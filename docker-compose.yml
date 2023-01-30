@@ -54,11 +54,6 @@ services:
     tty: true
     # -itは-i, --interactiveと-t, --ttyの組み合わせで、疑似ターミナルの割り当てを行い標準入出力を行えるよう
     # にするためのコマンドです。
-volumes:
-  public-data2:
-  tmp-data2:
-  log-data2:
-  db-data2:
 
   # web:
   #   build:
@@ -78,30 +73,29 @@ volumes:
   #   depends_on:
   #     - api
   #     - front
-
-  # front:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   image: nextjs-img-dev2
-  #   container_name: nextjs-ctr-dev2
-  #   # 同期する
-  #   volumes:
-  #     - ./frontend/front:/usr/src/front
-  #   # 作業ディレクトリを[/front]に指定しているので、'npm run dev'のみでOK
-  #   # [create next up]時は、そのコマンドが上書きされるので、"npm run dev"は実行されない
-  #   command: "npm run dev"
-  #   ports:
-  #     - "3011:3000"
-  #   depends_on:
-  #     - api
+  front:
+    build:
+      context: ./frontend/front
+      dockerfile: Dockerfile
+    image: nextjs-img-dev2
+    container_name: nextjs-ctr-dev2
+    # 同期する
+    volumes:
+      - ./frontend/front:/usr/src/front
+    # 作業ディレクトリを[/front]に指定しているので、'npm run dev'のみでOK
+    # [create next up]時は、そのコマンドが上書きされるので、"npm run dev"は実行されない
+    command: "npm run dev"
+    ports:
+      - "3011:3000"
+    depends_on:
+      - api
 # 記憶領域のマウントを設定(ボリュームマウント)。複数のコンテナ間でボリュームをシェア。
 # ここで定義したvolumeはdocker-compose実行時に自動で作成。このボリュームはホスト側からは独立して永続化。
-# volumes:
-#   public-data2:
-#   tmp-data2:
-#   log-data2:
-#   db-data2:
+volumes:
+  public-data2:
+  tmp-data2:
+  log-data2:
+  db-data2:
 # このボリュームに対して、どのボリューム・ドライバを使うか指定します。
 # デフォルトは、Docker Engineで使用するように設定されているドライバであり、多くの場合はlocalです。
 # driver: local

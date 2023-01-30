@@ -1,39 +1,110 @@
+# 1
+
 # MySQL. Versions 5.5.8 and up are supported.
+# [MySQL. バージョン5.5.8以降がサポートされています。]
 #
 # Install the MySQL driver
 #   gem install mysql2
 #
 # Ensure the MySQL gem is defined in your Gemfile
+# [GemfileにMySQL gemが定義されていることを確認する。]
 #   gem 'mysql2'
 #
 # And be sure to use new-style password hashing:
+# [そして、必ず新方式のパスワードハッシュを使うこと。]
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
-default: &default
-  adapter: mysql2
-  encoding: utf8mb4
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
-  host: localhost
 
+# 2
+default: &default # 使用するデータベース種類
+  adapter: mysql2
+  # 文字コード
+  encoding: utf8mb4
+  # 3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # 接続に使用するユーザの名前。
+  # username: root／<初期の設定>
+  username: <%= ENV.fetch("MYSQL_USER") %>
+  # 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
+  # githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
+  # password: ／<初期の設定>
+  password: <%= ENV.fetch("MYSQL_PASSWORD") %>
+  # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
+  host: db
+
+#  デフォルトでは、開発環境のdbを参照する。
 development:
   <<: *default
+  # database:データベース名。api-app:このアプリの名前。
+  # api_app_developmentという名前のDBが自動でMysqlの中に作成（初期設定）
   database: api_app_development
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
+# 4
 test:
   <<: *default
   database: api_app_test
 
+# 5
+production:
+  <<: *default
+  database: api_app_production
+  username: api_app
+  password: <%= ENV['API_APP_DATABASE_PASSWORD'] %>
+# RDS時、参考
+# DB_USERNAME="RDSの接続ユーザ名"
+# DB_PASSWORD="RDSのパスワード"
+# DB_HOST="RDSのエンドポイント名"
+# DB_DATABASE="myapp"
+# @          @@          @@          @@          @@          @@          @@          @
+# 1
+# Railsにおけるデータベースの設定ファイル。
+# Railsアプリケーションを作成すると自動的に生成され、デフォルトではSQLiteを使用する前提で作成されます。
+# MySQL等のSQLite以外のデータベースを使用する前提で生成する場合は、
+# アプリケーションを作成する際に明示的にオプションでデータベースを指定します。
+# $ rails new アプリケーション名 -d データベース
+# $ rails new アプリケーション名 --database=データベース
+
+# =          ==          ==          ==          ==          ==          ==          =
+# 2
+# 「&」の部分はアンカーという「YAML」の記述方法。
+# 「&」に続けて「default」という名前をつけると、「default」という名前で
+# ハッシューのデータを保存することができます
+
+# =          ==          ==          ==          ==          ==          ==          =
+# 3
+# pool:「コネクションプール」。データベースへ接続した時の接続状態を保存しておく役割をします。
+# データベースに再接続する場合、この「コネクションプール」を利用することによって接続時間を短縮する仕組み.
+# この「コネクションプール」の数が足りないとリクエストに対する待ち時間が増えてしまい、
+# 「ActiveRecord::ConnectionTimeoutError」などが発生する。デフォルト値は５。
+
+# *dotenv-railsをインストールすることにより、「.env」ファイルに記載された環境変数をdockerコンテナ内で、
+# 下記のような記述で取り出せる様になります。ENV['DATABASE_PASSWORD']
+
+# =          ==          ==          ==          ==          ==          ==          =
+# 4
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+# [警告: "test" として定義されたデータベースは、"rake" を実行した際に消去されます。
+# rake" を実行すると、開発用データベースから再生成されます。
+# このdbをdevelopmentやproductionと同じに設定しないでください。]
+
+# =          ==          ==          ==          ==          ==          ==          =
+# 5
+# productionの設定においては、database、username、passwordはベタ書きせずに、環境変数で保存する。
+# .envに保存するので、gitプッシュされない。
+
+# 参考情報
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
+# [config/credentials.yml と同様、機密情報をソースコードに保存することは決してありません。
+# データベースのパスワードのような機密情報をソースコードに保存してはいけません。もしあなたのソースコードが
+# 誰かに見られたら、彼らはあなたのデータベースにアクセスすることができるのです。]
 #
 # Instead, provide the password or a full connection URL as an environment
 # variable when you boot the app. For example:
+# [代わりに、アプリを起動するときに、パスワードまたは完全な接続URLを環境変数として提供します。]
 #
 #   DATABASE_URL="mysql2://myuser:mypass@localhost/somedatabase"
 #
@@ -41,15 +112,15 @@ test:
 # variable, Rails will automatically merge its configuration values on top of
 # the values provided in this file. Alternatively, you can specify a connection
 # URL environment variable explicitly:
+# [接続URLが特別なDATABASE_URL環境変数で提供されている場合、Railsはこのファイルで提供された値の上に、
+# 自動的にその設定値をマージしていきます。あるいは、接続URLの環境変数を明示的に指定することもできます。]
 #
 #   production:
 #     url: <%= ENV['MY_APP_DATABASE_URL'] %>
 #
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
+# [データベース接続設定の指定方法については、
+# https://guides.rubyonrails.org/configuring.html#configuring-a-database をご覧ください。]
 #
-production:
-  <<: *default
-  database: api_app_production
-  username: api_app
-  password: <%= ENV['API_APP_DATABASE_PASSWORD'] %>
+# -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -

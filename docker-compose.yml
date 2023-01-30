@@ -75,7 +75,7 @@ services:
   #     - front
   front:
     build:
-      context: ./frontend
+      context: ./frontend/front
       dockerfile: Dockerfile
     image: nextjs-img-dev2
     container_name: nextjs-ctr-dev2

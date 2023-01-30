@@ -1,0 +1,11 @@
+# 1
+**/node_modules/
+**/.git
+**/npm-debug.log
+
+# @          @@          @@          @@          @@          @@          @@          @
+# 1
+# dockerignoreとは、DockerfileのCOPYコマンドでコピーしたくないファイルやディレクトリを指定するファイル
+# のことです。dockerignoreはビルドコンテキストルートにある.dockerignoreファイルしか読み込まれません。
+# サブディレクトリにある.dockerignoreファイルは読み込まれません。そのため、.dockerignoreファイルはビルド
+# 時にルートとなるディレクトリに配置しておきましょう。

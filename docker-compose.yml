@@ -54,11 +54,11 @@ services:
     tty: true
     # -itは-i, --interactiveと-t, --ttyの組み合わせで、疑似ターミナルの割り当てを行い標準入出力を行えるよう
     # にするためのコマンドです。
-  volumes:
-    public-data2:
-    tmp-data2:
-    log-data2:
-    db-data2:
+volumes:
+  public-data2:
+  tmp-data2:
+  log-data2:
+  db-data2:
 
   # web:
   #   build:

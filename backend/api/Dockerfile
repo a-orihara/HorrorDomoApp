@@ -20,8 +20,7 @@ COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 # 2 ENTRYPOINTはdocker runの時に実行される
 ENTRYPOINT ["entrypoint.sh"]
-# コンテナがホスト(ローカルPC)に対してリッスンするport番号を3000に設定する。
-# ↓pumaでUNIXドメインソケット通信する為、ポート指定は不要に。
+# 4
 # EXPOSE 3000
 # 3 イメージの実行時に実行するメインプロセス
 CMD ["rails", "server", "-b", "0.0.0.0"]
@@ -83,3 +82,10 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 # -          --          --          --          --          --          --          -
 # コンテナでメインとして実行するプロセスは、 Dockerfileの最後に書かれているENTRYPOINTかCMD か、あ
 # るいは両方によって指定します。
+
+# =          ==          ==          ==          ==          ==          ==          =
+# 4
+# EXPOSE 3000
+# コンテナがホスト(ローカルPC)に対してリッスンするport番号を3000に設定する。
+# ここで設定しなくても、コンテナ立ち上げ時に-p 3010:3000のようにすれば、ポート接続出来る
+# pumaでUNIXドメインソケット通信する為、ポート指定は不要に。

@@ -1,6 +1,5 @@
 # クラスは一種のデータ型。コントローラー名は複数形。
 class Api::V1::UsersController < ApplicationController
-
   # GET:/users
   def index
     # @users(インスタンス変数:同じオブジェクト内で共有される変数)でなくていい。
@@ -20,8 +19,8 @@ class Api::V1::UsersController < ApplicationController
 
     if user.save
       # frontからPOSTされるユーザーデータをDBに保存し、その後JSONとして返り値をレンダリング。
-      # status: :created = status: 201
-      render json: { status: :created, user: user}
+      # status: :created = status: 201。user:->user: userの省略形。
+      render json: { status: :created, user: }
       # {"status":"created","user":{"id":2,"name":"値","email":"値","created_at":"値","updated_at":"値","password_digest":"値"}}%
     else
       # 500 :internal_server_error

@@ -36,5 +36,16 @@ module ApiApp
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # rspecでgenerator使用時にスペックファイルを作成するかどうかの設定
+    config.generators do |g|
+      g.test_framework :rspec,
+        # ヘルパーファイル用のスペックを作成しない
+        helper_specs: false,
+        # ルーティング(config/routes)用のスペックファイルを作成しない
+        routing_specs: false,
+        # ビュースペックを作成しない。フィーチャースペック、またはフロント側でUIをテストする為
+        view_specs: false
+    end
   end
 end

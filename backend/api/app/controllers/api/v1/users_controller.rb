@@ -1,3 +1,4 @@
+# クラスは一種のデータ型
 class Api::V1::UsersController < ApplicationController
 
   # GET:/users

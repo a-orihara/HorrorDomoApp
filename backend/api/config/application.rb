@@ -46,5 +46,6 @@ module ApiApp
         routing_specs: false,
         # ビュースペックを作成しない。フィーチャースペック、またはフロント側でUIをテストする為
         view_specs: false
+    end
   end
 end

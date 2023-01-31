@@ -81,6 +81,7 @@ RSpec.describe User, type: :model do
     duplicate_user = user.dup
     # duplicate_user.emailのみ大文字にする
     duplicate_user.email = user.email.upcase
+    # 一意性のテストのためには、メモリ上だけではなく(build)、実際にレコードをデータベースに登録する必要があります。
     user.save
     # 6
     expect(duplicate_user).not_to be_valid

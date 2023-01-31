@@ -103,7 +103,20 @@ Style/BlockComments:
 # ハッシュ{の前後にスペースが入ってない
 # good:e.g:
 # h = { a: 1, b: 2 }
-Layout/SpaceInsideHashLiteralBraces:
+# Layout/SpaceInsideHashLiteralBraces:
+#   Enabled: false
+
+# = = 下記三つのcopは、rspecのデフォルトの初期設定に反応した為、一旦無効にする。= =
+# 冗長なスペックタイプを特定する。
+RSpec/Rails/InferredSpecType:
+  Enabled: false
+
+# このコピーは、ファイルパスの結合処理で `Rails.root.join` 節を使用する用途を識別するために使用されます。
+# これは、パスを結合する際に統一性を持たせるために使用されます。
+Rails/FilePath:
+  Enabled: false
+
+Style/RedundantConstantBase:
   Enabled: false
 
 # 1行あたりの文字数をチェックする

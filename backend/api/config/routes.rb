@@ -6,14 +6,25 @@ Rails.application.routes.draw do
   # /static_pages/homeというURLへのリクエストを、StaticPagesコントローラのhome アクションと結びつけ。
   # = get 'static_pages/home', to: 'static_pages#home'
   get 'static_pages/home'
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
+  # 1
+  namespace 'api' do
+    namespace 'v1' do
+      # 4 全てのパスを対象に、optionsメソッドが来たときだけ反応
+      # match '*path' => 'options_request#preflight', via: :options
+      # get 'users/new', to: 'users#new'
+      # 2
+      resources :users
+    end
+  end
 end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @
 1
 namespace: <任意の名前> で名前空間を付与することができます。これはコントローラーをグルーピングし、またURLにもその
-情報を付与することを意味します。
+情報を付与することを意味します。こうすることで、http://localhost:<ポート番号>/api/v1/usersというURLで、例えば
+createアクションが実行できるようになります。
 
 APIのURLにはバージョンに関する情報を加えるケースが時折あります。例えば、/restaurants/:restaurant_id/foodsとい
 うURLにv1/をつけて、v1/restaurants/:restaurant_id/foodsとします。なぜバージョンをつけるのでしょうか？主な理由
@@ -60,6 +71,17 @@ match '/', to: 'home#index', via: 'get'
 #リダイレクトする場合
 get '/', to: redirect('/home/index', status: 302)
 get 'home/index'
+
+rootメソッドを使ってルートURL "/" のようなルーティングを定義することの効果は、ブラウザからアクセス
+しやすくすることだけではありません。それ以外にも、生のURLではなく、名前付きルートを使ってURLを参照
+することができるようになります。例えばルートURLを定義すると、root_path や root_url といったメソッ
+ドを通してURLを参照することができます。ちなみに前者はルートURL以下の文字列を、後者は完全なURLの文字
+列を返します。
+root_path -> '/'
+root_url -> 'https://www.example.com/'
+なお、Rails チュートリアルでは一般的な規約に従い、基本的には_path 書式を使い、リダイレクトの場合の
+み_url 書式を使うようにします。これは HTTP の標準としては、リ ダイレクトのときに完全な URL が要求
+されるためです。ただしほとんどのブラウザでは、どちらの方法でも動作します。
 
 =          ==          ==          ==          ==          ==          ==          ==          ==
 4

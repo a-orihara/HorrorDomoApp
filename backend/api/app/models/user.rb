@@ -1,5 +1,7 @@
 # 1
 class User < ApplicationRecord
+  # 5
+  before_save { self.email = email.downcase }
   # 2 ↓validates(:name, presence: true)と同じ意味
   validates :name,  presence: true, length: { maximum: 30 }
   # 3
@@ -13,16 +15,22 @@ class User < ApplicationRecord
 end
 
 =begin
-=        ==        ==        ==        ==        ==        ==        ==        ==        =
+@          @@          @@          @@          @@          @@          @@          @
 1
 class User < ApplicationRecord という構文で、User クラスは ApplicationRecord を継承するので、User
-モデルは自 動的に ActiveRecord::Base クラスのすべての機能を持つことになります。
+モデルは自 動的に ActiveRecord::Base クラスのすべての機能、メソッドを持つことになります。
 
+-          --          --          --          --          --          --          -
 Railsではバリデーションを簡単に利用できるよう、Active Recordには一般に利用可能なビルトインヘルパーが用意さ
 れており、独自のバリデーションメソッドも作成できるようになっています。これらのヘルパーは、共通のバリデーション
 ルールを提供します。
 
--        --        --        --        --        --        --        --        --        -
+-          --          --          --          --          --          --          -
+Modelのカラム（nameやemail）が、クラスで言うところの属性（プロパティ）。クラスでは属性に外部からアクセス
+する時はattr_accessor メソッドを使ったが、RailsでUserをモデリングするときは、属性を明示的に識別する必要
+がありません。
+
+=          ==          ==          ==          ==          ==          ==          =
 2
 以下のメソッドではバリデーションメソッドがトリガされ、オブジェクトが有効な場合にのみデータベースに保存されます。
 create,create!
@@ -32,6 +40,7 @@ update,update!
 無効な場合に例外を発生しません。saveとupdateは無効な場合にfalseを返し、createは無効な場合に単にそのオブジ
 ェクトを返します。
 
+-          --          --          --          --          --          --          -
 以下のメソッドはバリデーションを行わずにスキップします。オブジェクトの保存は、有効無効にかかわらず行われます。
 これらのメソッドの利用には注意が必要です。
 decrement!,decrement_counter
@@ -50,17 +59,17 @@ update_counters
 upsert
 upsert_all
 
--        --        --        --        --        --        --        --        --        -
+=          ==          ==          ==          ==          ==          ==          =
 3
 定数です。大文字で始まる名前は Ruby では定数を意味します。
 
--        --        --        --        --        --        --        --        --        -
+=          ==          ==          ==          ==          ==          ==          =
 4
 formatオプション
 このヘルパーメソッドは、引数にwithオプションで与えられた正規表現(Regular Expression)(regexとも呼ばれます)
 を取り、と属性の値がマッチするかどうかを検証します。
 
--        --        --        --        --        --        --        --        --        -
+=          ==          ==          ==          ==          ==          ==          =
 5
 before_save:Active Recordのコールバック(callback)メソッド。オブジェクトがDBに保存される前に処理を実行。
 
@@ -74,13 +83,13 @@ before_save:Active Recordのコールバック(callback)メソッド。オブジ
 self.email = self.email.downcase
 User モデルの中では右式の self を省略できるので、今回は次のように書きました
 
--        --        --        --        --        --        --        --        --        -
+=          ==          ==          ==          ==          ==          ==          =
 6
 # 以前の内容。メールアドレスが小文字で統一されれば、大文字小文字を区別するマッチが問題なく動作できるから不要に。
 # :case_sensitive:大文字小文字の違いを区別する。
 uniqueness: { case_sensitive: false },
 
--        --        --        --        --        --        --        --        --        -
+=          ==          ==          ==          ==          ==          ==          =
 7
 has_secure_password
 .セキュアにハッシュ化したパスワードを、データベース内の password_digest という属性に保存できるようになる。

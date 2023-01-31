@@ -1,4 +1,4 @@
-# クラスは一種のデータ型
+# クラスは一種のデータ型。コントローラー名は複数形。
 class Api::V1::UsersController < ApplicationController
 
   # GET:/users

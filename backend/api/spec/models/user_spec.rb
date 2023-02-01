@@ -11,10 +11,10 @@ RSpec.describe User, type: :model do
   let(:user) { build(:user) }
 
   # ファクトリ（テストデータ）の有効性を検証
-  # it '有効なファクトリを持つ事' do
-  #   # buildはメモリに保存されるが、テストDBに保存されない。createはテストDBに保存される
-  #   expect(build(:user)).to be_valid
-  # end
+  it '有効なファクトリを持つ事' do
+    # buildはメモリに保存されるが、テストDBに保存されない。createはテストDBに保存される
+    expect(build(:user)).to be_valid
+  end
 
   # 1
   # モデルの有効性を検証するテスト
@@ -95,15 +95,15 @@ RSpec.describe User, type: :model do
     expect(user.reload.email).to eq mixed_case_email.downcase
   end
 
-  # it 'パスワードが存在すること（空白でないこと）' do
-  #   user.password = user.password_confirmation = " " * 6
-  #   expect(user).not_to be_valid
-  # end
+  it 'パスワードが存在すること（空白でないこと）' do
+    user.password = user.password_confirmation = " " * 6
+    expect(user).not_to be_valid
+  end
 
-  # it '6文字未満のpasswordは無効である' do
-  #   user.password = user.password_confirmation = 'a' * 5
-  #   expect(user).not_to be_valid
-  # end
+  it '6文字未満のpasswordは無効である' do
+    user.password = user.password_confirmation = 'a' * 5
+    expect(user).not_to be_valid
+  end
 end
 
 =begin

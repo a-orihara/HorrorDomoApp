@@ -31,6 +31,8 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'dotenv-rails'
 # rails cでirbの代わりにpryを使用する。
 gem 'pry-rails'
+# has_secure_passwordを使ってパスワードをハッシュ化する為に、ハッシュ関数であるbcryptを使う為のgemが必要。
+gem 'bcrypt'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -119,6 +119,10 @@ Rails/FilePath:
 Style/RedundantConstantBase:
   Enabled: false
 
+# 検証用のStaticPagesControllerのエラー回避の為
+Rails/ApplicationController:
+  Enabled: false
+
 # 1行あたりの文字数をチェックする
 Layout/LineLength:
   Max: 150

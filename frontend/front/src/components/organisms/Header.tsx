@@ -2,8 +2,9 @@ import { JsxElement } from "typescript";
 
 export const Header = (): JSX.Element => {
   return (
-    <div className="flex flex-col min-h-screen container mx-auto basic-yellow outline">
-      <h1 className="bg-red-600">ヘッダーです!</h1>;
+    <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">
+      <h1 className="bg-red-600">ヘッダーです!</h1>
+      <p className="bg-blue-300">方</p>
     </div>
   );
 };

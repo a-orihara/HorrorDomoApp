@@ -9,10 +9,9 @@ type Props = {
 export const HeaderLayout = (props: Props): JSX.Element => {
   const { children } = props;
   return (
-    <>
-      <h1 className="text-xl">も</h1>
+    <div className="bg-yellow-200">
       <Header></Header>
       {children}
-    </>
+    </div>
   );
 };

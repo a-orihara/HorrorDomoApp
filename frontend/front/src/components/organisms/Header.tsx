@@ -1,10 +1,24 @@
 import { JsxElement } from "typescript";
+import Link from "next/link";
 
 export const Header = (): JSX.Element => {
   return (
     <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">
-      <h1 className="bg-red-600">ヘッダーです!</h1>
-      <p className="bg-blue-300">方</p>
+      <header className="flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl">
+        <h1 className="ml-3 mr-auto text-s md:text-2xl font-spacemono text-center tracking-tighter font-semibold">
+          Horror Domo App
+        </h1>
+        <Link href={`/`}>
+          <p className="mr-3 sm:mr-4 md:mr-12 text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
+            Home
+          </p>
+        </Link>
+        <Link href={`/SignUp`}>
+          <p className="mr-3 tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
+            Log in
+          </p>
+        </Link>
+      </header>
     </div>
   );
 };

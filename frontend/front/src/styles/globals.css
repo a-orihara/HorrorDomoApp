@@ -1,3 +1,9 @@
+/* global.css:アプリ全体のスタイリングを記載。どのページでも適用するstyleを書く
+基本_app.js以外では呼び出さない。 */
+
+/* Tailwind CSSのフォント設定。GoogleフォントからSpace Monoを@import。 */
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+
 /* Tailwindのディレクティブ */
 @tailwind base;
 @tailwind components;

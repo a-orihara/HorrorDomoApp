@@ -18,6 +18,11 @@ module.exports = {
         "font-color-green": "#0f7d3b",
       },
     },
+    // fontFamilyユーティリティを使って、テキストの書体を制御することができます。
+    fontFamily: {
+      // classに"font-spacemono"の設定で使用可能
+      spacemono: ["Space Mono", "monospace"],
+    },
   },
   plugins: [],
 };

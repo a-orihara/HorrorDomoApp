@@ -69,6 +69,9 @@ eslint-config-prettier -> "prettier"
 実際の開発においては TypeScript や Prettier など、効率を上げるためのツールを使用することが多いでしょう。
 その場合はそれぞれのツール向けの ESLint プラグインを利用しましょう。
 
+*eslint-config-prettier は prettier が整形したコードに対して ESLint がエラーを出力しないようにするプラグイ
+ン。ESLint のコードフォーマットに関連するルールを無効化し、バグを検出するルールのみを有効にする。
+
 =          ==          ==          ==          ==          ==          ==          ==          =
 4
 ESLintで独自のルールを記述する場合は、rules(その実体はコードを検証して結果をreportする関数)に記述します。

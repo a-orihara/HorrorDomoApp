@@ -1,23 +1,16 @@
 import { JsxElement } from "typescript";
 import Link from "next/link";
 
-export const Header = (): JSX.Element => {
+export const Footer = (): JSX.Element => {
   return (
-    <header className="flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl">
-      <h1 className="ml-3 mr-auto text-s md:text-3xl font-spacemono text-center tracking-tighter font-semibold">
-        Horror Domo App
-      </h1>
-      <Link href={`/`}>
-        <p className="mr-3 sm:mr-4 md:mr-12 text-s md:text-3xl text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
-          Home
-        </p>
-      </Link>
-      <Link href={`/SignUp`}>
-        <p className="mr-3 text-s md:text-3xl tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
-          Log in
-        </p>
-      </Link>
-    </header>
+    // <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">
+    <footer className="bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm">
+      &copy; Ori 2022
+      {/* <span > */}
+      {/* /public/vercel.svgの省略形 */}
+      {/* <Image src='/vercel.svg' alt='Vercel Logo' width={72} height={16} /> */}
+      {/* </span> */}
+    </footer>
   );
 };
 

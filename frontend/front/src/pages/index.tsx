@@ -1,6 +1,8 @@
 // 1
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import PrimaryButton from "../components/atoms/PrimaryButton";
 import { Header } from "../components/organisms/Header";
 import { HeaderLayout } from "../components/templates/HeaderLayout";
 // import { Inter } from "@next/font/google";
@@ -10,12 +12,22 @@ import styles from "../styles/Home.module.css";
 // const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  // 3
+  const router = useRouter();
+  const onClickHome = (): void => {
+    router.push("/");
+  };
   return (
-    <>
-      <HeaderLayout>
-        <Header></Header>
-      </HeaderLayout>
-    </>
+    <HeaderLayout title="HOME">
+      <div className="mx-auto px-6 py-16 pt-28 text-center">
+        <h1 className="mb-36 text-4xl font-spacemono scale-y-150 text-center tracking-tighter font-semibold text-black md:text-6xl">
+          Welcome to the Horror Domo App!
+        </h1>
+        <div className="pt-10">
+          <PrimaryButton onClick={onClickHome}>Sign up!</PrimaryButton>
+        </div>
+      </div>
+    </HeaderLayout>
   );
 }
 
@@ -46,6 +58,33 @@ styles/Home.module.cssのstyleを[styles]という名前でimport。[styles.cont
 stylesディレクトリ下のcssファイルはどのコンポーネントからでも使えるcss。他のファイルからもこの
 Home.module.cssは使用可能。
 cssモジュール(.module.css)を使うと、ビルド時にクラス名やIDへ接頭辞や接語尾がランダムに作成される。
+
+=          ==          ==          ==          ==          ==          ==          ==          =
+3
+next/routerは、routerオブジェクトにアクセスするためのパッケージ。
+useRouter と withRouter(とそれらの型)をexportしていますが、
+関数Component → useRouter
+クラスComponent → withRouter
+と覚えておけばOKです。両方とも、routerオブジェクトが返されます。
+
+-          --          --          --          --          --          --          --          -
+routerオブジェクト
+基本的にはNext.jsに最適化されたwindow.locationやwindow.historyみたいなもので、url関連の情報を取得・操作する
+ための処理が含まれています。
+
+-          --          --          --          --          --          --          --          -
+router.push
+
+クライアント側の遷移処理をおこないます。基本的な書き方は、router.push(url, as, options);です。
+型：
+push(url: Url, as?: Url, options?: TransitionOptions): Promise<boolean>;
+asは基本undefined（何も書かなくても）で良いです。また、optionsの型は下記になります。
+
+interface TransitionOptions {
+  shallow?: boolean;        // 浅いルーティングにするか (デフォは false)
+  locale?: string | false;  // 新しいページのロケール設定
+  scroll?: boolean;         // 遷移後に先頭にスクロールするか (デフォはtrue)
+}
 
 -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 

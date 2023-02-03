@@ -1,0 +1,5 @@
+eslint：構文解析のエンジン
+eslint-config-next：Next.js 専用の ESLint のルール
+
+*srcディレクトリのみ構文解析する。
+"lint": "next lint --dir src"

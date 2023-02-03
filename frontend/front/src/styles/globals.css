@@ -1,7 +1,20 @@
+/* global.css:アプリ全体のスタイリングを記載。どのページでも適用するstyleを書く
+基本_app.js以外では呼び出さない。 */
+
+/* Tailwind CSSのフォント設定。GoogleフォントからSpace Monoを@import。 */
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+
 /* Tailwindのディレクティブ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 共通の設定をclassとして */
+@layer components {
+  .btn-primary {
+    @apply border-2 border-black text-black font-normal md:font-medium rounded px-5 md:px-10 py-2 md:py-4 m-2 transition duration-300 select-none font-spacemono text-lg md:text-2xl tracking-tighter;
+  }
+}
 
 :root {
   --max-width: 1100px;
@@ -110,3 +123,23 @@ a {
     color-scheme: dark;
   }
 }
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+@layerディレクティブ
+@layer内でカスタムスタイルを作成可能。@layerディレクティブ配下に独自のカスタムクラスを定義する。
+また、カスタムスタイルがbase、components、utilitiesのどこに属するかを指定します。
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+baseはcssのベーススタイルをカスタム、componentsはTailwindのユーティリティクラスを使ってカスタムクラスを作成、
+utilitiesはTailwindのユーティリティクラスを編集。
+-          --          --          --          --          --          --          --          -
+@applyディレクティブで、Tailwindで用意されている既存のユーティリティクラスを使用可能。
+
+-          --          --          --          --          --          --          --          -
+カスタム用の.btn-primaryクラスを設定。カスタムスタイルはcomponentsレイヤーに所属させる。
+*@layer内で追加されたカスタムCSSは使用されない限り、最終的なビルドに含まれない。
+*/

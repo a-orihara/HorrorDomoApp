@@ -1,6 +1,3 @@
-import { JsxElement } from 'typescript';
-import Link from 'next/link';
-
 export const Footer = (): JSX.Element => {
   return (
     // <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">

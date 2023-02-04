@@ -1,4 +1,3 @@
-import { JsxElement } from 'typescript';
 import Link from 'next/link';
 
 export const Header = (): JSX.Element => {

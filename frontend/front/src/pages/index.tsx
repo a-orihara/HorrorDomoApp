@@ -1,13 +1,10 @@
 // 1
-import Head from 'next/head';
-import Image from 'next/image';
+
 import { useRouter } from 'next/router';
 import PrimaryButton from '../components/atoms/PrimaryButton';
-import { Header } from '../components/organisms/Header';
 import { HeaderLayout } from '../components/templates/HeaderLayout';
 // import { Inter } from "@next/font/google";
 // import styles from '@/styles/Home.module.css'
-import styles from '../styles/Home.module.css';
 
 // const inter = Inter({ subsets: ["latin"] });
 

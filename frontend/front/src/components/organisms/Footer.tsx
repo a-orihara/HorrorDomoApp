@@ -1,10 +1,10 @@
-import { JsxElement } from "typescript";
-import Link from "next/link";
+import { JsxElement } from 'typescript';
+import Link from 'next/link';
 
 export const Footer = (): JSX.Element => {
   return (
     // <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">
-    <footer className="bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm">
+    <footer className='bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm'>
       &copy; Ori 2022
       {/* <span > */}
       {/* /public/vercel.svgの省略形 */}

@@ -1,13 +1,13 @@
 // 1
-import Head from "next/head";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import PrimaryButton from "../components/atoms/PrimaryButton";
-import { Header } from "../components/organisms/Header";
-import { HeaderLayout } from "../components/templates/HeaderLayout";
+import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import PrimaryButton from '../components/atoms/PrimaryButton';
+import { Header } from '../components/organisms/Header';
+import { HeaderLayout } from '../components/templates/HeaderLayout';
 // import { Inter } from "@next/font/google";
 // import styles from '@/styles/Home.module.css'
-import styles from "../styles/Home.module.css";
+import styles from '../styles/Home.module.css';
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -15,15 +15,15 @@ export default function Home() {
   // 3
   const router = useRouter();
   const onClickHome = (): void => {
-    router.push("/");
+    router.push('/');
   };
   return (
-    <HeaderLayout title="HOME">
-      <div className="mx-auto px-6 py-16 pt-28 text-center">
-        <h1 className="mb-36 text-4xl font-spacemono scale-y-150 text-center tracking-tighter font-semibold text-black md:text-6xl">
+    <HeaderLayout title='HOME'>
+      <div className='mx-auto px-6 py-16 pt-28 text-center'>
+        <h1 className='mb-36 text-4xl font-spacemono scale-y-150 text-center tracking-tighter font-semibold text-black md:text-6xl'>
           Welcome to the Horror Domo App!
         </h1>
-        <div className="pt-10">
+        <div className='pt-10'>
           <PrimaryButton onClick={onClickHome}>Sign up!</PrimaryButton>
         </div>
       </div>

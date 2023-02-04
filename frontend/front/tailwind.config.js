@@ -1,27 +1,27 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // 1 プロジェクトのコンテンツソースを設定する。
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   // 2 テーマの設定:プロジェクトのデフォルトテーマをカスタマイズ
   theme: {
     // 3
     extend: {
       colors: {
-        "basic-yellow": "#F2CB05",
-        "basic-orange": "#F28705",
+        'basic-yellow': '#F2CB05',
+        'basic-orange': '#F28705',
         // 'basic-pink': '#F07171',
-        "basic-pink": "#F22C5A",
-        "basic-green": "#00b51a",
-        "hover-yellow": "#FFF33F",
-        "hover-pink": "#FC1919",
-        "hover-orange": "#fef08a",
-        "font-color-green": "#0f7d3b",
+        'basic-pink': '#F22C5A',
+        'basic-green': '#00b51a',
+        'hover-yellow': '#FFF33F',
+        'hover-pink': '#FC1919',
+        'hover-orange': '#fef08a',
+        'font-color-green': '#0f7d3b',
       },
     },
     // fontFamilyユーティリティを使って、テキストの書体を制御することができます。
     fontFamily: {
       // classに"font-spacemono"の設定で使用可能
-      spacemono: ["Space Mono", "monospace"],
+      spacemono: ['Space Mono', 'monospace'],
     },
   },
   plugins: [],

@@ -1,6 +1,6 @@
 // Headコンポーネントをimport
-import Head from "next/head";
-import Link from "next/link";
+import Head from 'next/head';
+import Link from 'next/link';
 // import styles from '../styles/Home.module.css';
 // import PrimaryButton from "./atoms/button/PrimaryButton";
 
@@ -16,42 +16,39 @@ type Props = {
 export const Layout = (props: Props) => {
   return (
     // jsx(tsx)ではclassではなく、classNameを使用
-    <div className="flex flex-col min-h-screen container mx-auto basic-yellow outline">
+    <div className='flex flex-col min-h-screen container mx-auto basic-yellow outline'>
       {/* 2  */}
       <Head>
         <title>{props.title}</title>
-        <meta charSet="utf-8" />
-        <meta
-          name="description"
-          content="ホラー映画好きが集まる投稿サイトです"
-        />
+        <meta charSet='utf-8' />
+        <meta name='description' content='ホラー映画好きが集まる投稿サイトです' />
         {/* 4 */}
-        <link rel="icon" href="/favicon.png" />
+        <link rel='icon' href='/favicon.png' />
       </Head>
 
-      <header className="flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl">
-        <h1 className="ml-3 mr-auto text-s md:text-2xl font-spacemono text-center tracking-tighter font-semibold">
+      <header className='flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl'>
+        <h1 className='ml-3 mr-auto text-s md:text-2xl font-spacemono text-center tracking-tighter font-semibold'>
           Horror Domo App
         </h1>
         <Link href={`/`}>
-          <p className="mr-3 sm:mr-4 md:mr-12 text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
+          <p className='mr-3 sm:mr-4 md:mr-12 text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
             Home
           </p>
         </Link>
         <Link href={`/SignUp`}>
-          <p className="mr-3 tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300">
+          <p className='mr-3 tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
             Log in
           </p>
         </Link>
       </header>
 
-      <div className="flex flex-col md:flex-row flex-1">
+      <div className='flex flex-col md:flex-row flex-1'>
         {/* <nav className="bg-orange-300 outline md:w-56"> */}
         {/* </nav> */}
-        <main className="bg-basic-orange outline flex-1">{props.children}</main>
+        <main className='bg-basic-orange outline flex-1'>{props.children}</main>
       </div>
 
-      <footer className="bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm">
+      <footer className='bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm'>
         @Ori 2022
         {/* <span > */}
         {/* /public/vercel.svgの省略形 */}

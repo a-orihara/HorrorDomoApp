@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 // 1
 
 // ボタンの名前や付属する関数を動的に変える為、propsを設定。
@@ -13,10 +13,7 @@ const PrimaryButton = (props: Props): JSX.Element => {
   const { children, onClick } = props;
   return (
     // childrenでボタンの名称を受け取って使い回しできるようにする
-    <button
-      onClick={onClick}
-      className="btn-primary bg-basic-yellow hover:bg-hover-yellow"
-    >
+    <button onClick={onClick} className='btn-primary bg-basic-yellow hover:bg-hover-yellow'>
       {children}
     </button>
   );

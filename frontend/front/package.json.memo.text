@@ -3,3 +3,16 @@ eslint-config-next：Next.js 専用の ESLint のルール
 
 *srcディレクトリのみ構文解析する。
 "lint": "next lint --dir src"
+
+*未整形のファイルのパスが表示される。整形は実行せずに整形済みかどうかを確認する。
+"check": "prettier --check ./src"
+
+*コードを整形する。
+"format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'"
+整形実行時には下記ファイルは除外されます。
+.gitignore
+~.js
+~.jsx
+~.ts
+~.tsx
+~.json

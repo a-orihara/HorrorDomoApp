@@ -76,7 +76,7 @@ services:
   front:
     build:
       context: ./frontend/front
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: nextjs-img-dev2
     container_name: nextjs-ctr-dev2
     # 同期する

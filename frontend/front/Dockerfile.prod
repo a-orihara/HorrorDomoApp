@@ -9,7 +9,7 @@ WORKDIR /usr/src/front
 # packeg.jsonとpackage-lock.jsonのみコピーする
 COPY package*.json ./
 # 4 本番用のnode_modulesを作成
-RUN npm ci --only=production
+RUN npm ci
 
 # Build環境
 FROM node:16-alpine AS builder
@@ -32,46 +32,14 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 # publicディレクトリにはアイコン等の公開ファイルが入っています。
 COPY --from=builder /usr/src/front/next.config.js ./
-COPY --from=builder /usr/src/front/public ./.next
+COPY --from=builder /usr/src/front/.next ./.next
 COPY --from=builder /usr/src/front/public ./public
 COPY --from=builder /usr/src/front/package.json ./package.json
-COPY --from=deps /front/node_modules ./node_modules
-
+COPY --from=deps /usr/src/front/node_modules ./node_modules
 # 6
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front/.next/standalone ./
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front//.next/static ./.next/static
 # 不要なものが取り除かれたnode_modulesをプロダクションにコピーする
-
-CMD [ "npm", "start" ]
-
-# @          @@          @@          @@          @@          @@          @@          @@          @
-# 依存パッケージのインストール
-FROM node:16
-WORKDIR /app
-# packeg.jsonとpackage-lock.jsonのみコピーする
-COPY package*.json ./
-RUN npm install
-
-# Build環境
-FROM node:16
-WORKDIR /app
-
-COPY . .
-# depsステージでインストールしたパッケージをコピーする
-COPY --from=deps /app/node_modules ./node_modules
-RUN npm run build
-
-# 実行環境
-FROM node:16
-WORKDIR /app
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-# ファビコンが格納されたディレクトリをコピーする
-COPY --from=builder /app/public ./public
-# buildによって.next配下に生成されたhtml、JSON、JSファイルをコピーする
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/package.json ./package.json
-# EXPOSE 8080
 CMD [ "npm", "start" ]
 
 # @          @@          @@          @@          @@          @@          @@          @@          @

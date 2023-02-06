@@ -1,9 +1,21 @@
 # 1
-du:
-	docker-compose up --force-recreate
+dud:
+	docker-compose -f docker-compose.dev.yml up --force-recreate
 
-db:
-	docker-compose build --no-cache
+dbd:
+	docker-compose -f docker-compose.dev.yml build
+
+dbdn:
+	docker-compose -f docker-compose.dev.yml build --no-cache
+
+dup:
+	docker-compose -f docker-compose.prod.yml up --force-recreate
+
+dbp:
+	docker-compose -f docker-compose.prod.yml build
+
+dbpn:
+	docker-compose -f docker-compose.prod.yml build --no-cache
 
 ds:
 	docker system prune

@@ -11,7 +11,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     # 3 同期する
     volumes:
-      - db-data2:/var/lib/mysql
+      - db-data-prod:/var/lib/mysql
     # 4
     env_file:
       - ./backend/api/.env
@@ -43,9 +43,9 @@ services:
     # 8
     volumes:
       - ./backend/api:/api-app
-      - public-data:/api-app/public
-      - tmp-data:/api-app/tmp
-      - log-data:/api-app/log
+      - public-data-prod:/api-app/public
+      - tmp-data-prod:/api-app/tmp
+      - log-data-prod:/api-app/log
 
     # 依存関係の指定（railsはDBと接続する際は、DBのIPアドレスを指定する為）。
     depends_on:
@@ -78,8 +78,8 @@ services:
 
   front:
     build:
-      context: ./frontend/front-app
-      dockerfile: Dockerfile.prod2
+      context: ./frontend/front
+      dockerfile: Dockerfile.prod
     image: nextjs-img-prod2
     container_name: nextjs-ctr-prod2
     # 同期する
@@ -95,10 +95,10 @@ services:
 # 記憶領域のマウントを設定(ボリュームマウント)。複数のコンテナ間でボリュームをシェア。
 # ここで定義したvolumeはdocker-compose実行時に自動で作成。このボリュームはホスト側からは独立して永続化。
 volumes:
-  public-data:
-  tmp-data:
-  log-data:
-  db-data:
+  public-data-prod:
+  tmp-data-prod:
+  log-data-prod:
+  db-data-prod:
     # # このボリュームに対して、どのボリューム・ドライバを使うか指定します。
     # # デフォルトは、Docker Engineで使用するように設定されているドライバであり、多くの場合はlocalです。
     # driver: local

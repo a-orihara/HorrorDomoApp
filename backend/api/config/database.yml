@@ -24,11 +24,11 @@ default: &default # 使用するデータベース種類
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   # 接続に使用するユーザの名前。
   # username: root／<初期の設定>
-  username: <%= ENV.fetch("MYSQL_USER") %>
+  username: user_dev
   # 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
   # githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
   # password: ／<初期の設定>
-  password: <%= ENV.fetch("MYSQL_PASSWORD") %>
+  password: password_dev
   # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
   host: db
 
@@ -36,7 +36,7 @@ default: &default # 使用するデータベース種類
 development:
   <<: *default
   # database:データベース名。api-app:このアプリの名前。
-  # api_app_developmentという名前のDBが自動でMysqlの中に作成（初期設定）
+  # api_app_developmentという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
   database: api_app_development
 
 # 4
@@ -47,9 +47,11 @@ test:
 # 5
 production:
   <<: *default
+  # api_app_productionという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
   database: api_app_production
-  username: api_app
-  password: <%= ENV['API_APP_DATABASE_PASSWORD'] %>
+  # <初期設定>username: api_app
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
 # RDS時、参考
 # DB_USERNAME="RDSの接続ユーザ名"
 # DB_PASSWORD="RDSのパスワード"

@@ -16,7 +16,7 @@ type Props = {
 export const Layout = (props: Props) => {
   return (
     // jsx(tsx)ではclassではなく、classNameを使用
-    <div className='flex flex-col min-h-screen container mx-auto basic-yellow outline'>
+    <div className='basic-yellow container mx-auto flex min-h-screen flex-col outline'>
       {/* 2  */}
       <Head>
         <title>{props.title}</title>
@@ -26,29 +26,29 @@ export const Layout = (props: Props) => {
         <link rel='icon' href='/favicon.png' />
       </Head>
 
-      <header className='flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl'>
-        <h1 className='ml-3 mr-auto text-s md:text-2xl font-spacemono text-center tracking-tighter font-semibold'>
+      <header className='text-s flex h-20 items-center bg-basic-yellow font-spacemono font-semibold outline md:text-2xl'>
+        <h1 className='text-s ml-3 mr-auto text-center font-spacemono font-semibold tracking-tighter md:text-2xl'>
           Horror Domo App
         </h1>
         <Link href={`/`}>
-          <p className='mr-3 sm:mr-4 md:mr-12 text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
+          <p className='mr-3 cursor-pointer text-basic-pink duration-300 hover:text-hover-pink sm:mr-4 md:mr-12'>
             Home
           </p>
         </Link>
         <Link href={`/SignUp`}>
-          <p className='mr-3 tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
+          <p className='mr-3 cursor-pointer tracking-tighter text-basic-pink duration-300 hover:text-hover-pink'>
             Log in
           </p>
         </Link>
       </header>
 
-      <div className='flex flex-col md:flex-row flex-1'>
+      <div className='flex flex-1 flex-col md:flex-row'>
         {/* <nav className="bg-orange-300 outline md:w-56"> */}
         {/* </nav> */}
-        <main className='bg-basic-orange outline flex-1'>{props.children}</main>
+        <main className='flex-1 bg-basic-orange outline'>{props.children}</main>
       </div>
 
-      <footer className='bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm'>
+      <footer className='flex h-11 items-center justify-center bg-basic-yellow text-sm text-black outline md:h-14'>
         @Ori 2022
         {/* <span > */}
         {/* /public/vercel.svgの省略形 */}

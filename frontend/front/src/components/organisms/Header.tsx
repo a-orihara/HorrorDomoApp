@@ -2,17 +2,17 @@ import Link from 'next/link';
 
 export const Header = (): JSX.Element => {
   return (
-    <header className='flex items-center bg-basic-yellow outline h-20 font-spacemono font-semibold text-s md:text-2xl'>
-      <h1 className='ml-3 mr-auto text-s md:text-3xl font-spacemono text-center tracking-tighter font-semibold'>
+    <header className='text-s flex h-20 items-center bg-basic-yellow font-spacemono font-semibold outline md:text-2xl'>
+      <h1 className='text-s ml-3 mr-auto text-center font-spacemono font-semibold tracking-tighter md:text-3xl'>
         Horror Domo App
       </h1>
       <Link href={`/`}>
-        <p className='mr-3 sm:mr-4 md:mr-12 text-s md:text-3xl text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
+        <p className='text-s mr-3 cursor-pointer text-basic-pink duration-300 hover:text-hover-pink sm:mr-4 md:mr-12 md:text-3xl'>
           Home
         </p>
       </Link>
       <Link href={`/SignUp`}>
-        <p className='mr-3 text-s md:text-3xl tracking-tighter text-basic-pink hover:text-hover-pink cursor-pointer duration-300'>
+        <p className='text-s mr-3 cursor-pointer tracking-tighter text-basic-pink duration-300 hover:text-hover-pink md:text-3xl'>
           Log in
         </p>
       </Link>

@@ -13,7 +13,7 @@ type Props = {
 export const HeaderLayout = (props: Props): JSX.Element => {
   const { children } = props;
   return (
-    <div className='flex flex-col min-h-screen container mx-auto outline'>
+    <div className='container mx-auto flex min-h-screen flex-col outline'>
       <Head>
         <title>{props.title}</title>
         <meta charSet='utf-8' />
@@ -24,9 +24,9 @@ export const HeaderLayout = (props: Props): JSX.Element => {
       {/* ヘッダーはヘッダー */}
       <Header></Header>
       {/* ここの[flex-1]は、全体に対するメイン画面に対して*/}
-      <div className='flex flex-col flex-1'>
+      <div className='flex flex-1 flex-col'>
         {/* ここの[flex-1]は、メイン画面に対するその中の子要素（この場合children）に対して*/}
-        <main className='bg-basic-orange outline flex-1'>{children}</main>
+        <main className='flex-1 bg-basic-orange outline'>{children}</main>
       </div>
       <Footer></Footer>
     </div>

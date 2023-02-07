@@ -1,7 +1,7 @@
 export const Footer = (): JSX.Element => {
   return (
     // <div className="flex flex-col min-h-screen container mx-auto bg-green-300 outline">
-    <footer className='bg-basic-yellow outline md:h-14 h-11 flex justify-center items-center text-black text-sm'>
+    <footer className='flex h-11 items-center justify-center bg-basic-yellow text-sm text-black outline md:h-14'>
       &copy; Ori 2022
       {/* <span > */}
       {/* /public/vercel.svgの省略形 */}

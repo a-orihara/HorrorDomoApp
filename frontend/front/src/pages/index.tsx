@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <HeaderLayout title='HOME'>
       <div className='mx-auto px-6 py-16 pt-28 text-center'>
-        <h1 className='mb-36 text-4xl font-spacemono scale-y-150 text-center tracking-tighter font-semibold text-black md:text-6xl'>
+        <h1 className='mb-36 scale-y-150 text-center font-spacemono text-4xl font-semibold tracking-tighter text-black md:text-6xl'>
           Welcome to the Horror Domo App!
         </h1>
         <div className='pt-10'>

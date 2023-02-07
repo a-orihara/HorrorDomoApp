@@ -24,11 +24,11 @@ default: &default # 使用するデータベース種類
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   # 接続に使用するユーザの名前。
   # username: root／<初期の設定>
-  username: <%= ENV.fetch("MYSQL_USER") %>
+  username: user_dev
   # 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
   # githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
   # password: ／<初期の設定>
-  password: <%= ENV.fetch("MYSQL_PASSWORD") %>
+  password: password_dev
   # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
   host: db
 

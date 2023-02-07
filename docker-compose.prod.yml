@@ -37,8 +37,8 @@ services:
     # 5
     # rails s:puma(アプリケーションサーバ)が起動。「-C」でPumaの設定ファイルを指定することが可能。
     # ↓nginxなしの場合。
-    # command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -e production -p 3000 -b '0.0.0.0'"
-    command: bash -c "rm -f tmp/pids/server.pid && mkdir -p tmp/sockets && mkdir -p tmp/pids && bundle exec puma -e production -C config/puma.rb"
+    command: bash -c "rm -f tmp/pids/server.pid && rails s -e production -p 3000 -b '0.0.0.0'"
+    # command: bash -c "rm -f tmp/pids/server.pid && mkdir -p tmp/sockets && mkdir -p tmp/pids && bundle exec puma -e production -C config/puma.rb"
 
     # 8
     volumes:

@@ -50,8 +50,8 @@ production:
   # api_app_productionという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
   database: api_app_production
   # <初期設定>username: api_app
-  username: <%= ENV['API_APP_DATABASE_USER'] %>
-  password: <%= ENV['API_APP_DATABASE_PASSWORD'] %>
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
 # RDS時、参考
 # DB_USERNAME="RDSの接続ユーザ名"
 # DB_PASSWORD="RDSのパスワード"

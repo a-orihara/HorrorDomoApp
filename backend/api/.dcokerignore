@@ -1,0 +1,36 @@
+# 1
+# 環境変数設定ファイルの無視
+.env*
+# マスターキーの無視
+/config/master.key
+# share配下の無視
+/share/*
+!/share/.keep
+.git
+.gitignore
+.cache
+.codeclimate.yml
+.dockerignore
+.gitlab-ci.yml
+.hound.yml
+.travis.yml
+LICENSE.md
+README.md
+docker-compose.*
+Dockerfile
+log/*
+
+# @          @@          @@          @@          @@          @@          @@          @
+# 1
+# .dockerignoreファイル。ビルドコンテキストとして無視する。
+# *ここで設定しても、バインドマウントで共有した場合、そちらの方が優先される。
+# docker up時、指定したパターンにマッチするファイルを無視する。ビルド対象からの除外や、COPYやADDすると
+# きにコンテナに取り込まないようにする。
+# OSに依存するディレクトリ(node_modulesなど)や、パスワードなどの重要な情報が入ったファイル（.envな
+# ど）を,除外対象にする。不要なファイルを除外することで、ビルドの短縮やファイルサイズの縮小ができる。
+
+# dockerignoreとは、DockerfileのCOPYコマンドでコピーしたくないファイルやディレクトリを指定するフ
+# ァイルのことです。
+# dockerignoreはビルドコンテキストルートにある.dockerignoreファイルしか読み込まれません。サブディレ
+# クトリにある.dockerignoreファイルは読み込まれません。そのため、.dockerignoreファイルはビルド時に
+# ルートとなるディレクトリに配置しておきましょう。

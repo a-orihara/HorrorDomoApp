@@ -1,11 +1,11 @@
 # 1
-dud:
+ddu:
 	docker-compose -f docker-compose.dev.yml up --force-recreate
 
-dbd:
+ddb:
 	docker-compose -f docker-compose.dev.yml build
 
-dbdn:
+ddbn:
 	docker-compose -f docker-compose.dev.yml build --no-cache
 
 dup:

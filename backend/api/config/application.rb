@@ -47,5 +47,37 @@ module ApiApp
         # ビュースペックを作成しない。フィーチャースペック、またはフロント側でUIをテストする為
         view_specs: false
     end
+
+    # Rackミドルウェアを使用してCORS（Cross-Origin Resource Sharing）ポリシーを設定
+    config.middleware.insert_before 0, Rack::Cors do
+      # 許可されるCORSリクエストについての設定
+      allow do
+        # すべてのオリジンからのリクエストを許可
+        origins '*'
+        # すべてのリソースに対するCORSポリシーを指定
+        resource '*',
+                  # すべてのヘッダーを許可
+                  :headers => :any,
+                  # CORSリクエストに含まれるヘッダーの内、許可されるヘッダーを指定
+                  :expose => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+                  # 許可されるHTTPメソッドを指定
+                  :methods => [:get, :post, :options, :delete, :put]
+      end
+    end
   end
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+
+このコードは、Rack::Corsを使ってCORS（Cross-Origin Resource Sharing）を設定するためのものです。allowブロ
+ック内にある設定によって、許可されたオリジン、許可されたHTTPメソッド、許可されたヘッダーなどが定義されています。
+
+CORSは、異なるオリジン間でWebアプリケーションのリソースにアクセスするための仕組みであり、セキュリティを維持するた
+めに必要です。この設定は、アプリケーションのサーバーが異なるオリジンからのリクエストを受け入れるための設定であり、
+異なるオリジンからのアクセスを許可するために必要な設定が含まれています。
+
+一般的には、CORSを設定する際には、許可するオリジン、HTTPメソッド、ヘッダーの設定を行うことが多いです。また、
+Railsアプリケーションでは、Rack::Corsを使ってCORSを設定することが一般的です。
+=end

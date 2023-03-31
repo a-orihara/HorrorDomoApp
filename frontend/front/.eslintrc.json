@@ -1,3 +1,104 @@
+// 1
 {
-  "extends": "next/core-web-vitals"
+  // 2
+  "extends": [
+    // "eslint-config-next(package.json)の設定"
+    "next",
+    // nextjs作成時にデフォルトで書かれている。Core Web Vitalsのルールを追加。
+    "next/core-web-vitals",
+    // ESLintが推奨するルール（チェック項目）で、基本的なソースの不備を手軽にまとめてチェックすることができる。
+    "eslint:recommended",
+    // 上のルールをこれで上書き。以下も同じ。eslint-plugin-reactのrecommendedの設定
+    "plugin:react/recommended",
+    // eslint-plugin-react-hooksのrecommendedの設定
+    "plugin:react-hooks/recommended",
+    // 3 @typescript-eslintのrecommendedの設定
+    "plugin:@typescript-eslint/recommended",
+    // eslint-plugin--importのrecommendedの設定
+    "plugin:import/recommended",
+    // 6
+    "prettier"
+  ],
+
+  // 4
+  "rules": {
+    // 5
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  }
 }
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+Next.js の新規プロジェクト作成時に生成されたESLintの設定ファイル。
+デフォルトでeslint-config-next(package.json)の設定が適用されている。
+また、Next.js にデフォルトで搭載されたESLintでは、lintコマンドの対象ディレクトリが、
+3つ（pages、lib、components）に限定されています。
+
+------------------------------------------------------------------------------------------------
+「package.json」の"scripts"の内容を下記に変更。
+"lint": "next lint --dir src"
+*srcディレクトリのみ構文解析する。
+
+------------------------------------------------------------------------------------------------
+extends に指定した配列の上から評価され、同一の設定項目は下にあるもので上書きされます。
+次の順序を意識して設定すると読みやすくなります。
+1、eslint:recommended
+2、TypeScriptなど開発全体に関わるもの
+3、Jestなど特定ファイルに対するもの
+
+================================================================================================
+2
+extends:設定ファイルを拡張する。Extend はruleのsettingを設定できます。
+上から順に適用されるので、この順番で記載。prettierの記載は最後に。
+recommendedなどを使うときにextendsを使う。
+*ドキュメントには下記記載
+設定ファイルを拡張すると、他の設定ファイル（ルール、プラグイン、言語オプションを含む）の特徴をすべて継承し、
+すべてのオプションを変更することができます。
+
+=          ==          ==          ==          ==          ==          ==          ==          =
+3
+plugin:の後にパッケージ名/設定名を指定する。
+パッケージ名は eslint-plugin- は省略し、頭にplugin:を付けた形で指定できる。
+例：
+"plugin:react/recommended" -> "eslint-plugin-react"
+"plugin:@typescript-eslint/recommended" -> "@typescript-eslint/eslint-plugin "
+
+eslint-config-prettierは、eslint-config- を省略して書く
+例：
+eslint-config-prettier -> "prettier"
+
+実際の開発においては TypeScript や Prettier など、効率を上げるためのツールを使用することが多いでしょう。
+その場合はそれぞれのツール向けの ESLint プラグインを利用しましょう。
+
+*eslint-config-prettier は prettier が整形したコードに対して ESLint がエラーを出力しないようにするプラグイ
+ン。ESLint のコードフォーマットに関連するルールを無効化し、バグを検出するルールのみを有効にする。
+
+=          ==          ==          ==          ==          ==          ==          ==          =
+4
+ESLintで独自のルールを記述する場合は、rules(その実体はコードを検証して結果をreportする関数)に記述します。
+ルールに反したものはreportするというのがESLintの大きな仕組み。
+
+rule(つまり静的検証する関数そのもの) を追加でき、ESLintはサードパーティプラグインの使用をサポートしています。プ
+ラグインは使用する前に、npm を使用してインストールする必要があります。設定ファイル内でプラグインを設定するには、
+プラグイン名のリストを含むpluginsキーを使用します。プラグイン名からeslint-plugin-という接頭辞を省略することが
+できます。
+
+プラグインは、ESLint で使用するための追加のルールを公開することができます。
+プラグインは、ESLintで使用するための追加の環境を公開することができます。
+また、JavaScript以外のファイルをどのように処理するかをESLintに伝えるプラグインを作成することもできます。
+=          ==          ==          ==          ==          ==          ==          ==          =
+5
+eslint-plugin-reactを使用している場合、react/jsx-uses-react と react/react-in-jsx-scope のルールは不要
+になる為、無効にする。
+
+=          ==          ==          ==          ==          ==          ==          ==          =
+6
+eslint-config-prettierの設定。lintとprettierの競合するルールをオフ。
+extendsの最後にprettierを読み込むことで、eslintのフォーマットの機能を上書きして機能の競合をなくします。
+
+"prettier/@typescript-eslint",
+以前は["prettier"]合わせて記載していたが、[eslint-config-prettier 8.0.0 ]で "prettier/@typescript-eslint" は "prettier" にマージされた為、
+'prettier/@typescript-eslint'は記載不要に。
+*/

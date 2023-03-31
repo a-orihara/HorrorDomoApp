@@ -35,6 +35,16 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+  # 下記追加
+  # rubocop:コード解析・検査ツール。
+  gem 'rubocop', require: false
+  # RuboCopで入れた方がいい機能。Rubyのパフォーマンスを改善するためのチェックを追加。
+  gem "rubocop-performance", require: false
+  # Railsのベストプラクティスに従うようにコードをチェック
+  gem "rubocop-rails", require: false
+  # RSpecのテストコードに対するコードをチェック
+  gem "rubocop-rspec", require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

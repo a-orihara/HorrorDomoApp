@@ -75,10 +75,10 @@ services:
   #     - front
   front:
     build:
-      context: ./frontend
+      context: ./frontend/front
       dockerfile: Dockerfile.dev
-    image: nextjs-img-dev
-    container_name: nextjs-ctr-dev
+    image: nextjs-img-dev2
+    container_name: nextjs-ctr-dev2
     # 同期する
     volumes:
       - ./frontend/front:/usr/src/front

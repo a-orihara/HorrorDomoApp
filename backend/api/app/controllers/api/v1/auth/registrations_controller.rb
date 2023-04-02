@@ -2,7 +2,7 @@
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
   private
 
-  2
+  # 2
   def sign_up_params
     # サインアップ時に登録できるカラムを指定
     params.permit(:email, :password, :password_confirmation, :name)
@@ -32,5 +32,4 @@ sign_up_params は、Devise Token Auth の RegistrationsController に実装さ�
 Devise の RegistrationsController でも、同様のアクションが存在するため、混乱が生じる場合があります。
 Devise Token Auth の sign_up_params は、新規ユーザー登録に必要なパラメータを許可するストロングパラメーターを
 定義するために使用されます。
-
 =end

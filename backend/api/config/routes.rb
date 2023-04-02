@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations'
       }
+      namespace :auth do
+        resources :sessions, only: %i[index]
+      end
     end
   end
 end
@@ -52,7 +55,7 @@ api_v1_user_registration        PATCH  /api/v1/auth(.:format)                   
 
 api_v1_auth_validate_token      GET    /api/v1/auth/validate_token(.:format)    devise_token_auth/token_validations#validate_token
 ------------------------------------------------------------------------------------------------
-api_v1_sessions                 GET    /api/v1/sessions(.:format)    api/v1/sessions#index
+api_v1_sessions                 GET    /api/v1/auth/sessions(.:format)    api/v1/sessions#index
 
 ------------------------------------------------------------------------------------------------
 api_v1_todos                    GET    /api/v1/todos(.:format)                  api/v1/todos#index

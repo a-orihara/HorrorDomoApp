@@ -10,10 +10,10 @@ type ButtonProps = React.ComponentProps<'button'> & {
 //   return <button className={`${props.className}`}>{props.children}</button>;
 // };
 // 2
-const Button = ({ ...buttonProps }: ButtonProps) => {
+const Button = ({ children, className, ...buttonProps }: ButtonProps) => {
   return (
-    <button className={`${buttonProps.className}`} {...buttonProps}>
-      {buttonProps.children}
+    <button className={`${className}`} {...buttonProps}>
+      {children}
     </button>
   );
 };

@@ -11,7 +11,7 @@ module.exports = {
         'basic-orange': '#F28705',
         // 'basic-pink': '#F07171',
         'basic-pink': '#F22C5A',
-        'basic-green': '#5AFF19',
+        'basic-green': '#008000',
         'basic-purple': '#CC00CC',
         'hover-yellow': '#FFF33F',
         'hover-pink': '#FC1919',

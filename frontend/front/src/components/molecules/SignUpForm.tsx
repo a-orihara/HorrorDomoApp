@@ -9,6 +9,7 @@ const SignUpForm = () => {
     password: string;
     password_confirmation: string;
   };
+
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

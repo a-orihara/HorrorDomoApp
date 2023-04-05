@@ -17,7 +17,7 @@ dbp:
 dbpn:
 	docker-compose -f docker-compose.prod.yml build --no-cache
 
-ds:
+dsp:
 	docker system prune
 
 # @          @@          @@          @@          @@          @@          @@          @

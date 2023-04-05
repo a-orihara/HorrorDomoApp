@@ -11,16 +11,13 @@ type LayoutProps = {
 // flexを子に適用
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className='basic-yellow container mx-auto flex min-h-screen min-w-full flex-col outline'>
+    <div className='basic-yellow container mx-auto flex h-full min-h-screen min-w-full flex-col outline'>
       {/* 2 */}
 
       <Header></Header>
 
-      <div className='flex flex-1 flex-col md:flex-row'>
-        <main className='flex-1 bg-basic-orange outline'>
-          <h1>メイン部分</h1>
-          {children}
-        </main>
+      <div className='flex  flex-1 flex-row  bg-red-300 md:flex-row'>
+        <main className='flex flex-1 bg-basic-orange outline '>{children}</main>
       </div>
 
       <Footer></Footer>

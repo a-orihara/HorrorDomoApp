@@ -24,7 +24,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
-# 下記追加
+# 下記追加 --------------------------------------
 gem 'dotenv-rails'
 gem 'devise'
 gem 'devise_token_auth'
@@ -32,10 +32,12 @@ gem 'devise_token_auth'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # 下記追加 --------------------------------------
   # RSpecをインストール
   gem 'rspec-rails'
   # テスト用のgem、FactoryBotをインストール。
   gem 'factory_bot_rails'
+  gem 'pry-rails'
 end
 
 group :development do
@@ -43,7 +45,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
-  # 下記追加
+  # 下記追加 --------------------------------------
   # rubocop:コード解析・検査ツール。
   gem 'rubocop', require: false
   # RuboCopで入れた方がいい機能。Rubyのパフォーマンスを改善するためのチェックを追加。
@@ -52,6 +54,7 @@ group :development do
   gem "rubocop-rails", require: false
   # RSpecのテストコードに対するコードをチェック
   gem "rubocop-rspec", require: false
+  gem 'pry-byebug'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

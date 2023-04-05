@@ -1,8 +1,6 @@
-import axios from 'axios';
-import { User } from '../types';
+import { SignUpParams } from '../types';
+import client from './client';
 
-export const signUpUser = async (name: string, email: string, password: string, password_confirmation: string;): Promise<User> => {
-  const res = await axios.post()
-
-  alert('サインアップ');
+export const signUpUser = (params: SignUpParams) => {
+  return client.post('/auth', params);
 };

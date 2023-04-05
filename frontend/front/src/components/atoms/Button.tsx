@@ -12,7 +12,7 @@ type ButtonProps = React.ComponentProps<'button'> & {
 // 2
 const Button = ({ children, className, ...buttonProps }: ButtonProps) => {
   return (
-    <button className={`${className}`} {...buttonProps}>
+    <button className={`button-basic bg-basic-yellow hover:bg-hover-yellow${className}`} {...buttonProps}>
       {children}
     </button>
   );

@@ -11,11 +11,11 @@ export type SignUpParams = {
   passwordConfirmation: string;
 };
 
-// // サインイン
-// export interface SignInParams {
-//   email: string
-//   password: string
-// }
+// サインイン
+export type SignInParams = {
+  email: string;
+  password: string;
+};
 
 // // ユーザー
 // export interface User {

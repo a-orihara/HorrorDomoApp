@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import React from 'react';
+import { signOut } from '../../api/auth';
+import Button from '../atoms/Button';
+import { useRouter } from 'next/router';
 
 const Navigation = () => {
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const res = await signOut();
+    console.log(res);
+    router.push('/');
+  };
   return (
     <nav className='text-s ml-3 mr-auto  items-center justify-around text-center font-spacemono font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
@@ -9,7 +19,7 @@ const Navigation = () => {
       <ul className='flex flex-row justify-around '>
         <Link href={'/'}>HOME</Link>
         <Link href={'/'}>SignUp</Link>
-        <Link href={'/'}>SignOut</Link>
+        <Button onClick={handleSignOut}>SignOut</Button>
       </ul>
     </nav>
   );

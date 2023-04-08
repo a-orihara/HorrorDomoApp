@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
-import { signInUser } from '../../api/auth';
+import { signIn } from '../../api/auth';
 import { SignInParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
@@ -17,7 +17,7 @@ const SignInForm = () => {
       password: password,
     };
     try {
-      const res = await signInUser(params);
+      const res = await signIn(params);
       console.log(res);
       if (res.status === 200) {
         Cookies.set('_access_token', res.headers['access-token']);

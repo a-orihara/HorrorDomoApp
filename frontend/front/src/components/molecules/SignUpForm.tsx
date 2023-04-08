@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
-import { signUpUser } from '../../api/auth';
+import { signUp } from '../../api/auth';
 import { SignUpParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
@@ -22,13 +22,16 @@ const SignUpForm = () => {
       passwordConfirmation: passwordConfirmation,
     };
     try {
-      const res = await signUpUser(params);
-      console.log(res);
+      // 5
+      const res = await signUp(params);
+      console.log(res.data);
       if (res.status === 200) {
         // 3
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
+        // const a = Cookies.get('_access_token');
+        // console.log(a);
       }
       alert('登録成功');
     } catch (err) {
@@ -172,4 +175,58 @@ e.preventDefault() は、イベントハンドラ内で使用される JavaScrip
 イベントが伝播（バブリングやキャプチャリング）されて、親要素で不要なイベントハンドラが実行されるのを防ぎたい場合
 e.preventDefault() は、これらのシナリオでよく使用されます。ただし、e.preventDefault() はイベント処理をキ
 ャンセルするため、通常のブラウザの動作が必要な場合は使用しないでください。
+
+================================================================================================
+5
+このresは、
+{data: {…}, status: 200, statusText: 'OK', headers: AxiosHeaders(以下略...)}
+res.dataは、わかりいくいけど、dataの中にstatusとdataオブジェクトがある。
+{ data:{status: 'success', data: {…}} }
+このres.data.dataの中身は、
+{data: {allowPasswordChange:false, createdAt:"2023-04-08T03:21:18.624Z", email: "koko@momo.com",
+id: 4, image: null, name: "koko", provider: "email", uid: "koko@momo.com",
+updatedAt: "2023-04-08T03:21:18.734Z"}}
+
+------------------------------------------------------------------------------------------------
+さらにCookieがセットされて帰ってきており、
+Cookie:
+_access_token=-TytLB7ijMdEVE-L7fTvDg;
+_client=T0JHkn5sIWxbp9pOtzJhow;
+_uid=koko@momo.com
+
+------------------------------------------------------------------------------------------------
+主なレスポンスヘッダー
+
+access-control-allow-methods: GET, POST, OPTIONS, DELETE, PUT
+CORSの設定で、許可されているHTTPメソッドを示す。
+
+access-control-allow-origin: *
+CORSの設定で、どのオリジンからのリクエストでも許可することを示す。
+
+access-control-expose-headers: access-token, expiry, token-type, uid, client
+CORSの設定で、クライアントに公開するレスポンスヘッダを示す。
+
+access-control-max-age: 7200
+CORSの設定で、許可されているリクエストをキャッシュする時間を示す。
+
+access-token: 6X54pSSjgNB4LNzkKpQc1Q
+認証トークンの一種であるaccess-tokenの値を示す。
+
+authorization: Bearer eyJhY2Nlc3MtdG9rZW4iOiI2WDU0cFNTamdOQjRMTnprS3BRYzFRIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6Im95MGdxcV8zdlRJOFVURktiaXhxb1EiLCJleHBpcnkiOiIxNjgyMTM2NjY3IiwidWlkIjoibW9tb0Btb21vLmNvbSJ9
+認証ヘッダの一種であるauthorizationの値を示す。
+
+client: oy0gqq_3vTI8UTFKbixqoQ
+認証トークンの一種であるclientの値を示す。
+
+Content-Type: application/json; charset=utf-8
+レスポンスのコンテンツタイプを示す。
+
+expiry: 1682136667
+認証トークンの有効期限を示す。
+
+token-type: Bearer
+認証トークンの種類を示す。
+
+uid: momo@momo.com
+認証ヘッダの一種であるuidの値を示す。
 */

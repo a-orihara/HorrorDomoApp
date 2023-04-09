@@ -39,6 +39,7 @@ const SignUpForm = () => {
       alert(`登録失敗${err}`);
     }
   };
+
   // 1
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const { name, value } = e.target;

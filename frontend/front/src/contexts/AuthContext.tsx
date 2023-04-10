@@ -11,7 +11,7 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 // 1
-const AuthContext = createContext(
+export const AuthContext = createContext(
   {} as {
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -181,6 +181,21 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 がログインした状態でアプリケーションを開始した場合、currentUserが更新されるたびに、handleGetCurrentUser関数
 が実行されて、認証状態が確認されます。これにより、認証状態を迅速に反映し、アプリケーション全体で正しい挙動を実現す
 ることができます。
+
+------------------------------------------------------------------------------------------------
+発火するタイミング
+
+コンポーネントがマウントされた時（初回レンダリング時）
+依存配列に指定されたsetCurrentUserが変更された時
+ただし、setCurrentUserはReactのuseStateから返される関数であり、通常は変更されないため、このuseEffectは主にコ
+ンポーネントがマウントされた時に実行されることになります。これにより、コンポーネントがマウントされた時に認証済みの
+ユーザー情報を取得し、現在の認証状態を確認する処理が行われます。
+
+依存配列にuseStateから返される関数（この場合はsetCurrentUser）を指定することで、useEffectはコンポーネントが
+マウントされた時（初回レンダリング時）に実行されます。この例では、初回レンダリング時に認証済みのユーザー情報を取得
+し、現在の認証状態を確認する処理が行われることを意図しています。
+一般的には、初回レンダリング時のみuseEffectを実行させたい場合、依存配列に空の配列（[]）を指定するのが一般的です。
+これにより、useEffectはコンポーネントがマウントされた時にのみ実行されます。
 
 ------------------------------------------------------------------------------------------------
 AuthProvider を _app.tsx で使用すると、アプリケーション全体に認証機能を提供できます。AuthProvider の中にある

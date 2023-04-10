@@ -1,11 +1,14 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import { signOut } from '../../api/auth';
 import Button from '../atoms/Button';
 import { useRouter } from 'next/router';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Navigation = () => {
+  const { loading, isSignedIn, setIsSignedIn, currentUser } = useContext(AuthContext);
   const router = useRouter();
+  console.log(`ここ${currentUser}`);
 
   const handleSignOut = async () => {
     const res = await signOut();
@@ -15,11 +18,10 @@ const Navigation = () => {
   return (
     <nav className='text-s ml-3 mr-auto  items-center justify-around text-center font-spacemono font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
-
       <ul className='flex flex-row justify-around '>
         <Link href={'/'}>HOME</Link>
-        <Link href={'/'}>SignUp</Link>
-        <Button onClick={handleSignOut}>SignOut</Button>
+        {!loading && !isSignedIn && <Link href={'/'}>SignUp</Link>}
+        {!loading && isSignedIn && <Button onClick={handleSignOut}>SignOut</Button>}
       </ul>
     </nav>
   );
@@ -36,7 +38,16 @@ ul タグは、順序を持たないリスト（unordered list）を表し、li 
 ul タグに li タグを入れる理由は、リストをマークアップするためです。ul タグを使用することで、順序を持たないリスト
 を表現できます。li タグを使用することで、各項目を表現できます。リスト全体を ul タグで囲むことで、各項目がリストの
 一部であることが明確になります。
-また、ul タグに li タグを入れることで、視覚的なデザインやスタイリングを適用することもできます。CSSを使用して、リストアイテムの間隔やマージン、フォントサイズ、色などを設定することができます。
+また、ul タグに li タグを入れることで、視覚的なデザインやスタイリングを適用することもできます。CSSを使用して、リ
+ストアイテムの間隔やマージン、フォントサイズ、色などを設定することができます。
+
+------------------------------------------------------------------------------------------------
+&&は、左側がtrueなら右側を返す。
+isSignedIn が false （反転してtrue）の場合にのみ Link コンポーネントを返します。
+それ以外は何も返さない。書き換えると、
+if (isSignedIn === false) { return <Link href={'/signup'}>SignUp</Link> }
+
+
 */
 
 /*

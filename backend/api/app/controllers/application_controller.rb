@@ -1,3 +1,4 @@
+# 1
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
 end
@@ -5,6 +6,13 @@ end
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+ApplicationController は、アプリケーション内のすべてのコントローラーの基本クラスであり、一般的に共通の動作やヘ
+ルパーメソッドが定義されています。
+ApplicationControllerが、include DeviseTokenAuth::Concerns::SetUserByTokenしているので、
+ApplicationController を継承した全てのコントローラーで、current_api_v1_userなどの Devise Token Auth の
+ヘルパーメソッドが利用可能になります。
+
+------------------------------------------------------------------------------------------------
 DeviseTokenAuth::Concerns::SetUserByToken
 
 devise_token_auth が提供するモジュールの一つで、APIでトークンベースの認証を行う際に、トークンに基づいて、様々

@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 確認できた場合はそのユーザーの情報を取得。
 
   // 2 認証済みのユーザー情報を取得し、現在の認証状態を確認する
-  const handleGetCurrentUser = async (): Promise<void> => {
+  const handleGetCurrentUser = async () => {
     try {
       const res = await getAuthenticatedUser();
       if (res?.data.isLogin === true) {
@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     } catch (err) {
       console.log(err);
+      alert('エラー');
     }
     setLoading(false);
   };

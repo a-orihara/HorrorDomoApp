@@ -14,6 +14,10 @@ export const signIn = (params: SignInParams) => {
 
 // 3 クライアント側とサーバー側の両方でセッションを終了
 export const signOut = () => {
+  // if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) {
+  //   alert('ログインしていません。');
+  //   return Promise.reject(new Error('User is not authenticated'));
+  // }
   // DELETEリクエストは、通常、リソースの削除やセッションの終了などに使用されます。
   return client.delete('/auth/sign_out', {
     // サーバーから受け取った各種ヘッダー。これらのヘッダーは、Cookieから取得されます。

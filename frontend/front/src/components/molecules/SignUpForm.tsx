@@ -1,17 +1,21 @@
 import Cookies from 'js-cookie';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { signUp } from '../../api/auth';
 import { SignUpParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-
+import { AuthContext } from '../../contexts/AuthContext';
+import { useRouter } from 'next/router';
+// ------------------------------------------------------------------------------------------------
 const SignUpForm = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const router = useRouter();
+  // ------------------------------------------------------------------------------------------------
   // 非同期通信なので、async await
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -30,13 +34,16 @@ const SignUpForm = () => {
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
-        // const a = Cookies.get('_access_token');
-        // console.log(a);
+        setIsSignedIn(true);
+        setCurrentUser(res.data.data);
+        alert('登録成功');
+        router.push('/');
+      } else {
+        alert('登録失敗');
       }
-      alert('登録成功');
     } catch (err) {
       console.log(err);
-      alert(`登録失敗${err}`);
+      alert(`登録エラー${err}`);
     }
   };
 

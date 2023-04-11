@@ -1,5 +1,6 @@
-class Api::V1::Auth::SessionsController < DeviseTokenAuth::RegistrationsController
-  # 1 ログイン済みのユーザーが存在するかをチェックする
+# 1
+class Api::V1::Auth::SessionsController < ApplicationController
+  # 2 ログイン済みのユーザーが存在するかをチェックする
   def index
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
@@ -10,9 +11,17 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::RegistrationsControll
   end
 end
 
+# [devise_token_auth]ヘルパーメソッドが使えない(undefined)ときの対処法
+
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+ApplicationControllerが、include DeviseTokenAuth::Concerns::SetUserByTokenしているので、
+ApplicationController を継承した全てのコントローラーで、current_api_v1_userなどの Devise Token Auth の
+ヘルパーメソッドが利用可能になります。
+
+================================================================================================
+2
 一般にこのメソッドの返り値は、
 id: ユーザーのID
 provider: 認証プロバイダーの種類（例えば、"email"や"facebook"など）

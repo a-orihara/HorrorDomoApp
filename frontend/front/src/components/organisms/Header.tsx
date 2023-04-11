@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navigation from '../molecules/Navigation';
+('../../contexts/AuthContext');
 
 const Header = () => {
   return (

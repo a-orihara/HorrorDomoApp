@@ -1,14 +1,18 @@
 import Cookies from 'js-cookie';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useState } from 'react';
 import { signIn } from '../../api/auth';
 import { SignInParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-
+import { AuthContext } from '../../contexts/AuthContext';
+// ------------------------------------------------------------------------------------------------
 const SignInForm = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -23,20 +27,23 @@ const SignInForm = () => {
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
+        setIsSignedIn(true);
+        setCurrentUser(res.data.data);
         alert('ログイン成功');
+        router.push('/');
       } else {
         alert('ログイン失敗');
       }
     } catch (err) {
       console.log(err);
-      alert(`ログイン失敗${err}`);
+      alert(`ログインエラー${err}`);
     }
   };
   // ------------------------------------------------------------------------------------------------
   return (
     <div className='mar flex h-full flex-1 items-center justify-center bg-slate-300'>
       <div className='flex-1 bg-red-200'>
-        <h1>Sign Up From</h1>
+        <h1>Sign In From</h1>
         <form>
           <div>
             <Label htmlFor='email'>Email:</Label>
@@ -67,7 +74,7 @@ const SignInForm = () => {
           </div>
 
           <div>
-            <Button onClick={handleSubmit}>Sign Up!</Button>
+            <Button onClick={handleSubmit}>Sign In!</Button>
           </div>
         </form>
       </div>

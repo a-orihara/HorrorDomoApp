@@ -1,8 +1,12 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import { useContext } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
+  const { isSignedIn, currentUser } = useContext(AuthContext);
+  // ------------------------------------------------------------------------------------------------
   return (
     <div className='p-4'>
       {/* 1 */}
@@ -15,6 +19,15 @@ const Home: NextPage = () => {
       </Head>
       <h1 className='text-xl font-bold'>ホームページ</h1>
       <p className='mt-4'>ここにツイート一覧や、他のコンポーネントを追加できます。</p>
+      {isSignedIn && currentUser ? (
+        <>
+          <h1>Signed in successfully!</h1>
+          <h2>Email: {currentUser?.email}</h2>
+          <h2>Name: {currentUser?.name}</h2>
+        </>
+      ) : (
+        <h1>Not signed in</h1>
+      )}
     </div>
   );
 };

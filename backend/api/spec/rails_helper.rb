@@ -6,6 +6,11 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+# [この行の下に追加のrequireを追加します。この時点までRailsはロードされていません！]
+# 1
+require 'devise'
+require 'support/controller_macros'
+require 'support/request_macros'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -61,3 +66,23 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+require 'devise'
+Deviseを使用したテストで必要となる、Deviseのライブラリを読み込むための記述です。DeviseはRailsでよく使われる認
+証機能を提供するGemであり、RSpecを使ったテストでDeviseを使用する場合はこのようにライブラリを読み込む必要があり
+ます。
+------------------------------------------------------------------------------------------------
+require 'support/controller_macros'
+Controllerテストでよく使われる、ログインを簡単に行うためのコントローラマクロを定義したファイルを読み込むための記
+述です。コントローラマクロは、Deviseのテストヘルパーを使って、コントローラのテスト中にログイン処理を実行するため
+のコードをまとめたものであり、このファイルを読み込むことでコントローラテストを書きやすくすることができます。
+
+require 'support/request_macros'
+リクエストスペックでよく使われる、APIリクエストのテストに必要な認証トークンを取得するためのリクエストマクロを定義
+したファイルを読み込むための記述です。リクエストマクロは、Devise Token Authを使って、リクエストのヘッダーに必要
+な認証トークンを付与するためのコードをまとめたものであり、このファイルを読み込むことでAPIリクエストのテストを書き
+やすくすることができます。
+=end

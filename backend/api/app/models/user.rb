@@ -13,7 +13,6 @@ class User < ApplicationRecord
   validates :email, length: { maximum: 255 }
 end
 
-
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

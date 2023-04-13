@@ -1,9 +1,6 @@
 # 1
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
-  def create
-     # ここにデバッグしたい箇所にbinding.pryを挿入する
-    super
-  end
+
   private
 
   # 2

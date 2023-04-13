@@ -139,6 +139,23 @@ Layout/MultilineMethodCallIndentation:
 # 空メソッドの場合に、1行のスタイルにしない:NG例：def style1; end
 Style/EmptyMethod:
   EnforcedStyle: expanded
+
+# contextやdescribeに指定する文字列が when, with, without のいずれかで始まっているか
+RSpec/ContextWording:
+  Enabled: false
+
+# 下記はchatGPTのおすすめの設定
+Style/BlockDelimiters:
+  Enabled: false
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: false
+Lint/RedundantDirGlobSort:
+  Enabled: false
 # @          @@          @@          @@          @@          @@          @@          @
 # 1
 # [.rubocop.yml]:独自のコーディング規約を設定するファイル。

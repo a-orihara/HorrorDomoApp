@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react';
 import Footer from '../organisms/Footer';
 import Header from '../organisms/Header';
@@ -5,13 +6,21 @@ import Header from '../organisms/Header';
 type LayoutProps = {
   // title?: string;
   children: React.ReactNode;
+  title: string;
 };
 
 // flexを子に適用
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, title = 'HorrorDomoApp' }: LayoutProps) => {
   return (
     <div className='container mx-auto flex h-full min-h-screen min-w-full flex-col font-spacemono  outline'>
       {/* 2 */}
+      <Head>
+        <title>{title}</title>
+        <meta charSet='utf-8' />
+        <meta name='description' content='ホラー映画好きが集まる投稿サイトです' />
+        {/* 4 */}
+        <link rel='icon' href='/favicon.png' />
+      </Head>
 
       <Header></Header>
 

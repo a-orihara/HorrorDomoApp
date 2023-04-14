@@ -1,8 +1,12 @@
-import React from 'react';
+import Layout from '../components/layout/Layout';
 import SignUpPage from '../components/templates/SignUpPage';
 
 const Signup = () => {
-  return <SignUpPage></SignUpPage>;
+  return (
+    <Layout title='Sign Up'>
+      <SignUpPage></SignUpPage>;
+    </Layout>
+  );
 };
 
 export default Signup;

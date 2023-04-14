@@ -2,11 +2,11 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { signIn } from '../../api/auth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-import { AuthContext } from '../../contexts/AuthContext';
 // ------------------------------------------------------------------------------------------------
 const SignInForm = () => {
   const [email, setEmail] = useState<string>('');
@@ -41,43 +41,43 @@ const SignInForm = () => {
   };
   // ------------------------------------------------------------------------------------------------
   return (
-    <div className='mar flex h-full flex-1 items-center justify-center bg-slate-300'>
-      <div className='flex-1 bg-red-200'>
-        <h1>Sign In From</h1>
-        <form>
-          <div>
-            <Label htmlFor='email'>Email:</Label>
-            <br />
-            <Input
-              id='email'
-              type='email'
-              name='email'
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-              }}
-            ></Input>
-          </div>
+    <div className='flex w-full flex-1 flex-col bg-red-200'>
+      <h1 className=' my-6 w-full bg-green-200 text-center'>Sign In From</h1>
+      <form className='flex  flex-1 flex-col items-center justify-center space-y-6 bg-yellow-200'>
+        <div>
+          <Label htmlFor='email'>Email:</Label>
+          <br />
+          <Input
+            id='email'
+            type='email'
+            name='email'
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
+            }}
+          ></Input>
+        </div>
 
-          <div>
-            <Label htmlFor='password'>Password:</Label>
-            <br />
-            <Input
-              id='password'
-              type='password'
-              name='password'
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(e.target.value);
-              }}
-            ></Input>
-          </div>
+        <div>
+          <Label htmlFor='password'>Password:</Label>
+          <br />
+          <Input
+            id='password'
+            type='password'
+            name='password'
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
+            }}
+          ></Input>
+        </div>
 
-          <div>
-            <Button onClick={handleSubmit}>Sign In!</Button>
-          </div>
-        </form>
-      </div>
+        <div>
+          <Button className='bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+            Sign In!
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

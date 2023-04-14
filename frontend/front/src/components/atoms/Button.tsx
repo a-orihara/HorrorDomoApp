@@ -12,7 +12,7 @@ type ButtonProps = React.ComponentProps<'button'> & {
 // 2
 const Button = ({ children, className, ...buttonProps }: ButtonProps) => {
   return (
-    <button className={`button-basic bg-basic-yellow hover:bg-hover-yellow${className}`} {...buttonProps}>
+    <button className={`button-basic ${className}`} {...buttonProps}>
       {children}
     </button>
   );
@@ -21,6 +21,7 @@ const Button = ({ children, className, ...buttonProps }: ButtonProps) => {
 export default Button;
 
 /*
+bg-basic-yellow hover:bg-hover-yellow
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 React.ComponentProps<'button'>はオブジェクト。その実行結果。

@@ -1,11 +1,8 @@
-import React from 'react';
-import Navigation from '../molecules/Navigation';
-
 // type FooterProps = React.ComponentProps<'footer'>;
 
 const Footer = () => {
   return (
-    <footer className='flex h-14 items-center justify-center bg-basic-yellow text-sm text-black outline md:h-14'>
+    <footer className='basic-border flex h-14 items-center justify-center bg-basic-yellow text-sm text-black outline md:h-14'>
       <h1>フッター</h1>
     </footer>
   );

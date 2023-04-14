@@ -1,10 +1,10 @@
-import Link from 'next/link';
-import React, { useContext } from 'react';
-import { signOut } from '../../api/auth';
-import Button from '../atoms/Button';
-import { useRouter } from 'next/router';
-import { AuthContext } from '../../contexts/AuthContext';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { signOut } from '../../api/auth';
+import { AuthContext } from '../../contexts/AuthContext';
+import Button from '../atoms/Button';
 
 const Navigation = () => {
   const { loading, isSignedIn, setIsSignedIn, currentUser } = useContext(AuthContext);
@@ -31,13 +31,19 @@ const Navigation = () => {
     }
   };
   return (
-    <nav className='text-s ml-3 mr-auto  items-center justify-around text-center font-spacemono font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className='text-s mr-auto flex h-16 flex-grow  bg-red-200 text-center  font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
-      <ul className='flex flex-row justify-around '>
-        <Link href={'/'}>HOME</Link>
+      <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
+        <Link href={'/'} className='bg-slate-400'>
+          HOME
+        </Link>
         {router.pathname !== '/signup' && !loading && !isSignedIn && <Link href={'/signup'}>SignUp</Link>}
         {!loading && !isSignedIn && <Link href={'/signin'}>SignIn</Link>}
-        {!loading && isSignedIn && <Button onClick={handleSignOut}>SignOut</Button>}
+        {!loading && isSignedIn && (
+          <Button className='h-14 bg-basic-green text-center text-white' onClick={handleSignOut}>
+            SignOut
+          </Button>
+        )}
       </ul>
     </nav>
   );
@@ -76,6 +82,10 @@ router.pathnameは、<Link>コンポーネントのhref属性などで使用さ�
 ./signupページでなく、非同期処理が終わり、認証してなければ、SignUpリンクを表示
 ./signupページでなく、非同期処理が終わり、認証していればば、SignOutリンクを表示
 
+@          @@          @@          @@          @@          @@          @@          @@          @
+css
+
+@          @@          @@          @@          @@          @@          @@          @@          @
 */
 
 /*

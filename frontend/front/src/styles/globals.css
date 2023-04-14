@@ -12,7 +12,13 @@
 /* 1 共通の設定をclassとして */
 @layer components {
   .button-basic {
-    @apply m-2 select-none rounded border-2 border-black px-5 py-2 font-spacemono text-lg font-normal tracking-tighter text-black transition duration-300 md:px-10 md:py-4 md:text-2xl md:font-medium;
+    @apply m-2 select-none rounded border-2 border-black px-5 py-2 font-spacemono text-lg font-normal tracking-tighter transition duration-300 md:px-10 md:py-4 md:text-2xl md:font-medium;
+  }
+  .button-small {
+    @apply m-2 select-none rounded border-2 border-black px-5 py-2 font-spacemono text-lg font-normal tracking-tighter text-white transition duration-300 md:px-10 md:py-4 md:text-2xl md:font-medium;
+  }
+  .basic-border {
+    @apply border border-black;
   }
 }
 
@@ -61,4 +67,12 @@ utilitiesはTailwindのユーティリティクラスを編集。
 ------------------------------------------------------------------------------------------------
 カスタム用の.button-basicクラスを設定。カスタムスタイルはcomponentsレイヤーに所属させる。
 *@layer内で追加されたカスタムCSSは使用されない限り、最終的なビルドに含まれない。
+================================================================================================
+@          @@          @@          @@          @@          @@          @@          @@          @
+CSS
+@          @@          @@          @@          @@          @@          @@          @@          @
+button-basic
+左右のmargin、左右上下のpadding、角のround、枠線の色と太さ、フォント（ファミリー、フォントウェイト（太さ）、テ
+キストサイズ、文字間の広さ、transition、アニメーションの時間、mdの設定
+
 */

@@ -1,4 +1,3 @@
-import React from 'react';
 import SignInPage from '../components/templates/SignInPage';
 
 const signin = () => {

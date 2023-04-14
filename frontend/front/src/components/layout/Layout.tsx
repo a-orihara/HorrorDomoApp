@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import React from 'react';
 import Footer from '../organisms/Footer';
 import Header from '../organisms/Header';
@@ -11,14 +10,12 @@ type LayoutProps = {
 // flexを子に適用
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className='basic-yellow container mx-auto flex h-full min-h-screen min-w-full flex-col outline'>
+    <div className='container mx-auto flex h-full min-h-screen min-w-full flex-col font-spacemono  outline'>
       {/* 2 */}
 
       <Header></Header>
 
-      <div className='flex  flex-1 flex-row  bg-red-300 md:flex-row'>
-        <main className='flex flex-1 bg-basic-orange outline '>{children}</main>
-      </div>
+      <main className='basic-border basic-border flex flex-1 flex-row bg-basic-orange'>{children}</main>
 
       <Footer></Footer>
     </div>
@@ -55,4 +52,5 @@ flex-grow、flex-shrink、flex-basisの3つのプロパティのショートハ�
 flex-growは、親要素のflexコンテナの余っているスペースを、子要素のflexアイテムに分配して、flexアイテムを伸ばすプ
 ロパティです。flex-growの値は整数値のみで、flexアイテムが伸びる比率を指定します。
 親要素に対して子要素を均等に配置するために使用されます。
+
 */

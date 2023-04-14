@@ -1,12 +1,12 @@
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { signUp } from '../../api/auth';
+import { AuthContext } from '../../contexts/AuthContext';
 import { SignUpParams } from '../../types';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-import { AuthContext } from '../../contexts/AuthContext';
-import { useRouter } from 'next/router';
 // ------------------------------------------------------------------------------------------------
 const SignUpForm = () => {
   const [name, setName] = useState<string>('');
@@ -116,7 +116,9 @@ const SignUpForm = () => {
           </div>
 
           <div>
-            <Button onClick={handleSubmit}>Sign Up!</Button>
+            <Button className='bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+              Sign Up!
+            </Button>
           </div>
         </form>
       </div>

@@ -4,6 +4,7 @@ import React, { useContext, useState } from 'react';
 import { signUp } from '../../api/auth';
 import { AuthContext } from '../../contexts/AuthContext';
 import { SignUpParams } from '../../types';
+import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
@@ -14,6 +15,13 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  // アラートメッセージの表示非表示を管理するステート
+  const [alertOpen, setAlertOpen] = useState(false);
+  // アラートメッセージの種類を管理するステート
+  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
+  // アラートのメッセージ内容を管理するステート
+  const [alertMessage, setAlertMessage] = useState('');
+
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
   // 非同期通信なので、async await
@@ -36,14 +44,22 @@ const SignUpForm = () => {
         Cookies.set('_uid', res.headers['uid']);
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
-        alert('登録成功');
-        router.push('/');
+        setAlertSeverity('success');
+        setAlertMessage('新規登録しました');
+        setAlertOpen(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 3000);
       } else {
-        alert('登録失敗');
+        setAlertSeverity('error');
+        setAlertMessage('Invalid email or password');
+        setAlertOpen(true);
       }
     } catch (err) {
-      console.log(err);
-      alert(`登録エラー${err}`);
+      console.error(err);
+      setAlertSeverity('error');
+      setAlertMessage('Something went wrong');
+      setAlertOpen(true);
     }
   };
 
@@ -120,6 +136,12 @@ const SignUpForm = () => {
               Sign Up!
             </Button>
           </div>
+          <AlertMessage
+            open={alertOpen}
+            setOpen={setAlertOpen}
+            severity={alertSeverity}
+            message={alertMessage}
+          ></AlertMessage>
         </form>
       </div>
     </div>

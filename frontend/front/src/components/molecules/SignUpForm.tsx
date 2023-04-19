@@ -81,7 +81,7 @@ const SignUpForm = () => {
             <Input
               id='name'
               type='text'
-              name='username'
+              name='name'
               value={name}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setName(e.target.value);

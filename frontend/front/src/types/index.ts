@@ -17,6 +17,14 @@ export type SignInParams = {
   password: string;
 };
 
+// アップデート
+export type UserUpdateParams = {
+  name: string;
+  email: string;
+  // password: string;
+  // passwordConfirmation: string;
+};
+
 // ユーザー
 export type User = {
   id: number;

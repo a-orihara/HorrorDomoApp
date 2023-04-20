@@ -2,7 +2,7 @@
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
 
   # 4
-  protected
+  # protected
 
     # def update_resource(resource, params)
     #   パスワードが空の場合は、パスワードの更新をスキップ
@@ -13,6 +13,17 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     #   end
     #   # resource.update_without_password(params)
     # end
+
+  # def create
+  #   super do |resource|
+  #     if resource.errors.empty?
+  #       render json: { status: 'success', message: I18n.t('devise.registrations.signed_up') }
+  #     else
+  #       render json: { status: 'error', errors: resource.errors.full_messages }
+  #       # render json: { status: 'error', fullMessages: resource.errors.full_messages }
+  #     end
+  #   end
+  # end
 
   private
 
@@ -32,6 +43,11 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
       update_params = params.permit(:name, :email)
       update_params.delete(:email) if update_params[:email].blank?
       update_params
+    end
+
+    # 5
+    def render_create_success
+      render json: { status: 'success', message: I18n.t('devise.registrations.signed_up'), data: resource }
     end
 end
 
@@ -101,4 +117,31 @@ protectedはRubyにおけるアクセス修飾子の一つで、記述したそ�
 び出す場合は、同じオブジェクト内である必要があります。
 protectedの利用意図の一例として、サブ（子）クラスでのみ使用するメソッドを定義することが挙げられます。
 
+================================================================================================
+5
+render_create_success
+DeviseTokenAuthのRegistrationsControllerクラスで新しいアカウントが作成されたときに呼び出される、成功応答をカ
+スタマイズするためのメソッドです。
+このメソッドは、ユーザーの新規登録が成功した場合に呼び出され、成功メッセージをJSON形式で返します。
+DeviseTokenAuthでは、render_create_successメソッドをオーバーライドして、成功応答をカスタマイズすることができ
+ます。
+
+------------------------------------------------------------------------------------------------
+I18nのtメソッドを使って、Deviseの国際化ファイルからdevise.registrations.signed_upに対応するメッセージを取得
+しています。
+18nは、多言語化に便利なライブラリで、デフォルトでRailsに組み込まれています。
+tメソッドは、指定されたキーに対応する翻訳を取得し、ローカライズされた文字列を返します。この例では、新しいアカウント
+が作成されたときに表示されるメッセージを取得するために使用されています。
+
+Deviseの国際化ファイルとは、Deviseで使用されるエラーメッセージや成功メッセージなどのテキストを、複数の言語に翻訳
+するためのファイルです。ファイル名は"devise.{ロケール名}.yml"です。
+devise.registrations.signed_upに対応するメッセージは、"devise.{ロケール名}.yml"ファイルの中の、
+"registrations"セクション内にある"signed_up"というキーに対応するメッセージです。
+
+locales/devise.en.ymlとlocales/devise.ja.yml2つのファイルがある場合、英語の場合はlocales/devise.en.yml
+に定義された"devise.registrations.signed_up"に対応するメッセージが取得される。
+日本語の場合はlocales/devise.ja.ymlに定義された"devise.registrations.signed_up"に対応するメッセージが取得
+される。
+言語に対応するファイルがない場合は、デフォルトのメッセージが表示される。
+言語は、リクエストヘッダーの"Accept-Language"に含まれる値で判断されます。
 =end

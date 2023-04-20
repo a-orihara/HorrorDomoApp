@@ -23,6 +23,16 @@ const SignUpForm = () => {
   const [alertMessage, setAlertMessage] = useState('');
 
   const router = useRouter();
+
+  interface ErrorResponse {
+    response: {
+      data: {
+        errors: {
+          full_messages: string[];
+        };
+      };
+    };
+  }
   // ------------------------------------------------------------------------------------------------
   // 非同期通信なので、async await
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,29 +46,30 @@ const SignUpForm = () => {
     try {
       // 5
       const res = await signUp(params);
-      console.log(res.data);
+      console.log(res.data.message);
       if (res.status === 200) {
         // 3
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
+        console.log(res);
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
         setAlertSeverity('success');
-        setAlertMessage('新規登録しました');
+        setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/');
         }, 3000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage('Invalid email or password');
+        setAlertMessage(`${res.data.errors.full_messages}`);
         setAlertOpen(true);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       setAlertSeverity('error');
-      setAlertMessage('Something went wrong');
+      setAlertMessage(`${err.response.data.errors.fullMessages}`);
       setAlertOpen(true);
     }
   };

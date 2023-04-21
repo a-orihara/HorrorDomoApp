@@ -7,7 +7,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import Button from '../atoms/Button';
 
 const Navigation = () => {
-  const { loading, isSignedIn, setIsSignedIn, currentUser } = useContext(AuthContext);
+  const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -34,13 +34,21 @@ const Navigation = () => {
     <nav className='text-s mr-auto flex h-16 flex-grow  bg-red-200 text-center  font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
       <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
-        <Link href={'/'} className='bg-slate-400'>
-          HOME
+        <Link href={'/'}>
+          <a className='hover:text-basic-pink'>HOME</a>
         </Link>
-        {router.pathname !== '/signup' && !loading && !isSignedIn && <Link href={'/signup'}>SignUp</Link>}
-        {!loading && !isSignedIn && <Link href={'/signin'}>SignIn</Link>}
+        {router.pathname !== '/signup' && !loading && !isSignedIn && (
+          <Link href={'/signup'}>
+            <a className='hover:text-basic-pink'>SignUp</a>
+          </Link>
+        )}
+        {!loading && !isSignedIn && (
+          <Link href={'/signin'}>
+            <a className='hover:text-basic-pink'>SignIn</a>
+          </Link>
+        )}
         {!loading && isSignedIn && (
-          <Button className='h-14 bg-basic-green text-center text-white' onClick={handleSignOut}>
+          <Button className='flex h-14 items-center justify-center bg-basic-green text-white' onClick={handleSignOut}>
             SignOut
           </Button>
         )}

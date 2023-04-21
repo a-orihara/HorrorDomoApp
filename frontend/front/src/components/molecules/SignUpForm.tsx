@@ -24,15 +24,6 @@ const SignUpForm = () => {
 
   const router = useRouter();
 
-  interface ErrorResponse {
-    response: {
-      data: {
-        errors: {
-          full_messages: string[];
-        };
-      };
-    };
-  }
   // ------------------------------------------------------------------------------------------------
   // 非同期通信なので、async await
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -82,79 +73,87 @@ const SignUpForm = () => {
 
   // ------------------------------------------------------------------------------------------------
   return (
-    <div className='mar flex h-full flex-1 items-center justify-center bg-slate-300'>
-      <div className='flex-1 bg-red-200'>
-        <h1>Sign Up From</h1>
-        <form>
-          <div>
-            <Label htmlFor='name'>Name:</Label>
-            <br />
-            <Input
-              id='name'
-              type='text'
-              name='name'
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setName(e.target.value);
-              }}
-            ></Input>
-          </div>
+    <div className='flex flex-1 flex-col'>
+      <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign Up</h1>
+      <form className='mt-11 flex flex-1 flex-col'>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='name'>
+            Name:
+          </Label>
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='name'
+            type='text'
+            name='name'
+            value={name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setName(e.target.value);
+            }}
+          ></Input>
+        </div>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
+            Email:
+          </Label>
 
-          <div>
-            <Label htmlFor='email'>Email:</Label>
-            <br />
-            <Input
-              id='email'
-              type='email'
-              name='email'
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-              }}
-            ></Input>
-          </div>
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='email'
+            type='email'
+            name='email'
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setEmail(e.target.value);
+            }}
+          ></Input>
+        </div>
 
-          <div>
-            <Label htmlFor='password'>Password:</Label>
-            <br />
-            <Input
-              id='password'
-              type='password'
-              name='password'
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(e.target.value);
-              }}
-            ></Input>
-          </div>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='password'>
+            Password:
+          </Label>
 
-          <div>
-            <Label htmlFor='passwordConfirmation'>Password Confirmation:</Label>
-            <br />
-            <Input
-              id='passwordConfirmation'
-              type='password'
-              name='passwordConfirmation'
-              value={passwordConfirmation}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPasswordConfirmation(e.target.value);
-              }}
-            ></Input>
-          </div>
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='password'
+            type='password'
+            name='password'
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
+            }}
+          ></Input>
+        </div>
 
-          <div>
-            <Button className='bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
-              Sign Up!
-            </Button>
-          </div>
-          <AlertMessage
-            open={alertOpen}
-            setOpen={setAlertOpen}
-            severity={alertSeverity}
-            message={alertMessage}
-          ></AlertMessage>
-        </form>
-      </div>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='passwordConfirmation'>
+            Password Confirmation:
+          </Label>
+
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='passwordConfirmation'
+            type='password'
+            name='passwordConfirmation'
+            value={passwordConfirmation}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPasswordConfirmation(e.target.value);
+            }}
+          ></Input>
+        </div>
+
+        <div>
+          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+            Sign Up!
+          </Button>
+        </div>
+        <AlertMessage
+          open={alertOpen}
+          setOpen={setAlertOpen}
+          severity={alertSeverity}
+          message={alertMessage}
+        ></AlertMessage>
+      </form>
     </div>
   );
 };

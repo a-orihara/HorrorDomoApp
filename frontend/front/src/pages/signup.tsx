@@ -4,7 +4,7 @@ import SignUpPage from '../components/templates/SignUpPage';
 const Signup = () => {
   return (
     <Layout title='Sign Up'>
-      <SignUpPage></SignUpPage>;
+      <SignUpPage></SignUpPage>
     </Layout>
   );
 };

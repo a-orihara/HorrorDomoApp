@@ -12,7 +12,7 @@ type LayoutProps = {
 // flexを子に適用
 const Layout = ({ children, title = 'HorrorDomoApp' }: LayoutProps) => {
   return (
-    <div className='container mx-auto flex h-full min-h-screen min-w-full flex-col font-spacemono  outline'>
+    <div className='container mx-auto flex min-h-screen min-w-full flex-col font-spacemono  outline'>
       {/* 1 */}
       <Head>
         <title>{title}</title>

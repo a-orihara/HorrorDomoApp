@@ -41,13 +41,18 @@ const SignInForm = () => {
   };
   // ------------------------------------------------------------------------------------------------
   return (
-    <div className='flex w-full flex-1 flex-col bg-red-200'>
-      <h1 className=' my-6 w-full bg-green-200 text-center'>Sign In From</h1>
-      <form className='flex  flex-1 flex-col items-center justify-center space-y-6 bg-yellow-200'>
+    <div className='flex flex-1 flex-col bg-red-200'>
+      <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>
+        Sign In
+      </h1>
+      <form className='mt-20 flex flex-1 flex-col bg-amber-100'>
         <div>
-          <Label htmlFor='email'>Email:</Label>
+          <Label className='m-auto w-2/5 bg-red-100 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
+            Email:
+          </Label>
           <br />
           <Input
+            className='m-auto mb-2 mt-1 w-2/5 bg-blue-100'
             id='email'
             type='email'
             name='email'
@@ -57,11 +62,13 @@ const SignInForm = () => {
             }}
           ></Input>
         </div>
-
         <div>
-          <Label htmlFor='password'>Password:</Label>
+          <Label className='m-auto w-2/5 bg-red-100 pl-3 text-left text-lg md:text-2xl' htmlFor='password'>
+            Password:
+          </Label>
           <br />
           <Input
+            className='m-auto mb-2 mt-1 w-2/5 bg-blue-100'
             id='password'
             type='password'
             name='password'
@@ -71,9 +78,8 @@ const SignInForm = () => {
             }}
           ></Input>
         </div>
-
         <div>
-          <Button className='bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
             Sign In!
           </Button>
         </div>

@@ -1,45 +1,55 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getUserById } from '../../../api/auth';
-import { User } from '../../../types';
+// 1
 
-const UserProfile = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
-  const { id } = router.query;
+import ProfilePage from '../../../components/templates/ProfilePage';
 
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchUserData = async () => {
-      try {
-        const res = await getUserById(id as string);
-        const fetchedUser: User = res.data;
-        setUser(fetchedUser);
-      } catch (err) {
-        console.error('Error fetching user data:', err);
-      }
-    };
-    fetchUserData();
-  }, [id]);
-
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div>
-      <h1>UserProfile</h1>
-      <p>{user.name}</p>
-      <p>{user.email}</p>
-    </div>
-  );
+const profile = () => {
+  return <ProfilePage></ProfilePage>;
 };
+export default profile;
 
-export default UserProfile;
+// const UserProfile = () => {
+//   const [user, setUser] = useState<User | null>(null);
+//   const router = useRouter();
+//   const { id } = router.query;
+
+//   useEffect(() => {
+//     if (!id) return;
+
+//     const fetchUserData = async () => {
+//       try {
+//         const res = await getUserById(id as string);
+//         const fetchedUser: User = res.data;
+//         setUser(fetchedUser);
+//       } catch (err) {
+//         console.error('Error fetching user data:', err);
+//       }
+//     };
+//     fetchUserData();
+//   }, [id]);
+
+//   if (!user) {
+//     return <div>Loading...</div>;
+//   }
+
+//   return (
+//     <div>
+//       <Layout title='Profile'>
+//         <Sidebar></Sidebar>
+//         <h1>UserProfile</h1>
+//         <p>{user.name}</p>
+//         <p>{user.email}</p>
+//       </Layout>
+//     </div>
+//   );
+// };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
+1
+ユーザーのプロフィール写真と基本ユーザーデータ、そしてマイクロポストの一覧を表示する動的なページ
+渡されたuserIDを元に、apiへリクエストし、ユーザーの情報を取得する
+
+================================================================================================
 1
 getServerSidePropsは、ServerSide(サーバーサイド)で実行される、ページを生成するメソッドです。
 getServerSidePropsはリクエスト毎に実行されます。

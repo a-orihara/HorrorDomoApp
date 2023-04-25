@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: %i[index]
       end
+      resources :users, only: [:index, :show]
     end
   end
 end
@@ -44,7 +45,9 @@ DeviseTokenAuth::ConfirmationsController
 DeviseTokenAuth::PasswordsController
 DeviseTokenAuth::OmniauthCallbacksController
 
-================================================================================================
+@          @@          @@          @@          @@          @@          @@          @@          @
+Path
+@          @@          @@          @@          @@          @@          @@          @@          @
 作成されるルート
 [registrations: 'auth/registrations']にマウントされた結果
 
@@ -68,6 +71,7 @@ api_v1_user_registration        PATCH  /api/v1/auth(.:format)                   
                                 POST   /api/v1/auth(.:format)                   api/v1/auth/registrations#create
 
 api_v1_auth_validate_token      GET    /api/v1/auth/validate_token(.:format)    devise_token_auth/token_validations#validate_token
+
 ------------------------------------------------------------------------------------------------
 api_v1_auth_sessions            GET    /api/v1/auth/sessions(.:format)          api/v1/auth/sessions#index
 
@@ -79,9 +83,11 @@ api_v1_todo                     GET    /api/v1/todos/:id(.:format)              
                                 PUT    /api/v1/todos/:id(.:format)              api/v1/todos#update
                                 DELETE /api/v1/todos/:id(.:format)              api/v1/todos#destroy
 
---------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+api_v1_users                    GET    /api/v1/users(.:format)                  api/v1/users#index
+api_v1_user                     GET    /api/v1/users/:id(.:format)              api/v1/users#show
 
-@          @@          @@          @@          @@          @@          @@          @@          @@
+================================================================================================
 deviseのdevise_forメソッド
 ルーティング設定の1つです。Deviseが提供する様々なユーザー認証機能にアクセスするためのURLが自動的に生成されます。
 
@@ -179,4 +185,6 @@ user_path                          # ユーザー情報を表示するGETリク�
 new_user_password_path            # パスワードリセット画面を表示するGETリクエスト用のパス
 edit_user_password_path           # パスワード再設定画面を表示するGETリクエスト用のパス
 user_password_path                # パスワード再設定処理を行うPUTリクエスト用のパス
+
+
 =end

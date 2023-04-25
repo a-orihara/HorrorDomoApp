@@ -61,7 +61,7 @@ module ApiApp
                   # CORSリクエストに含まれるヘッダーの内、許可されるヘッダーを指定
                   :expose => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
                   # 許可されるHTTPメソッドを指定
-                  :methods => [:get, :post, :options, :delete, :put]
+                  :methods => [:get, :post, :options, :delete, :put, :show, :patch]
       end
     end
     config.i18n.default_locale = :ja

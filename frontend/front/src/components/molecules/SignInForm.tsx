@@ -30,7 +30,8 @@ const SignInForm = () => {
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
         alert('ログイン成功');
-        router.push('/');
+        // router.push('/');
+        router.push(`/user/${res.data.data.id}`);
       } else {
         alert('ログイン失敗');
       }
@@ -39,6 +40,14 @@ const SignInForm = () => {
       alert(`ログインエラー${err}`);
     }
   };
+
+  // const v = async () => {
+  //   const res = await getUserById('40');
+  //   console.log(`ここ${JSON.stringify(res.data)}`);
+  //   return res.data.data;
+  // };
+  // const d = v();
+  // console.log(d);
   // ------------------------------------------------------------------------------------------------
   return (
     <div className='flex flex-1 flex-col bg-red-200'>

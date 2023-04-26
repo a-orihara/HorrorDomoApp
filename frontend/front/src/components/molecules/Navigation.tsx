@@ -21,7 +21,7 @@ const Navigation = () => {
         // ここで、isSignedInをfalseにしないと、ログアウト後にヘッダーのボタンが変わらない。
         // router.push('/signin')だけだと、AuthContextのuseEffectが発火しない。
         setIsSignedIn(false);
-        router.push('/signin');
+        router.push('/');
         alert('ログアウトしました');
       } else {
         alert('ログアウトに失敗しました');

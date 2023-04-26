@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/auth';
@@ -37,6 +38,8 @@ const ProfilePage = () => {
             <h1>Signed in successfully!</h1>
             <h2>Email: {user.email}</h2>
             <h2>Name: {user.name}</h2>
+            <Image src='/favicon.png' alt={user.name} width={100} height={100} />
+
             <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
           </div>
         </div>

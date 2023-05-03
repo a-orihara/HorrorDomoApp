@@ -21,6 +21,7 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
       # params.permit(:email, :password, :password_confirmation, :name, :avatar)
     end
 
+
     # 3 ユーザー更新時に使用
     # def account_update_params
     #   # update_params = params.permit(:name, :email, :avatar)

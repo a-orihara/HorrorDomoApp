@@ -37,7 +37,6 @@ const ProfilePage = () => {
   // name: 'soso';
   // provider: 'email';
   // uid: 'soso@soso.com';
-  // "avatarUrl": "http://localhost:3000/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBDUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--14b0d8bf197b62f45b8d821fc8992f4edc02615f/momo.jpg"
 
   return (
     <Layout title='Profile'>
@@ -50,7 +49,6 @@ const ProfilePage = () => {
             <h2>Name: {user.name}</h2>
             <h1>Signed in successfully!</h1>
             <h1 className='text-blue-500'>*Profile詳細は今後実装予定</h1>
-            <h1>{user.avatarUrl}</h1>
             <p>{user.name}</p>
 
             {/* <Image

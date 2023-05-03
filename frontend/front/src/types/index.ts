@@ -35,7 +35,7 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   // 1
-  avatarUrl: string | null;
+  // avatarUrl: string | null;
 };
 
 /*

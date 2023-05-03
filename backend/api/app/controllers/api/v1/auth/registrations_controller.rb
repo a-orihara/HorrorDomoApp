@@ -4,30 +4,29 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   # 4
   # protected
 
-
   # 6
-  def update
-    super
-    if account_update_params[:avatar].present?
-      current_api_v1_user.avatar.attach(account_update_params[:avatar])
-    end
-  end
+  # def update
+  #   super
+  #   if account_update_params[:avatar].present?
+  #     current_api_v1_user.avatar.attach(account_update_params[:avatar])
+  #   end
+  # end
 
   # privateである場合、子クラスでメソッドがオーバーライドできません。
   private
     # 2 ユーザー登録時に使用
     def sign_up_params
       # サインアップ時に登録できるカラムを指定
-      params.permit(:email, :password, :password_confirmation, :name, :avatar)
+      params.permit(:email, :password, :password_confirmation, :name)
+      # params.permit(:email, :password, :password_confirmation, :name, :avatar)
     end
 
     # 3 ユーザー更新時に使用
-    def account_update_params
-      # update_params = params.require(:registration).permit(:name, :email, :avatar)
-      update_params = params.permit(:name, :email, :avatar)
-      update_params.delete(:email) if update_params[:email].blank?
-      update_params
-    end
+    # def account_update_params
+    #   # update_params = params.permit(:name, :email, :avatar)
+    #   update_params.delete(:email) if update_params[:email].blank?
+    #   update_params
+    # end
 
     # 5
     def render_create_success

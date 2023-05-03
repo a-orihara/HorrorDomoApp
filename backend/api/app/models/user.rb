@@ -12,18 +12,7 @@ class User < ApplicationRecord
   # 2
   validates :email, length: { maximum: 255 }
   # 3
-  has_one_attached :avatar
-
-  # ログイン中のユーザーを返す
-  # def self.current_user(request)
-  #   user = request.env['warden'].user
-  #   if user.present?
-  #     # ログイン中のユーザーに avatar を含めて返す
-  #     user.as_json.merge(avatar: user.avatar.service_url)
-  #   else
-  #     {}
-  #   end
-  # end
+  # has_one_attached :avatar
 end
 
 =begin

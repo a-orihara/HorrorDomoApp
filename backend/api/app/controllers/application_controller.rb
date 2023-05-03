@@ -2,16 +2,16 @@
 class ApplicationController < ActionController::API
   # 2
   # Deviseコントローラーであれば、アクション実行前にconfigure_permitted_parametersメソッドを呼び出す。
-  before_action :configure_permitted_parameters, if: :devise_controller?
+  # before_action :configure_permitted_parameters, if: :devise_controller?
   # current_api_v1_userなどの Devise Token Auth のヘルパーメソッドが利用可能
   include DeviseTokenAuth::Concerns::SetUserByToken
 
   # 3
-  private
-    def configure_permitted_parameters
-      devise_parameter_sanitizer.permit(:sign_up, keys: [ :avatar] )
-      devise_parameter_sanitizer.permit(:account_update, keys: [ :avatar])
-    end
+  # private
+  #   def configure_permitted_parameters
+  #     devise_parameter_sanitizer.permit(:sign_up, keys: [ :avatar] )
+  #     devise_parameter_sanitizer.permit(:account_update, keys: [ :avatar])
+  #   end
 end
 
 =begin

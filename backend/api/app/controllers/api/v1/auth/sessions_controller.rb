@@ -4,14 +4,14 @@ class Api::V1::Auth::SessionsController < ApplicationController
   def index
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
-      # render json: { is_login: true, data: current_api_v1_user }
-      render json: {
-        is_login: true,
-        # 3
-        data: current_api_v1_user.as_json.merge(
-          avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
-        )
-      }
+      render json: { is_login: true, data: current_api_v1_user }
+      # render json: {
+      #   is_login: true,
+      #   # 3
+      #   data: current_api_v1_user.as_json.merge(
+      #     avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
+      #   )
+      # }
     else
       render json: { is_login: false, message: "ユーザーが存在しません" }
     end

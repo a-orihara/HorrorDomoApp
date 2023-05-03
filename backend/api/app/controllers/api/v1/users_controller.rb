@@ -12,10 +12,10 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/1
   def show
     puts "Welcome to the show action!"
-    # render json: @user
-    render json: @user.as_json.merge(
-      avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
-    )
+    render json: @user
+    # render json: @user.as_json.merge(
+    #   avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
+    # )
   end
 
   # POST /api/v1/users

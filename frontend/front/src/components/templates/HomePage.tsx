@@ -17,7 +17,6 @@ const HomePage = () => {
               <h2>Email: {currentUser?.email}</h2>
               <h2>Name: {currentUser?.name}</h2>
               <h1 className='text-blue-500'>*HOME詳細は今後実装予定</h1>
-              <h1>{currentUser?.avatarUrl}</h1>
             </div>
           </div>
         ) : (

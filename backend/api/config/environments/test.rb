@@ -34,6 +34,7 @@ Rails.application.configure do
   config.action_controller.allow_forgery_protection = false
 
   # Store uploaded files on the local file system in a temporary directory.
+  # [アップロードされたファイルをローカルファイルシステムのテンポラリディレクトリに保存します。]
   config.active_storage.service = :test
 
   config.action_mailer.perform_caching = false

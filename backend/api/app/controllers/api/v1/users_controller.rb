@@ -12,8 +12,10 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/1
   def show
     puts "Welcome to the show action!"
-    render json: @user
-
+    # render json: @user
+    render json: @user.as_json.merge(
+      avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
+    )
   end
 
   # POST /api/v1/users
@@ -48,20 +50,21 @@ class Api::V1::UsersController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
+    # def user_params
+    #   params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    # end
 end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 :authenticate_api_v1_user!
-Railsアプリケーションの認証機能であるDeviseを使って、APIエンドポイントにアクセスするユーザーが認証されているかど
-うかを確認するメソッドです。ユーザーが認証されていることを確認できます。
-このメソッドは、このコントローラー内の各アクション（index、show、create、update、destroy）が実行される前に実行
-され、認証されていない場合は401 Unauthorizedのステータスコードを返します。
-
+Railsアプリケーションの認証機能であるDeviseを使って、APIリクエストを行ったユーザーが認証されているかどうかを確認
+するメソッドです。ユーザーが認証されていることを確認できます。
+このメソッドは、このコントローラー内の各アクションが実行される前に実行され、認証されていない場合は
+401 Unauthorizedのステータスコードを返します。
+Railsを使ったAPI開発においては、before_actionフィルターを使用して、アクセス制御のために認証を要求することが一般
+的です。
 ------------------------------------------------------------------------------------------------
 set_user
 アクションで使用する前に、特定のユーザーをデータベースから取得して @user インスタンス変数に割り当てることを目的と

@@ -8,15 +8,16 @@ const HomePage = () => {
   const { isSignedIn, currentUser } = useContext(AuthContext);
   return (
     <Layout title='HOME'>
-      <div className='flex flex-1 flex-col'>
+      <div className='flex  flex-1 flex-col bg-green-200'>
         {isSignedIn && currentUser ? (
-          <div className='flex flex-row'>
+          <div className='flex h-full flex-row bg-blue-200'>
             <Sidebar></Sidebar>
             <div className='flex-1'>
               <h1>Signed in successfully!</h1>
               <h2>Email: {currentUser?.email}</h2>
               <h2>Name: {currentUser?.name}</h2>
-              <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
+              <h1 className='text-blue-500'>*HOME詳細は今後実装予定</h1>
+              <h1>{currentUser?.avatarUrl}</h1>
             </div>
           </div>
         ) : (

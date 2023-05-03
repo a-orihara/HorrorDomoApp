@@ -21,7 +21,7 @@ const Navigation = () => {
         // ここで、isSignedInをfalseにしないと、ログアウト後にヘッダーのボタンが変わらない。
         // router.push('/signin')だけだと、AuthContextのuseEffectが発火しない。
         setIsSignedIn(false);
-        router.push('/signin');
+        router.push('/');
         alert('ログアウトしました');
       } else {
         alert('ログアウトに失敗しました');
@@ -31,7 +31,7 @@ const Navigation = () => {
     }
   };
   return (
-    <nav className='text-s mr-auto flex h-16 flex-grow  bg-red-200 text-center  font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className='text-s basic-border mr-auto flex h-16  flex-grow bg-red-200  text-center font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
       <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
         <Link href={'/'}>
@@ -48,7 +48,10 @@ const Navigation = () => {
           </Link>
         )}
         {!loading && isSignedIn && (
-          <Button className='flex h-14 items-center justify-center bg-basic-green text-white' onClick={handleSignOut}>
+          <Button
+            className='flex h-14 items-center justify-center bg-basic-green text-white hover:bg-basic-pink'
+            onClick={handleSignOut}
+          >
             SignOut
           </Button>
         )}

@@ -8,7 +8,8 @@ Rails.application.routes.draw do
       namespace :auth do
         resources :sessions, only: %i[index]
       end
-      resources :users, only: [:index, :show]
+      resources :users, only: %i[index show]
+
     end
   end
 end
@@ -186,5 +187,48 @@ new_user_password_path            # パスワードリセット画面を表示�
 edit_user_password_path           # パスワード再設定画面を表示するGETリクエスト用のパス
 user_password_path                # パスワード再設定処理を行うPUTリクエスト用のパス
 
+@          @@          @@          @@          @@          @@          @@          @@          @
+基本知識
+@          @@          @@          @@          @@          @@          @@          @@          @
+Devise Token Authの各コントローラー。アクションの実装はドキュメントを参照
 
+DeviseTokenAuth::RegistrationsController
+DeviseTokenAuth::SessionsController
+DeviseTokenAuth::PasswordsController
+DeviseTokenAuth::ConfirmationsController
+DeviseTokenAuth::OmniauthCallbacksController
+DeviseTokenAuth::TokenValidationsController
+
+================================================================================================
+Deviseの各コントローラーアクション
+
+Devise::SessionsController
+new: ログイン画面を表示するアクション
+create: ログイン処理を行うアクション
+destroy: ログアウト処理を行うアクション
+
+Devise::RegistrationsController
+new: 新規登録画面を表示するアクション
+create: 新規登録処理を行うアクション
+edit: 登録情報編集画面を表示するアクション
+update: 登録情報編集処理を行うアクション
+destroy: アカウント削除処理を行うアクション
+
+Devise::PasswordsController
+new: パスワード再設定画面を表示するアクション
+create: パスワード再設定用のメールを送信するアクション
+edit: パスワード再設定画面を表示するアクション
+update: パスワード再設定処理を行うアクション
+
+Devise::ConfirmationsController
+new: アカウント認証用のメール再送画面を表示するアクション
+create: アカウント認証用のメールを再送するアクション
+show: アカウント認証完了画面を表示するアクション
+
+Devise::UnlocksController
+new: アカウントロック解除用のメール再送画面を表示するアクション
+create: アカウントロック解除用のメールを再送するアクション
+show: アカウントロック解除完了画面を表示するアクション
+
+Devise::OmniauthCallbacksController
 =end

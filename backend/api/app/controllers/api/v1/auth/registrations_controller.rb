@@ -4,43 +4,27 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   # 4
   # protected
 
-    # def update_resource(resource, params)
-    #   パスワードが空の場合は、パスワードの更新をスキップ
-    #   if params[:password].blank?
-    #     resource.update_without_password(params)
-    #   else
-    #     super
-    #   end
-    #   # resource.update_without_password(params)
-    # end
 
-  # def create
-  #   super do |resource|
-  #     if resource.errors.empty?
-  #       render json: { status: 'success', message: I18n.t('devise.registrations.signed_up') }
-  #     else
-  #       render json: { status: 'error', errors: resource.errors.full_messages }
-  #       # render json: { status: 'error', fullMessages: resource.errors.full_messages }
-  #     end
-  #   end
-  # end
+  # 6
+  def update
+    super
+    if account_update_params[:avatar].present?
+      current_api_v1_user.avatar.attach(account_update_params[:avatar])
+    end
+  end
 
+  # privateである場合、子クラスでメソッドがオーバーライドできません。
   private
-
-    # 2
+    # 2 ユーザー登録時に使用
     def sign_up_params
       # サインアップ時に登録できるカラムを指定
-      params.permit(:email, :password, :password_confirmation, :name)
+      params.permit(:email, :password, :password_confirmation, :name, :avatar)
     end
 
-
-    # def account_update_params
-    #   params.permit(:name, :email)
-    #   update_params.delete(:email) if update_params[:email].blank?
-    # end
-    # 3
+    # 3 ユーザー更新時に使用
     def account_update_params
-      update_params = params.permit(:name, :email)
+      # update_params = params.require(:registration).permit(:name, :email, :avatar)
+      update_params = params.permit(:name, :email, :avatar)
       update_params.delete(:email) if update_params[:email].blank?
       update_params
     end
@@ -64,6 +48,9 @@ sign_up_paramsメソッドを定義しています。params.permitで許可す�
 
 ================================================================================================
 2
+sign_up_params
+DeviseTokenAuth::RegistrationsControllerが提供するメソッド。
+サインアップ時に必要なパラメータを設定するメソッド。
 sign_up_paramsメソッドは、サインアップ時に登録できるカラムを指定するために使用されます。具体的には、paramsオブ
 ジェクトからemail、password、password_confirmation、nameの4つのパラメータのみを取得します。
 sign_up_paramsメソッドの目的は、セキュリティ上の理由から、不要な情報が含まれている場合に備えて、許可されたパラメ
@@ -74,6 +61,19 @@ sign_up_params は、Devise Token Auth の RegistrationsController に実装さ�
 Devise の RegistrationsController でも、同様のアクションが存在するため、混乱が生じる場合があります。
 Devise Token Auth の sign_up_params は、新規ユーザー登録に必要なパラメータを許可するストロングパラメーターを
 定義するために使用されます。
+
+------------------------------------------------------------------------------------------------
+configure_permitted_parametersは、デフォルトの許可されたストロングパラメーターに追加のストロングパラメーターを
+追加するメソッドです。
+deviseのsign_up_paramsとconfigure_permitted_parameters、params.permitは機能が競合しているわけではありま
+せん。
+sign_up_params は Devise のメソッドで、params.permit は Rails の Strong Parameters のメソッドです。
+configure_permitted_parametersはデフォルトの許可されたパラメーターに追加のパラメーターを追加するために使用され
+ます。
+Devise の sign_up_paramsメソッドは、params.permitを使用して、許可されたパラメータを定義しています。
+つまり、Devise の機能である sign_up_params と Rails の機能である params.permit は協調して動作し、
+configure_permitted_parameters は Devise で許可されたパラメータに加えて、さらにカスタムのストロングパラメー
+ターを設定するために使用されます。
 
 ================================================================================================
 3
@@ -144,4 +144,46 @@ locales/devise.en.ymlとlocales/devise.ja.yml2つのファイルがある場合�
 される。
 言語に対応するファイルがない場合は、デフォルトのメッセージが表示される。
 言語は、リクエストヘッダーの"Accept-Language"に含まれる値で判断されます。
+
+================================================================================================
+6
+継承元のDeviseTokenAuth::RegistrationsControllerの
+before_action :set_user_by_token, only: [:destroy, :update]は自動で発火している
+
+set_user_by_token
+トークンによって認証されたユーザーを特定し、そのユーザーの情報をcurrent_api_v1_userという変数にセットするメソッ
+ド。
+
+------------------------------------------------------------------------------------------------
+親クラスのupdate機能に追加して、アバター画像を更新する処理を追加。
+ユーザーがプロフィール画像をアップロードした場合に、その画像でユーザーのプロフィール画像を更新するために使用。
+active_strageで保存する場合、親要素.イメージ名.attach(params[:key]とする必要があります。
+例えば,既存のuserにavatarを付与するには、
+User.avatar.attach(params[:avatar])とします。
+
+------------------------------------------------------------------------------------------------
+.account_update_params[:avatar]
+account_update_params
+DeviseのStrong Parametersによって許可されたキーにアクセスするためのメソッド
+:avatar
+その中の一つのキー
+つまり、更新フォームから送信されたファイルの情報が含まれるストロングパラメーターから :avatar キーの値を取得してい
+る。
+
+current_api_v1_user
+現在認証されているユーザーを表します。
+
+avatar
+Userモデルで定義されたActive Storageのhas_one_attachedメソッドによって、ユーザーのプロフィール画像を参照する
+ためのアクセッサーです。
+
+attach
+Active Storageのメソッドで、引数として渡されたファイルをアップロードし、アタッチメントを作成します。
+
+account_update_params[:avatar]
+ユーザーがアップロードしたプロフィール画像を含む、account_update_paramsというストロングパラメータのavatarキー
+を参照します。
+
+------------------------------------------------------------------------------------------------
+
 =end

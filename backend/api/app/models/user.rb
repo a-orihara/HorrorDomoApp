@@ -2,10 +2,10 @@
 
 # Rails 5.0 以降を使用している場合は、User < ActiveRecord::Baseから変更。
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  # 4
   include DeviseTokenAuth::Concerns::User
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形
   validates :name,  presence: true, length: { maximum: 30 }
@@ -13,6 +13,17 @@ class User < ApplicationRecord
   validates :email, length: { maximum: 255 }
   # 3
   has_one_attached :avatar
+
+  # ログイン中のユーザーを返す
+  # def self.current_user(request)
+  #   user = request.env['warden'].user
+  #   if user.present?
+  #     # ログイン中のユーザーに avatar を含めて返す
+  #     user.as_json.merge(avatar: user.avatar.service_url)
+  #   else
+  #     {}
+  #   end
+  # end
 end
 
 =begin
@@ -79,9 +90,18 @@ has_one_attachedによって生成されるメソッド
 avatar
 添付されたファイルを取得する。
 user.avatar.attach
-ユーザーオブジェクトにavatarを添付するためのメソッドです。
+ユーザーオブジェクトにavatarを添付するためのメソッドです。ファイルをアップロードすることができます。。
 user.avatar.attached?
 特定のユーザーがavatrを持っているかどうか検証し、真偽値を返すメソッドです
-user.avatar.attach
-ファイルをアップロードすることができます。
+
+================================================================================================
+4
+include DeviseTokenAuth::Concerns::User
+`include` はRubyのモジュールをクラスに取り込むためのメソッドです。これにより、モジュール内のメソッドや定数をクラ
+スで使用できるようになります。
+`DeviseTokenAuth::Concerns::User` は、Devise Token Auth gemが提供するモジュールで、トークンベースの認証
+機能を追加するためのものです。
+`include DeviseTokenAuth::Concerns::User` によって、Userモデルにトークン認証に必要なメソッドやバリデーシ
+ョンが追加されます。これにより、APIモードでの認証が容易になります。
+
 =end

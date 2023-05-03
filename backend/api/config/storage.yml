@@ -3,6 +3,7 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
+# 2
 local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
@@ -55,3 +56,13 @@ local:
 # 対パスを取得することができます。
 # 例えばRails.root が /Users/yourname/yourapp だった場合、<%= Rails.root.join("tmp/storage") %> の戻り
 # 値は /Users/yourname/yourapp/tmp/storage になります。
+# ================================================================================================
+# 2
+# `local`: ローカルのファイルシステムに保存するためのストレージを定義するための設定
+# `service`: ストレージの種類を指定する。ここでは、`Disk`を指定している。
+# `root`: 保存先のディレクトリを指定する。ここでは、`storage`ディレクトリを指定している。
+# `variants`: 画像のバリエーションを定義するための設定
+# `resize`: リサイズの設定を定義する
+# `width`: 幅のサイズを指定する
+# `height`: 高さのサイズを指定する
+# Active Storageを使って、ローカルのファイルシステムに画像を保存し、リサイズすることができます。

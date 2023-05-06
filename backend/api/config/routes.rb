@@ -3,11 +3,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       # 1
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-        registrations: 'api/v1/auth/registrations'
+        registrations: 'api/v1/auth/registrations',
+        sessions: 'api/v1/auth/sessions',
       }
-      namespace :auth do
-        resources :sessions, only: %i[index]
-      end
+      # namespace :auth do
+      # end
+      resources :authenticated_users, only: %i[index]
       resources :users, only: %i[index show]
 
     end
@@ -53,9 +54,9 @@ Path
 [registrations: 'auth/registrations']にマウントされた結果
 
 Prefix Verb                     URI Pattern                                     Controller#Action
-new_api_v1_user_session         GET    /api/v1/auth/sign_in(.:format)           devise_token_auth/sessions#new
-api_v1_user_session             POST   /api/v1/auth/sign_in(.:format)           devise_token_auth/sessions#create
-destroy_api_v1_user_session     DELETE /api/v1/auth/sign_out(.:format)          devise_token_auth/sessions#destroy
+new_api_v1_user_session         GET    /api/v1/auth/sign_in(.:format)           api/v1/auth/sessions#new
+api_v1_user_session             POST   /api/v1/auth/sign_in(.:format)           api/v1/auth/sessions#create
+destroy_api_v1_user_session     DELETE /api/v1/auth/sign_out(.:format)          api/v1/auth/sessions#destroy
 
 new_api_v1_user_password        GET    /api/v1/auth/password/new(.:format)      devise_token_auth/passwords#new
 edit_api_v1_user_password       GET    /api/v1/auth/password/edit(.:format)     devise_token_auth/passwords#edit
@@ -74,8 +75,7 @@ api_v1_user_registration        PATCH  /api/v1/auth(.:format)                   
 api_v1_auth_validate_token      GET    /api/v1/auth/validate_token(.:format)    devise_token_auth/token_validations#validate_token
 
 ------------------------------------------------------------------------------------------------
-api_v1_auth_sessions            GET    /api/v1/auth/sessions(.:format)          api/v1/auth/sessions#index
-
+api_v1_authenticated_users      GET    /api/v1/authenticated_users(.:format)    api/v1/authenticated_users#index
 ------------------------------------------------------------------------------------------------
 api_v1_todos                    GET    /api/v1/todos(.:format)                  api/v1/todos#index
                                 POST   /api/v1/todos(.:format)                  api/v1/todos#create

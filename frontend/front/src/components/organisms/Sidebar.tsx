@@ -4,11 +4,10 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 const Sidebar = () => {
   const { currentUser } = useContext(AuthContext);
-  console.log(`カレント：${JSON.stringify(currentUser, null, 2)}`);
   return (
-    <aside className='basic-border h-full w-48 bg-basic-purple p-4'>
+    <aside className='basic-border h-full w-32 bg-basic-purple p-4 md:w-48'>
       <nav className='h-full'>
-        <ul className='flex  h-full flex-col items-center justify-around bg-basic-purple text-white'>
+        <ul className='flex  h-full flex-col items-center justify-around bg-basic-purple text-white md:text-2xl'>
           <h1 className='mb-2'>Acount</h1>
           {/* <li className='mb-2'>
             <Link href='/'>

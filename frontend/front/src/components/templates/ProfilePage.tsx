@@ -29,7 +29,6 @@ const ProfilePage = () => {
   if (!user) {
     return <div>Loading...</div>;
   }
-  console.log(`ユーザー：${JSON.stringify(user)}`);
   // allowPasswordChange: false;
   // email: 'soso@soso.com';
   // id: 3;

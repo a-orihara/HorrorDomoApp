@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   # 1
-  before_action :authenticate_api_v1_user!
+
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /api/v1/users

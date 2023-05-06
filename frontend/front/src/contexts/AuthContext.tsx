@@ -3,10 +3,10 @@
 // AuthContextのProviderコンポーネントに渡す値（useState）を設定
 // 2.AuthContextのProviderコンポーネントでラップされた、AuthProviderコンポーネントを作成
 
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
 import { User } from '../types';
-
+// ================================================================================================
 type AuthProviderProps = {
   children: React.ReactNode;
 };
@@ -19,44 +19,52 @@ export const AuthContext = createContext(
     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
     currentUser: User | undefined;
     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+    // userUpdated: boolean;
+    // setUserUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   }
 );
-console.log(AuthContext);
 
-// ------------------------------------------------------------------------------------------------
+// @          @@          @@          @@          @@          @@          @@          @@          @
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 3
+  // ローディング中かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
+  // ログインしているかどうかの状態を管理するステート
   const [isSignedIn, setIsSignedIn] = useState(false);
+  // 現在ログインしているユーザーの情報を管理するステート
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
+  // ユーザー情報が更新されたかどうかの状態を管理するステート
+  // const [userUpdated, setUserUpdated] = useState(false);
+  // ------------------------------------------------------------------------------------------------
 
-  // 認証済みのユーザーがいるかどうかチェック。
-  // 確認できた場合はそのユーザーの情報を取得。
-
-  // 2 認証済みのユーザー情報を取得し、現在の認証状態を確認する
+  // 2 認証済みのユーザー情報をか取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
     try {
       const res = await getAuthenticatedUser();
       if (res?.data.isLogin === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data.data);
-        console.log(res?.data.data);
+        console.log(`handleGetCurrentUser:${JSON.stringify(res?.data.data)}`);
       } else {
-        console.log('No current user');
+        console.log('handleGetCurrentUser:No current user');
       }
     } catch (err) {
       console.log(err);
-      alert('エラー');
+      console.log('handleGetCurrentUserのエラー');
+      alert('handleGetCurrentUserのエラー');
     }
     setLoading(false);
   };
+  console.log('AuthProviderが呼ばれた');
 
-  // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、現在の認証状態を確認する
+  // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
     handleGetCurrentUser();
-  }, [setCurrentUser]);
+    console.log('AuthContextのuseEffectが発火');
+    // userUpdatedが更新されたときにuseEffectが発火する
+  }, []);
 
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   // 5
   return (
     <AuthContext.Provider
@@ -67,6 +75,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsSignedIn,
         currentUser,
         setCurrentUser,
+        // userUpdated,
+        // setUserUpdated,
       }}
     >
       {children}
@@ -79,7 +89,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 1
 Contextオブジェクトの作成はcreateContextで行います。
 Contextではデータを渡す側をProviderと呼びデータを受け取る側をConsumerと呼びます。
-作成したUserCountをexportしているのは他のコンポーネントでimportを行なって利用するためです。
+作成したAuthContextをexportしているのは他のコンポーネントでimportを行なって利用するためです。
 
 初期値に空オブジェクトを設定する意図は、コンテキストのデフォルト値を空のオブジェクトとして定義し、アプリケーション
 全体で使用されるデータを保持するためのプレースホルダーを作成することです。このプレースホルダーには、アプリケーショ
@@ -128,6 +138,17 @@ asで規定した型以外のプロパティは使えない？
 currentUserをundefinedにすることで、現在のユーザーが存在しない状態を表現します。nullにする場合、あたかも値が存
 在しているように見えることがありますが、undefinedであれば、値が存在しないことを明示的に示すことができます。
 
+例えば、ユーザーがログインしていない場合、currentUserはundefinedとなります。また、ログアウト後もcurrentUserは
+undefinedのままになります。nullを使う場合、ログアウト後にcurrentUserがnullになっていると、何かしらのユーザーが
+存在しているように見えてしまいます。しかし、undefinedを使うことで、値が存在しないことを明示的に示すことができます。
+
+nullを使う場合、ユーザーが存在しない状態を表現することはできますが、undefinedを使う場合、より明示的に値が存在しな
+いことを示すことができます。nullは値が存在しないことを示すために使われる場合が多いですが、undefinedは未定義の値で
+あることを示すためにも使われます。
+
+JavaScriptでは、nullはオブジェクトが存在しないことを示すために使われますが、null自体はオブジェクトであるため、何
+かしらの値が存在しているように見えてしまうことがあります。一方、undefinedは未定義の値であるため、何も存在していな
+いことを明示的に示すことができます。
 ================================================================================================
 2
 getAuthenticatedUser()の返り値はユーザー情報か、undefinedです。
@@ -155,14 +176,14 @@ res?.data.isLogin === true の式では、以下の処理が行われます。
 ================================================================================================
 3
 const [loading, setLoading] = useState(true);
-初期値をfalseと設定した理由は、最初は認証されていない状態から始まり、認証処理が完了してユーザーがログインするまで
-の間はfalseが維持されるからです。ログイン処理が完了した後には、isSignedInの値がtrueに更新されます。
-
-------------------------------------------------------------------------------------------------
-const [isSignedIn, setIsSignedIn] = useState(false);
 通常、API通信は非同期で行われるため、初期値にfalseを設定すると、初期レンダリング時にAPI通信が完了していないため
 に誤った結果が表示される可能性があります。そのため、初期状態ではAPI通信中であることを明示するため、trueを初期値と
 して設定するのが一般的です。
+
+------------------------------------------------------------------------------------------------
+const [isSignedIn, setIsSignedIn] = useState(false);
+初期値をfalseと設定した理由は、最初は認証されていない状態から始まり、認証処理が完了してユーザーがログインするまで
+の間はfalseが維持されるからです。ログイン処理が完了した後には、isSignedInの値がtrueに更新されます。
 
 ------------------------------------------------------------------------------------------------
 const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
@@ -186,8 +207,8 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 ------------------------------------------------------------------------------------------------
 発火するタイミング
 
-コンポーネントがマウントされた時（初回レンダリング時）
-依存配列に指定されたsetCurrentUserが変更された時
+.コンポーネントがマウントされた時（初回レンダリング時）useEffectはまず初回レンダリングする。
+.その後、依存配列に指定されたsetCurrentUserが変更された時
 ただし、setCurrentUserはReactのuseStateから返される関数であり、通常は変更されないため、このuseEffectは主にコ
 ンポーネントがマウントされた時に実行されることになります。これにより、コンポーネントがマウントされた時に認証済みの
 ユーザー情報を取得し、現在の認証状態を確認する処理が行われます。
@@ -213,5 +234,5 @@ AuthProvider をアプリケーション全体のルートコンポーネント�
 AuthContextの初期値は空のオブジェクト{}ですが、AuthProviderコンポーネントでvalueプロパティに値を設定していま
 す。valueプロパティに渡すオブジェクトのプロパティは、
 loading、setLoading、isSignedIn、setIsSignedIn、currentUser、setCurrentUserの6つです。
-変数名valuehが任意の名前です。
+変数名valueは任意の名前です。
 */

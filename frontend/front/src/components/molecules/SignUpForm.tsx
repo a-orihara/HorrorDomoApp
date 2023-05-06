@@ -8,7 +8,7 @@ import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-// ------------------------------------------------------------------------------------------------
+// ================================================================================================
 const SignUpForm = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState('');
@@ -71,7 +71,7 @@ const SignUpForm = () => {
   //   setValues({ ...values, [name]: value });
   // };
 
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
       <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign Up</h1>

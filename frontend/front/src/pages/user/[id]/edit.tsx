@@ -4,6 +4,7 @@ import AlertMessage from '../../../components/atoms/AlertMessage';
 import EditPage from '../../../components/templates/EditPage';
 import { AuthContext } from '../../../contexts/AuthContext';
 
+// ================================================================================================
 const Edit = () => {
   const [alertOpen, setAlertOpen] = useState(false);
   // アラートメッセージの種類を管理するステート
@@ -13,7 +14,8 @@ const Edit = () => {
   const { currentUser } = useContext(AuthContext);
   const router = useRouter();
 
-  // 1
+  // ------------------------------------------------------------------------------------------------
+  // 1 ログインしていない場合は、ログインページにリダイレクトする
   useEffect(() => {
     if (!currentUser) {
       setAlertSeverity('error');
@@ -22,8 +24,19 @@ const Edit = () => {
       setTimeout(() => {
         router.push('/signin');
       }, 2000);
+      // } else if (currentUser.id !== parseInt(router.query.id)) {
+      // 2 ログインしているが、アクセスしているページが自分のユーザーIDと一致しない場合
+    } else if (typeof router.query.id === 'string' && currentUser.id !== parseInt(router.query.id)) {
+      setAlertSeverity('error');
+      setAlertMessage('他のユーザーのページにアクセスすることはできません');
+      setAlertOpen(true);
+      setTimeout(() => {
+        router.push('/');
+      }, 2000);
     }
   }, [currentUser, router]);
+
+  // ================================================================================================
   return (
     <>
       <EditPage></EditPage>
@@ -60,4 +73,28 @@ router：routerオブジェクトが変更された場合に、useEffect内の�
 依存配列に値を入れない場合の問題点：
 依存配列が空の場合、useEffect内の処理はコンポーネントのマウント時にのみ実行されます。これにより、currentUserが
 後から変更された場合でも、ログインしているかどうかを再評価せず、リダイレクトが正しく機能しない可能性があります。
+
+================================================================================================
+2
+router.query.idはstring | string[] | undefinedの型を持っています。
+parseInt関数はstring型の引数を期待しています。
+router.query.idが存在しない場合、parseInt関数にはundefinedが渡されます。
+このままだとエラーになるので、2のように'string'の場合でIDが合わない場合にのみ処理するよう記載。
+
+------------------------------------------------------------------------------------------------
+parseInt
+文字列を整数に変換するJavaScriptの組み込み関数。
+
+------------------------------------------------------------------------------------------------
+typeof演算子
+渡された値の型を文字列で返すJavaScriptの演算子。
+例
+console.log(typeof "Hello, world!"); // "string"
+console.log(typeof 123); // "number"
+console.log(typeof true); // "boolean"
+
+------------------------------------------------------------------------------------------------
+
+
+
 */

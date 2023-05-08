@@ -1,5 +1,6 @@
 # 1
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
+  # 4
   # （デフォ:コメントアウト）
   before_action :configure_sign_up_params, only: [:create]
   # （デフォ:コメントアウト）
@@ -111,7 +112,18 @@ account_update_params メソッドが使用されます。registrations_controll
 
 ================================================================================================
 4
+before_action
 
+バックエンドのupdate(その他あればedit)に、ユーザーにログインを要求する before_actionを設定。
+rails_tutorialでは、
+before_action :logged_in_user, only: [:edit, :update]
+
+ただし、devise_token_authではデフォルトで、devise_token_auth/registrations_controller.rbに、
+before_action :logged_in_user, only: [:edit, :update]設定済みなので、特に設定不要。
+
+*set_user_by_token
+devise_token_authが提供するトークンベースの認証機能を利用し、リクエストから渡されたトークンに紐づくユーザーが存
+在するかどうかを確認します。失敗した場合はnilを返します。
 
 ================================================================================================
 5

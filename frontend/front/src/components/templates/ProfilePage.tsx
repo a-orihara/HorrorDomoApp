@@ -13,6 +13,7 @@ const ProfilePage = () => {
 
   // 2
   useEffect(() => {
+    console.log('ProfilePageのuseEffectが呼ばれました');
     if (!id) return;
     const fetchUserData = async () => {
       try {

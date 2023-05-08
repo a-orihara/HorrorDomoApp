@@ -19,6 +19,7 @@ export const AuthContext = createContext(
     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
     currentUser: User | undefined;
     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+    handleGetCurrentUser: () => Promise<void>;
     // userUpdated: boolean;
     // setUserUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   }
@@ -37,9 +38,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // const [userUpdated, setUserUpdated] = useState(false);
   // ------------------------------------------------------------------------------------------------
 
-  // 2 認証済みのユーザー情報をか取得し、ユーザー情報や認証状態を更新する
+  // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
     try {
+      // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
       if (res?.data.isLogin === true) {
         setIsSignedIn(true);
@@ -75,6 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsSignedIn,
         currentUser,
         setCurrentUser,
+        handleGetCurrentUser,
         // userUpdated,
         // setUserUpdated,
       }}

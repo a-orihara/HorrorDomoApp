@@ -9,7 +9,7 @@ import Input from '../atoms/Input';
 import Label from '../atoms/Label';
 // ================================================================================================
 const UserForm: React.FC = () => {
-  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser, handleGetCurrentUser } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   // 2
@@ -26,19 +26,21 @@ const UserForm: React.FC = () => {
     };
     try {
       const res = await updateUser(params);
-      console.log(`updateのres:${JSON.stringify(res.data)}`);
       if (res.status === 200) {
+        console.log(`updateのres.data:${JSON.stringify(res.data)}`);
         setCurrentUser(res.data);
+        handleGetCurrentUser();
         // setUserUpdated(true);
         // getAuthenticatedUser();
         setAlertSeverity('success');
         setAlertMessage('ユーザー情報の更新に成功しました！');
         setAlertOpen(true);
         // ページをリロードして、ユーザー情報を更新する
-        // router.reload();
+        // router.push(`/user/${res.data.data.id}`);
+
         setTimeout(() => {
-          router.reload();
-        }, 1000);
+          router.push('/');
+        }, 1500);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.full_messages}`);

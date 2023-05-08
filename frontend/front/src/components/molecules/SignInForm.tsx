@@ -29,8 +29,8 @@ const SignInForm = () => {
     };
     try {
       const res = await signIn(params);
-      console.log(`signIn:${JSON.stringify(res.data)}`);
       if (res.status === 200) {
+        console.log(`signInのres.data:${JSON.stringify(res.data)}`);
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
@@ -43,7 +43,7 @@ const SignInForm = () => {
         // router.push(`/user/${res.data.data.id}`);
         setTimeout(() => {
           router.push(`/user/${res.data.data.id}`);
-        }, 3000);
+        }, 2000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.full_messages}`);

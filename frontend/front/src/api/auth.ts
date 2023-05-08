@@ -49,6 +49,7 @@ export const updateAvatar = async (formData: FormData) => {
 
 // 4 認証済みのユーザーを取得
 export const getAuthenticatedUser = () => {
+  // トークンがない場合は何もしない
   if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
   console.log('getAuthenticatedUserが呼ばれた');
   return client.get('/authenticated_users', {

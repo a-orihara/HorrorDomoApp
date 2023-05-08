@@ -1,11 +1,24 @@
 import Link from 'next/link';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import Layout from '../layout/Layout';
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
   const { isSignedIn, currentUser } = useContext(AuthContext);
+  // ログイン後に、初回ログイン時のみ表示するメッセージを管理するステート
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
+
+  useEffect(() => {
+    // ログイン後に、初回ログイン時のみ表示するメッセージを表示する
+    if (localStorage.getItem('firstTimeLogin') === 'true') {
+      // ログイン後に、初回ログイン時のみ表示するメッセージを表示する
+      setShowWelcomeMessage(true);
+      // 今後、初回ログイン時のメッセージを表示しないようにする
+      localStorage.removeItem('firstTimeLogin');
+    }
+  }, []);
+
   return (
     <Layout title='HOME'>
       <div className='flex  flex-1 flex-col bg-green-200'>
@@ -13,6 +26,11 @@ const HomePage = () => {
           <div className='flex h-full flex-row bg-blue-200'>
             <Sidebar></Sidebar>
             <div className='flex-1'>
+              {showWelcomeMessage && (
+                <h1 className='bg-basic-pink text-2xl text-white'>
+                  Welcome, {currentUser?.name}! Your registration was successful.
+                </h1>
+              )}
               <h1>Signed in successfully!</h1>
               <h2>Email: {currentUser?.email}</h2>
               <h2>Name: {currentUser?.name}</h2>

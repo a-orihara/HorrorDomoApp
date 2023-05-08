@@ -52,10 +52,12 @@ const SignUpForm = () => {
         setAlertMessage(`${res.data.message}`);
         // アラートをオープン
         setAlertOpen(true);
+        // ユーザーが初回登録時であることをlocalStorageに記録
+        localStorage.setItem('firstTimeLogin', 'true');
         // 3秒後にページ遷移
         setTimeout(() => {
           router.push('/');
-        }, 3000);
+        }, 2000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.full_messages}`);

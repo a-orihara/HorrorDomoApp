@@ -28,12 +28,12 @@ const UserForm: React.FC = () => {
       const res = await updateUser(params);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        setCurrentUser(res.data);
+        // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
         handleGetCurrentUser();
         // setUserUpdated(true);
         // getAuthenticatedUser();
         setAlertSeverity('success');
-        setAlertMessage('ユーザー情報の更新に成功しました！');
+        setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
         // ページをリロードして、ユーザー情報を更新する
         // router.push(`/user/${res.data.data.id}`);

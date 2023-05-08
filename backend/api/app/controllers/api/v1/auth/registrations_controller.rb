@@ -29,7 +29,19 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
 
     # 5
     def render_create_success
-      render json: { status: 'success', message: I18n.t('devise.registrations.signed_up'), data: resource_data }
+      render json: {
+        status: 'success',
+        message: I18n.t('devise.registrations.signed_up'),
+        data: resource_data
+      }
+    end
+
+    def render_update_success
+      render json: {
+        status: 'success',
+        message: I18n.t('devise.registrations.updated'),
+        data:   resource_data
+      }
     end
 end
 

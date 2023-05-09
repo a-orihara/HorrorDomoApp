@@ -18,7 +18,7 @@ const Navigation = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
-  // サインアウト処理
+  // サインアウト処理。処理後は、トップページに遷移
   const handleSignOut = async () => {
     try {
       const res = await signOut();
@@ -33,6 +33,7 @@ const Navigation = () => {
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
+        // サインアウトしたら、トップページに遷移
         setTimeout(() => {
           router.push('/');
         }, 2000);

@@ -28,7 +28,7 @@ const HomePage = () => {
             <div className='flex-1'>
               {showWelcomeMessage && (
                 <h1 className='bg-basic-pink text-2xl text-white'>
-                  Welcome, {currentUser?.name}! Your registration was successful.
+                  ようこそ！, {currentUser?.name}さん! 登録が完了しました!
                 </h1>
               )}
               <h1>Signed in successfully!</h1>

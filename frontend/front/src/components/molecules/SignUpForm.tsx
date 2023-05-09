@@ -8,7 +8,7 @@ import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-// ------------------------------------------------------------------------------------------------
+// ================================================================================================
 const SignUpForm = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState('');
@@ -21,7 +21,6 @@ const SignUpForm = () => {
   const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
   // アラートのメッセージ内容を管理するステート
   const [alertMessage, setAlertMessage] = useState('');
-
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -37,21 +36,28 @@ const SignUpForm = () => {
     try {
       // 5
       const res = await signUp(params);
-      console.log(res.data.message);
       if (res.status === 200) {
-        // 3
+        console.log(`signUpのres.data${JSON.stringify(res.data)}`);
+        // 3 Cookieにトークンをセット
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
-        console.log(res);
+        // ログイン状態にする
         setIsSignedIn(true);
+        // ユーザー情報をセット
         setCurrentUser(res.data.data);
+        // アラート状態をセット
         setAlertSeverity('success');
+        // アラートメッセージを表示
         setAlertMessage(`${res.data.message}`);
+        // アラートをオープン
         setAlertOpen(true);
+        // ユーザーが初回登録時であることをlocalStorageに記録
+        localStorage.setItem('firstTimeLogin', 'true');
+        // 3秒後にページ遷移
         setTimeout(() => {
           router.push('/');
-        }, 3000);
+        }, 2000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.full_messages}`);
@@ -64,14 +70,7 @@ const SignUpForm = () => {
       setAlertOpen(true);
     }
   };
-
-  // 1
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setValues({ ...values, [name]: value });
-  // };
-
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
       <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign Up</h1>
@@ -86,6 +85,7 @@ const SignUpForm = () => {
             type='text'
             name='name'
             value={name}
+            // 1
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setName(e.target.value);
             }}

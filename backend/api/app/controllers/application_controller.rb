@@ -1,17 +1,21 @@
 # 1
 class ApplicationController < ActionController::API
+  # 4
+  # before_action :authenticate_api_v1_user!
+
   # 2
   # Deviseコントローラーであれば、アクション実行前にconfigure_permitted_parametersメソッドを呼び出す。
-  # before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
   # current_api_v1_userなどの Devise Token Auth のヘルパーメソッドが利用可能
   include DeviseTokenAuth::Concerns::SetUserByToken
 
   # 3
-  # private
-  #   def configure_permitted_parameters
-  #     devise_parameter_sanitizer.permit(:sign_up, keys: [ :avatar] )
-  #     devise_parameter_sanitizer.permit(:account_update, keys: [ :avatar])
-  #   end
+  protected
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.permit(:sign_up, keys: [ :name] )
+      devise_parameter_sanitizer.permit(:account_update, keys: [ :name])
+    end
 end
 
 =begin
@@ -57,16 +61,15 @@ Devise::UnlocksController
 
 ================================================================================================
 3
-private
-以下に定義されたメソッドがクラスの外部からアクセスできないようにするためのキーワードです。privateで定義されたメソ
-ッドは、そのクラスの内部からしか呼び出すことができません。
-configure_permitted_parametersはDeviseのコントローラーで使われるため、外部から呼び出される必要がなく、プライ
-ベートメソッドとして定義しています。また、このメソッドはDeviseの設定をカスタマイズするために使用されるため、外部か
-らのアクセスは必要ありません。
+protected
+Rubyのアクセス制御キーワードの1つで、このキーワード以下に定義されたメソッドは、そのクラス自身またはその子クラスから
+のみアクセス可能になります。このメソッドを外部から呼び出されないようにして、セキュリティを確保しています。
+configure_permitted_parametersメソッドがprotectedメソッドとして定義されていることから、このメソッドは、
+ApplicationControllerとその子クラスからのみアクセス可能になります。
 
 ------------------------------------------------------------------------------------------------
 configure_permitted_parameters
-Deviseで許可するストロングパラメータを設定するためのメソッド。一般的には、ApplicationControllerに記述。
+Deviseで許可するストロングパラメータを設定するためのメソッド。一般的にApplicationControllerに記述。
 メソッド名はconfigure_permitted_parametersでなくても構いませんが、Deviseの命名規則に従い、この名前が慣習的に
 使われています。
 
@@ -91,11 +94,27 @@ Strong Parametersで使用されるメソッドで、指定されたキーを許
 avatarパラメータを許可するために使用されています。
 Deviseは、Railsの認証機能を拡張したGemであり、Strong Parametersを使用することが推奨されています。そのため、
 Deviseもpermitメソッドを使用します。
-keysオプションを使用すると、特定のパラメータに対して許可を指定することができます。上記の例では、keys: [:avatar]
-を指定することで、avatarパラメータに対する許可を追加しています。
+keysオプションを使用すると、特定のパラメータに対して許可を指定することができます。上記の例では、keys: [:name]
+を指定することで、nameパラメータに対する許可を追加しています。
 
-------------------------------------------------------------------------------------------------
+================================================================================================
+4
+:authenticate_api_v1_user!
+一般的にApplicationControllerに記載。
+ApplicationController にこの before_action を追加することによって、アプリの全てのコントローラーがログインし
+たユーザーだけにアクセスを許可するように設定されます。なので、実際には使えない。
+*使用する際は、個別のコントローラーに記載する。
+このように、before_action を ApplicationController に追加することで、アプリの全てのページにログイン機能を組
+み込むことができます。
+このメソッドは、このコントローラー内の各アクションが実行される前に実行され、認証されていない場合は
+401 Unauthorizedのステータスコードを返します。
+Railsを使ったAPI開発においては、before_actionフィルターを使用して、アクセス制御のために認証を要求することが一般
+的です。
+
+
+@          @@          @@          @@          @@          @@          @@          @@          @
 基本理解
+@          @@          @@          @@          @@          @@          @@          @@          @
 
 params.require(:user).permit(:name, :email, :password, :password_confirmation)
 

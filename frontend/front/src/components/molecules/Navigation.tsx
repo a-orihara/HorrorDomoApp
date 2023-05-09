@@ -1,33 +1,52 @@
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { signOut } from '../../api/auth';
 import { AuthContext } from '../../contexts/AuthContext';
+import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 
 const Navigation = () => {
+  // AuthContextから取得した値を使用する
   const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+  // アラートメッセージの表示非表示を管理するステート
+  const [alertOpen, setAlertOpen] = useState(false);
+  // アラートメッセージの種類を管理するステート
+  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
+  // アラートのメッセージ内容を管理するステート
+  const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
-
+  // ------------------------------------------------------------------------------------------------
+  // サインアウト処理。処理後は、トップページに遷移
   const handleSignOut = async () => {
     try {
       const res = await signOut();
       if (res.data.success === true) {
+        console.log(`signOutのres.data:${JSON.stringify(res.data)}`);
         // サインアウト時には各Cookieを削除
         Cookies.remove('access-token');
         Cookies.remove('client');
         Cookies.remove('uid');
         // ここで、isSignedInをfalseにしないと、ログアウト後にヘッダーのボタンが変わらない。
-        // router.push('/signin')だけだと、AuthContextのuseEffectが発火しない。
         setIsSignedIn(false);
-        router.push('/');
-        alert('ログアウトしました');
+        setAlertSeverity('success');
+        setAlertMessage(`${res.data.message}`);
+        setAlertOpen(true);
+        // サインアウトしたら、トップページに遷移
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
       } else {
-        alert('ログアウトに失敗しました');
+        setAlertSeverity('error');
+        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertOpen(true);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.error(err);
+      setAlertSeverity('error');
+      setAlertMessage(`${err.response.data.errors}`);
+      setAlertOpen(true);
     }
   };
   return (
@@ -56,6 +75,12 @@ const Navigation = () => {
           </Button>
         )}
       </ul>
+      <AlertMessage
+        open={alertOpen}
+        setOpen={setAlertOpen}
+        severity={alertSeverity}
+        message={alertMessage}
+      ></AlertMessage>
     </nav>
   );
 };

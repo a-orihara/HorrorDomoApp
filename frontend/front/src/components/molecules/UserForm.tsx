@@ -1,56 +1,23 @@
+import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
-import { updateAvatar, updateUser } from '../../api/auth';
+import { updateUser } from '../../api/auth';
 import { AuthContext } from '../../contexts/AuthContext';
 import { UserUpdateParams } from '../../types';
 import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-
+// ================================================================================================
 const UserForm: React.FC = () => {
-  const { currentUser } = useContext(AuthContext);
-
+  const { currentUser, setCurrentUser, handleGetCurrentUser } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   // 2
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<'error' | 'success'>('error');
   const [alertMessage, setAlertMessage] = useState('');
-
-  // 4
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarFile(file);
-  };
-
-  // 5
-  // ファイルを送信するためのフォームデータを作成し、選択されたファイルをフォームデータに追加する
-  const handleAvatarSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!avatarFile) {
-      setAlertSeverity('error');
-      setAlertMessage('ファイルが選択されていません。');
-      setAlertOpen(true);
-      return;
-    }
-    const formData = new FormData();
-    formData.append('avatar', avatarFile);
-    try {
-      const res = await updateAvatar(formData);
-      if (res.status === 200) {
-        setAlertSeverity('success');
-        setAlertMessage('ユーザーアバターの更新に成功しました！');
-        setAlertOpen(true);
-      }
-    } catch (err) {
-      setAlertSeverity('error');
-      setAlertMessage('ユーザーアバターの更新中にエラーが発生しました。');
-      setAlertOpen(true);
-    }
-  };
-
+  const router = useRouter();
+  // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const params: UserUpdateParams = {
@@ -59,24 +26,35 @@ const UserForm: React.FC = () => {
     };
     try {
       const res = await updateUser(params);
-      console.log(`updateのres:${res.data}`);
-      console.log(res.data);
       if (res.status === 200) {
+        console.log(`updateのres.data:${JSON.stringify(res.data)}`);
+        // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
+        handleGetCurrentUser();
+        // setUserUpdated(true);
+        // getAuthenticatedUser();
         setAlertSeverity('success');
-        setAlertMessage('ユーザー情報の更新に成功しました！');
+        setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
-        // setTimeout(() => {
-        //   router.push('/');
-        // }, 3000);
+        // ページをリロードして、ユーザー情報を更新する
+        // router.push(`/user/${res.data.data.id}`);
+
+        setTimeout(() => {
+          router.push('/');
+        }, 1500);
+      } else {
+        setAlertSeverity('error');
+        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertOpen(true);
       }
-    } catch (err) {
+    } catch (err: any) {
+      console.error(err);
       setAlertSeverity('error');
-      setAlertMessage('ユーザー情報の更新中にエラーが発生しました。');
+      setAlertMessage(`${err.response.data.errors.fullMessages}`);
       setAlertOpen(true);
     }
   };
 
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
       <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
@@ -130,29 +108,6 @@ const UserForm: React.FC = () => {
           severity={alertSeverity}
           message={alertMessage}
         ></AlertMessage>
-      </form>
-      <form className='mt-11 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
-            Avatar:
-          </Label>
-          <Input
-            className='m-auto mb-2 mt-1 w-2/5'
-            id='avatar'
-            type='file'
-            name='avatar'
-            onChange={handleAvatarChange}
-          ></Input>
-        </div>
-
-        <div>
-          <Button
-            className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
-            onClick={handleAvatarSubmit}
-          >
-            Update Avatar
-          </Button>
-        </div>
       </form>
     </div>
   );
@@ -261,10 +216,67 @@ nullチェックをしていれば、エラーが発生するリスクを減ら�
 
 ================================================================================================
 
-const handleAvatarSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+@          @@          @@          @@          @@          @@          @@          @@          @
+avatarを登録したときの実装コード
+@          @@          @@          @@          @@          @@          @@          @@          @
+const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+================================================================================================
+// 4
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+  };
+
+================================================================================================
+5
+router.reload()
+現在のページを再読み込みする。例えば、特定のアクションが実行された後、現在のページを更新する必要がある場合に使用され
+ます。
+router.reload()を使用する場合は、ページのリロードに伴い、ユーザーが入力したデータやスクロール位置などの状態もすべ
+てリセットされることに注意が必要です。適切に扱ってください。
+
+================================================================================================
+@          @@          @@          @@          @@          @@          @@          @@          @
+avatar
+@          @@          @@          @@          @@          @@          @@          @@          @
+<form className='mt-11 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
+            Avatar:
+          </Label>
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='avatar'
+            type='file'
+            name='avatar'
+            onChange={handleAvatarChange}
+          ></Input>
+        </div>
+
+        <div>
+          <Button
+            className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            onClick={handleAvatarSubmit}
+          >
+            Update Avatar
+          </Button>
+        </div>
+      </form>
+================================================================================================
+// 5
+  // ファイルを送信するためのフォームデータを作成し、選択されたファイルをフォームデータに追加する
+  const handleAvatarSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (!avatarFile) {
+      setAlertSeverity('error');
+      setAlertMessage('ファイルが選択されていません。');
+      setAlertOpen(true);
+      return;
+    }
     const formData = new FormData();
-    formData.append('avatar', avatarFile!);
+    formData.append('avatar', avatarFile);
     try {
       const res = await updateAvatar(formData);
       if (res.status === 200) {
@@ -278,27 +290,5 @@ const handleAvatarSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
       setAlertOpen(true);
     }
   };
-*/
 
-/*
-<div>
-  <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
-    Avatar:
-  </Label>
-  <Input
-    className='m-auto mb-2 mt-1 w-2/5'
-    id='avatar'
-    type='file'
-    name='avatar'
-    // 3
-    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-      // ファイルを取得する
-      const file = e.target.files && e.target.files[0];
-      if (file) {
-        // 選択されたファイルをstateに保存する
-        setAvatar(file);
-      }
-    }}
-  ></Input>
-</div>
 */

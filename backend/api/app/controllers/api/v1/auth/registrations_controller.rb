@@ -1,8 +1,10 @@
 # 1
 class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
-
   # 4
-  # protected
+  # （デフォ:コメントアウト）
+  before_action :configure_sign_up_params, only: [:create]
+  # （デフォ:コメントアウト）
+  before_action :configure_account_update_params, only: [:update]
 
   # 6
   # def update
@@ -12,26 +14,34 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   #   end
   # end
 
-  # privateである場合、子クラスでメソッドがオーバーライドできません。
-  private
+  protected
     # 2 ユーザー登録時に使用
-    def sign_up_params
+    def configure_sign_up_params
       # サインアップ時に登録できるカラムを指定
-      params.permit(:email, :password, :password_confirmation, :name)
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
       # params.permit(:email, :password, :password_confirmation, :name, :avatar)
     end
 
-
     # 3 ユーザー更新時に使用
-    # def account_update_params
-    #   # update_params = params.permit(:name, :email, :avatar)
-    #   update_params.delete(:email) if update_params[:email].blank?
-    #   update_params
-    # end
+    def configure_account_update_params
+      devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+    end
 
     # 5
     def render_create_success
-      render json: { status: 'success', message: I18n.t('devise.registrations.signed_up'), data: resource }
+      render json: {
+        status: 'success',
+        message: I18n.t('devise.registrations.signed_up'),
+        data: resource_data
+      }
+    end
+
+    def render_update_success
+      render json: {
+        status: 'success',
+        message: I18n.t('devise.registrations.updated'),
+        data:   resource_data
+      }
     end
 end
 
@@ -48,7 +58,9 @@ sign_up_paramsメソッドを定義しています。params.permitで許可す�
 
 ================================================================================================
 2
-sign_up_params
+configure_sign_up_paramsという名前がdeviseのデフォの名前だが、任意でいい。
+その場合、devise_token_authにsign_up_paramsがあるので、これを使う。
+
 DeviseTokenAuth::RegistrationsControllerが提供するメソッド。
 サインアップ時に必要なパラメータを設定するメソッド。
 sign_up_paramsメソッドは、サインアップ時に登録できるカラムを指定するために使用されます。具体的には、paramsオブ
@@ -112,10 +124,18 @@ account_update_params メソッドが使用されます。registrations_controll
 
 ================================================================================================
 4
-protectedはRubyにおけるアクセス修飾子の一つで、記述したそのクラス自身、またはその親クラス内で呼び出しが可能です。
-親クラスでprotectedメソッドを定義すると、その子クラスでも呼び出すことができます。ただし、インスタンスメソッドを呼
-び出す場合は、同じオブジェクト内である必要があります。
-protectedの利用意図の一例として、サブ（子）クラスでのみ使用するメソッドを定義することが挙げられます。
+before_action
+
+バックエンドのupdate(その他あればedit)に、ユーザーにログインを要求する before_actionを設定。
+rails_tutorialでは、
+before_action :logged_in_user, only: [:edit, :update]
+
+ただし、devise_token_authではデフォルトで、devise_token_auth/registrations_controller.rbに、
+before_action :logged_in_user, only: [:edit, :update]設定済みなので、特に設定不要。
+
+*set_user_by_token
+devise_token_authが提供するトークンベースの認証機能を利用し、リクエストから渡されたトークンに紐づくユーザーが存
+在するかどうかを確認します。失敗した場合はnilを返します。
 
 ================================================================================================
 5

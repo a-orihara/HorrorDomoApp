@@ -37,8 +37,13 @@ next.config.jsは、Next.jsアプリケーションのルートディレクト�
 2
 reactStrictMode:true（デフォルトの設定）
 これはReactのStrict Modeを有効にし、開発モードでアプリケーションの潜在的な問題を検出するための機能を提供します。
+
 swcMinify:true（デフォルトの設定）
 これは、Next.jsアプリケーションのコードをSWCコンパイラを使用して最小化するオプションです。
+*SWCコンパイラは、JavaScript/TypeScriptのコンパイラであり、Rustで実装されています。
+Babelと同様に、コードを別の形式に変換するために使用されますが、SWCは高速であり、Rustの効率的なコンパイルエンジン
+により、Babelよりも高速であるとされています。
+
 images
 画像の設定に関するオプションです。domainsプロパティにlocalhostを設定することで、このアプリケーションで使用する
 画像のホストを指定しています。

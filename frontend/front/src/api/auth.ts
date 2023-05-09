@@ -49,8 +49,10 @@ export const updateAvatar = async (formData: FormData) => {
 
 // 4 認証済みのユーザーを取得
 export const getAuthenticatedUser = () => {
+  // トークンがない場合は何もしない
   if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
-  return client.get('/auth/sessions', {
+  console.log('getAuthenticatedUserが呼ばれた');
+  return client.get('/authenticated_users', {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -61,7 +63,7 @@ export const getAuthenticatedUser = () => {
 
 // 3000 / api / v1;
 export const getUserById = (userId: string) => {
-  console.log('getUserById呼ばれた');
+  console.log('getUserByIdが呼ばれた');
   return client.get(`/users/${userId}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),

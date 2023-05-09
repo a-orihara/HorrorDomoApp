@@ -13,6 +13,7 @@ const ProfilePage = () => {
 
   // 2
   useEffect(() => {
+    console.log('ProfilePageのuseEffectが呼ばれました');
     if (!id) return;
     const fetchUserData = async () => {
       try {
@@ -29,7 +30,6 @@ const ProfilePage = () => {
   if (!user) {
     return <div>Loading...</div>;
   }
-  console.log(`ユーザー：${JSON.stringify(user)}`);
   // allowPasswordChange: false;
   // email: 'soso@soso.com';
   // id: 3;

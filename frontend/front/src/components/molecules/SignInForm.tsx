@@ -4,16 +4,23 @@ import React, { useContext, useState } from 'react';
 import { signIn } from '../../api/auth';
 import { AuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
+import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
-// ------------------------------------------------------------------------------------------------
+// ================================================================================================
 const SignInForm = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  // アラートメッセージの表示非表示を管理するステート
+  const [alertOpen, setAlertOpen] = useState(false);
+  // アラートメッセージの種類を管理するステート
+  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
+  // アラートのメッセージ内容を管理するステート
+  const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
-
+  // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     const params: SignInParams = {
@@ -22,26 +29,34 @@ const SignInForm = () => {
     };
     try {
       const res = await signIn(params);
-      console.log(res);
       if (res.status === 200) {
+        console.log(`signInのres.data:${JSON.stringify(res.data)}`);
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
-        alert('ログイン成功');
+        setAlertSeverity('success');
+        setAlertMessage(`${res.data.message}`);
+        setAlertOpen(true);
         // ユーザーIDを元にマイページ（プロフィールページ）へ遷移
-        router.push(`/user/${res.data.data.id}`);
+        // router.push(`/user/${res.data.data.id}`);
+        setTimeout(() => {
+          router.push(`/user/${res.data.data.id}`);
+        }, 2000);
       } else {
-        alert('ログイン失敗');
+        setAlertSeverity('error');
+        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertOpen(true);
       }
-    } catch (err) {
-      console.log(err);
-      alert(`ログインエラー${err}`);
+    } catch (err: any) {
+      console.error(err);
+      setAlertSeverity('error');
+      setAlertMessage(`${err.response.data.errors}`);
+      setAlertOpen(true);
     }
   };
-
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col bg-red-200'>
       <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>
@@ -85,6 +100,12 @@ const SignInForm = () => {
             Sign In!
           </Button>
         </div>
+        <AlertMessage
+          open={alertOpen}
+          setOpen={setAlertOpen}
+          severity={alertSeverity}
+          message={alertMessage}
+        ></AlertMessage>
       </form>
     </div>
   );

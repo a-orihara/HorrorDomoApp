@@ -42,7 +42,7 @@ const SignInForm = () => {
         // ユーザーIDを元にマイページ（プロフィールページ）へ遷移
         // router.push(`/user/${res.data.data.id}`);
         setTimeout(() => {
-          router.push(`/user/${res.data.data.id}`);
+          router.push(`/users/${res.data.data.id}`);
         }, 2000);
       } else {
         setAlertSeverity('error');

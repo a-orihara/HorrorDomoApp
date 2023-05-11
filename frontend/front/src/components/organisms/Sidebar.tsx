@@ -15,12 +15,12 @@ const Sidebar = () => {
             </Link>
           </li> */}
           <li className='mb-2'>
-            <Link href={`/user/${currentUser?.id}/edit`}>
+            <Link href={`/users/${currentUser?.id}/edit`}>
               <a className='w-40 text-left hover:text-basic-pink'>Settings</a>
             </Link>
           </li>
           <li className='mb-2'>
-            <Link href='/'>
+            <Link href='/users/'>
               <a className='w-40 text-left hover:text-basic-pink'>Users</a>
             </Link>
           </li>

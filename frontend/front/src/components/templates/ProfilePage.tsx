@@ -44,13 +44,9 @@ const ProfilePage = () => {
         <div className='flex h-full flex-row bg-blue-200'>
           <Sidebar></Sidebar>
           <div className='flex-1 '>
-            <h1>Signed in successfully!</h1>
-            <h2>Email: {user.email}</h2>
             <h2>Name: {user.name}</h2>
-            <h1>Signed in successfully!</h1>
-            <h1 className='text-blue-500'>*Profile詳細は今後実装予定</h1>
-            <p>{user.name}</p>
-
+            <h2>Email: {user.email}</h2>
+            <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
             {/* <Image
               // user.avatar が undefined だった場合にデフォルト画像を表示
               src={user.avatarUrl || '/no_image_square.jpg'}
@@ -64,8 +60,6 @@ const ProfilePage = () => {
                 e.currentTarget.src = '/no_image_square.jpg';
               }}
             /> */}
-
-            <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
           </div>
         </div>
       </div>

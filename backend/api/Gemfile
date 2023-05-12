@@ -28,9 +28,11 @@ gem 'rack-cors'
 gem 'dotenv-rails'
 gem 'devise'
 gem 'devise_token_auth'
-gem 'rails-i18n'
-gem 'devise-i18n'
+gem 'rails-i18n' # 日本語化
+gem 'devise-i18n' # deviseの日本語化
 gem 'mini_magick'
+gem 'kaminari' # ページネーション
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

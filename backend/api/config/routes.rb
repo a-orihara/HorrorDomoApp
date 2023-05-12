@@ -1,15 +1,21 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      # 1
+      # 1 api/v1/auth
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations',
         sessions: 'api/v1/auth/sessions',
       }
-      # namespace :auth do
-      # end
+
+      # api/v1/authenticated_users
       resources :authenticated_users, only: %i[index]
+      # api/v1/users
       resources :users, only: %i[index show]
+
+      # api/v1/admin/users
+      namespace :admin do
+        resources :users, only: [:destroy]
+      end
 
     end
   end
@@ -87,6 +93,9 @@ api_v1_todo                     GET    /api/v1/todos/:id(.:format)              
 ------------------------------------------------------------------------------------------------
 api_v1_users                    GET    /api/v1/users(.:format)                  api/v1/users#index
 api_v1_user                     GET    /api/v1/users/:id(.:format)              api/v1/users#show
+
+------------------------------------------------------------------------------------------------
+api_v1_admin_user               DELETE /api/v1/admin/users/:id(.:format)        api/v1/admin/users#destroy
 
 ================================================================================================
 deviseのdevise_forメソッド

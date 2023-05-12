@@ -9,7 +9,7 @@ import Input from '../atoms/Input';
 import Label from '../atoms/Label';
 // ================================================================================================
 const UserForm: React.FC = () => {
-  const { currentUser, setCurrentUser, handleGetCurrentUser } = useContext(AuthContext);
+  const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   // 2

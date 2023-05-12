@@ -34,6 +34,7 @@ export type User = {
   allowPasswordChange: boolean;
   createdAt: Date;
   updatedAt: Date;
+  admin: boolean;
   // 1
   // avatarUrl: string | null;
 };

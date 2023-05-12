@@ -4,6 +4,7 @@ class Api::V1::AuthenticatedUsersController < ApplicationController
   # include DeviseTokenAuth::Concerns::SetUserByToken
   # 2 ログイン済みのユーザーが存在するかをチェックし、存在する場合はそのユーザーの情報を返す
   def index
+    puts "indexアクションが発火"
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
       render json: { is_login: true, data: current_api_v1_user }

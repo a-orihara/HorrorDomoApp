@@ -16,6 +16,17 @@ export const userIndex = (page: number, itemsPerPage: number) => {
   });
 };
 
+// ユーザーを削除する
+export const userDelete = (userId: number) => {
+  return client.delete(`/admin/users/${userId}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // export const signIn = (params: SignInParams) => {
 //   return client.post('/auth/sign_in', params);
 // };

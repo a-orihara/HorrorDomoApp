@@ -2,12 +2,15 @@
 module TestMacros
   # 2
   def login_user(user = FactoryBot.create(:user))
+    # requestオブジェクトのenvにdeviseのmappingを設定
     @request.env['devise.mapping'] = Devise.mappings[:user]
+    # sign_inメソッドはDeviseのヘルパーメソッド。
     sign_in user
   end
 
   # 3
   def login_admin
+    # requestオブジェクトのenvにadminのmappingを設定
     @request.env['devise.mapping'] = Devise.mappings[:admin]
     admin = FactoryBot.create(:admin)
     sign_in admin
@@ -25,7 +28,7 @@ module TestMacros
     token.each do |key, value|
       headers[key] = value
     end
-    # headerハッシュを返す
+    # 戻り値はトークンを設定したheaderハッシュ
     headers
   end
 end

@@ -29,6 +29,7 @@ RSpec.describe 'Api::V1::Admin::Users', type: :request do
 
       it 'ユーザーの削除に失敗する' do
         delete api_v1_admin_user_path(user), headers: headers
+        # forbidden(403)が返ってくることを確認。
         expect(response).to have_http_status(:forbidden)
         json = response.parsed_body
         expect(json['status']).to eq 'error'

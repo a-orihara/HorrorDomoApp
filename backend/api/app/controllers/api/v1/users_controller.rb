@@ -5,19 +5,16 @@ class Api::V1::UsersController < ApplicationController
 
   before_action :set_user, only: [:show, :update, :destroy]
 
-
   # GET /api/v1/users
   # 3 全てのユーザーをページネーション付きで取得するメソッド
   def index
     puts "indexアクションが発火"
-    # @users = User.all
-    # render json: { users: @users }
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     @users = User.all.page(page).per(per_page)
     total_users = User.count # 総ユーザー数を取得
+    # { users: @users, total_users: total_users }と同じ意味
     render json: { users: @users, total_users: total_users } # 総ユーザー数もレスポンスに含める
-    # render json: { users: @users }
   end
 
   # GET /api/v1/users/1
@@ -31,39 +28,18 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /api/v1/users
   # def create
-  #   @user = User.new(user_params)
-
-  #   if @user.save
-  #     render json: @user, status: :created, location: @user
-  #   else
-  #     render json: @user.errors, status: :unprocessable_entity
-  #   end
   # end
 
   # PATCH/PUT /api/v1/users/1
   # def update
-  #   if @user.update(user_params)
-  #     render json: @user
-  #   else
-  #     render json: @user.errors, status: :unprocessable_entity
-  #   end
   # end
 
-  # DELETE /api/v1/users/1
-
-
   private
+
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。
     def set_user
       @user = User.find(params[:id])
     end
-
-
-
-    # Only allow a list of trusted parameters through.
-    # def user_params
-    #   params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    # end
 end
 
 =begin

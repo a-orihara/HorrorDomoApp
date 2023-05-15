@@ -6,16 +6,16 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   # （デフォ:コメントアウト）
   before_action :configure_account_update_params, only: [:update]
 
-
   # 6
   # def update
-  #   super
-  #   if account_update_params[:avatar].present?
-  #     current_api_v1_user.avatar.attach(account_update_params[:avatar])
-  #   end
+    # super
+    # if account_update_params[:avatar].present?
+    #   current_api_v1_user.avatar.attach(account_update_params[:avatar])
+    # end
   # end
 
   protected
+
     # 2 ユーザー登録時に使用
     def configure_sign_up_params
       # サインアップ時に登録できるカラムを指定
@@ -31,27 +31,27 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     # 5
     def render_create_success
       render json: {
+        # status: 'success'は、200を返す
         status: 'success',
         message: I18n.t('devise.registrations.signed_up'),
         data: resource_data
-      }
+        # status: 'created'は、201を返す。201はPOST, PUT：リクエストが成功しリソースが作成されたことを示す。
+      },status: :created
     end
 
     def render_update_success
       render json: {
         status: 'success',
         message: I18n.t('devise.registrations.updated'),
-        data:   resource_data
+        data: resource_data
       }
     end
-
-
 end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-このコードは、DeviseTokenAuthのRegistrationsControllerを継承した
+このコードは、DeviseTokenAuthのRegistrationsControllerを継承した、
 Api::V1::Auth::RegistrationsControllerクラスで、サインアップ時に許可されるパラメータを指定する
 sign_up_paramsメソッドを定義しています。params.permitで許可するカラムを指定しています。
 このコードの利用意図は、サインアップ時に必要なカラムを指定することで、不必要なパラメータが登録されることを防止し、セ

@@ -100,6 +100,48 @@ Naming/PredicateName:
 Style/BlockComments:
   Enabled: false
 
+# インデントの警告を無視する設定
+Layout/IndentationWidth:
+  Enabled: false
+
+# コードのインデントの一貫性をチェックする
+Layout/IndentationConsistency:
+  Enabled: false
+
+# コメントのインデントが誤っていることを示す警告
+Layout/CommentIndentation:
+  Enabled: false
+
+# クラス内で明示的に定義されていないアクションがbefore_actionで指定されている場合に警告を表示する
+# devise使用で設定が合わないため、一旦オフにする
+LexicallyScopedActionFilter:
+  Enabled: false
+
+# HTTPステータスコードを指定する際に:okを使うことを推奨する警告
+Rails/HttpStatus:
+  Enabled: false
+
+# 空のテスト例を検出する警告
+RSpec/EmptyExampleGroup:
+  Enabled: false
+
+# HTTPステータスコードを表現するためにシンボル :ok を使用することを推奨する警告
+RSpec/Rails/HttpStatus:
+  Enabled: false
+
+# 1つのテストケース（itブロック）に1つの期待値（expect）のみを持つべきであるという警告
+RSpec/MultipleExpectations:
+  Enabled: false
+
+# RSpecのdescribeやcontextブロックのネストの深さを制限する警告
+RSpec/NestedGroups:
+  Max: 4
+
+# ハッシュリテラルの書式に関するスタイルをチェックする
+# 紛らわしいので一旦オフにする
+Style/HashSyntax:
+  Enabled: false
+
 # ハッシュ{の前後にスペースが入ってない
 # good:e.g:
 # h = { a: 1, b: 2 }

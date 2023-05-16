@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
 import Modal from 'react-modal';
+import { AlertProvider } from '../contexts/AlertContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import '../styles/globals.css';
 
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   console.log('_app.tsxが呼ばれた');
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <AlertProvider>
+        <Component {...pageProps} />
+      </AlertProvider>
     </AuthProvider>
   );
 }

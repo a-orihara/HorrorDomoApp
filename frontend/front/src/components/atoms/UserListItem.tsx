@@ -13,7 +13,9 @@ type UserListItemProps = {
 // ================================================================================================
 const UserListItem = ({ user }: UserListItemProps) => {
   const { currentUser } = useContext(AuthContext);
+  // 現在のユーザーが管理者で、かつ、現在のユーザーと表示中のユーザーが異なる場合にtrue
   const isDifferentUser = currentUser?.id !== user.id;
+  // 現在のユーザーが管理者の場合にtrue
   const isAdmin = currentUser?.admin;
   const router = useRouter();
 
@@ -22,6 +24,7 @@ const UserListItem = ({ user }: UserListItemProps) => {
   // ユーザー削除ハンドラー
   const handleDeleteUser = async (userId: number) => {
     try {
+      // userDelete: ユーザー削除API
       const res = await userDelete(userId);
       console.log(`userDeleteのres.data${JSON.stringify(res.data)}`);
       alert('ユーザーが削除されました。');

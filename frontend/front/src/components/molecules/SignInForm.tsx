@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { signIn } from '../../api/auth';
+import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
 import AlertMessage from '../atoms/AlertMessage';
@@ -13,12 +14,13 @@ const SignInForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // アラートメッセージの表示非表示を管理するステート
-  const [alertOpen, setAlertOpen] = useState(false);
+  // const [alertOpen, setAlertOpen] = useState(false);
   // アラートメッセージの種類を管理するステート
-  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
+  // const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
   // アラートのメッセージ内容を管理するステート
-  const [alertMessage, setAlertMessage] = useState('');
+  // const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -100,12 +102,7 @@ const SignInForm = () => {
             Sign In!
           </Button>
         </div>
-        <AlertMessage
-          open={alertOpen}
-          setOpen={setAlertOpen}
-          severity={alertSeverity}
-          message={alertMessage}
-        ></AlertMessage>
+        <AlertMessage></AlertMessage>
       </form>
     </div>
   );

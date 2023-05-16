@@ -1,25 +1,19 @@
-import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+import { useAlertContext } from '../../contexts/AlertContext';
+
 // 1
-type AlertMessageProps = {
-  open: boolean;
-  setOpen: (isOpen: boolean) => void;
-  severity: 'error' | 'success' | 'info' | 'warning';
-  message: string;
-};
+const AlertMessage = () => {
+  // AlertContextからalertOpen, setAlertOpen, alertSeverity, alertMessageを受け取る
+  const { alertOpen, setAlertOpen, alertSeverity, alertMessage } = useAlertContext();
 
-const AlertMessage = ({ open, setOpen, severity, message }: AlertMessageProps) => {
-  // モーダルの表示/非表示を管理するためのuseStateを定義
-  const [modalIsOpen, setModalOpen] = useState<boolean>(open);
+  // 3 メッセージ（モーダル）を閉じる。setOpenをfalseにする関数
+  const handleCloseAlertMessage = () => {
+    setAlertOpen(false);
+  };
 
-  // 5
-  useEffect(() => {
-    setModalOpen(open);
-  }, [open]);
-
-  // 2
+  // 2 severityに応じて背景色を変更する
   const backgroundColor = () => {
-    switch (severity) {
+    switch (alertSeverity) {
       case 'error':
         return 'bg-red-500';
       case 'success':
@@ -33,21 +27,20 @@ const AlertMessage = ({ open, setOpen, severity, message }: AlertMessageProps) =
     }
   };
 
-  // 3
-  const handleCloseAlertMessage = () => {
-    setOpen(false);
-  };
   // ------------------------------------------------------------------------------------------------
   return (
     // 4
     <Modal
-      isOpen={modalIsOpen}
+      // isOpen:モーダルの表示状態を管理する真偽値
+      isOpen={alertOpen}
+      // onRequestClose:モーダルを閉じるための関数
       onRequestClose={handleCloseAlertMessage}
       className={`mx-auto mt-10 w-full rounded-lg px-8 py-6 text-center text-white md:mt-24 md:w-auto md:max-w-md ${backgroundColor()} shadow-md`}
+      // overlayClassName:モーダルの背景を設定するためのクラス名
       overlayClassName='fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-6'
     >
       <div className='flex flex-col items-center justify-center'>
-        <h2 className='mb-4 font-spacemono text-2xl md:text-3xl'>{message}</h2>
+        <h2 className='mb-4 font-spacemono text-2xl md:text-3xl'>{alertMessage}</h2>
         <button
           onClick={handleCloseAlertMessage}
           className='mt-4 rounded-lg bg-white px-4 py-2 text-lg font-semibold text-gray-800 shadow-md transition-colors duration-300 hover:bg-gray-100 md:mt-6 md:px-6 md:py-3 md:text-xl'
@@ -64,11 +57,12 @@ export default AlertMessage;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-severity:重大度
-
-*open プロパティは、表示状態を管理する真偽値を定義します。
-*setOpen プロパティは、表示状態を設定するための関数を定義します。
-*severity プロパティは、アラートの重要度を示す文字列を定義します。
+open プロパティは、表示状態を管理する真偽値を定義します。
+------------------------------------------------------------------------------------------------
+setOpen プロパティは、表示状態を設定するための関数を定義します。
+------------------------------------------------------------------------------------------------
+severity プロパティは、アラートの重要度を示す文字列を定義します。
+severity:重大度という意味。
 ここでは、'error', 'success', 'info', 'warning' の4つの文字列しか許容されておらず、それ以外の文字列は許容さ
 れていません。
 これにより、アラートの重要度に誤った値が渡された場合、コンパイル時にエラーが発生するため、バグを未然に防ぐことがで
@@ -78,7 +72,8 @@ severity:重大度
 を表す文字列の一部です。ただし、アラートの目的に応じて適切な文字列を使用する必要があります。例えば、質問フォームで
 のエラーは error、アクションの成功時は success、通知メッセージは info など、目的に合わせて適切な文字列を選ぶよ
 うにしましょう。
-*message プロパティは、アラートに表示されるメッセージの文字列を定義します。
+------------------------------------------------------------------------------------------------
+message プロパティは、アラートに表示されるメッセージの文字列を定義します。
 
 ================================================================================================
 2
@@ -89,68 +84,8 @@ propsとして渡されたアラートの重要度に応じて、背景色を決
 
 ================================================================================================
 3
+handleCloseAlertMessageは、引数で受け取ったsetOpenに入った関数にfalseをセットする（falseの結果にする）。
 setOpenで受け取った関数にfalseを設定して実行する。これにより、アラートを閉じることができます。
-
-------------------------------------------------------------------------------------------------
-アラートを閉じるためのコールバック関数。
-React.SyntheticEvent
-React のイベントシステムにおいて、ブラウザのネイティブイベントをラップしたオブジェクトです。これにより、ブラウザ
-間のイベントの違いを吸収し、一貫性のあるイベントオブジェクトを提供します。React.SyntheticEvent は、クリック、
-マウスオーバー、キーボード入力など、様々なイベントタイプに対応しています。
-他の、例えばReact.ChangeEvent<HTMLInputElement>は、React.SyntheticEvent をさらに特定のイベントに特化さ
-せたもので、HTMLInputElement に関連する変更イベントに特化した型です。例えば、テキストボックスやチェックボック
-スなどの入力要素の値が変更されたときに発生するイベントです。
-
-------------------------------------------------------------------------------------------------
-handleCloseAlertMessage は、アラートメッセージを閉じる際に実行されるイベントハンドラです。このイベントハンドラ
-は、アラートメッセージ自体や、アラートメッセージの外側の領域がクリックされたときに呼び出されます。
-React.SyntheticEvent は、イベントハンドラがどのようなイベントによって発火されたかに関わらず、一貫性のあるイベン
-トオブジェクトを提供するために使用されます。handleCloseAlertMessage では、イベントオブジェクトの情報を利用して、
-「clickaway」の理由でアラートが閉じられたかどうかを判断します。
-React.SyntheticEvent を引数として使用することで、ブラウザ間のイベントの違いを吸収し、イベントハンドラがどのイベ
-ントタイプであっても適切に動作することが保証されます。したがって、handleCloseAlertMessage の引数として、
-React.SyntheticEvent を使用することが適切です。
-
-------------------------------------------------------------------------------------------------
-ブラウザ間のイベントの違いについて:
-ウェブアプリケーション開発において、異なるブラウザ間でイベントの挙動が異なることがあります。これらの違いは、以下のよ
-うな要因に起因することがあります。
-ブラウザの実装: 各ブラウザは、それぞれ独自のエンジンを使用しており、イベント処理の実装方法が異なる場合があります。
-ブラウザのバージョン: ブラウザのバージョンによっても、イベントの挙動が変わることがあります。特に、古いバージョンの
-ブラウザでは、新しいイベントや API がサポートされていない場合があります。
-イベントプロパティ: イベントオブジェクトのプロパティがブラウザ間で異なることがあります。例えば、イベントのタイムス
-タンプや座標情報など、特定のブラウザでのみ利用可能なプロパティが存在する場合があります。
-
-------------------------------------------------------------------------------------------------
-handleCloseAlertMessage 関数で引数 e と reason がオプショナル型（? がついている）になっているのは、以下の理
-由があります。
-1.異なるコンテキストでの呼び出しを許容するため
-この関数がイベントハンドラとして利用される場合、イベントオブジェク
-トやイベントの詳細を引数として受け取ることが一般的です。ただし、この関数が別のコンテキストで呼び出される場合や、イ
-ベントオブジェクトが不要な場合もあります。そのため、オプショナル型を使って引数を省略できるようにしています。
-2.省略された引数に対してデフォルトの挙動を設定する場合がある
-関数内で引数が省略された場合にデフォルトの挙動を実行することがあります。オプショナル型を使うことで、引数が与えられ
-なくても関数が正常に動作することを示すことができます。
-
-例えば、handleCloseAlertMessage 関数が ErrorMessage コンポーネント内でイベントハンドラとして使われる場合が
-あります。ここでは、ユーザーがメッセージをクリックしたときに発生するイベントに対応するために、イベントオブジェクト
-やイベントの詳細を引数として受け取ることが一般的です。
-しかし、この関数が別のコンテキストで呼び出される場合も考えられます。例えば、タイマーが設定されていて、一定時間が経
-過したらメッセージが自動的に閉じるという機能があるとします。この場合、handleCloseAlertMessage 関数はイベントオ
-ブジェクトが不要で、タイマーによって呼び出されることになります。
-このような異なるコンテキストでの呼び出しを許容するために、handleCloseAlertMessage 関数の引数 e と reason を
-オプショナル型にしています。これにより、イベントオブジェクトやイベントの詳細が不要な場合や、省略された場合でも、関
-数が正常に動作することが保証されます。
-このように、オプショナル型を使用することで、関数が異なるコンテキストで呼び出されることに対応でき、柔軟な実装が可能
-になります。これは、初学者にとっても理解しやすく、コードの可読性や保守性が向上します。
-
-------------------------------------------------------------------------------------------------
-setOpen(false);
-メッセージを閉じるためのアクションを実行しています。setOpen は、ErrorMessage コンポーネント内で open ステート
-を管理するための関数です。open ステートが true の場合、メッセージが表示されますが、false の場合には非表示になり
-ます。setOpen(false) を実行することで、メッセージが閉じられるようになり、ユーザーがメッセージ内をクリックするこ
-とで、メッセージを閉じることができるようになります。この利用意図は、ユーザーがメッセージを閉じるアクションを実行で
-きるようにすることです。
 
 ================================================================================================
 4
@@ -177,4 +112,38 @@ useEffectの第2引数であり、openプロパティが変更されたときに
 この処理の意図は、ErrorMessageコンポーネントに渡されるopenプロパティが変更されたときに、modalIsOpenの状態を更
 新することで、モーダルの開閉状態を反映させることです。
 
+================================================================================================
+6
+backgroundColor はカスタムフック useAlertMessage の中で定義した関数として返ります。まずここで、
+useAlertMessageは、引数 severityを受け取っています。
+severity が error の場合、 backgroundColor 関数は文字列 'bg-red-500' を返す関数となります。これは
+useAlertMessage フック内の switch ステートメントにおいて、 severity が error の場合に 'bg-red-500' を返す
+ように定義されているからです。
+
+backgroundColor 関数自体は引数を取らずに severity の値に基づいて色を決定する関数となっている点に注意です。
+つまり、「useAlertMessage関数の、引数severityに基づいて挙動が決まる関数」です。
+
+------------------------------------------------------------------------------------------------
+handleCloseAlertMessageは、引数で受け取ったsetOpenに入った関数にfalseをセットする（falseの結果にする）。
+------------------------------------------------------------------------------------------------
+modalIsOpenは、molalの表示状態の初期値。
+@          @@          @@          @@          @@          @@          @@          @@          @
+useAlertContext()でリファクタリング前
+@          @@          @@          @@          @@          @@          @@          @@          @
+================================================================================================
+type AlertMessageProps = {
+  // open:molalの表示状態を管理する真偽値を定義
+  open: boolean;
+  // setOpen:表示状態を設定するための関数を定義
+  setOpen: (isOpen: boolean) => void;
+  // severity:アラートの重要度を示す文字列を定義
+  severity: 'error' | 'success' | 'info' | 'warning';
+  // message:アラートに表示するメッセージを定義
+  message: string;
+};
+------------------------------------------------------------------------------------------------
+const AlertMessage = ({ open, setOpen, severity, message }: AlertMessageProps) => {
+------------------------------------------------------------------------------------------------
+6 カスタムフック。useAlertMessageに引数として、open, setOpen, severityを渡し、その結果のオブジェクトを受ける。
+const { modalIsOpen, backgroundColor, handleCloseAlertMessage } = useAlertMessage({ open, setOpen, severity });
 */

@@ -1,21 +1,18 @@
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { signOut } from '../../api/auth';
+import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 
 const Navigation = () => {
-  // AuthContextから取得した値を使用する
+  // AuthContextから値を取得
   const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
-  // アラートメッセージの表示非表示を管理するステート
-  const [alertOpen, setAlertOpen] = useState(false);
-  // アラートメッセージの種類を管理するステート
-  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
-  // アラートのメッセージ内容を管理するステート
-  const [alertMessage, setAlertMessage] = useState('');
+  // AlertContextから値を取得
+  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
   // サインアウト処理。処理後は、トップページに遷移
@@ -75,12 +72,7 @@ const Navigation = () => {
           </Button>
         )}
       </ul>
-      <AlertMessage
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        severity={alertSeverity}
-        message={alertMessage}
-      ></AlertMessage>
+      <AlertMessage></AlertMessage>
     </nav>
   );
 };

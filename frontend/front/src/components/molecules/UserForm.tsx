@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { updateUser } from '../../api/auth';
+import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { UserUpdateParams } from '../../types';
 import AlertMessage from '../atoms/AlertMessage';
@@ -10,12 +11,10 @@ import Label from '../atoms/Label';
 // ================================================================================================
 const UserForm: React.FC = () => {
   const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
+  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  // 2
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success'>('error');
-  const [alertMessage, setAlertMessage] = useState('');
+
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,12 +101,7 @@ const UserForm: React.FC = () => {
             Save Changes
           </Button>
         </div>
-        <AlertMessage
-          open={alertOpen}
-          setOpen={setAlertOpen}
-          severity={alertSeverity}
-          message={alertMessage}
-        ></AlertMessage>
+        <AlertMessage></AlertMessage>
       </form>
     </div>
   );
@@ -123,9 +117,7 @@ inputタグを関連付ける（対応するinput要素のid属性を指定）�
 
 ================================================================================================
 2
-File型というのはブラウザ上で選択されたファイルを扱うための型で、JavaScriptには標準で用意されています。一般的に、
-ファイルのアップロード機能を作る場合に使われます。
-Union Types（共用型）。 File型の配列を受け取る。
+
 
 ================================================================================================
 3

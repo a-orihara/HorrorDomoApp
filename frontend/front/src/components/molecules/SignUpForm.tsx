@@ -61,12 +61,14 @@ const SignUpForm = () => {
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.full_messages}`);
+        // setAlertMessage(res.data.errors.full_messages.join('\n'));
         setAlertOpen(true);
       }
     } catch (err: any) {
       console.error(err);
       setAlertSeverity('error');
       setAlertMessage(`${err.response.data.errors.fullMessages}`);
+      // setAlertMessage(err.response.data.errors.fullMessages.join('\n'));
       setAlertOpen(true);
     }
   };

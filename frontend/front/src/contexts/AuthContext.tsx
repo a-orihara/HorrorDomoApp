@@ -20,8 +20,6 @@ export const AuthContext = createContext(
     currentUser: User | undefined;
     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
     handleGetCurrentUser: () => Promise<void>;
-    // userUpdated: boolean;
-    // setUserUpdated: React.Dispatch<React.SetStateAction<boolean>>;
   }
 );
 
@@ -63,7 +61,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     handleGetCurrentUser();
     console.log('AuthContextのuseEffectが発火');
-    // userUpdatedが更新されたときにuseEffectが発火する
   }, []);
 
   // ================================================================================================
@@ -78,8 +75,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         currentUser,
         setCurrentUser,
         handleGetCurrentUser,
-        // userUpdated,
-        // setUserUpdated,
       }}
     >
       {children}

@@ -1,49 +1,32 @@
-import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
+import { useAlertMessage } from '../../hooks/useAlertMessage';
 // 1
 type AlertMessageProps = {
+  // open:molalの表示状態を管理する真偽値を定義
   open: boolean;
+  // setOpen:表示状態を設定するための関数を定義
   setOpen: (isOpen: boolean) => void;
+  // severity:アラートの重要度を示す文字列を定義
   severity: 'error' | 'success' | 'info' | 'warning';
+  // message:アラートに表示するメッセージを定義
   message: string;
 };
 
+// openはモーダルの表示状態を管理する真偽値(true/false)
 const AlertMessage = ({ open, setOpen, severity, message }: AlertMessageProps) => {
-  // モーダルの表示/非表示を管理するためのuseStateを定義
-  const [modalIsOpen, setModalOpen] = useState<boolean>(open);
+  // 6 カスタムフック。useAlertMessageに引数として、open, setOpen, severityを渡し、その結果のオブジェクトを受ける。
+  const { modalIsOpen, backgroundColor, handleCloseAlertMessage } = useAlertMessage({ open, setOpen, severity });
 
-  // 5
-  useEffect(() => {
-    setModalOpen(open);
-  }, [open]);
-
-  // 2
-  const backgroundColor = () => {
-    switch (severity) {
-      case 'error':
-        return 'bg-red-500';
-      case 'success':
-        return 'bg-green-500';
-      case 'info':
-        return 'bg-blue-500';
-      case 'warning':
-        return 'bg-yellow-500';
-      default:
-        return 'bg-gray-500';
-    }
-  };
-
-  // 3
-  const handleCloseAlertMessage = () => {
-    setOpen(false);
-  };
   // ------------------------------------------------------------------------------------------------
   return (
     // 4
     <Modal
+      // isOpen:モーダルの表示状態を管理する真偽値
       isOpen={modalIsOpen}
+      // onRequestClose:モーダルを閉じるための関数
       onRequestClose={handleCloseAlertMessage}
       className={`mx-auto mt-10 w-full rounded-lg px-8 py-6 text-center text-white md:mt-24 md:w-auto md:max-w-md ${backgroundColor()} shadow-md`}
+      // overlayClassName:モーダルの背景を設定するためのクラス名
       overlayClassName='fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-6'
     >
       <div className='flex flex-col items-center justify-center'>
@@ -64,11 +47,12 @@ export default AlertMessage;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-severity:重大度
-
-*open プロパティは、表示状態を管理する真偽値を定義します。
-*setOpen プロパティは、表示状態を設定するための関数を定義します。
-*severity プロパティは、アラートの重要度を示す文字列を定義します。
+open プロパティは、表示状態を管理する真偽値を定義します。
+------------------------------------------------------------------------------------------------
+setOpen プロパティは、表示状態を設定するための関数を定義します。
+------------------------------------------------------------------------------------------------
+severity プロパティは、アラートの重要度を示す文字列を定義します。
+severity:重大度という意味。
 ここでは、'error', 'success', 'info', 'warning' の4つの文字列しか許容されておらず、それ以外の文字列は許容さ
 れていません。
 これにより、アラートの重要度に誤った値が渡された場合、コンパイル時にエラーが発生するため、バグを未然に防ぐことがで
@@ -78,19 +62,8 @@ severity:重大度
 を表す文字列の一部です。ただし、アラートの目的に応じて適切な文字列を使用する必要があります。例えば、質問フォームで
 のエラーは error、アクションの成功時は success、通知メッセージは info など、目的に合わせて適切な文字列を選ぶよ
 うにしましょう。
-*message プロパティは、アラートに表示されるメッセージの文字列を定義します。
-
-================================================================================================
-2
-propsとして渡されたアラートの重要度に応じて、背景色を決定する関数です。アラートの重要度は、propsとして渡された
-'severity'という文字列で指定されており、それに応じて適切な背景色を返します。
-アラートコンポーネントが、アラートの種類に応じた背景色を持つようにすることです。これにより、ユーザーがアラートの種
-類を直感的に理解しやすくなります。
-
-================================================================================================
-3
-setOpenで受け取った関数にfalseを設定して実行する。これにより、アラートを閉じることができます。
-
+------------------------------------------------------------------------------------------------
+message プロパティは、アラートに表示されるメッセージの文字列を定義します。
 ------------------------------------------------------------------------------------------------
 アラートを閉じるためのコールバック関数。
 React.SyntheticEvent
@@ -177,4 +150,19 @@ useEffectの第2引数であり、openプロパティが変更されたときに
 この処理の意図は、ErrorMessageコンポーネントに渡されるopenプロパティが変更されたときに、modalIsOpenの状態を更
 新することで、モーダルの開閉状態を反映させることです。
 
+================================================================================================
+6
+backgroundColor はカスタムフック useAlertMessage の中で定義した関数として返ります。まずここで、
+useAlertMessageは、引数 severityを受け取っています。
+severity が error の場合、 backgroundColor 関数は文字列 'bg-red-500' を返す関数となります。これは
+useAlertMessage フック内の switch ステートメントにおいて、 severity が error の場合に 'bg-red-500' を返す
+ように定義されているからです。
+
+backgroundColor 関数自体は引数を取らずに severity の値に基づいて色を決定する関数となっている点に注意です。
+つまり、「useAlertMessage関数の、引数severityに基づいて挙動が決まる関数」です。
+
+------------------------------------------------------------------------------------------------
+handleCloseAlertMessageは、引数で受け取ったsetOpenに入った関数にfalseをセットする（falseの結果にする）。
+------------------------------------------------------------------------------------------------
+modalIsOpenは、molalの表示状態の初期値。
 */

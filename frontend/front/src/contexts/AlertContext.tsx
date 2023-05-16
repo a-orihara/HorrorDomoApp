@@ -5,12 +5,15 @@
 import React, { createContext, useContext, useState } from 'react';
 
 type AlertContextProps = {
-  open: boolean;
-  setOpen: (isOpen: boolean) => void;
-  severity: 'error' | 'success' | 'info' | 'warning';
-  message: string;
-  setSeverity: (severity: 'error' | 'success' | 'info' | 'warning') => void;
-  setMessage: (message: string) => void;
+  // open:molalの表示状態を管理する真偽値を定義
+  alertOpen: boolean;
+  setAlertOpen: (isOpen: boolean) => void;
+  // severity:アラートの重要度を示す文字列を定義
+  alertSeverity: 'error' | 'success' | 'info' | 'warning';
+  setAlertSeverity: (severity: 'error' | 'success' | 'info' | 'warning') => void;
+  // message:アラートに表示するメッセージを定義
+  alertMessage: string;
+  setAlertMessage: (message: string) => void;
 };
 
 type AlertProviderProps = {
@@ -22,12 +25,18 @@ export const AlertContext = createContext<AlertContextProps | undefined>(undefin
 
 // 2
 export const AlertProvider = ({ children }: AlertProviderProps) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [severity, setSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
-  const [message, setMessage] = useState<string>('');
+  // アラートメッセージの表示非表示を管理するステート
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  // アラートメッセージの種類を管理するステート
+  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
+  // アラートのメッセージ内容を管理するステート
+  const [alertMessage, setAlertMessage] = useState<string>('');
 
   return (
-    <AlertContext.Provider value={{ open, setOpen, severity, setSeverity, message, setMessage }}>
+    // AlertContextから提供する値をvalueに設定
+    <AlertContext.Provider
+      value={{ alertOpen, setAlertOpen, alertSeverity, setAlertSeverity, alertMessage, setAlertMessage }}
+    >
       {children}
     </AlertContext.Provider>
   );

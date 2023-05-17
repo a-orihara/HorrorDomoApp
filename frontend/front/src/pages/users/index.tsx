@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import { userIndex } from '../../api/user';
-import AlertMessage from '../../components/atoms/AlertMessage';
 import UserListItem from '../../components/atoms/UserListItem';
 import Layout from '../../components/layout/Layout';
 import { User } from '../../types';
@@ -16,6 +15,7 @@ const Index = () => {
   const [alertSeverity, setAlertSeverity] = useState<'error' | 'success'>('error');
   const [alertMessage, setAlertMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
+  // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const itemsPerPage = 10;
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
@@ -77,12 +77,6 @@ const Index = () => {
           activeClassName={'active bg-basic-pink'}
         />
       </div>
-      <AlertMessage
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        severity={alertSeverity}
-        message={alertMessage}
-      ></AlertMessage>
     </Layout>
   );
 };

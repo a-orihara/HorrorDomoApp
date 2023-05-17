@@ -5,7 +5,6 @@ import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
-import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
@@ -15,12 +14,6 @@ const SignInForm = () => {
   const [password, setPassword] = useState('');
   const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  // アラートメッセージの表示非表示を管理するステート
-  // const [alertOpen, setAlertOpen] = useState(false);
-  // アラートメッセージの種類を管理するステート
-  // const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
-  // アラートのメッセージ内容を管理するステート
-  // const [alertMessage, setAlertMessage] = useState('');
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -48,7 +41,7 @@ const SignInForm = () => {
         }, 2000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertMessage(`${res.data.errors.fullMessages}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
@@ -102,7 +95,6 @@ const SignInForm = () => {
             Sign In!
           </Button>
         </div>
-        <AlertMessage></AlertMessage>
       </form>
     </div>
   );

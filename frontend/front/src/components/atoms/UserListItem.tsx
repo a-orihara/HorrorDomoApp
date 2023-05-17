@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { userDelete } from '../../api/user';
+import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { User } from '../../types';
 
@@ -13,6 +14,7 @@ type UserListItemProps = {
 // ================================================================================================
 const UserListItem = ({ user }: UserListItemProps) => {
   const { currentUser } = useContext(AuthContext);
+  const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
   // 現在のユーザーが管理者で、かつ、現在のユーザーと表示中のユーザーが異なる場合にtrue
   const isDifferentUser = currentUser?.id !== user.id;
   // 現在のユーザーが管理者の場合にtrue
@@ -27,13 +29,17 @@ const UserListItem = ({ user }: UserListItemProps) => {
       // userDelete: ユーザー削除API
       const res = await userDelete(userId);
       console.log(`userDeleteのres.data${JSON.stringify(res.data)}`);
-      alert('ユーザーが削除されました。');
+      setAlertSeverity('success'); // AlertMessageのseverityを設定
+      setAlertMessage('ユーザーが削除されました。'); // AlertMessageのmessageを設定
+      setAlertOpen(true); // AlertMessageを表示
       setTimeout(() => {
         router.push('/users');
       }, 500);
     } catch (error) {
       console.error(error);
-      alert('ユーザーの削除に失敗しました。');
+      setAlertSeverity('error'); // AlertMessageのseverityを設定
+      setAlertMessage('ユーザーの削除に失敗しました。'); // AlertMessageのmessageを設定
+      setAlertOpen(true); // AlertMessageを表示
     }
   };
 

@@ -42,13 +42,17 @@ const UserForm: React.FC = () => {
         }, 1500);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertMessage(`${res.data.errors.fullMessages}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
       console.error(err);
       setAlertSeverity('error');
-      setAlertMessage(`${err.response.data.errors.fullMessages}`);
+      if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
+        setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
+      } else {
+        setAlertMessage('予期せぬエラーが発生しました。');
+      }
       setAlertOpen(true);
     }
   };

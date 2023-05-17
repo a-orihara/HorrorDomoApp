@@ -36,7 +36,7 @@ const Navigation = () => {
         }, 2000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.full_messages}`);
+        setAlertMessage(`${res.data.errors.fullMessages}`);
         setAlertOpen(true);
       }
     } catch (err: any) {

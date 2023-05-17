@@ -20,6 +20,7 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     def configure_sign_up_params
       # サインアップ時に登録できるカラムを指定
       devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+      # params.require(:registration).permit(:name, :email, :password)
       # params.permit(:email, :password, :password_confirmation, :name, :avatar)
     end
 
@@ -35,8 +36,9 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
         status: 'success',
         message: I18n.t('devise.registrations.signed_up'),
         data: resource_data
-        # status: 'created'は、201を返す。201はPOST, PUT：リクエストが成功しリソースが作成されたことを示す。
-      },status: :created
+      #   # status: 'created'は、201を返す。201はPOST, PUT：リクエストが成功しリソースが作成されたことを示す。
+      # },status: :created
+      }
     end
 
     def render_update_success

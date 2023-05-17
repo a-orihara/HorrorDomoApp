@@ -14,9 +14,10 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
         }
       end
 
-      it '201 ステータスコードを返すこと' do
+      it '200 ステータスコードを返すこと' do
         post '/api/v1/auth', params: valid_attributes
-        expect(response).to have_http_status(:created)
+        # :success は 200 を表す
+        expect(response).to have_http_status(:success)
       end
 
       it '成功メッセージを返すこと' do

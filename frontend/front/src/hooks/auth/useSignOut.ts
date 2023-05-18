@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { signOut } from '../api/auth';
-import { useAlertContext } from '../contexts/AlertContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { signOut } from '../../api/auth';
+import { useAlertContext } from '../../contexts/AlertContext';
+import { AuthContext } from '../../contexts/AuthContext';
 
 // サインアウト処理。処理後は、トップページに遷移する。
 export const useSignOut = () => {

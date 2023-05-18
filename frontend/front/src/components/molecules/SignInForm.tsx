@@ -1,11 +1,11 @@
 import React from 'react';
-import useSignIn from '../../hooks/auth/useSignIn';
+import { useSignIn } from '../../hooks/auth/useSignIn';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
 // ================================================================================================
 const SignInForm = () => {
-  const { email, setEmail, password, setPassword, handleSubmit } = useSignIn();
+  const { email, setEmail, password, setPassword, handleSignIn } = useSignIn();
 
   // ------------------------------------------------------------------------------------------------
   return (
@@ -47,7 +47,7 @@ const SignInForm = () => {
           ></Input>
         </div>
         <div>
-          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSignIn}>
             Sign In!
           </Button>
         </div>

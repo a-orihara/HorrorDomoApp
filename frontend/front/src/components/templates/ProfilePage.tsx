@@ -5,11 +5,14 @@ import { User } from '../../types';
 import Layout from '../layout/Layout';
 import Sidebar from '../organisms/Sidebar';
 
+// ================================================================================================
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
   // 1
   const { id } = router.query;
+
+  // ------------------------------------------------------------------------------------------------
 
   // 2
   useEffect(() => {
@@ -38,6 +41,7 @@ const ProfilePage = () => {
   // provider: 'email';
   // uid: 'soso@soso.com';
 
+  // ================================================================================================
   return (
     <Layout title='Profile'>
       <div className='flex  flex-1 flex-col bg-green-200'>

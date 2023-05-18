@@ -8,14 +8,15 @@ import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
+
 // ================================================================================================
 const UserForm: React.FC = () => {
   const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-
   const router = useRouter();
+
   // ------------------------------------------------------------------------------------------------
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

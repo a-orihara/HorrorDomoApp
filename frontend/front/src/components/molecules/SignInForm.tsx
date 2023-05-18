@@ -1,57 +1,13 @@
-import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
-import { signIn } from '../../api/auth';
-import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
-import { SignInParams } from '../../types';
+import React from 'react';
+import useSignIn from '../../hooks/auth/useSignIn';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
 // ================================================================================================
 const SignInForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
-  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  const router = useRouter();
+  const { email, setEmail, password, setPassword, handleSubmit } = useSignIn();
+
   // ------------------------------------------------------------------------------------------------
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    const params: SignInParams = {
-      email: email,
-      password: password,
-    };
-    try {
-      const res = await signIn(params);
-      if (res.status === 200) {
-        console.log(`signInのres.data:${JSON.stringify(res.data)}`);
-        Cookies.set('_access_token', res.headers['access-token']);
-        Cookies.set('_client', res.headers['client']);
-        Cookies.set('_uid', res.headers['uid']);
-        setIsSignedIn(true);
-        setCurrentUser(res.data.data);
-        setAlertSeverity('success');
-        setAlertMessage(`${res.data.message}`);
-        setAlertOpen(true);
-        // ユーザーIDを元にマイページ（プロフィールページ）へ遷移
-        // router.push(`/user/${res.data.data.id}`);
-        setTimeout(() => {
-          router.push(`/users/${res.data.data.id}`);
-        }, 2000);
-      } else {
-        setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.fullMessages}`);
-        setAlertOpen(true);
-      }
-    } catch (err: any) {
-      console.error(err);
-      setAlertSeverity('error');
-      setAlertMessage(`${err.response.data.errors}`);
-      setAlertOpen(true);
-    }
-  };
-  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col bg-red-200'>
       <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>

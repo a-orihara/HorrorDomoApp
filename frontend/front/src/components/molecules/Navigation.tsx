@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
-import { useSignOut } from '../../hooks/useSignOut';
+import { useSignOut } from '../../hooks/auth/useSignOut';
 import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 // ================================================================================================

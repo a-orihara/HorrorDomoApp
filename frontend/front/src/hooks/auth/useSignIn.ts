@@ -5,6 +5,7 @@ import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
+
 // ================================================================================================
 export const useSignIn = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ export const useSignIn = () => {
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
+
   // ------------------------------------------------------------------------------------------------
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -47,7 +49,8 @@ export const useSignIn = () => {
       setAlertOpen(true);
     }
   };
-  // ------------------------------------------------------------------------------------------------
+
+  // ================================================================================================
   return {
     email,
     setEmail,

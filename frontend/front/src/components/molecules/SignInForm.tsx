@@ -3,11 +3,12 @@ import { useSignIn } from '../../hooks/auth/useSignIn';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
+
 // ================================================================================================
 const SignInForm = () => {
   const { email, setEmail, password, setPassword, handleSignIn } = useSignIn();
 
-  // ------------------------------------------------------------------------------------------------
+  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col bg-red-200'>
       <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>

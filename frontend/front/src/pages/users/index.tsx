@@ -1,7 +1,7 @@
 import ReactPaginate from 'react-paginate';
 import UserListItem from '../../components/atoms/UserListItem';
 import Layout from '../../components/layout/Layout';
-import { useUsersPagination } from '../../hooks/useUsersPagination';
+import { useUsersPagination } from '../../hooks/user/useUsersPagination';
 
 const Index = () => {
   // 1ぺージに表示するユーザー数

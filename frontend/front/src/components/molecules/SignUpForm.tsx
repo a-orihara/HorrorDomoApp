@@ -3,6 +3,7 @@ import useSignUp from '../../hooks/auth/useSignUp';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
+
 // ================================================================================================
 const SignUpForm = () => {
   const {
@@ -16,6 +17,7 @@ const SignUpForm = () => {
     setPasswordConfirmation,
     handleSignUp,
   } = useSignUp();
+
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>

@@ -3,7 +3,7 @@
 // - 提供する機能: アプリケーション全体で使用される型の定義
 // - 利用意図: コード内で型を参照する際の一貫性を確保する
 
-// ユーザー情報の型定義
+// サインアップ用の型定義
 export type SignUpParams = {
   name: string;
   email: string;
@@ -11,20 +11,20 @@ export type SignUpParams = {
   passwordConfirmation: string;
 };
 
-// サインイン
+// サインイン用の型定義
 export type SignInParams = {
   email: string;
   password: string;
 };
 
-// 2 アップデート
+// 2 アップデート用の型定義
 export type UserUpdateParams = {
   name: string;
   email: string;
   avatar?: File | null;
 };
 
-// ユーザー
+// ユーザーの型定義
 export type User = {
   id: number;
   uid: string;

@@ -7,42 +7,6 @@ const profile = () => {
 };
 export default profile;
 
-// const UserProfile = () => {
-//   const [user, setUser] = useState<User | null>(null);
-//   const router = useRouter();
-//   const { id } = router.query;
-
-//   useEffect(() => {
-//     if (!id) return;
-
-//     const fetchUserData = async () => {
-//       try {
-//         const res = await getUserById(id as string);
-//         const fetchedUser: User = res.data;
-//         setUser(fetchedUser);
-//       } catch (err) {
-//         console.error('Error fetching user data:', err);
-//       }
-//     };
-//     fetchUserData();
-//   }, [id]);
-
-//   if (!user) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <Layout title='Profile'>
-//         <Sidebar></Sidebar>
-//         <h1>UserProfile</h1>
-//         <p>{user.name}</p>
-//         <p>{user.email}</p>
-//       </Layout>
-//     </div>
-//   );
-// };
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

@@ -23,6 +23,7 @@ type AlertProviderProps = {
 // 1
 export const AlertContext = createContext<AlertContextProps | undefined>(undefined);
 
+// @          @@          @@          @@          @@          @@          @@          @@          @
 // 2
 export const AlertProvider = ({ children }: AlertProviderProps) => {
   // アラートメッセージの表示非表示を管理するステート
@@ -31,7 +32,9 @@ export const AlertProvider = ({ children }: AlertProviderProps) => {
   const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
   // アラートのメッセージ内容を管理するステート
   const [alertMessage, setAlertMessage] = useState<string>('');
+  // console.log('AlertContextが呼ばれた');
 
+  // ================================================================================================
   return (
     // AlertContextから提供する値をvalueに設定
     <AlertContext.Provider
@@ -42,6 +45,7 @@ export const AlertProvider = ({ children }: AlertProviderProps) => {
   );
 };
 
+// @          @@          @@          @@          @@          @@          @@          @@          @
 // 3 AlertContextから値を取得し、undefinedの場合にエラーをスローするカスタムフック
 export const useAlertContext = () => {
   // AlertContextの値(AlertContextProps型の各種値、もしくはundefined)を取得
@@ -50,6 +54,8 @@ export const useAlertContext = () => {
   if (context === undefined) {
     throw new Error('useAlertはAlertProviderの中で使用する必要があります。');
   }
+
+  // ================================================================================================
   return context;
 };
 
@@ -65,6 +71,10 @@ undefinedを初期値として渡すことで、コンテキストの初期値�
 2.コンテキストが正しく提供されなかった場合にエラーをスローするため:
 useContextフックを使用してコンテキストを参照する際、コンテキストが提供されていない場合にはundefinedが返されます。
 そのため、useContextの戻り値がundefinedである場合には、useAlertカスタムフック内でエラーをスローしています。
+
+その他、初期値を空オブジェクトにしない理由は、空オブジェクトのプロパティにアクセスしようとしてもTypeScriptはエラー
+を出さないので、空オブジェクトの`{}`は同じ目的を果たすことはできない。この場合、すべてのプロパティに `undefined`
+という値が入るだけで、不明瞭なバグが発生し、デバッグが困難になる可能性があります。
 
 ================================================================================================
 2

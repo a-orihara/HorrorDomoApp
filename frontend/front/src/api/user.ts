@@ -16,6 +16,18 @@ export const userIndex = (page: number, itemsPerPage: number) => {
   });
 };
 
+// 指定したIDのユーザー情報を取得する 3000 / api / v1;
+export const getUserById = (userId: string) => {
+  // console.log('getUserByIdが呼ばれた');
+  return client.get(`/users/${userId}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // ユーザーを削除する
 export const userDelete = (userId: number) => {
   return client.delete(`/admin/users/${userId}`, {

@@ -32,8 +32,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   // 現在ログインしているユーザーの情報を管理するステート
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
-  // ユーザー情報が更新されたかどうかの状態を管理するステート
-  // const [userUpdated, setUserUpdated] = useState(false);
   // ------------------------------------------------------------------------------------------------
 
   // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
@@ -55,7 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     setLoading(false);
   };
-  console.log('AuthProviderが呼ばれた');
+  // console.log('AuthProviderが呼ばれた');
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {

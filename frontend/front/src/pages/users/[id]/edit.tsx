@@ -1,22 +1,19 @@
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import AlertMessage from '../../../components/atoms/AlertMessage';
+import { useContext, useEffect } from 'react';
 import EditPage from '../../../components/templates/EditPage';
+import { useAlertContext } from '../../../contexts/AlertContext';
 import { AuthContext } from '../../../contexts/AuthContext';
 
 // ================================================================================================
 const Edit = () => {
-  const [alertOpen, setAlertOpen] = useState(false);
-  // アラートメッセージの種類を管理するステート
-  const [alertSeverity, setAlertSeverity] = useState<'error' | 'success' | 'info' | 'warning'>('error');
-  // アラートのメッセージ内容を管理するステート
-  const [alertMessage, setAlertMessage] = useState('');
+  const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
   const { currentUser } = useContext(AuthContext);
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
   // 1 ログインしていない場合は、ログインページにリダイレクトする
   useEffect(() => {
+    console.log('user/[id]/edit.tsxのuseEffectが発火しました');
     if (!currentUser) {
       setAlertSeverity('error');
       setAlertMessage('ログインしていません');
@@ -24,8 +21,7 @@ const Edit = () => {
       setTimeout(() => {
         router.push('/signin');
       }, 2000);
-      // } else if (currentUser.id !== parseInt(router.query.id)) {
-      // 2 ログインしているが、アクセスしているページが自分のユーザーIDと一致しない場合
+      // 2
     } else if (typeof router.query.id === 'string' && currentUser.id !== parseInt(router.query.id)) {
       setAlertSeverity('error');
       setAlertMessage('他のユーザーのページにアクセスすることはできません');
@@ -34,18 +30,13 @@ const Edit = () => {
         router.push('/');
       }, 2000);
     }
-  }, [currentUser, router]);
+    // 3
+  }, [currentUser, router, setAlertMessage, setAlertOpen, setAlertSeverity]);
 
   // ================================================================================================
   return (
     <>
       <EditPage></EditPage>
-      <AlertMessage
-        open={alertOpen}
-        setOpen={setAlertOpen}
-        severity={alertSeverity}
-        message={alertMessage}
-      ></AlertMessage>
     </>
   );
 };
@@ -94,7 +85,8 @@ console.log(typeof 123); // "number"
 console.log(typeof true); // "boolean"
 
 ------------------------------------------------------------------------------------------------
-
+3
+[currentUser, router, setAlertMessage, setAlertOpen, setAlertSeverity]
 
 
 */

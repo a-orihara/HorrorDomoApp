@@ -1,9 +1,5 @@
-import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
-import { updateUser } from '../../api/auth';
-import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
-import { UserUpdateParams } from '../../types';
+import React from 'react';
+import { useUpdateUser } from '../../hooks/user/useUpdateUser';
 import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
@@ -11,52 +7,7 @@ import Label from '../atoms/Label';
 
 // ================================================================================================
 const UserForm: React.FC = () => {
-  const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
-  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const router = useRouter();
-
-  // ------------------------------------------------------------------------------------------------
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const params: UserUpdateParams = {
-      name: name,
-      email: email,
-    };
-    try {
-      const res = await updateUser(params);
-      if (res.status === 200) {
-        console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
-        handleGetCurrentUser();
-        // setUserUpdated(true);
-        // getAuthenticatedUser();
-        setAlertSeverity('success');
-        setAlertMessage(`${res.data.message}`);
-        setAlertOpen(true);
-        // ページをリロードして、ユーザー情報を更新する
-        // router.push(`/user/${res.data.data.id}`);
-
-        setTimeout(() => {
-          router.push('/');
-        }, 1500);
-      } else {
-        setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.fullMessages}`);
-        setAlertOpen(true);
-      }
-    } catch (err: any) {
-      console.error(err);
-      setAlertSeverity('error');
-      if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
-        setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
-      } else {
-        setAlertMessage('予期せぬエラーが発生しました。');
-      }
-      setAlertOpen(true);
-    }
-  };
+  const { name, setName, email, setEmail, currentUser, handleUpdateUser } = useUpdateUser();
 
   // ================================================================================================
   return (
@@ -102,7 +53,10 @@ const UserForm: React.FC = () => {
         </div>
 
         <div>
-          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSubmit}>
+          <Button
+            className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            onClick={handleUpdateUser}
+          >
             Save Changes
           </Button>
         </div>
@@ -121,9 +75,9 @@ htmlForは、HTMLのlabelタグのfor属性に対応するReact JSXの属性で�
 inputタグを関連付ける（対応するinput要素のid属性を指定）ことができます。
 
 ================================================================================================
-2
-
-
+@          @@          @@          @@          @@          @@          @@          @@          @
+Active_strage
+@          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================
 3
 const file = e.target.files && e.target.files[0];

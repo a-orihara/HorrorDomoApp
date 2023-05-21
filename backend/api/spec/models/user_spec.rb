@@ -27,11 +27,11 @@ RSpec.describe User, type: :model do
     it '255文字以内のメールは有効' do
       expect(user).to validate_length_of(:email).is_at_most(255)
     end
-  end
 
-  # describe 'Associations' do
-  #   # You can add any association tests for your User model here
-  # end
+    it '160文字以内のプロフィールは有効' do
+    expect(user).to validate_length_of(:profile).is_at_most(160)
+    end
+  end
 
   # 3
   describe 'サインアップの流れ' do

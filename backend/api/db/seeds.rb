@@ -1,6 +1,6 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
+# [このファイルには、データベースのデフォルト値を設定するために必要なすべてのレコード作成が含まれているはずです。
+#   その後、bin/rails db:seedコマンドでデータをロードすることができます（またはdb:setupでデータベースと一緒に
+#   作成します）。]
 # Examples:
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
@@ -11,6 +11,8 @@ user1 = User.create!(
   password: 'momomo',
   password_confirmation: 'momomo',
   admin: true,
+  # 1
+  profile: Faker::Lorem.sentence(word_count: 20),
 )
 
 user2 = User.create!(
@@ -18,6 +20,7 @@ user2 = User.create!(
   email: 'koko@koko.com',
   password: 'kokoko',
   password_confirmation: 'kokoko',
+  profile: Faker::Lorem.sentence(word_count: 20),
 )
 
 user3 = User.create!(
@@ -25,6 +28,7 @@ user3 = User.create!(
   email: 'soso@soso.com',
   password: 'sososo',
   password_confirmation: 'sososo',
+  profile: Faker::Lorem.sentence(word_count: 20),
 )
 
 # 追加のユーザーをまとめて生成する
@@ -32,8 +36,25 @@ user3 = User.create!(
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
+  profile = Faker::Lorem.sentence(word_count: 20)
   User.create!(name:  name,
                 email: email,
                 password:              password,
-                password_confirmation: password)
+                password_confirmation: password,
+                profile: profile) # プロフィールを追加
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+Faker::Lorem
+Faker gemのLoremクラスです。Loremクラスは、ダミーデータを生成するためのメソッドを提供します。
+------------------------------------------------------------------------------------------------
+sentence
+Faker::Loremクラスのメソッドです。ランダムな単語の文を生成するためのメソッドです。
+sentence(word_count: 5)は、5つの単語からなるランダムな文を生成するという意味です。
+------------------------------------------------------------------------------------------------
+(word_count: 5)
+word_countというキーを持つハッシュが引数として渡されています。word_countは生成する文の単語数を指定するためのオ
+プションです。値として5が指定されているため、5つの単語からなる文が生成されます。
+=end

@@ -32,6 +32,7 @@ const ProfilePage = () => {
           <div className='flex-1 '>
             <h2>Name: {user.name}</h2>
             <h2>Email: {user.email}</h2>
+            <h2>Profile: {user.profile || 'No profile set.'}</h2>
             <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
             <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
             {/* <Image

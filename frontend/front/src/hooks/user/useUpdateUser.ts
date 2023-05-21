@@ -10,6 +10,7 @@ import { UserUpdateParams } from '../../types';
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [profile, setProfile] = useState<string | null>(null);
   const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
@@ -19,6 +20,7 @@ export const useUpdateUser = () => {
     const params: UserUpdateParams = {
       name: name,
       email: email,
+      profile: profile,
     };
     try {
       const res = await updateUser(params);
@@ -54,6 +56,8 @@ export const useUpdateUser = () => {
     setName,
     email,
     setEmail,
+    profile,
+    setProfile,
     currentUser,
     handleUpdateUser,
   };

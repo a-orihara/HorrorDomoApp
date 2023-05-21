@@ -26,7 +26,7 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
 
     # 3 ユーザー更新時に使用
     def configure_account_update_params
-      devise_parameter_sanitizer.permit(:account_update, keys: [:name])
+      devise_parameter_sanitizer.permit(:account_update, keys: [:name, :profile])
     end
 
     # 5

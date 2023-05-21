@@ -1,21 +1,20 @@
 import React from 'react';
 import { useUpdateUser } from '../../hooks/user/useUpdateUser';
-import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
 
 // ================================================================================================
 const UserForm: React.FC = () => {
-  const { name, setName, email, setEmail, currentUser, handleUpdateUser } = useUpdateUser();
+  const { name, setName, email, setEmail, profile, setProfile, currentUser, handleUpdateUser } = useUpdateUser();
 
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
+      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
         Update your profile
       </h1>
-      <form className='mt-11 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
+      <form className='mt-6 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
         <div>
           {/* 1 */}
           <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='name'>
@@ -34,7 +33,6 @@ const UserForm: React.FC = () => {
             }}
           ></Input>
         </div>
-
         <div>
           <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
             Email:
@@ -51,7 +49,21 @@ const UserForm: React.FC = () => {
             }}
           ></Input>
         </div>
-
+        <div className='flex flex-col bg-red-200'>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='profile'>
+            Profile:
+          </Label>
+          <textarea
+            className='m-auto mb-4 mt-1 h-32 w-3/5 border-2 border-gray-900 bg-blue-200'
+            id='profile'
+            name='profile'
+            value={profile || ''}
+            placeholder={currentUser && currentUser.profile ? currentUser.profile : 'Profile'}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              setProfile(e.target.value);
+            }}
+          ></textarea>
+        </div>
         <div>
           <Button
             className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
@@ -60,7 +72,6 @@ const UserForm: React.FC = () => {
             Save Changes
           </Button>
         </div>
-        <AlertMessage></AlertMessage>
       </form>
     </div>
   );
@@ -75,6 +86,16 @@ htmlForは、HTMLのlabelタグのfor属性に対応するReact JSXの属性で�
 inputタグを関連付ける（対応するinput要素のid属性を指定）ことができます。
 
 ================================================================================================
+2
+encType
+HTMLの<form>要素の属性の1つです。この属性は、フォームデータのエンコーディングタイプを指定します。通常、フォームに
+テキストや数字のデータが含まれる場合には、デフォルトのエンコーディングタイプである、
+application/x-www-form-urlencodedが使用されます。しかし、フォームがファイルのアップロードを含む場合には、
+encType を multipart/form-data に設定する必要があります。
+------------------------------------------------------------------------------------------------
+method='post'
+HTTPリクエストメソッドを指定する属性です。postメソッドは、データをリクエスト本体に含めて送信する際に使用されます。
+指定することで、フォームのデータのエンコーディング方法やデータの送信方法を明示的に指定することができます。
 @          @@          @@          @@          @@          @@          @@          @@          @
 Active_strage
 @          @@          @@          @@          @@          @@          @@          @@          @

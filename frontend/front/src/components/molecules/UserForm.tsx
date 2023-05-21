@@ -3,6 +3,7 @@ import { useUpdateUser } from '../../hooks/user/useUpdateUser';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import Label from '../atoms/Label';
+import TextArea from '../atoms/TextArea';
 
 // ================================================================================================
 const UserForm: React.FC = () => {
@@ -53,7 +54,17 @@ const UserForm: React.FC = () => {
           <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='profile'>
             Profile:
           </Label>
-          <textarea
+          <TextArea
+            className='m-auto mb-4 mt-1 h-32 w-2/5 bg-blue-200'
+            id='profile'
+            name='profile'
+            value={profile || ''}
+            placeholder={currentUser && currentUser.profile ? currentUser.profile : 'Profile'}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              setProfile(e.target.value);
+            }}
+          ></TextArea>
+          {/* <textarea
             className='m-auto mb-4 mt-1 h-32 w-3/5 border-2 border-gray-900 bg-blue-200'
             id='profile'
             name='profile'
@@ -62,7 +73,7 @@ const UserForm: React.FC = () => {
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               setProfile(e.target.value);
             }}
-          ></textarea>
+          ></textarea> */}
         </div>
         <div>
           <Button

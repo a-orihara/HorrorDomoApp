@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import Layout from '../layout/Layout';
+import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
@@ -23,11 +24,13 @@ const HomePage = () => {
                   ようこそ！, {currentUser?.name}さん! 登録が完了しました!
                 </h1>
               )}
-              <h2>Email: {currentUser?.email}</h2>
+              <UserInfo user={currentUser}></UserInfo>
+              {/* <h2>Email: {currentUser?.email}</h2>
               <h2>Name: {currentUser?.name}</h2>
               <h2>Profile: {currentUser?.profile || 'profileは設定されていません。'}</h2>
               <h1 className='text-blue-500'>*HOME詳細は今後実装予定</h1>
-              <h1>ここはユーザーホームページ:pages/index.tsx</h1>
+              <h1>ここはユーザーホームページ:pages/index.tsx</h1> */}
+              <h1>ここはホームページ</h1>
             </div>
           </div>
         ) : (

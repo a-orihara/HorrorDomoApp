@@ -11,6 +11,8 @@ class User < ApplicationRecord
   validates :name,  presence: true, length: { maximum: 30 }
   # 2
   validates :email, length: { maximum: 255 }
+  # presence: trueがないので、プロフィールが空でもいい
+  validates :profile, length: { maximum: 160 }
   # 3
   # has_one_attached :avatar
 end

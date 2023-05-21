@@ -21,7 +21,7 @@ export type SignInParams = {
 export type UserUpdateParams = {
   name: string;
   email: string;
-  avatar?: File | null;
+  profile: string | null;
 };
 
 // ユーザーの型定義
@@ -35,6 +35,8 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   admin: boolean;
+  // profile を追加。型は string または null を許容。プロフィールを設定しない場合を考慮。
+  profile: string | null;
   // 1
   // avatarUrl: string | null;
 };

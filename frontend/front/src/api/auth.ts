@@ -61,18 +61,6 @@ export const getAuthenticatedUser = () => {
   });
 };
 
-// 3000 / api / v1;
-export const getUserById = (userId: string) => {
-  console.log('getUserByIdが呼ばれた');
-  return client.get(`/users/${userId}`, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

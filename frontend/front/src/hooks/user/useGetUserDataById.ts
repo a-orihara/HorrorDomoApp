@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getUserById } from '../../api/user';
 import { User } from '../../types';
 
@@ -6,31 +6,27 @@ import { User } from '../../types';
 const useGetUserDataById = (id: string | string[] | undefined) => {
   // ユーザー情報を格納するステート
   const [user, setUser] = useState<User | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  // const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // 2
-  useEffect(() => {
-    // idがない場合は何もしない
+  const handleGetUserDataById = useCallback(async () => {
     if (!id) return;
-    // idで指定したユーザーのユーザー情報を取得
-    const getUserData = async () => {
-      console.log('getUserDataByIdが呼ばれた');
-      try {
-        const res = await getUserById(id as string);
-        const fetchedUser: User = res.data;
-        const fetchAvatarUrl = res.data.avatarUrl;
-        console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
-        console.log(`fetchAvatarUrl:${JSON.stringify(fetchAvatarUrl)}`);
-        setUser(fetchedUser);
-        setAvatarUrl(fetchAvatarUrl);
-      } catch (err) {
-        console.error('Error fetching user data:', err);
-      }
-    };
-    getUserData();
+    console.log('getUserDataById is called');
+    try {
+      const res = await getUserById(id as string);
+      const fetchedUser: User = res.data;
+      // const fetchAvatarUrl = res.data.avatarUrl;
+      console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
+      // console.log(`fetchAvatarUrl:${JSON.stringify(fetchAvatarUrl)}`);
+      setUser(fetchedUser);
+      // setAvatarUrl(fetchAvatarUrl);
+    } catch (err) {
+      console.error('Error fetching user data:', err);
+    }
   }, [id]);
 
-  return { user, avatarUrl };
+  // return { user, avatarUrl, handleGetUserDataById };
+  return { user, handleGetUserDataById };
 };
 
 export default useGetUserDataById;
@@ -58,20 +54,17 @@ id` の型が `string | string[] | undefined` である理由は、Next.js の `
 
 ================================================================================================
 2
-idに合うユーザー情報を取得
-
-if(!id) return;
-idがundefinedの場合は何もしないようにするための処理です。この場合は、idがまだ設定されていない初回レンダリング時に
-は何もしないようになっている。
-
-関数コンポーネントのレンダリング後に非同期処理を実行し、idが変更された場合に再度処理を実行する。
-具体的には、idが存在する場合にgetUserByIdという関数を実行し、取得したユーザーデータをsetUser関数を使ってuserス
-テートにセットしています。
-[id]はuseEffectの依存配列であり、idの値が変わった場合に再度このuseEffectが実行されるようにしています。
-利用意図としては、指定したidに対応するユーザーデータを非同期的に取得し、画面に表示するためです。
-
+useGetUserDataById.tsでは、handleGetUserDataByIdをuseEffect内で使用しない。
+useGetUserDataById.ts` において、`useCallback` を使用しない場合、レンダリング毎にuseEffactにより、
+新しい `handleGetUserDataById` 関数が作成され、`ProfilePage` が依存している `handleGetUserDataById` 関
+数がレンダリング毎に変わるため、不必要な再レンダリングを引き起こす。これは、コンポーネントが複雑な場合や再レンダリン
+グが多い場合に、パフォーマンスの問題につながる可能性があります。
 ------------------------------------------------------------------------------------------------
-getUserById(id as string);
-as string
-TypeScriptの型アサーションと呼ばれるもので、idがstring型であることを明示的に示している。
+`handleGetUserDataById`に `useCallback` を使用する目的は、関数をメモ化することです。つまり、依存関係の1つが
+変更された場合にのみ関数を変更します。この場合、`handleGetUserDataById`は、`id`が変更された場合にのみ変更され
+ます。これにより、不必要な再レンダリングを防ぎ、パフォーマンスを向上させることができます。
+------------------------------------------------------------------------------------------------
+さらにuseCallback`により新しい `handleGetUserDataById` 関数が作成されますが、useCallbackは生成するだけで、
+この関数は自動的に実行されません。ProfilePage.tsx`の `useEffect` 内のように、明示的に呼び出されたときのみ実行
+されます。
 */

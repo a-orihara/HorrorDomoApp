@@ -1,20 +1,19 @@
 # 1
 class Api::V1::AuthenticatedUsersController < ApplicationController
-# class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
-  # include DeviseTokenAuth::Concerns::SetUserByToken
+
   # 2 ログイン済みのユーザーが存在するかをチェックし、存在する場合はそのユーザーの情報を返す
   def index
     puts "indexアクションが発火"
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
-      render json: { is_login: true, data: current_api_v1_user }
-      # render json: {
-      #   is_login: true,
-      #   # 3
-      #   data: current_api_v1_user.as_json.merge(
-      #     avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
-      #   )
-      # }
+      # render json: { is_login: true, data: current_api_v1_user }
+      render json: {
+        is_login: true,
+        # 3
+        data: current_api_v1_user.as_json.merge(
+          avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
+        )
+      }
     else
       render json: { is_login: false, message: "ユーザーが存在しません" }
     end

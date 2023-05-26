@@ -69,7 +69,17 @@ export const getAuthenticatedUser = () => {
     },
   });
 };
-
+// admin:
+// allowPasswordChange:
+// avatarUrl:
+// createdAt:
+// email:
+// id:
+// name:
+// profile:
+// provider: 'email';
+// uid: 'koko@koko.com';
+// updatedAt:
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

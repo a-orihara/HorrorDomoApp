@@ -26,7 +26,7 @@ const HomePage = () => {
                 </h1>
               )}
               <UserInfo user={currentUser}></UserInfo>
-              <h1>ここはホームページ</h1>
+              <h1>ここはホームページa</h1>
             </div>
           </div>
         ) : (

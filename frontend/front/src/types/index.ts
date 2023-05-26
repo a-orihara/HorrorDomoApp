@@ -24,6 +24,10 @@ export type UserUpdateParams = {
   profile: string | null;
 };
 
+export type UserUpdateAvatarParams = {
+  avatar: string | null;
+};
+
 // ユーザーの型定義
 export type User = {
   id: number;
@@ -38,7 +42,7 @@ export type User = {
   // profile を追加。型は string または null を許容。プロフィールを設定しない場合を考慮。
   profile: string | null;
   // 1
-  // avatarUrl: string | null;
+  avatarUrl: string | null;
 };
 
 /*

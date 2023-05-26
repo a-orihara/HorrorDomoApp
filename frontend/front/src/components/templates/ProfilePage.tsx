@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const router = useRouter();
   // 1
   const { id } = router.query;
-  const { user } = useGetUserDataById(id);
+  const { user, avatarUrl } = useGetUserDataById(id);
 
   // ------------------------------------------------------------------------------------------------
   if (!user) {
@@ -50,7 +50,7 @@ const ProfilePage = () => {
               }}
             />
           </div> */}
-          <UserInfo user={user}></UserInfo>
+          <UserInfo user={user} avatarUrl={avatarUrl}></UserInfo>
           <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
         </div>
       </div>

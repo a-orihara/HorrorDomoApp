@@ -16,7 +16,7 @@ export const userIndex = (page: number, itemsPerPage: number) => {
   });
 };
 
-// 指定したIDのユーザー情報を取得する 3000 / api / v1;
+// 指定したIDのユーザー情報を取得する:#GET /api/v1/users/1->users_controller.rbのshowアクション
 export const getUserById = (userId: string) => {
   // console.log('getUserByIdが呼ばれた');
   return client.get(`/users/${userId}`, {

@@ -36,14 +36,23 @@ devise_token_authで使用するコントローラーを指定します。
 registrations: 'api/v1/auth/registrations'
 ユーザーの登録に関する registrationsコントローラーを api/v1/auth/registrations_controller.rb に設定します。
 
-devise_token_authの、API認証用のルーティングを設定するメソッドです。
-Userモデルに対して、指定したルーティングパス（atオプション）に認証用のルーティングを設定することができます。例え
-ば、at: 'auth'と指定すると、localhost:3000/auth/sign_inのようなURLで認証機能にアクセスできるようになりま
-す。
-また、このメソッドを呼び出すことで、devise_token_authに含まれる認証用の下記コントローラーが自動的に作成されます。
-これにより、APIの認証に必要な機能を簡単に実装することができます。
-この設定により、devise_token_authが提供するすべてのエンドポイントが、/authのパスの下に作成されます。これにより
-、トークンベースの認証をサポートするためのルートが生成されます。
+mount_devise_token_auth_for 'User', at: 'auth', controllers: { registrations: 'api/v1/auth/registrations' }
+という設定は、DeviseTokenAuthライブラリのモジュールを指定したモデル（この場合は'User'）とパス（'auth'）にマウン
+トする設定です。ここでは特にregistrationsコントローラーについてカスタムのコントローラーを指定しています。
+
+mount_devise_token_auth_for 'User':
+mount_devise_token_auth_forはDeviseTokenAuthの全てのルーティングを設定します。この場合、'User'モデルに対し
+て設定しています。つまり、DeviseTokenAuthの認証機能を'User'モデルで使用するためのルーティングを作成します。
+at: 'auth'
+atオプションは、指定したパス（この場合は'auth'）にDeviseTokenAuthのルーティングをマウントします。つまり、'auth'
+というパスがDeviseTokenAuthの機能に関連するURLのプレフィクスになります。
+controllers: { registrations: 'api/v1/auth/registrations' }:
+controllersオプションは、DeviseTokenAuthのデフォルトのコントローラーをカスタムのコントローラーにオーバーライド
+します。この場合、registrationsコントローラー（ユーザーの登録に関する処理を担当）をカスタムの
+'api/v1/auth/registrations'コントローラーにオーバーライドしています。
+
+この設定全体をまとめると、「'User'モデルのためのDeviseTokenAuthの認証機能を、'auth'というパスで利用し、その際
+のユーザー登録に関する処理はカスタムの'api/v1/auth/registrations'コントローラーで行う」という意味になります。
 
 ------------------------------------------------------------------------------------------------
 作成されるコントローラー（DeviseTokenAuth内で定義）
@@ -97,6 +106,16 @@ api_v1_user                     GET    /api/v1/users/:id(.:format)              
 ------------------------------------------------------------------------------------------------
 api_v1_admin_user               DELETE /api/v1/admin/users/:id(.:format)        api/v1/admin/users#destroy
 
+------------------------------------------------------------------------------------------------
+
+active_storage/blobs/redirect#show
+
+rails_blob_representation       GET    /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations/redirect#show
+rails_blob_representation_proxy GET    /rails/active_storage/representations/proxy/:signed_blob_id/:variation_key/*filename(.:format)    active_storage/representations/proxy#show
+                                GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format)          active_storage/representations/redirect#show
+rails_disk_service              GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                                       active_storage/disk#show
+update_rails_disk_service       PUT    /rails/active_storage/disk/:encoded_token(.:format)                                               active_storage/disk#update
+rails_direct_uploads            POST   /rails/active_storage/direct_uploads(.:format)
 ================================================================================================
 deviseのdevise_forメソッド
 ルーティング設定の1つです。Deviseが提供する様々なユーザー認証機能にアクセスするためのURLが自動的に生成されます。

@@ -2,7 +2,6 @@
 class Api::V1::UsersController < ApplicationController
   # 2
   before_action :authenticate_api_v1_user!, only: [:index]
-
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /api/v1/users
@@ -20,10 +19,13 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/1
   def show
     puts "showアクションが発火"
-    render json: @user
-    # render json: @user.as_json.merge(
-    #   avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
-    # )
+    # render json: @user
+    render json: @user.as_json.merge(
+      avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
+    )
+    # avatar_url = Rails.application.routes.url_helpers.rails_representation_url(@user.avatar.variant({}), only_path: true)
+    # render json: {user: @user, avatar_url: avatar_url}
+    # render json: {@user, avatar_url: avatar_path}
   end
 
   # POST /api/v1/users

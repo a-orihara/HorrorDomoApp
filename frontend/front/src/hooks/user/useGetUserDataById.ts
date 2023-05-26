@@ -6,6 +6,7 @@ import { User } from '../../types';
 const useGetUserDataById = (id: string | string[] | undefined) => {
   // ユーザー情報を格納するステート
   const [user, setUser] = useState<User | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // 2
   useEffect(() => {
@@ -13,10 +14,15 @@ const useGetUserDataById = (id: string | string[] | undefined) => {
     if (!id) return;
     // idで指定したユーザーのユーザー情報を取得
     const getUserData = async () => {
+      console.log('getUserDataByIdが呼ばれた');
       try {
         const res = await getUserById(id as string);
         const fetchedUser: User = res.data;
+        const fetchAvatarUrl = res.data.avatarUrl;
+        console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
+        console.log(`fetchAvatarUrl:${JSON.stringify(fetchAvatarUrl)}`);
         setUser(fetchedUser);
+        setAvatarUrl(fetchAvatarUrl);
       } catch (err) {
         console.error('Error fetching user data:', err);
       }
@@ -24,7 +30,7 @@ const useGetUserDataById = (id: string | string[] | undefined) => {
     getUserData();
   }, [id]);
 
-  return { user };
+  return { user, avatarUrl };
 };
 
 export default useGetUserDataById;

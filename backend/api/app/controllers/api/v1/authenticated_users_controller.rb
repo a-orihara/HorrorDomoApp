@@ -6,18 +6,18 @@ class Api::V1::AuthenticatedUsersController < ApplicationController
     puts "indexアクションが発火"
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
+      avatar_url = current_api_v1_user.avatar.attached? ? rails_representation_url(current_api_v1_user.avatar.variant(resize: "100x100^", gravity: "center", crop: "100x100+0+0"), only_path: false) : nil
       # render json: { is_login: true, data: current_api_v1_user }
       render json: {
         is_login: true,
         # 3
-        data: current_api_v1_user.as_json.merge(
-          avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
-        )
+        data: current_api_v1_user.as_json.merge(avatar_url: avatar_url)
       }
     else
       render json: { is_login: false, message: "ユーザーが存在しません" }
     end
   end
+
 end
 
 # [devise_token_auth]ヘルパーメソッドが使えない(undefined)ときの対処法

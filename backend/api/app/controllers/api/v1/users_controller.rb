@@ -2,7 +2,6 @@
 class Api::V1::UsersController < ApplicationController
   # 2
   before_action :authenticate_api_v1_user!, only: [:index]
-
   before_action :set_user, only: [:show, :update, :destroy]
 
   # GET /api/v1/users
@@ -17,13 +16,17 @@ class Api::V1::UsersController < ApplicationController
     render json: { users: @users, total_users: total_users } # 総ユーザー数もレスポンスに含める
   end
 
-  # GET /api/v1/users/1
+  # 5
   def show
     puts "showアクションが発火"
-    render json: @user
-    # render json: @user.as_json.merge(
-    #   avatar_url: @user.avatar.attached? ? url_for(@user.avatar) : nil
-    # )
+    # アバターが添付されている場合、バリアントURLを生成する
+    if @user.avatar.attached?
+      variant = @user.avatar.variant(resize: "100x100^", gravity: "center", crop: "100x100+0+0")
+      avatar_url = rails_representation_url(variant, only_path: false)
+    else
+      avatar_url = nil
+    end
+    render json: @user.as_json.merge(avatar_url: avatar_url)
   end
 
   # POST /api/v1/users
@@ -139,4 +142,27 @@ current_api_v1_user が存在し、かつ admin? メソッドが呼び出せる�
 もし、unless current_api_v1_user.admin?だと、admin属性を正しくチェックしているように見えますが、
 current_api_v1_userがnil（ログインしていない状態）の場合にエラーが発生します。そのため、
 current_api_v1_user&.admin?として安全な参照を行います。
+
+================================================================================================
+5
+variant
+Active Storageで画像のバリアント（変形）を作成するためのメソッドです。このメソッドは、指定した変形オプションに基
+づいて画像を変形し、変形後の画像のURLやパスを取得します。戻り値はVariantオブジェクトで、変形対象の画像ファイルへの
+参照や、変形後の画像のURLやパスを生成するためのメソッドが含まれる。
+この変換はImageMagickソフトウェアによって行割れる。
+
+rails_representation_url(variant, only_path: false)
+Active Storageで作成したvariantのURLを生成するためのRailsメソッド。variantのURLの生成にはurl_forではなくこ
+ちらを使う。
+only_path: falseはオプションで、生成されるURLが絶対パスとなることを指定しています。
+railsへフロントからアクセスするので、絶対パスでないとアクセス出来ない。
+絶対パス:"http://localhost:3000/rails/active_storage/representations/redirect/
+相対パス:"/rails/active_storage/representations/redirect""
+
+引数(variant, only_path: true)の解説
+variant：バリアントとして作成する画像の指定です。この引数には、変形オプション（例えば、リサイズ、重心、クロップなど
+）が含まれています。
+only_path: true：オプション引数で、生成されるURLを相対パスとして取得することを指定します。相対パスを使用すると、
+ホスト名やドメインを含まないURLが生成されます。
+
 =end

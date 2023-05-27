@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     setLoading(false);
   };
-  // console.log('AuthProviderが呼ばれた');
+  // console.log('AuthProviderが呼ばれた')
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {

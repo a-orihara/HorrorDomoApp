@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { SignInParams, SignUpParams, UserUpdateParams } from '../types';
+import { SignInParams, SignUpParams } from '../types';
 import client from './client';
 // 1
 export const signUp = (params: SignUpParams) => {
@@ -26,8 +26,8 @@ export const signOut = () => {
 };
 
 // 5 ユーザー情報を更新
-export const updateUser = (params: UserUpdateParams) => {
-  return client.put('/auth', params, {
+export const updateUser = (formData: any) => {
+  return client.put('/auth', formData, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -35,6 +35,15 @@ export const updateUser = (params: UserUpdateParams) => {
     },
   });
 };
+// export const updateUser = (params: UserUpdateParams) => {
+//   return client.put('/auth', params, {
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
 
 // ユーザーのavatarを更新
 export const updateAvatar = async (formData: FormData) => {
@@ -60,7 +69,17 @@ export const getAuthenticatedUser = () => {
     },
   });
 };
-
+// admin:
+// allowPasswordChange:
+// avatarUrl:
+// createdAt:
+// email:
+// id:
+// name:
+// profile:
+// provider: 'email';
+// uid: 'koko@koko.com';
+// updatedAt:
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

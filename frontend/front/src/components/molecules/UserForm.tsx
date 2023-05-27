@@ -6,8 +6,52 @@ import Label from '../atoms/Label';
 import TextArea from '../atoms/TextArea';
 
 // ================================================================================================
-const UserForm: React.FC = () => {
-  const { name, setName, email, setEmail, profile, setProfile, currentUser, handleUpdateUser } = useUpdateUser();
+const UserForm = () => {
+  const { name, setName, email, setEmail, profile, setProfile, avatar, setAvatar, currentUser, handleUpdateUser } =
+    useUpdateUser();
+  // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  // const router = useRouter();
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatar(file);
+    }
+  };
+
+  // 画像のアップロード処理
+  // const handleAvatarUpload = async () => {
+  //   const formData = new FormData();
+  //   formData.append('avatar', avatar || '');
+  //   try {
+  //     // Avatarのアップロード処理を実行するAPIメソッドを呼び出す
+  //     const res = await updateAvatar(formData);
+  //     if (res.status === 200) {
+  //       console.log(`updateのres.data:${JSON.stringify(res.data)}`);
+  //       // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
+
+  //       setAlertSeverity('success');
+  //       setAlertMessage(`${res.data.message}`);
+  //       setAlertOpen(true);
+  //       setTimeout(() => {
+  //         router.push('/');
+  //       }, 1500);
+  //     } else {
+  //       setAlertSeverity('error');
+  //       setAlertMessage(`${res.data.errors.fullMessages}`);
+  //       setAlertOpen(true);
+  //     }
+  //   } catch (err: any) {
+  //     console.error(err);
+  //     setAlertSeverity('error');
+  //     if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
+  //       setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
+  //     } else {
+  //       setAlertMessage('予期せぬエラーが発生しました。');
+  //     }
+  //     setAlertOpen(true);
+  //   }
+  // };
 
   // ================================================================================================
   return (
@@ -64,16 +108,18 @@ const UserForm: React.FC = () => {
               setProfile(e.target.value);
             }}
           ></TextArea>
-          {/* <textarea
-            className='m-auto mb-4 mt-1 h-32 w-3/5 border-2 border-gray-900 bg-blue-200'
-            id='profile'
-            name='profile'
-            value={profile || ''}
-            placeholder={currentUser && currentUser.profile ? currentUser.profile : 'Profile'}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-              setProfile(e.target.value);
-            }}
-          ></textarea> */}
+        </div>
+        <div>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
+            Avatar:
+          </Label>
+          <Input
+            className='m-auto mb-2 mt-1 w-2/5'
+            id='avatar'
+            type='file'
+            accept='image/*'
+            onChange={handleAvatarChange}
+          />
         </div>
         <div>
           <Button

@@ -1,24 +1,23 @@
 # 1
 class Api::V1::AuthenticatedUsersController < ApplicationController
-# class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
-  # include DeviseTokenAuth::Concerns::SetUserByToken
+
   # 2 ログイン済みのユーザーが存在するかをチェックし、存在する場合はそのユーザーの情報を返す
   def index
     puts "indexアクションが発火"
     # 現在のログインユーザーを返す。ログインしていない場合は、nilを返す。
     if current_api_v1_user
-      render json: { is_login: true, data: current_api_v1_user }
-      # render json: {
-      #   is_login: true,
-      #   # 3
-      #   data: current_api_v1_user.as_json.merge(
-      #     avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil
-      #   )
-      # }
+      avatar_url = current_api_v1_user.avatar.attached? ? rails_representation_url(current_api_v1_user.avatar.variant(resize: "100x100^", gravity: "center", crop: "100x100+0+0"), only_path: false) : nil
+      # render json: { is_login: true, data: current_api_v1_user }
+      render json: {
+        is_login: true,
+        # 3
+        data: current_api_v1_user.as_json.merge(avatar_url: avatar_url)
+      }
     else
       render json: { is_login: false, message: "ユーザーが存在しません" }
     end
   end
+
 end
 
 # [devise_token_auth]ヘルパーメソッドが使えない(undefined)ときの対処法
@@ -125,7 +124,12 @@ railsのActive Storageで使用されるメソッドであり、アップロー�
 
 ------------------------------------------------------------------------------------------------
 url_for
-Railsで定義されているヘルパーメソッドで、与えられたリソースからURLを生成する。生み出す。
+Railsで定義されているヘルパーメソッドで、与えられたリソースから、blobの永続的なURLを生成するURLを生成する。
+これは、blobのRedirectControllerにルーティングされるblobのsigned_idを持つURL（署名付きURL）を生成します。
+RedirectControllerは、実際のサービスエンドポイントにリダイレクトします。このリダイレクトにより、サービスの URL
+と実際の URL が切り離され、たとえば異なるサービスの添付ファイルをミラーリングして高可用性を実現することができます。
+このリダイレクトには、5分間のHTTP有効期限があります。
+
 引数として生成したいURLの情報を取ります。この場合は、current_api_v1_user.avatarで、avatarはActive Storage
 でアタッチされたファイルオブジェクトを表します。
 
@@ -143,8 +147,6 @@ url_for(current_api_v1_user.avatar)が返す URL は、Blob オブジェクト�
 current_api_v1_user.avatar
 このavatarはメソッドではなく、Active Storage の Attachment オブジェクトを返します。Attachment オブジェクト
 は、Blob オブジェクトへの参照とレコードの関連を持っています。
-url_for メソッドは、Active Storage が内部的に保持している情報を使って、Attachment オブジェクトの Blob オブ
-ジェクトに紐付けられた URL を生成します。
 
 ------------------------------------------------------------------------------------------------
 avatar_url: current_api_v1_user.avatar.attached? ? url_for(current_api_v1_user.avatar) : nil

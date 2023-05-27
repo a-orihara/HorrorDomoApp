@@ -5,6 +5,7 @@ test:
 
 # 2
 local:
+  # Diskとはローカルのファイルシステムに保存するためのストレージの種類で、rootで保存先のディレクトリを指定する
   service: Disk
   root: <%= Rails.root.join("storage") %>
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)

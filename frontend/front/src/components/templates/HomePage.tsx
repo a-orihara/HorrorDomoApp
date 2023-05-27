@@ -11,6 +11,7 @@ const HomePage = () => {
   // showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
   // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
   const { showWelcomeMessage } = useFirstTimeLogin();
+  console.log('HomePage.tsxのcurrentUser:', currentUser);
 
   return (
     <Layout title='HOME'>
@@ -25,11 +26,6 @@ const HomePage = () => {
                 </h1>
               )}
               <UserInfo user={currentUser}></UserInfo>
-              {/* <h2>Email: {currentUser?.email}</h2>
-              <h2>Name: {currentUser?.name}</h2>
-              <h2>Profile: {currentUser?.profile || 'profileは設定されていません。'}</h2>
-              <h1 className='text-blue-500'>*HOME詳細は今後実装予定</h1>
-              <h1>ここはユーザーホームページ:pages/index.tsx</h1> */}
               <h1>ここはホームページ</h1>
             </div>
           </div>

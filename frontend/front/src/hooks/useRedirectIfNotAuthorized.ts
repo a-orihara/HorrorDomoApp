@@ -10,7 +10,8 @@ export const useRedirectIfNotAuthorized = () => {
   const { currentUser } = useContext(AuthContext);
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
-  // 1 ログインしていない場合は、ログインページにリダイレクトする
+  // 1 サインインしていない場合はサインインページ、サインイン済みでも他ユーザーならユーザーのホームページへリダイレ
+  // クトする
   useEffect(() => {
     if (!currentUser) {
       setAlertSeverity('error');

@@ -28,19 +28,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 3
   // ローディング中かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
-  // ログインしているかどうかの状態を管理するステート
+  // ログインしているかどうかの状態を管理するステート。初期値はfalse（サインインしていない）
   const [isSignedIn, setIsSignedIn] = useState(false);
-  // 現在ログインしているユーザーの情報を管理するステート
+  // 現在ログインしているユーザーの情報を管理するステート。初期値はundefined（未定義）
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   // ------------------------------------------------------------------------------------------------
 
   // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
+    console.log('handleGetCurrentUserが発火');
     try {
       // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
+      console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
+      // サインインしていたら、
       if (res?.data.isLogin === true) {
+        // サインイン状態に変更
         setIsSignedIn(true);
+        // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
         console.log(`handleGetCurrentUser:${JSON.stringify(res?.data.data)}`);
       } else {
@@ -48,12 +53,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     } catch (err) {
       console.log(err);
-      console.log('handleGetCurrentUserのエラー');
       alert('handleGetCurrentUserのエラー');
     }
     setLoading(false);
   };
-  // console.log('AuthProviderが呼ばれた')
+  console.log(`AuthProviderが呼ばれた。カレント:${JSON.stringify(currentUser)}`);
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
@@ -64,6 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // ================================================================================================
   // 5
   return (
+    // サインしているか、現在のユーザー、現在のユーザーの取得する処理、ローディング
     <AuthContext.Provider
       value={{
         loading,

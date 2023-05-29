@@ -7,7 +7,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 // ================================================================================================
 // サインアウト処理。処理後は、トップページに遷移する。
 export const useSignOut = () => {
-  const { setIsSignedIn } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
@@ -25,6 +25,7 @@ export const useSignOut = () => {
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
+        setCurrentUser(undefined);
         // サインアウトしたら、トップページに遷移
         setTimeout(() => {
           router.push('/');

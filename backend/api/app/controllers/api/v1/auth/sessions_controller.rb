@@ -1,4 +1,9 @@
 class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
+
+  def destroy
+    puts "destroyが発火:DeviseTokenAuth::SessionsController"
+    super
+  end
   protected
 
     # サインイン成功時に許可するパラメーターを設定

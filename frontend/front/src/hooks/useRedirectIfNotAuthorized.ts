@@ -1,13 +1,13 @@
 // ~/hooks/useRedirectIfNotAuthorized.tsx
 import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAlertContext } from '../contexts/AlertContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from '../contexts/AuthContext';
 
 // ログインしていない場合は、ログインページにリダイレクトするカスタムフック
 export const useRedirectIfNotAuthorized = () => {
   const router = useRouter();
-  const { currentUser, loading } = useContext(AuthContext);
+  const { currentUser, loading } = useAuthContext();
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
   // ------------------------------------------------------------------------------------------------
   console.log(`useRedirectIfNotAuthorizedのカレントユーザー:${JSON.stringify(currentUser)}`);

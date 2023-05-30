@@ -8,26 +8,6 @@ import '../styles/globals.css';
 Modal.setAppElement('#__next');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // // AuthContextからローディングとサインインの状態変数を受け取る
-  // // loading:trueが非同期処理中、isSignedIn:trueがサインイン済み
-  // const { loading, isSignedIn } = useContext(AuthContext);
-  // const router = useRouter();
-
-  // // サインインしていない場合、サインインページにリダイレクトします
-  // useEffect(() => {
-  //   console.log('ログインチェックが呼ばれた');
-  //   // 非同期処理が終わり(false)、サインインしていない場合
-  //   if (!loading && !isSignedIn) {
-  //     router.push('/signin');
-  //   }
-  //   // 2
-  // }, [loading, isSignedIn, router]);
-
-  // // 非同期処理中(loading:true)の場合、ローディングコンポーネントを表示します
-  // if (loading) {
-  //   return <div>Loading...</div>; // あなたのローディングコンポーネントに置き換えてください。
-  // }
-
   console.log('_app.tsxが呼ばれた');
   return (
     <AuthProvider>

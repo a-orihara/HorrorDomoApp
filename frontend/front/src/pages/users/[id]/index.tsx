@@ -6,7 +6,7 @@ import ProfilePage from '../../../components/templates/ProfilePage';
 const profile = () => {
   return (
     <Layout title='Profile'>
-      <ProfilePage></ProfilePage>;
+      <ProfilePage></ProfilePage>
     </Layout>
   );
 };

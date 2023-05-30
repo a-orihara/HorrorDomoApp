@@ -1,7 +1,6 @@
 // frontend/front/src/components/UserListItem.tsx
 import Link from 'next/link';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { useDeleteUser } from '../../hooks/user/useDeleteUser';
 import { User } from '../../types';
 // 複雑？
@@ -12,7 +11,7 @@ type UserListItemProps = {
 };
 // ================================================================================================
 const UserListItem = ({ user }: UserListItemProps) => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useAuthContext();
   const { handleDeleteUser } = useDeleteUser();
   // 現在のユーザーが管理者で、かつ、現在のユーザーと表示中のユーザーが異なる場合にtrue
   const isDifferentUser = currentUser?.id !== user.id;

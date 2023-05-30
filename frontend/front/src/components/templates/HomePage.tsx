@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
-  const { isSignedIn, currentUser } = useContext(AuthContext);
+  const { isSignedIn, currentUser } = useAuthContext();
   // showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
   // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
   const { showWelcomeMessage } = useFirstTimeLogin();

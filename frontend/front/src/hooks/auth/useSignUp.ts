@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { signUp } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { getErrorMessage } from '../../hooks/error';
 import { SignUpParams } from '../../types';
 // ================================================================================================
@@ -13,7 +13,7 @@ const useSignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------

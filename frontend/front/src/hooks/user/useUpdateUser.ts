@@ -1,17 +1,17 @@
 // frontend/front/src/hooks/user/useUpdateUser.ts
 
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { updateUser } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
-  const { currentUser, handleGetCurrentUser, setCurrentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useAuthContext;
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
@@ -33,8 +33,6 @@ export const useUpdateUser = () => {
       const res = await updateUser(formData);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        // handleGetCurrentUser();
-        // setIsSignedIn(true);
         // 現在のユーザー情報をセット
         setCurrentUser(res.data.data);
         setAlertSeverity('success');
@@ -67,7 +65,6 @@ export const useUpdateUser = () => {
     setEmail,
     profile,
     setProfile,
-    avatar,
     setAvatar,
     currentUser,
     handleUpdateUser,

@@ -22,10 +22,11 @@ export const useSignOut = () => {
         Cookies.remove('uid');
         // ここで、isSignedInをfalseにしないと、ログアウト後にヘッダーのボタンが変わらない。
         setIsSignedIn(false);
+        // ユーザーを未定義にする
+        setCurrentUser(undefined);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
-        setCurrentUser(undefined);
         // サインアウトしたら、トップページに遷移
         setTimeout(() => {
           router.push('/');

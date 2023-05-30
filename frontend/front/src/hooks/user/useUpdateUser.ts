@@ -11,7 +11,7 @@ export const useUpdateUser = () => {
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
-  const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
+  const { currentUser, handleGetCurrentUser, setCurrentUser } = useContext(AuthContext);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
@@ -33,7 +33,10 @@ export const useUpdateUser = () => {
       const res = await updateUser(formData);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        handleGetCurrentUser();
+        // handleGetCurrentUser();
+        // setIsSignedIn(true);
+        // 現在のユーザー情報をセット
+        setCurrentUser(res.data.data);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -70,64 +73,6 @@ export const useUpdateUser = () => {
     handleUpdateUser,
   };
 };
-
-// @          @@          @@          @@          @@          @@          @@          @@          @
-// // ================================================================================================
-// export const useUpdateUser = () => {
-//   const [name, setName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [profile, setProfile] = useState<string | null>(null);
-//   const { currentUser, handleGetCurrentUser } = useContext(AuthContext);
-//   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-//   const router = useRouter();
-//   // ------------------------------------------------------------------------------------------------
-//   const handleUpdateUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
-//     e.preventDefault();
-//     const params: UserUpdateParams = {
-//       name: name,
-//       email: email,
-//       profile: profile,
-//     };
-//     try {
-//       const res = await updateUser(params);
-//       if (res.status === 200) {
-//         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-//         // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
-//         handleGetCurrentUser();
-//         setAlertSeverity('success');
-//         setAlertMessage(`${res.data.message}`);
-//         setAlertOpen(true);
-//         setTimeout(() => {
-//           router.push('/');
-//         }, 1500);
-//       } else {
-//         setAlertSeverity('error');
-//         setAlertMessage(`${res.data.errors.fullMessages}`);
-//         setAlertOpen(true);
-//       }
-//     } catch (err: any) {
-//       console.error(err);
-//       setAlertSeverity('error');
-//       if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
-//         setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
-//       } else {
-//         setAlertMessage('予期せぬエラーが発生しました。');
-//       }
-//       setAlertOpen(true);
-//     }
-//   };
-//   // ================================================================================================
-//   return {
-//     name,
-//     setName,
-//     email,
-//     setEmail,
-//     profile,
-//     setProfile,
-//     currentUser,
-//     handleUpdateUser,
-//   };
-// };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

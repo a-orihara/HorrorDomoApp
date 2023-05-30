@@ -158,13 +158,12 @@ tryで例外が発生すればcatchが実行される。
 
 ------------------------------------------------------------------------------------------------
 if (res?.data.isLogin === true)
-res? とオプショナルチェイニングが使われている理由は、getAuthenticatedUser() 関数が return; ステートメントで
-早期に終了する場合があるためです。この場合、getAuthenticatedUser() の戻り値は undefined になります。オプショ
-ナルチェイニングを使用することで、res が undefined の場合にアクセスしようとするプロパティが存在しないというエラー
-が発生しなくなります。
+res?.data`の`?`は、オプショナルチェーニング演算子。もし `res` が `undefined` ならば、エラーを投げる代わりに
+`res?.data` は `undefined` を返します。これは、実行時エラーを防ぐのに役立つ。
+もし `res` が `undefined` で、オプショナルチェーニングの演算子?を使わずに `res.data` にアクセスしようとすると、
+JSは `undefined` のプロパティ `data` にアクセスできない、という `TypeError` を投げます。
 
 res?.data.isLogin === true の式では、以下の処理が行われます。
-
 1.res が undefined の場合、オプショナルチェイニングによって式全体が undefined になります。
 2.res が undefined でない場合、res.data.isLogin の値が取得されます。
 3.res.data.isLogin が true であれば、res?.data.isLogin === true の式全体が true になります。それ以外の

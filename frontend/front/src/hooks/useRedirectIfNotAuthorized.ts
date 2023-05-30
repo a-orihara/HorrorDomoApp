@@ -27,7 +27,7 @@ export const useRedirectIfNotAuthorized = () => {
       // 2
       else if (typeof router.query.id === 'string' && currentUser?.id !== parseInt(router.query.id)) {
         setAlertSeverity('error');
-        setAlertMessage('他のユーザーのページにアクセスすることはできません');
+        setAlertMessage('他のユーザーの編集ページにアクセスすることはできません');
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/');

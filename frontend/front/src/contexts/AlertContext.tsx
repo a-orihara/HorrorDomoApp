@@ -54,7 +54,6 @@ export const useAlertContext = () => {
   if (context === undefined) {
     throw new Error('useAlertはAlertProviderの中で使用する必要があります。');
   }
-
   // ================================================================================================
   return context;
 };

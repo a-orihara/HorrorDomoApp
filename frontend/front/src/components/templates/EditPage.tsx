@@ -1,12 +1,7 @@
-import Layout from '../layout/Layout';
-import UserForm from '../molecules/UserForm';
+import UserEditForm from '../molecules/UserEditForm';
 
 const EditPage = () => {
-  return (
-    <Layout title='EDIT'>
-      <UserForm></UserForm>
-    </Layout>
-  );
+  return <UserEditForm></UserEditForm>;
 };
 
 export default EditPage;

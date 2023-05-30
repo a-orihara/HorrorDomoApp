@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { SignInParams } from '../../types';
 
 // ================================================================================================
@@ -11,7 +11,8 @@ export const useSignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // setIsSignedIn:ログイン状態を管理、setCurrentUser:ログインユーザーの情報を管理
-  const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  // const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();

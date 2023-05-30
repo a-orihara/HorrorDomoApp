@@ -1,10 +1,12 @@
 class Api::V1::Admin::UsersController < ApplicationController
+  # サインイン済みで、adminユーザーのみdestroyできる
   before_action :authenticate_api_v1_user!, :set_user, :admin_user, only: :destroy
 
   # 1
   def destroy
     puts "destroyアクションが発火"
     @user.destroy
+    # res.data.status = 'success' となる
     render json: { status: 'success', message: 'ユーザーが削除されました。' }
   end
 

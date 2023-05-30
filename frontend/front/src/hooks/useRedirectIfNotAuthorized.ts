@@ -1,34 +1,40 @@
 // ~/hooks/useRedirectIfNotAuthorized.tsx
 import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAlertContext } from '../contexts/AlertContext';
-import { AuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from '../contexts/AuthContext';
 
 // ログインしていない場合は、ログインページにリダイレクトするカスタムフック
 export const useRedirectIfNotAuthorized = () => {
   const router = useRouter();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, loading } = useAuthContext();
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
+  // ------------------------------------------------------------------------------------------------
+  console.log(`useRedirectIfNotAuthorizedのカレントユーザー:${JSON.stringify(currentUser)}`);
 
-  // 1 ログインしていない場合は、ログインページにリダイレクトする
+  // 1 サインインしていない場合はサインインページ、サインイン済みでも他ユーザーならユーザーのホームページへリダイレ
+  // クトする
   useEffect(() => {
-    if (!currentUser) {
-      setAlertSeverity('error');
-      setAlertMessage('ログインしていません');
-      setAlertOpen(true);
-      setTimeout(() => {
-        router.push('/signin');
-      }, 2000);
+    if (!loading) {
+      if (!currentUser) {
+        setAlertSeverity('error');
+        setAlertMessage('ログインしていません');
+        setAlertOpen(true);
+        setTimeout(() => {
+          router.push('/signin');
+        }, 2000);
+      }
       // 2
-    } else if (typeof router.query.id === 'string' && currentUser.id !== parseInt(router.query.id)) {
-      setAlertSeverity('error');
-      setAlertMessage('他のユーザーのページにアクセスすることはできません');
-      setAlertOpen(true);
-      setTimeout(() => {
-        router.push('/');
-      }, 2000);
+      else if (typeof router.query.id === 'string' && currentUser?.id !== parseInt(router.query.id)) {
+        setAlertSeverity('error');
+        setAlertMessage('他のユーザーの編集ページにアクセスすることはできません');
+        setAlertOpen(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      }
     }
-  }, [currentUser, router, setAlertMessage, setAlertOpen, setAlertSeverity]);
+  }, [currentUser, router, setAlertMessage, setAlertOpen, setAlertSeverity, loading]);
 };
 
 /*
@@ -58,11 +64,18 @@ router.query.idはstring | string[] | undefinedの型を持っています。
 parseInt関数はstring型の引数を期待しています。
 router.query.idが存在しない場合、parseInt関数にはundefinedが渡されます。
 このままだとエラーになるので、2のように'string'の場合でIDが合わない場合にのみ処理するよう記載。
-
 ------------------------------------------------------------------------------------------------
 parseInt
 文字列を整数に変換するJavaScriptの組み込み関数。
-
+------------------------------------------------------------------------------------------------
+!==
+厳密な不等号演算子（strict inequality operator）です。この演算子は、2つの値が等しくない場合にtrueを返し、等し
+い場合にfalseを返します。
+具体的には、currentUser?.id !== parseInt(router.query.id)は、currentUserオブジェクトのidプロパティの値と
+router.query.idの値が等しくない場合に条件が成立します。異なる値であれば、trueとなります。
+!==演算子は、値の型と値の両方を比較するため、型変換を行わずに厳密な比較を行います。例えば、数値と文字列を比較する場
+合、型が異なるため必ず異なると判定されます。
+なお、!==演算子の反対の意味で、2つの値が等しい場合にtrueを返す演算子が===（厳密な等号演算子）です。
 ------------------------------------------------------------------------------------------------
 typeof演算子
 渡された値の型を文字列で返すJavaScriptの演算子。

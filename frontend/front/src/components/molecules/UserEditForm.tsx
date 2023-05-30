@@ -6,8 +6,8 @@ import Label from '../atoms/Label';
 import TextArea from '../atoms/TextArea';
 
 // ================================================================================================
-const UserForm = () => {
-  const { name, setName, email, setEmail, profile, setProfile, avatar, setAvatar, currentUser, handleUpdateUser } =
+const UserEditForm = () => {
+  const { name, setName, email, setEmail, profile, setProfile, setAvatar, currentUser, handleUpdateUser } =
     useUpdateUser();
   // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // const router = useRouter();
@@ -18,40 +18,6 @@ const UserForm = () => {
       setAvatar(file);
     }
   };
-
-  // 画像のアップロード処理
-  // const handleAvatarUpload = async () => {
-  //   const formData = new FormData();
-  //   formData.append('avatar', avatar || '');
-  //   try {
-  //     // Avatarのアップロード処理を実行するAPIメソッドを呼び出す
-  //     const res = await updateAvatar(formData);
-  //     if (res.status === 200) {
-  //       console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-  //       // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
-
-  //       setAlertSeverity('success');
-  //       setAlertMessage(`${res.data.message}`);
-  //       setAlertOpen(true);
-  //       setTimeout(() => {
-  //         router.push('/');
-  //       }, 1500);
-  //     } else {
-  //       setAlertSeverity('error');
-  //       setAlertMessage(`${res.data.errors.fullMessages}`);
-  //       setAlertOpen(true);
-  //     }
-  //   } catch (err: any) {
-  //     console.error(err);
-  //     setAlertSeverity('error');
-  //     if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
-  //       setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
-  //     } else {
-  //       setAlertMessage('予期せぬエラーが発生しました。');
-  //     }
-  //     setAlertOpen(true);
-  //   }
-  // };
 
   // ================================================================================================
   return (
@@ -134,7 +100,7 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default UserEditForm;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

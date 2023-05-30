@@ -3,44 +3,63 @@
 // AuthContextのProviderコンポーネントに渡す値（useState）を設定
 // 2.AuthContextのProviderコンポーネントでラップされた、AuthProviderコンポーネントを作成
 
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
 import { User } from '../types';
 // ================================================================================================
 type AuthProviderProps = {
   children: React.ReactNode;
 };
+
+type AuthContextProps = {
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isSignedIn: boolean;
+  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  currentUser: User | undefined;
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  handleGetCurrentUser: () => Promise<void>;
+};
 // 1
-export const AuthContext = createContext(
-  {} as {
-    loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    isSignedIn: boolean;
-    setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-    currentUser: User | undefined;
-    setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-    handleGetCurrentUser: () => Promise<void>;
-  }
-);
+// export const AuthContext = createContext(
+//   {} as {
+//     loading: boolean;
+//     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+//     isSignedIn: boolean;
+//     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+//     currentUser: User | undefined;
+//     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+//     handleGetCurrentUser: () => Promise<void>;
+//   }
+// );
+// 1
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+
+// export const AuthContext = createContext<AuthContextProps>({});
 
 // @          @@          @@          @@          @@          @@          @@          @@          @
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 3
   // ローディング中かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
-  // ログインしているかどうかの状態を管理するステート
+  // ログインしているかどうかの状態を管理するステート。初期値はfalse（サインインしていない）
   const [isSignedIn, setIsSignedIn] = useState(false);
-  // 現在ログインしているユーザーの情報を管理するステート
+  // 現在ログインしているユーザーの情報を管理するステート。初期値はundefined（未定義）
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   // ------------------------------------------------------------------------------------------------
 
   // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
+    console.log('handleGetCurrentUserが発火');
     try {
       // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
+      console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
+      // サインインしていたら、
       if (res?.data.isLogin === true) {
+        // サインイン状態に変更
         setIsSignedIn(true);
+        // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
         console.log(`handleGetCurrentUser:${JSON.stringify(res?.data.data)}`);
       } else {
@@ -48,12 +67,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     } catch (err) {
       console.log(err);
-      console.log('handleGetCurrentUserのエラー');
       alert('handleGetCurrentUserのエラー');
     }
     setLoading(false);
   };
-  // console.log('AuthProviderが呼ばれた')
+  console.log(`AuthProviderが呼ばれた。カレント:${JSON.stringify(currentUser)}`);
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
@@ -64,6 +82,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // ================================================================================================
   // 5
   return (
+    // サインしているか、現在のユーザー、現在のユーザーの取得する処理、ローディング
     <AuthContext.Provider
       value={{
         loading,
@@ -78,6 +97,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       {children}
     </AuthContext.Provider>
   );
+};
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    // 6
+    throw new Error('useAuthContextはAuthProviderの子コンポーネントの内部でのみ使用する必要があります');
+  }
+  return context;
 };
 
 /*
@@ -153,13 +180,12 @@ tryで例外が発生すればcatchが実行される。
 
 ------------------------------------------------------------------------------------------------
 if (res?.data.isLogin === true)
-res? とオプショナルチェイニングが使われている理由は、getAuthenticatedUser() 関数が return; ステートメントで
-早期に終了する場合があるためです。この場合、getAuthenticatedUser() の戻り値は undefined になります。オプショ
-ナルチェイニングを使用することで、res が undefined の場合にアクセスしようとするプロパティが存在しないというエラー
-が発生しなくなります。
+res?.data`の`?`は、オプショナルチェーニング演算子。もし `res` が `undefined` ならば、エラーを投げる代わりに
+`res?.data` は `undefined` を返します。これは、実行時エラーを防ぐのに役立つ。
+もし `res` が `undefined` で、オプショナルチェーニングの演算子?を使わずに `res.data` にアクセスしようとすると、
+JSは `undefined` のプロパティ `data` にアクセスできない、という `TypeError` を投げます。
 
 res?.data.isLogin === true の式では、以下の処理が行われます。
-
 1.res が undefined の場合、オプショナルチェイニングによって式全体が undefined になります。
 2.res が undefined でない場合、res.data.isLogin の値が取得されます。
 3.res.data.isLogin が true であれば、res?.data.isLogin === true の式全体が true になります。それ以外の
@@ -231,4 +257,27 @@ AuthContextの初期値は空のオブジェクト{}ですが、AuthProviderコ�
 す。valueプロパティに渡すオブジェクトのプロパティは、
 loading、setLoading、isSignedIn、setIsSignedIn、currentUser、setCurrentUserの6つです。
 変数名valueは任意の名前です。
+
+================================================================================================
+6
+このエラーメッセージは、`useAuthContext` は `AuthProvider` の子であるコンポーネントの内部でのみ使用する必要が
+あることを述べています。もしそうでなければ、 `useContext(AuthContext)` は `undefined` を返すので、これを防ぐ
+ために新しい Error を投げ、開発者が間違った場所でフックを使っていることを知らせます。
+AuthContext.Providerの子であるコンポーネントの内部で使用すれば、undefinedではなく、初期値が設定された
+AuthProviderのプロパティが返されます。
+------------------------------------------------------------------------------------------------
+Reactでは、Contextは、ツリーの各レベルに明示的にpropを渡すことなく、コンポーネント間で値を共有する方法を提供しま
+す。アプリケーションの `AuthProvider` コンポーネントは、 `AuthContext.Provider` を使用してこれらの値を提供し
+ます。
+
+AuthContext.Provider` の子コンポーネント： AuthContext.Provider` 内でレンダリングされるすべてのコンポーネン
+トは、このプロバイダの子とみなされます。これらの子プロバイダーだけが `AuthContext.Provider` が提供する値に直接
+アクセスすることができます。
+
+useAuthContext` フック： このカスタムフックは、基本的に `useContext(AuthContext)` のラッパーとして作成され
+ます。このフックは、`AuthContext.Provider` の子プロパティの中で使用すると、現在のコンテキスト値
+(`AuthContext.Provider` の value prop) を返します。
+
+`AuthContext.Provider` の子ではないコンポーネントで使用しようとすると、 `useContext(AuthContext)` は
+`undefined` を返します。
 */

@@ -1,13 +1,12 @@
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
 import { signOut } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 // ================================================================================================
 // サインアウト処理。処理後は、トップページに遷移する。
 export const useSignOut = () => {
-  const { setIsSignedIn } = useContext(AuthContext);
+  const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
@@ -22,6 +21,8 @@ export const useSignOut = () => {
         Cookies.remove('uid');
         // ここで、isSignedInをfalseにしないと、ログアウト後にヘッダーのボタンが変わらない。
         setIsSignedIn(false);
+        // ユーザーを未定義にする
+        setCurrentUser(undefined);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

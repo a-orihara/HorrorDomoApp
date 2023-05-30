@@ -1,9 +1,14 @@
 // 1
 
+import Layout from '../../../components/layout/Layout';
 import ProfilePage from '../../../components/templates/ProfilePage';
 
 const profile = () => {
-  return <ProfilePage></ProfilePage>;
+  return (
+    <Layout title='Profile'>
+      <ProfilePage></ProfilePage>
+    </Layout>
+  );
 };
 export default profile;
 

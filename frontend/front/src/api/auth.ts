@@ -12,6 +12,7 @@ export const signIn = (params: SignInParams) => {
 };
 
 // 3 クライアント側とサーバー側の両方でセッションを終了
+// /auth/sign_out:DeviseTokenAuth::SessionsController#destroy
 export const signOut = () => {
   // DELETEリクエストは、通常、リソースの削除やセッションの終了などに使用されます。
   return client.delete('/auth/sign_out', {
@@ -44,17 +45,6 @@ export const updateUser = (formData: any) => {
 //     },
 //   });
 // };
-
-// ユーザーのavatarを更新
-export const updateAvatar = async (formData: FormData) => {
-  return client.put('/auth', formData, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
 
 // 4 認証済みのユーザーを取得
 export const getAuthenticatedUser = () => {

@@ -30,7 +30,7 @@ describe('Button', () => {
     expect(mockClick).toHaveBeenCalled();
   });
 
-  test('classNameが適用されていること', () => {
+  test('指定したクラスを持つ', () => {
     render(<Button className='test-button'>Click me</Button>);
     const buttonElement = screen.getByRole('button', { name: /click me/i });
     expect(buttonElement).toHaveClass('test-button');

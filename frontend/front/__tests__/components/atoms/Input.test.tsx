@@ -17,13 +17,13 @@ describe('Input', () => {
     expect(inputElement).toBeInTheDocument();
   });
 
-  test('classNameの適用', () => {
+  test('指定したクラスを持つ', () => {
     render(<Input className='test-input' />);
     const inputElement = screen.getByRole('textbox');
     expect(inputElement).toHaveClass('test-input');
   });
 
-  test('input shows correct value when typed into', async () => {
+  test('入力された値が正しく表示される', async () => {
     render(<Input placeholder='Test Placeholder' />);
     const inputElement = screen.getByPlaceholderText('Test Placeholder');
     await userEvent.type(inputElement, 'test value');

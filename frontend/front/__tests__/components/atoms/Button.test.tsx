@@ -1,31 +1,40 @@
 // frontend/front/__tests__/components/atoms/Button.test.tsx
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Button from '../../../src/components/atoms/Button';
 
-// 1
-test('ボタンがレンダリングされ、指定したテキストを持つこと', () => {
-  // 3
-  render(<Button onClick={jest.fn()}>Click me</Button>);
-  // 4
-  const buttonElement = screen.getByRole('button', { name: /click me/i });
-  // 5
-  expect(buttonElement).toBeInTheDocument();
-});
+describe('Button', () => {
+  test('buttonが存在すること', () => {
+    render(<Button>Click me</Button>);
+    const buttonElement = screen.getByRole('button');
+    expect(buttonElement).toBeInTheDocument();
+  });
+  // 1
+  test('指定したテキストを持つこと', () => {
+    // 3
+    render(<Button>Click me</Button>);
+    // 4
+    const buttonElement = screen.getByRole('button', { name: /click me/i });
+    // 5
+    expect(buttonElement).toBeInTheDocument();
+  });
 
-test('ボタンがクリックイベントに反応すること', () => {
-  // 2
-  const mockClick = jest.fn();
+  test('クリックイベントに反応すること', async () => {
+    // 2
+    const mockClick = jest.fn();
+    render(<Button onClick={mockClick}>Click me</Button>);
+    const buttonElement = screen.getByRole('button', { name: 'Click me' });
+    // 6
+    await userEvent.click(buttonElement);
+    // 7
+    expect(mockClick).toHaveBeenCalled();
+  });
 
-  render(<Button onClick={mockClick}>Click me</Button>);
-  const buttonElement = screen.getByRole('button', { name: 'Click me' });
-  console.log(`ここはbuttonElement:${mockClick}`);
-  // const debug = screen.debug(buttonElement);
-  // console.log(debug);
-  // 6
-  // userEventだとエラー
-  fireEvent.click(buttonElement);
-  // 7
-  expect(mockClick).toHaveBeenCalled();
+  test('classNameが適用されていること', () => {
+    render(<Button className='test-button'>Click me</Button>);
+    const buttonElement = screen.getByRole('button', { name: /click me/i });
+    expect(buttonElement).toHaveClass('test-button');
+  });
 });
 
 /*

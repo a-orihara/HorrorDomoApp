@@ -11,7 +11,7 @@ export const useUpdateUser = () => {
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
-  const { currentUser, setCurrentUser } = useAuthContext;
+  const { currentUser, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 

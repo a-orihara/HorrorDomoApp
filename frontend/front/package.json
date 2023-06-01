@@ -51,14 +51,5 @@
     "prettier-plugin-tailwindcss": "^0.2.6",
     "tailwindcss": "^3.3.1",
     "typescript": "5.0.3"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "<rootDir>/.next/",
-      "<rootDir>/node_modules/"
-    ],
-    "moduleNameMapper": {
-      "\\.(css)$": "<rootDir>/node_modules/jest-css-modules"
-    }
   }
 }

@@ -8,12 +8,17 @@ class Api::V1::UsersController < ApplicationController
   # 3 全てのユーザーをページネーション付きで取得するメソッド
   def index
     puts "indexアクションが発火"
+    # ページ番号
     page = params[:page] || 1
+    # 1ページあたりの表示件数
     per_page = params[:per_page] || 10
+    # 指定したページの指定した表示件数分のユーザーを取得
     @users = User.all.page(page).per(per_page)
-    total_users = User.count # 総ユーザー数を取得
+    # 総ユーザー数を取得
+    total_users = User.count
     # { users: @users, total_users: total_users }と同じ意味
-    render json: { users: @users, total_users: total_users } # 総ユーザー数もレスポンスに含める
+    # res:指定したページの指定した表示件数分のユーザーと総ユーザー数
+    render json: { users: @users, total_users: total_users }
   end
 
   # 5

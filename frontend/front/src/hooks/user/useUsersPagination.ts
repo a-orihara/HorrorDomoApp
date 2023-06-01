@@ -9,7 +9,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
   // 1 user一覧の状態を管理するステート。User型の配列を保持する。
   const [users, setUsers] = useState<User[]>([]);
   // 総ユーザー数を保持するステート
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalUsersCount, setTotalUsersCount] = useState(0);
   // 現在のページ番号を保持するステート
   const [currentPage, setCurrentPage] = useState(0);
   // AlertContextから、setAlertMessage, setAlertOpen, setAlertSeverityを受け取る。
@@ -20,12 +20,12 @@ export const useUsersPagination = (itemsPerPage: number) => {
   const handleGetUsers = useCallback(
     async (page: number) => {
       try {
-        // userIndex関数を使用して、ユーザー一覧を取得する
+        // res:指定したページの指定した表示件数分のユーザーと総ユーザー数
         const res = await userIndex(page, itemsPerPage);
-        // ユーザー一覧をステートに格納する
+        // 指定したページの指定した表示件数分のユーザーの一覧をstateに格納
         setUsers(res.data.users);
         // 総ユーザー数をステートに格納する
-        setTotalUsers(res.data.totalUsers);
+        setTotalUsersCount(res.data.totalUsers);
       } catch (err: any) {
         setAlertSeverity('error');
         setAlertMessage(`${err.response.data.errors[0]}`);
@@ -38,7 +38,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity]
   );
 
-  // 4 ページネーションのページをクリックした時に実行される関数
+  // 4 ページネーションのページをクリックした時に実行、指定したページの指定した表示件数分のユーザーと総ユーザー数を取得
   useEffect(() => {
     handleGetUsers(currentPage);
   }, [currentPage, handleGetUsers]);
@@ -48,7 +48,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { users, totalUsers, handlePageChange };
+  return { users, totalUsersCount, handlePageChange };
 };
 
 /*

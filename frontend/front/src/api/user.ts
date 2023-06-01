@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import client from './client';
 
-// 1 ユーザー一覧を取得する（ページネーション）
+// 1 ユーザー一覧を取得する（ページネーション）:GET /api/v1/users/1->users_controller#indwex
 export const userIndex = (page: number, itemsPerPage: number) => {
   return client.get('/users', {
     params: {
@@ -13,10 +13,11 @@ export const userIndex = (page: number, itemsPerPage: number) => {
       client: Cookies.get('_client'),
       uid: Cookies.get('_uid'),
     },
+    // res:指定したページの指定した表示件数分のユーザーと総ユーザー数
   });
 };
 
-// 指定したIDのユーザー情報を取得する:#GET /api/v1/users/1->users_controller.rbのshowアクション.
+// 指定したIDのユーザー情報を取得する:GET /api/v1/users/1->users_controller#show
 export const getUserById = (userId: string) => {
   // console.log('getUserByIdが呼ばれた');
   return client.get(`/users/${userId}`, {

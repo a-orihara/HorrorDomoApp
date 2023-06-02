@@ -13,7 +13,7 @@ const mockUseAuthContext = useAuthContext as jest.Mock;
 const mockUseDeleteUser = useDeleteUser as jest.Mock;
 
 // テストデータ
-const user = {
+const mockUser = {
   id: 1,
   uid: '1',
   provider: '',
@@ -39,7 +39,7 @@ describe('UserListItem', () => {
       currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
     });
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
-    render(<UserListItem user={user} />);
+    render(<UserListItem user={mockUser} />);
     expect(screen.getByRole('listitem')).toBeInTheDocument();
   });
 
@@ -50,7 +50,7 @@ describe('UserListItem', () => {
       currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
     });
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
-    render(<UserListItem user={user} />);
+    render(<UserListItem user={mockUser} />);
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe('UserListItem', () => {
       currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
     });
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
-    render(<UserListItem user={user} />);
+    render(<UserListItem user={mockUser} />);
     // 7
     expect(screen.getByText('Test User').closest('a')).toHaveAttribute('href', '/users/1');
   });
@@ -71,7 +71,7 @@ describe('UserListItem', () => {
     });
     const handleDeleteUser = jest.fn();
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser });
-    render(<UserListItem user={user} />);
+    render(<UserListItem user={mockUser} />);
     // 指定されたテキスト(delete)を持つ要素がレンダリングされているかどうかを確認する
     expect(screen.getByText('delete')).toBeInTheDocument();
   });
@@ -82,7 +82,7 @@ describe('UserListItem', () => {
     });
     const handleDeleteUser = jest.fn();
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser });
-    render(<UserListItem user={user} />);
+    render(<UserListItem user={mockUser} />);
     // 指定されたテキスト(delete)を持つ要素をクリックする
     await userEvent.click(screen.getByText('delete'));
     // 8
@@ -115,6 +115,12 @@ TypeScriptの型アサーションです。`useAuthContext`がJestのモック�
 この行以降、`mockUseAuthContext` は `useAuthContext` と同じ関数を指す変数ですが、TypeScript はこれがJest
 のモック関数であることを理解するようになります。これで `mockUseAuthContext` で Jest のモック関数のメソッドを呼
 び出すことができるようになります。
+------------------------------------------------------------------------------------------------
+asの後にタイプアサーションが続きます。これは、左側の値（この場合は `getAuthenticatedUser` ）を右側で指定された
+型（この場合は `jest.Mock` ）とみなすように TypeScript に指示します。
+------------------------------------------------------------------------------------------------
+jest.Mock` はJestが提供するモック関数を表す型です。この型は、関数の振る舞いを制御したり、関数がどのように呼び出さ
+れたかを問い合わせることができるプロパティを持っています。特定の値やオブジェクト、関数ではない。
 ================================================================================================
 3
 afterEach

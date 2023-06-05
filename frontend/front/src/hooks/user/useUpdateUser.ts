@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { updateUser } from '../../api/auth';
+import { updateUser } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 

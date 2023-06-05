@@ -26,17 +26,6 @@ export const signOut = () => {
   });
 };
 
-// 5 ユーザー情報を更新
-export const updateUser = (formData: any) => {
-  return client.put('/auth', formData, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
 // 4 認証済みのユーザーを取得
 export const getAuthenticatedUser = () => {
   // トークンがない場合は何もしない
@@ -261,12 +250,7 @@ Devise Token Authでは、トークン認証を使用してAPIのリクエスト
 敗して認証エラーが返されます。
 
 ================================================================================================
-5
-updateAvatar に headers: { 'content-type': 'multipart/form-data' } を追加するかどうか。
-通常、FormData オブジェクトを使用してファイルを送信する場合、content-type ヘッダーに multipart/form-data を
-設定することが推奨されています。
-ただし、Axiosは、自動的に content-type ヘッダーを multipart/form-data に設定します。したがって、明示的に追加
-する必要はありません。
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 
 作成されるルート

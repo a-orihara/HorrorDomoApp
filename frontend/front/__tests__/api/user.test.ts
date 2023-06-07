@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import client from '../../src/api/client';
-import { getUserById, updateUser, userDelete } from '../../src/api/user';
+import { getUserById, updateUser, userDelete, userIndex } from '../../src/api/user';
 
 // 1
 
@@ -10,18 +10,53 @@ import { getUserById, updateUser, userDelete } from '../../src/api/user';
 jest.mock('../../src/api/client');
 jest.mock('js-cookie');
 
+// 8 すべてのテストに対応するグローバル設定
+beforeEach(() => {
+  (client.get as jest.Mock).mockReset();
+  // 3 テストのたびにモックをリセット
+  (client.delete as jest.Mock).mockReset();
+  (client.put as jest.Mock).mockReset();
+  (Cookies.get as jest.Mock).mockReset();
+  // 4 すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
+  (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
+});
+
+describe('updateUser関数のテスト', () => {
+  // 各テストで共通の変数を定義
+  let mockResponse: { data: object };
+  let formData: any;
+
+  beforeEach(() => {
+    mockResponse = { data: {} };
+    (client.put as jest.Mock).mockResolvedValue(mockResponse);
+    formData = { name: 'test' };
+  });
+  it('client.putが正しいパスで呼ばれる', async () => {
+    await updateUser(formData);
+    expect(client.put).toHaveBeenCalledWith('/auth', formData, expect.anything());
+  });
+  it('client.putが正しいヘッダーで呼ばれる', async () => {
+    await updateUser(formData);
+    expect(client.put).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      headers: {
+        'access-token': 'mock__access_token',
+        client: 'mock__client',
+        uid: 'mock__uid',
+      },
+    });
+  });
+  it('updateUserの戻り値がclient.putのモックから返された値と一致しているか確認', async () => {
+    const result = await updateUser(formData);
+    expect(result).toEqual(mockResponse);
+  });
+});
+
 describe('userDelete関数のテスト', () => {
   // 7 各テストで共通の変数を定義
   let mockResponse: { data: object };
   let testUserId: number;
-
   // 8
   beforeEach(() => {
-    // 3 テストのたびにモックをリセット
-    (client.delete as jest.Mock).mockReset();
-    (Cookies.get as jest.Mock).mockReset();
-    // 4 すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
-    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
     // 5
     mockResponse = { data: {} };
     (client.delete as jest.Mock).mockResolvedValue(mockResponse);
@@ -61,14 +96,56 @@ describe('userDelete関数のテスト', () => {
   });
 });
 
+describe('userIndex関数のテスト', () => {
+  let mockResponse: { data: object };
+  let page: number;
+  let itemsPerPage: number;
+
+  beforeEach(() => {
+    mockResponse = { data: {} };
+    (client.get as jest.Mock).mockResolvedValue(mockResponse);
+    page = 0;
+    itemsPerPage = 5;
+  });
+
+  it('client.getが正しいパスとパラメータで呼ばれる', async () => {
+    await userIndex(page, itemsPerPage);
+    expect(client.get).toHaveBeenCalledWith(
+      '/users',
+      // 9
+      expect.objectContaining({
+        params: {
+          page: page + 1,
+          per_page: itemsPerPage,
+        },
+      })
+    );
+  });
+
+  it('client.getが正しいヘッダーで呼ばれる', async () => {
+    await userIndex(page, itemsPerPage);
+    expect(client.get).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        headers: {
+          'access-token': 'mock__access_token',
+          client: 'mock__client',
+          uid: 'mock__uid',
+        },
+      })
+    );
+  });
+
+  it('userIndexの戻り値がclient.getのモックから返された値と一致しているか確認', async () => {
+    const result = await userIndex(page, itemsPerPage);
+    expect(result).toEqual(mockResponse);
+  });
+});
+
 describe('getUserById関数のテスト', () => {
   let mockResponse: { data: object };
   let testUserId: string;
-
   beforeEach(() => {
-    (client.get as jest.Mock).mockReset();
-    (Cookies.get as jest.Mock).mockReset();
-    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
     mockResponse = { data: {} };
     (client.get as jest.Mock).mockResolvedValue(mockResponse);
     testUserId = '1';
@@ -92,39 +169,6 @@ describe('getUserById関数のテスト', () => {
 
   it('getUserByIdの戻り値がclient.getのモックから返された値と一致しているか確認', async () => {
     const result = await getUserById(testUserId);
-    expect(result).toEqual(mockResponse);
-  });
-});
-
-describe('updateUser関数のテスト', () => {
-  // 各テストで共通の変数を定義
-  let mockResponse: { data: object };
-  let formData: any;
-
-  beforeEach(() => {
-    (client.put as jest.Mock).mockReset();
-    (Cookies.get as jest.Mock).mockReset();
-    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
-    mockResponse = { data: {} };
-    (client.put as jest.Mock).mockResolvedValue(mockResponse);
-    formData = { name: 'test' };
-  });
-  it('client.putが正しいパスで呼ばれる', async () => {
-    await updateUser(formData);
-    expect(client.put).toHaveBeenCalledWith('/auth', formData, expect.anything());
-  });
-  it('client.putが正しいヘッダーで呼ばれる', async () => {
-    await updateUser(formData);
-    expect(client.put).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
-      headers: {
-        'access-token': 'mock__access_token',
-        client: 'mock__client',
-        uid: 'mock__uid',
-      },
-    });
-  });
-  it('updateUserの戻り値がclient.putのモックから返された値と一致しているか確認', async () => {
-    const result = await updateUser(formData);
     expect(result).toEqual(mockResponse);
   });
 });
@@ -223,4 +267,10 @@ mockResponse は新しいオブジェクト { data: {} } に再代入されま�
 テストで `client.delete` が呼び出されるたびに、指定した `mockResponse` が返されます。
 4. テストで使用する `testUserId` を `1` に設定します。これにより、各テストで同一のユーザーIDを用いることができま
 す。
+================================================================================================
+9
+expect.objectContaining
+Jestのマッチャーの一つで、オブジェクトが期待されるプロパティを含んでいるか（部分一致）をチェックします。
+この関数は、オブジェクトを引数に取ります。この引数は期待されるプロパティとその値のセットを表します。
+paramsというプロパティを持ち、その値が{ page: page + 1, per_page: itemsPerPage }であることを期待している。
 */

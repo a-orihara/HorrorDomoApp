@@ -29,6 +29,7 @@ const useSignUp = () => {
     try {
       // 5
       const res = await signUp(params);
+      console.log(`サインアップのres${JSON.stringify(res)}`);
       if (res.status === 200) {
         // 3 Cookieにトークンをセット
         Cookies.set('_access_token', res.headers['access-token']);

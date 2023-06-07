@@ -1,6 +1,28 @@
 import Cookies from 'js-cookie';
 import client from './client';
 
+// 2 ユーザー情報を更新
+export const updateUser = (formData: any) => {
+  return client.put('/auth', formData, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
+// ユーザーを削除する
+export const userDelete = (userId: number) => {
+  return client.delete(`/admin/users/${userId}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // 1 ユーザー一覧を取得する（ページネーション）:GET /api/v1/users/1->users_controller#indwex
 export const userIndex = (page: number, itemsPerPage: number) => {
   return client.get('/users', {
@@ -21,28 +43,6 @@ export const userIndex = (page: number, itemsPerPage: number) => {
 export const getUserById = (userId: string) => {
   // console.log('getUserByIdが呼ばれた');
   return client.get(`/users/${userId}`, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
-// 2 ユーザー情報を更新
-export const updateUser = (formData: any) => {
-  return client.put('/auth', formData, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
-// ユーザーを削除する
-export const userDelete = (userId: number) => {
-  return client.delete(`/admin/users/${userId}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

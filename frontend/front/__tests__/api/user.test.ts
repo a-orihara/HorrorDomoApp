@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import client from '../../src/api/client';
-import { getUserById, userDelete } from '../../src/api/user';
+import { getUserById, updateUser, userDelete } from '../../src/api/user';
 
 // 1
 
@@ -92,6 +92,39 @@ describe('getUserById関数のテスト', () => {
 
   it('getUserByIdの戻り値がclient.getのモックから返された値と一致しているか確認', async () => {
     const result = await getUserById(testUserId);
+    expect(result).toEqual(mockResponse);
+  });
+});
+
+describe('updateUser関数のテスト', () => {
+  // 各テストで共通の変数を定義
+  let mockResponse: { data: object };
+  let formData: any;
+
+  beforeEach(() => {
+    (client.put as jest.Mock).mockReset();
+    (Cookies.get as jest.Mock).mockReset();
+    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
+    mockResponse = { data: {} };
+    (client.put as jest.Mock).mockResolvedValue(mockResponse);
+    formData = { name: 'test' };
+  });
+  it('client.putが正しいパスで呼ばれる', async () => {
+    await updateUser(formData);
+    expect(client.put).toHaveBeenCalledWith('/auth', formData, expect.anything());
+  });
+  it('client.putが正しいヘッダーで呼ばれる', async () => {
+    await updateUser(formData);
+    expect(client.put).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
+      headers: {
+        'access-token': 'mock__access_token',
+        client: 'mock__client',
+        uid: 'mock__uid',
+      },
+    });
+  });
+  it('updateUserの戻り値がclient.putのモックから返された値と一致しているか確認', async () => {
+    const result = await updateUser(formData);
     expect(result).toEqual(mockResponse);
   });
 });

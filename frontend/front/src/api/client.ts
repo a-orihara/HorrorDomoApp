@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios'; // eslint-disable-line import/named
 import applyCaseMiddleware from 'axios-case-converter';
 
 // applyCaseMiddleware:
@@ -11,7 +11,7 @@ const options = {
 };
 
 // 2
-const client = applyCaseMiddleware(
+const client: AxiosInstance = applyCaseMiddleware(
   axios.create({
     baseURL: 'http://localhost:3000/api/v1',
     timeout: 5000,
@@ -29,6 +29,13 @@ ignoreHeaders: trueは、HTTPヘッダーをキャメルケースに変換する
 ヘッダーに関してはケバブケースのままで良いので適用を無視するオプションを追加。
 ================================================================================================
 2
+client.post('/auth/sign_in', params);になる。
+使わないとこう、
+axios.post('http://localhost:3000/api/v1/auth/sign_in', params, {
+    timeout: 5000,
+  });
+------------------------------------------------------------------------------------------------
+
 applyCaseMiddlewareでaxios-case-converterを適用している。
 applyCaseMiddlewareは、HTTPリクエストのパラメータをキャメルケースからスネークケースに変換するライブラリです。
 逆の変換も可。

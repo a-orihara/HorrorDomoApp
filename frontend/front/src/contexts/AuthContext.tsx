@@ -20,22 +20,9 @@ type AuthContextProps = {
   setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   handleGetCurrentUser: () => Promise<void>;
 };
-// 1
-// export const AuthContext = createContext(
-//   {} as {
-//     loading: boolean;
-//     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-//     isSignedIn: boolean;
-//     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-//     currentUser: User | undefined;
-//     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-//     handleGetCurrentUser: () => Promise<void>;
-//   }
-// );
+
 // 1
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
-
-// export const AuthContext = createContext<AuthContextProps>({});
 
 // @          @@          @@          @@          @@          @@          @@          @@          @
 export const AuthProvider = ({ children }: AuthProviderProps) => {

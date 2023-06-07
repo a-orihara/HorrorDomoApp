@@ -1,3 +1,4 @@
+// import { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { SignInParams, SignUpParams } from '../types';
 import client from './client';
@@ -18,17 +19,6 @@ export const signOut = () => {
   return client.delete('/auth/sign_out', {
     // サーバーから受け取った各種ヘッダー。これらのヘッダーは、Cookieから取得されます。
     // これらのヘッダーをリクエストに添付することで、サーバーはどのユーザーがサインアウトしたいのかを識別。
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
-// 5 ユーザー情報を更新
-export const updateUser = (formData: any) => {
-  return client.put('/auth', formData, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -183,6 +173,8 @@ token-type: Bearer
 
 uid: momo@momo.com
 認証ヘッダの一種であるuidの値を示す。
+------------------------------------------------------------------------------------------------
+型定義
 
 ================================================================================================
 2
@@ -261,12 +253,7 @@ Devise Token Authでは、トークン認証を使用してAPIのリクエスト
 敗して認証エラーが返されます。
 
 ================================================================================================
-5
-updateAvatar に headers: { 'content-type': 'multipart/form-data' } を追加するかどうか。
-通常、FormData オブジェクトを使用してファイルを送信する場合、content-type ヘッダーに multipart/form-data を
-設定することが推奨されています。
-ただし、Axiosは、自動的に content-type ヘッダーを multipart/form-data に設定します。したがって、明示的に追加
-する必要はありません。
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 
 作成されるルート
@@ -294,5 +281,39 @@ api_v1_user_registration        PATCH  /api/v1/auth(.:format)                   
 api_v1_auth_validate_token      GET    /api/v1/auth/validate_token(.:format)    devise_token_auth/token_validations#validate_token
 ------------------------------------------------------------------------------------------------
 api_v1_sessions                 GET    /api/v1/auth/sessions(.:format)    api/v1/sessions#index
-
+@          @@          @@          @@          @@          @@          @@          @@          @
+未課題
+@          @@          @@          @@          @@          @@          @@          @@          @
+================================================================================================
+型定義
+import { AxiosResponse } from 'axios'; // eslint-disable-line import/named
+------------------------------------------------------------------------------------------------
+export const signUp = (params: SignUpParams): Promise<AxiosResponse<SignUpResponse>> => {
+  return client.post('/auth', params);
+};
+------------------------------------------------------------------------------------------------
+export type SignUpResponse = {
+  data: {
+    status: string;
+    message: string;
+    data: User;
+  };
+};
+------------------------------------------------------------------------------------------------
+TypeScriptの型定義は、コード内で利用するデータの構造を明示的に指定するためのものです。
+この場合、`status`、`message`、および`User`型のデータを含む`data`フィールドだけを利用しているため、それらだけ
+を型として定義しています。
+レスポンスの全体を受け取りますが、その中で実際に使用するdataフィールドに含まれるstatus、message、およびUser型の
+データだけを型定義しています。
+一般的にはレスポンスの中で実際にアプリケーションで使用する値だけを型定義します。これにより型定義が適切な規模で保たれ
+、また不要なフィールドに対する変更が型定義に影響を与えないようにします。
+------------------------------------------------------------------------------------------------
+TypeScriptは静的型付けのためのツールであり、その主な目的はコードの安全性と可読性を高めることです。レスポンスオブジ
+ェクトのすべてのフィールドを型定義に含めることも可能ですが、利用しないフィールドまで型定義すると、型定義が複雑になり
+、可読性が下がる可能性があります。
+TypeScriptの型定義は、コード内で利用するデータの構造を明示的に指定するものであり、レスポンス自体を受け取るかどうか
+に影響を与えるものではありません。
+型定義がないフィールドがあっても、それらのフィールドはレスポンス内に存在し、JavaScriptのコードからはアクセス可能で
+す。
+ただし、そのフィールドをTypeScriptのコードから直接アクセスしようとすると、TypeScriptは警告を出します。
 */

@@ -26,6 +26,7 @@ export const useSignIn = () => {
     };
     try {
       const res = await signIn(params);
+      console.log(`サインインのres${JSON.stringify(res.data)}`);
       if (res.status === 200) {
         // ログインに成功したら、Cookieにアクセストークン、クライアント、uidを保存
         Cookies.set('_access_token', res.headers['access-token']);

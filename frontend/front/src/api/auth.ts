@@ -31,7 +31,7 @@ export const signOut = () => {
 export const getAuthenticatedUser = () => {
   // トークンがない場合は何もしない
   if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
-  console.log('getAuthenticatedUserが呼ばれた');
+  // console.log('getAuthenticatedUserが呼ばれた');
   return client.get('/authenticated_users', {
     headers: {
       'access-token': Cookies.get('_access_token'),

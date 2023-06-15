@@ -20,6 +20,7 @@ export const useSignIn = () => {
   // ------------------------------------------------------------------------------------------------
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    // paramsオブジェクトを作成、emailとpasswordを格納
     const params: SignInParams = {
       email: email,
       password: password,

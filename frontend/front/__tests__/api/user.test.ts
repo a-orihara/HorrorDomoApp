@@ -27,11 +27,15 @@ describe('updateUser関数のテスト', () => {
   let formData: any;
 
   beforeEach(() => {
+    // mockResponseに空オブジェクトをセット
     mockResponse = { data: {} };
+    // client.putの戻り値に空オブジェクトをセット
     (client.put as jest.Mock).mockResolvedValue(mockResponse);
     formData = { name: 'test' };
   });
+
   it('client.putが正しいパスで呼ばれる', async () => {
+    // このupdateUser内のclient.putの戻り値は、{ data: {} }
     await updateUser(formData);
     expect(client.put).toHaveBeenCalledWith('/auth', formData, expect.anything());
   });

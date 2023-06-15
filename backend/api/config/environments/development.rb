@@ -32,11 +32,16 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
+  # [メーラーが送れなくとも気にしないこと。]
   config.action_mailer.raise_delivery_errors = false
+
+  # 1 mailer setting
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
+  # [Railsのロガーに非推奨のお知らせを出力する。]
   config.active_support.deprecation = :log
 
   # Raise exceptions for disallowed deprecations.
@@ -65,3 +70,15 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 end
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+Railsが生成するURLのデフォルトのホスト名とポート番号を設定しています。
+この設定は、主にActionMailer（Railsのメール送信機能）で使用されます。
+------------------------------------------------------------------------------------------------
+host: 'localhost'：Railsが生成するURLのホスト名をlocalhostに設定しています。
+例えば、メール内にアプリケーションのリンクを含める場合、このホスト名が使用されます。
+port: 3000：Railsが生成するURLのポート番号を3000に設定しています。
+開発環境では通常、Railsアプリケーションはポート3000で実行されるため、この設定が必要です。
+=end

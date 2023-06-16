@@ -23,14 +23,13 @@ Devise.setup do |config|
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
 
-  # ==> Mailer Configuration
-  # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class
-  # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
-  # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+# [ ==> メーラーの設定
+# Devise::Mailerに表示されるメールアドレスを設定します、
+# デフォルトの "from "パラメータを持つ独自のメーラークラスを使用する場合は、上書きされることに注意してください。]
+  config.mailer_sender = ENV['EMAIL_ADDRESS']
+  # [電子メールの送信を担当するクラスを設定する。]
+  config.mailer = 'Devise::Mailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'

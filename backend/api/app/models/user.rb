@@ -4,7 +4,7 @@
 class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
   # 4
   include DeviseTokenAuth::Concerns::User
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形

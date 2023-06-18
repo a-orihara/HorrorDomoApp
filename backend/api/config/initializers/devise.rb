@@ -1,5 +1,4 @@
-# rails g devise:installで追加されたファイル
-# Deviseの初期設定ファイルです。アプリケーションの設定に合わせて変更することができます。
+# 1 rails g devise:installで追加されたファイル
 
 # frozen_string_literal: true
 
@@ -23,14 +22,14 @@ Devise.setup do |config|
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'
 
-  # ==> Mailer Configuration
-  # Configure the e-mail address which will be shown in Devise::Mailer,
-  # note that it will be overwritten if you use your own mailer class
-  # with default "from" parameter.
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
 
-  # Configure the class responsible to send e-mails.
-  # config.mailer = 'Devise::Mailer'
+# [ ==> メーラーの設定
+# Devise::Mailerに表示されるメールアドレスを設定します、
+# デフォルトの "from "パラメータを持つ独自のメーラークラスを使用する場合は、上書きされることに注意してください。]
+  # 2
+  config.mailer_sender = ENV['EMAIL_ADDRESS']
+  # [電子メールの送信を担当するクラスを設定する。]
+  config.mailer = 'Devise::Mailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'
@@ -314,3 +313,23 @@ Devise.setup do |config|
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+Deviseの初期設定ファイルです。アプリケーションの設定に合わせて変更することができます。
+Deviseの様々な挙動、例えばメール送信の設定、パスワードの長さや複雑さ、認証トークンの有効期限などをこのファイル内で
+設定できます。
+================================================================================================
+2
+config.mailer_sender = ENV['EMAIL_ADDRESS']
+Deviseが送信するメールの「送信元アドレス」を設定するものです。
+ここで設定したアドレスが、パスワードリセットメールや確認メールなどDeviseが送信する全てのメールの送信元となります。
+環境変数EMAIL_ADDRESSに設定された値が使用されます。
+------------------------------------------------------------------------------------------------
+config.mailer = 'Devise::Mailer'
+Deviseが使用するメーラークラスを設定するものです。
+メーラークラスとは、メールの送信処理を行うクラスのことで、ここではDeviseがデフォルトで提供している
+Devise::Mailerが指定されています。
+もしDeviseのメール送信にカスタマイズが必要な場合、自分で定義したメーラークラスを指定することも可能です。
+=end

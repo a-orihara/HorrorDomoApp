@@ -6,12 +6,14 @@ import { SignInParams, SignUpParams } from '../../src/types';
 jest.mock('../../src/api/client');
 jest.mock('js-cookie');
 
-// すべてのテストに対応するグローバル設定
+// すべてのテストの前にモックをリセット
 beforeEach(() => {
+  // '../../src/api/client'内の各clientメソッドに対して
   (client.get as jest.Mock).mockReset();
   (client.post as jest.Mock).mockReset();
   (client.delete as jest.Mock).mockReset();
   (Cookies.get as jest.Mock).mockReset();
+  // すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
   (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
 });
 
@@ -21,7 +23,9 @@ describe('signUp関数のテスト', () => {
   let params: SignUpParams;
 
   beforeEach(() => {
+    // mockResponseに空オブジェクトをセット
     mockResponse = { data: {} };
+    // client.putの戻り値に空オブジェクトをセット
     (client.post as jest.Mock).mockResolvedValue(mockResponse);
     params = { name: 'test', email: 'test@example.com', password: 'password', passwordConfirmation: 'password' };
   });

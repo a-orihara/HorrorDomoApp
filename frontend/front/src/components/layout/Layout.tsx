@@ -4,7 +4,6 @@ import Footer from '../organisms/Footer';
 import Header from '../organisms/Header';
 
 type LayoutProps = {
-  // title?: string;
   children: React.ReactNode;
   title: string;
 };

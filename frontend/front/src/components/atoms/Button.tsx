@@ -40,7 +40,6 @@ type ButtonProps = React.ComponentProps<'button'>;
 React.ComponentPropsにchildren: React.ReactNode、className?: stringがあるのに、
 intersection型（交差型）にするのは、Buttonコンポーネントの独自のプロパティが明示的に示され、よりわかりやすく
 なるため。
-
 ------------------------------------------------------------------------------------------------
 &の意味は、intersection型（交差型）を表しています。交差型は、複数の型を「&」でつないで、2つ以上の型を結合するこ
 とができます。

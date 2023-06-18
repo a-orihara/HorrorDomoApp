@@ -2,39 +2,39 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
   def change
 
     create_table(:users) do |t|
-      ## 1 Required
+      ## 1 Required 暗号化されたパスワードを保存するためのカラムを追加する
       t.string :provider, :null => false, :default => "email"
       t.string :uid, :null => false, :default => ""
 
-      ## 2 Database authenticatable
+      ## 2 Database authenticatable パスワードを暗号化して保存する
       t.string :encrypted_password, :null => false, :default => ""
 
-      ## 3 Recoverable
+      ## 3 Recoverable パスワードをリセットする
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
       t.boolean  :allow_password_change, :default => false
 
-      ## 4 Rememberable
+      ## 4 Rememberable ログイン状態を保持する
       t.datetime :remember_created_at
 
-      ## 5 Confirmable
+      ## 5 Confirmable 登録の際にメール確認を行う
       t.string   :confirmation_token
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
       t.string   :unconfirmed_email # Only if using reconfirmable
 
-      ## 6 Lockable
+      ## 6 Lockable ログイン試行回数を制限する
       # t.integer  :failed_attempts, :default => 0, :null => false # Only if lock strategy is :failed_attempts
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
-      ## 7 User Info
+      ## 7 User Info ユーザー情報を保存する
       t.string :name
       # t.string :nickname
       # t.string :image
       t.string :email
 
-      ## 8 Tokens
+      ## 8 Tokens トークンを保存する
       t.text :tokens
 
       t.timestamps
@@ -51,7 +51,6 @@ end
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-
 Required
 providerとuidの2つのカラムを必須とする機能です。providerは認証プロバイダーを示す文字列、uidはそのプロバイダー
 によって割り当てられた識別子を示します。
@@ -69,9 +68,7 @@ uid
 ダーから提供される識別子などが使用されます。
 ================================================================================================
 2
-
 Database authenticatable
-
 Deviseの認証機能の一つで、パスワードを暗号化して保存し、認証に使用する機能です。ユーザーテーブルに
 encrypted_passwordカラムを追加する必要があり、パスワードを登録すると自動的にハッシュ化され保存されます。ユーザ
 ーがログインすると、入力されたパスワードがハッシュ化され、保存されたパスワードと比較されます。パスワードが一致した
@@ -84,7 +81,6 @@ encrypted_password
 暗号化されたパスワードを保存するためのカラムです。このカラムは、ユーザーがパスワードを変更したときに更新されます。
 ================================================================================================
 3
-
 Recoverable
 ユーザーがパスワードを忘れた場合にリセットすることができる機能です。
 ユーザーがパスワードリセットをリクエストすると、reset_password_token属性に一意のトークンが生成されます。このト
@@ -102,7 +98,6 @@ allow_password_change
 パスワード変更を許可するかどうかを判断するためのブール値。デフォルトでは許可されていません。
 ================================================================================================
 4
-
 Rememberable
 ユーザーがブラウザを閉じた後にもログイン状態を保持するための機能です。
 Rememberable機能を使用するためには、モデルに:rememberableオプションを追加する必要があります。
@@ -111,28 +106,27 @@ remember_created_at
 rememberable機能を使用するときに必要となる、remember_tokenの作成日時を記録する。
 ================================================================================================
 5
-
 Confirmable
 ユーザーがサインアップした後にメールアドレスを送信して確認を行う機能。
 ------------------------------------------------------------------------------------------------
 :confirmation_token
-確認トークンを保存するためのカラムです。ユーザーがアカウントを作成すると、自動的にランダムな確認トークンが生成され
-ます。ユーザーが確認トークンをクリックすると、アカウントが確認され、:confirmed_atカラムに確認された日時が記録さ
-れます。
+確認トークンを保存するためのカラムです。
+ユーザーがアカウントを作成すると、自動的にランダムな確認トークンが生成されます。ユーザーが確認トークンをクリックする
+と、アカウントが確認され、:confirmed_atカラムに確認された日時が記録されます。
 ------------------------------------------------------------------------------------------------
 :confirmed_at
-アカウントが確認された日時を記録するためのカラムです。ユーザーが確認トークンをクリックしたときに更新されます。
+アカウントが確認された日時を記録するためのカラムです。
+ユーザーが確認トークンをクリックしたときに更新されます。
 ------------------------------------------------------------------------------------------------
 :confirmation_sent_at
 確認トークンのメールが送信された日時を記録するためのカラムです。
 ------------------------------------------------------------------------------------------------
 :unconfirmed_email
-ユーザーが変更しようとしている未確認のメールアドレスを保存するためのカラムです。このカラムはreconfirmableオプショ
+ユーザーが変更しようとしている未確認のメールアドレスを保存するためのカラムです。
+このカラムはreconfirmableオプショ
 ンが有効になっている場合にのみ使用されます。
-
 ================================================================================================
 7
-
 User Info
 DeviseTokenAuthで定義されたUserモデルの属性（デフォは下記4つ）
 ------------------------------------------------------------------------------------------------
@@ -151,9 +145,7 @@ email
 
 ================================================================================================
 8
-
 Tokens
-
 ユーザーの認証トークン
 ------------------------------------------------------------------------------------------------
 t.text :tokens

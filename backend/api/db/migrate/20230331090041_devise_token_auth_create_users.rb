@@ -2,39 +2,39 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.1]
   def change
 
     create_table(:users) do |t|
-      ## 1 Required
+      ## 1 Required 暗号化されたパスワードを保存するためのカラムを追加する
       t.string :provider, :null => false, :default => "email"
       t.string :uid, :null => false, :default => ""
 
-      ## 2 Database authenticatable
+      ## 2 Database authenticatable パスワードを暗号化して保存する
       t.string :encrypted_password, :null => false, :default => ""
 
-      ## 3 Recoverable
+      ## 3 Recoverable パスワードをリセットする
       t.string   :reset_password_token
       t.datetime :reset_password_sent_at
       t.boolean  :allow_password_change, :default => false
 
-      ## 4 Rememberable
+      ## 4 Rememberable ログイン状態を保持する
       t.datetime :remember_created_at
 
-      ## 5 Confirmable
+      ## 5 Confirmable 登録の際にメール確認を行う
       t.string   :confirmation_token
       t.datetime :confirmed_at
       t.datetime :confirmation_sent_at
       t.string   :unconfirmed_email # Only if using reconfirmable
 
-      ## 6 Lockable
+      ## 6 Lockable ログイン試行回数を制限する
       # t.integer  :failed_attempts, :default => 0, :null => false # Only if lock strategy is :failed_attempts
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
-      ## 7 User Info
+      ## 7 User Info ユーザー情報を保存する
       t.string :name
       # t.string :nickname
       # t.string :image
       t.string :email
 
-      ## 8 Tokens
+      ## 8 Tokens トークンを保存する
       t.text :tokens
 
       t.timestamps

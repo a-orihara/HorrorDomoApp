@@ -34,8 +34,8 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # [メーラーが送れなくとも気にしない。デフォ：false]
-  config.action_mailer.raise_delivery_errors = false
-
+  # 5 メールの送信エラーが発生した際に例外（エラー）を発生させるかどうかを指定
+  config.action_mailer.raise_delivery_errors = true
   # 1 mailer setting
   # 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
@@ -137,5 +137,13 @@ STARTTLSコマンドを使用してTLS(Transport Layer Security)接続を自動�
 STARTTLSコマンドとは、SMTP通信を行っている途中で暗号化通信（TLSまたはSSL）に切り替えるためのコマンドです。
 SMTP通信を開始する際に自動的にSTARTTLSコマンドを送信し、TLS接続を開始するかどうかを指定するものです。
 これにより、メールの送信処理が暗号化され、安全に行われます。
+================================================================================================
+5
+config.action_mailer.raise_delivery_errors = false
+メールの送信エラーが発生した際に例外（エラー）を発生させるかどうかを設定
+falseに設定すると、メールの送信に失敗したとしてもRailsは例外を発生させません。つまり、メールの送信失敗がアプリケー
+ションの動作に影響を及ぼさないようになります。
+ただし、この設定が原因でメールの送信エラーが静かに無視され、問題が見逃される可能性があります。そのため、開発環境やテ
+スト環境ではエラーを発見しやすいようtrueに設定することが多いです。
 
 =end

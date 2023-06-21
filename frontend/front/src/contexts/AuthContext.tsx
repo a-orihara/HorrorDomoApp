@@ -11,6 +11,19 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+// 1
+// export const AuthContext = createContext(
+//   {} as {
+//     loading: boolean;
+//     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+//     isSignedIn: boolean;
+//     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+//     currentUser: User | undefined;
+//     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+//     handleGetCurrentUser: () => Promise<void>;
+//   }
+// );
+
 type AuthContextProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +34,6 @@ type AuthContextProps = {
   handleGetCurrentUser: () => Promise<void>;
 };
 
-// 1
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 // @          @@          @@          @@          @@          @@          @@          @@          @
@@ -41,16 +53,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
-      console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
+      // console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
       // サインインしていたら、
       if (res?.data.isLogin === true) {
         // サインイン状態に変更
         setIsSignedIn(true);
         // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
-        console.log(`handleGetCurrentUser:${JSON.stringify(res?.data.data)}`);
+        console.log(`handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
       } else {
-        console.log('handleGetCurrentUser:No current user');
+        console.log('handleGetCurrentUser:ノーcurrent user');
       }
     } catch (err) {
       console.log(err);
@@ -58,12 +70,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     setLoading(false);
   };
-  console.log(`AuthProviderが呼ばれた。カレント:${JSON.stringify(currentUser)}`);
+  // console.log(`AuthProviderが呼ばれた。カレント:${JSON.stringify(currentUser)}`);
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
     handleGetCurrentUser();
-    console.log('AuthContextのuseEffectが発火');
+    console.log('AuthContext-useEffect-handleGetCurrentUserが発火');
   }, []);
 
   // ================================================================================================

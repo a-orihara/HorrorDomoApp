@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { useSignOut } from '../../hooks/auth/useSignOut';
 import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
 // ================================================================================================
 const Navigation = () => {
   // AuthContextから値を取得。Linkコンポーネントの表示制御に使用。
-  const { loading, isSignedIn } = useContext(AuthContext);
+  const { loading, isSignedIn } = useAuthContext();
   const router = useRouter();
   // useSignOut: ユーザーのサインアウト処理
   const handleSignOut = useSignOut();

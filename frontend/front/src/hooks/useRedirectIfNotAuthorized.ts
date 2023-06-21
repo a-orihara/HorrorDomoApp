@@ -18,7 +18,7 @@ export const useRedirectIfNotAuthorized = () => {
     if (!loading) {
       if (!currentUser) {
         setAlertSeverity('error');
-        setAlertMessage('ログインしていません');
+        setAlertMessage('ログインしてください');
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/signin');

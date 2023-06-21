@@ -9,7 +9,7 @@ const HomePage = () => {
   // showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
   // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
   const { showWelcomeMessage } = useFirstTimeLogin();
-  console.log('HomePage.tsxのcurrentUser:', currentUser);
+  // console.log('HomePage.tsxのcurrentUser:', currentUser);
 
   return (
     <div className='flex  flex-1 flex-col bg-green-200'>

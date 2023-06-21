@@ -11,6 +11,7 @@ class CreateMicroposts < ActiveRecord::Migration[6.1]
     add_index :microposts, [:user_id, :created_at]
   end
 end
+
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

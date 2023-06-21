@@ -2,7 +2,7 @@
 class Micropost < ApplicationRecord
   # 2
   belongs_to :user
-  # マイグレーションでnilチェックしているが、明示的に記載
+  # belongs_to :userで自動的にuser_idが設定され、マイグレーションでnilチェックしているが、明示的に記載
   validates :user_id, presence: true
   validates :content, presence: true, length: { maximum: 140 }
 end

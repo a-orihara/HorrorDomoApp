@@ -15,6 +15,7 @@ class User < ApplicationRecord
   validates :profile, length: { maximum: 160 }
   # 3
   has_one_attached :avatar
+  has_many :microposts
 end
 
 =begin

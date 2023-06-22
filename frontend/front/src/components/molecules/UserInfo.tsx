@@ -4,7 +4,9 @@ type UserInfoProps = {
   user: User;
   // avatarUrl: string | null;
 };
+
 const UserInfo = ({ user }: UserInfoProps) => {
+  // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     <div className='flex-1'>
       {user.avatarUrl && <img src={user.avatarUrl} alt='User Avatar' />}

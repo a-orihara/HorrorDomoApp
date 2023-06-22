@@ -11,7 +11,7 @@ export const useUpdateUser = () => {
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<File | null>(null);
-  const { currentUser, setCurrentUser } = useAuthContext();
+  const { currentUser, setCurrentUser, handleGetCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
@@ -33,8 +33,9 @@ export const useUpdateUser = () => {
       const res = await updateUser(formData);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        // 現在のユーザー情報をセット
-        setCurrentUser(res.data.data);
+        // 更新後のユーザー情報をセット
+        // setCurrentUser(res.data.data);
+        handleGetCurrentUser();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :authenticated_users, only: %i[index]
       # api/v1/users
       resources :users, only: %i[index show]
+      # api/v1/microposts
+      resources :microposts, only: %i[index show create destroy]
 
       # api/v1/admin/users
       namespace :admin do

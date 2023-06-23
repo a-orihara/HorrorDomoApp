@@ -47,6 +47,11 @@ AllCops:
 # [Cop名]:
 #   Enabled: false
 
+# 関連の外部キーに対して不要な存在性のバリデーションが設定されている場合に警告を表示する
+# *学習用に一旦falseにする
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Enabled: false
+
 # 設定が厳しいので一旦全てfalseにする
 Metrics:
   Enabled: false

@@ -15,6 +15,7 @@ class User < ApplicationRecord
   validates :profile, length: { maximum: 160 }
   # 3
   has_one_attached :avatar
+  # 5
   has_many :microposts, dependent: :destroy
 end
 
@@ -115,4 +116,11 @@ include DeviseTokenAuth::Concerns::User
 `include DeviseTokenAuth::Concerns::User` によって、Userモデルにトークン認証に必要なメソッドやバリデーシ
 ョンが追加されます。これにより、APIモードでの認証が容易になります。
 
+================================================================================================
+5
+dependent: :destroy
+ユーザーが削除されたときに、そ のユーザーに紐付いた(そのユーザーが投稿した)マイクロポストも一緒に削除されるようにな
+ります。
+これは、管理者がシステムからユーザーを削除したとき、持ち主の存在しないマイクロポストがデータベースに取り残されてしま
+う問題を防ぎます。
 =end

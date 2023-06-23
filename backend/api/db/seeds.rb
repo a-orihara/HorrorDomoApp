@@ -31,18 +31,32 @@ user3 = User.create!(
   profile: Faker::Lorem.sentence(word_count: 20),
 )
 
+users = [user1, user2, user3]
+
+users.each do |user|
+  3.times do
+    content = Faker::Lorem.characters(number: 77)
+    user.microposts.create!(content: content)
+  end
+end
+
 # 追加のユーザーをまとめて生成する
 77.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
   profile = Faker::Lorem.sentence(word_count: 20)
-  User.create!(name:  name,
+  user = User.create!(name:  name,
                 email: email,
                 password:              password,
                 password_confirmation: password,
                 profile: profile) # プロフィールを追加
+  3.times do
+    content = Faker::Lorem.characters(number: 77)
+    user.microposts.create!(content: content)
+  end
 end
+
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @

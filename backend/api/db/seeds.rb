@@ -36,7 +36,7 @@ users = [user1, user2, user3]
 users.each do |user|
   3.times do
     content = Faker::Lorem.characters(number: 77)
-    user.microposts.create!(content: content)
+    user.posts.create!(content: content)
   end
 end
 
@@ -53,7 +53,7 @@ end
                 profile: profile) # プロフィールを追加
   3.times do
     content = Faker::Lorem.characters(number: 77)
-    user.microposts.create!(content: content)
+    user.posts.create!(content: content)
   end
 end
 

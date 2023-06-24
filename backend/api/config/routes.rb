@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       # api/v1/users
       resources :users, only: %i[index show]
       # api/v1/microposts
-      resources :microposts, only: %i[index show create destroy]
+      resources :posts, only: %i[index show create destroy]
 
       # api/v1/admin/users
       namespace :admin do

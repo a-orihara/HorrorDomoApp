@@ -61,11 +61,11 @@ RSpec.describe User, type: :model do
     # ユーザーを作成
     let(:user) { create(:user) }
 
-    it '投稿したユーザが削除された場合、そのユーザのMicropostも削除されること' do
-      # そのユーザーが投稿したMicropostを作成
-      create(:micropost, user: user)
-      # 7 user.destroyを実行することによって、Micropostの数が1つ減ることを確認
-      expect { user.destroy }.to change(Micropost, :count).by(-1)
+    it '投稿したユーザが削除された場合、そのユーザのPostも削除されること' do
+      # そのユーザーが投稿したPostを作成
+      create(:post, user: user)
+      # 7 user.destroyを実行することによって、Postの数が1つ減ることを確認
+      expect { user.destroy }.to change(Post, :count).by(-1)
     end
   end
 end

@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import client from './client';
 
-export const getMicropostList = () => {
-  return client.get('/microposts', {
+export const getPostList = () => {
+  return client.get('/posts', {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

@@ -16,7 +16,7 @@ class User < ApplicationRecord
   # 3
   has_one_attached :avatar
   # 5
-  has_many :microposts, dependent: :destroy
+  has_many :posts, dependent: :destroy
 end
 
 =begin

@@ -1,7 +1,7 @@
 # 1
 FactoryBot.define do
   # 2
-  factory :micropost do
+  factory :post do
     content { "Content" }
     # 3 user { association :user }の省略形
     user
@@ -16,10 +16,10 @@ FactoryBotを使用してモデルのファクトリーを定義するための�
 に使用されます。
 ================================================================================================
 2
-FactoryBotはファクトリ名（この場合:micropost）から自動的にモデルクラスを推測します。
+FactoryBotはファクトリ名（この場合:post）から自動的にモデルクラスを推測します。
 このため、ファクトリ名がモデル名と一致している場合は、クラスを指定しなくても問題ありません。
 ファクトリ名が一致していない場合、class名を指定する。
-factory :orange, class: Micropost
+factory :orange, class: Picropost
 end
 ================================================================================================
 3
@@ -42,7 +42,7 @@ association :userと指定することで、:userという名前のファクト�
 ------------------------------------------------------------------------------------------------
 その他、userがnilの場合の書き方
 user { nil }
-user { nil } の user は micropost モデルの user アソシエーションを指しており、実際には user_id という外部
+user { nil } の user は post モデルの user アソシエーションを指しており、実際には user_id という外部
 キーを表しています。
 ------------------------------------------------------------------------------------------------
 他の書き方
@@ -50,12 +50,12 @@ user { nil } の user は micropost モデルの user アソシエーション�
 てそのオブジェクトを使いたい場合には、以下のように書くことができます。
 
 FactoryBot.define do
-  factory :micropost do
+  factory :post do
     content { "MyContent" }
     user { FactoryBot.create(:user) }
   end
 end
 
-ここで user { FactoryBot.create(:user) } と書くことで、micropost を作成する際に新たに user も一緒に作成さ
-れ、その user が micropost の user アソシエーションに設定されます。
+ここで user { FactoryBot.create(:user) } と書くことで、post を作成する際に新たに user も一緒に作成さ
+れ、その user が post の user アソシエーションに設定されます。
 =end

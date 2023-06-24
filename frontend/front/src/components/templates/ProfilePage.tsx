@@ -2,14 +2,12 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useGetPostList from '../../hooks/post/useGetPostList';
 import useGetUserDataById from '../../hooks/user/useGetUserDataById';
-import PostListItem from '../atoms/PostListItem';
+import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
 const ProfilePage = () => {
   // const [user, setUser] = useState<User | null>(null);
-  // ポストデータを保持するためのStateを追加
-  // const [posts, setPosts] = useState<Post[]>([]);
   const { posts } = useGetPostList();
   const router = useRouter();
   // 1
@@ -32,12 +30,7 @@ const ProfilePage = () => {
         <Sidebar></Sidebar>
         <UserInfo user={user}></UserInfo>
         <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
-        <br />
-        {posts.map((post) => (
-          <PostListItem key={post.id} post={post}></PostListItem>
-        ))}
-        <br />
-        <p>ふは</p>
+        <PostList posts={posts}></PostList>
       </div>
     </div>
   );

@@ -31,7 +31,7 @@ user3 = User.create!(
   profile: Faker::Lorem.sentence(word_count: 20),
 )
 
-users = [user1, user2, user3]
+users = [user1, user2]
 
 users.each do |user|
   3.times do

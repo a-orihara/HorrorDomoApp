@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { getUserById } from '../../api/user';
-import { User } from '../../types';
+import { User } from '../../types/user';
 
 // 1 idで指定したユーザーのユーザー情報を取得する
 const useGetUserDataById = (id: string | string[] | undefined) => {

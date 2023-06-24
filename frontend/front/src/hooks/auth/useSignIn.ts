@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { SignInParams } from '../../types';
+import { SignInParams } from '../../types/user';
 
 // ================================================================================================
 export const useSignIn = () => {

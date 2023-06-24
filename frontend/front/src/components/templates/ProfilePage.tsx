@@ -1,12 +1,17 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getPostList } from '../../api/post';
 import useGetUserDataById from '../../hooks/user/useGetUserDataById';
+import { Post } from '../../types/post';
+import PostListItem from '../atoms/PostListItem';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 
 // ================================================================================================
 const ProfilePage = () => {
   // const [user, setUser] = useState<User | null>(null);
+  // ポストデータを保持するためのStateを追加
+  const [posts, setPosts] = useState<Post[]>([]);
   const router = useRouter();
   // 1
   const { id } = router.query;
@@ -16,9 +21,7 @@ const ProfilePage = () => {
   useEffect(() => {
     handleGetUserDataById();
   }, [handleGetUserDataById]);
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+
   // allowPasswordChange: false;
   // email: 'soso@soso.com';
   // id: 3;
@@ -27,13 +30,50 @@ const ProfilePage = () => {
   // provider: 'email';
   // uid: 'soso@soso.com'
 
+  useEffect(() => {
+    const handleGetPostList = async () => {
+      try {
+        const data = await getPostList();
+        if (data.data.status == 200) {
+          console.log('200だった');
+          setPosts(data.data.data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    handleGetPostList();
+  }, []);
+  // useEffect(() => {
+  //   const handleGetPostList = async () => {
+  //     try {
+  //       const posts = await getPostList();
+  //       console.log('200だった');
+  //       setPosts(posts);
+  //     } catch (err) {
+  //       console.log('だめよ');
+  //     }
+  //   };
+  //   handleGetPostList();
+  // }, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
+
   // ================================================================================================
   return (
     <div className='flex  flex-1 flex-col bg-green-200'>
-      <div className='flex h-full flex-row bg-blue-200'>
+      <div className='flex h-full flex-col bg-blue-200'>
         <Sidebar></Sidebar>
         <UserInfo user={user}></UserInfo>
         <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
+        <br />
+        {posts.map((post) => (
+          <PostListItem key={post.id} post={post}></PostListItem>
+        ))}
+        <br />
+        <p>ふは</p>
       </div>
     </div>
   );

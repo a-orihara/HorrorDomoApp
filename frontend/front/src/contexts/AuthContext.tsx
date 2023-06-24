@@ -5,7 +5,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
-import { User } from '../types';
+import { User } from '../types/user';
 // ================================================================================================
 type AuthProviderProps = {
   children: React.ReactNode;

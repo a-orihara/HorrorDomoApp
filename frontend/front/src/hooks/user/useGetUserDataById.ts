@@ -16,7 +16,7 @@ const useGetUserDataById = (id: string | string[] | undefined) => {
       const res = await getUserById(id as string);
       const fetchedUser: User = res.data;
       // const fetchAvatarUrl = res.data.avatarUrl;
-      console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
+      // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       // console.log(`fetchAvatarUrl:${JSON.stringify(fetchAvatarUrl)}`);
       setUser(fetchedUser);
       // setAvatarUrl(fetchAvatarUrl);

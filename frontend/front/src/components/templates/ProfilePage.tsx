@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { getPostList } from '../../api/post';
+import { useEffect } from 'react';
+import useGetPostList from '../../hooks/post/useGetPostList';
 import useGetUserDataById from '../../hooks/user/useGetUserDataById';
-import { Post } from '../../types/post';
 import PostListItem from '../atoms/PostListItem';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
-
 // ================================================================================================
 const ProfilePage = () => {
   // const [user, setUser] = useState<User | null>(null);
   // ポストデータを保持するためのStateを追加
-  const [posts, setPosts] = useState<Post[]>([]);
+  // const [posts, setPosts] = useState<Post[]>([]);
+  const { posts } = useGetPostList();
   const router = useRouter();
   // 1
   const { id } = router.query;
@@ -21,41 +20,6 @@ const ProfilePage = () => {
   useEffect(() => {
     handleGetUserDataById();
   }, [handleGetUserDataById]);
-
-  // allowPasswordChange: false;
-  // email: 'soso@soso.com';
-  // id: 3;
-  // image: null;
-  // name: 'soso';
-  // provider: 'email';
-  // uid: 'soso@soso.com'
-
-  useEffect(() => {
-    const handleGetPostList = async () => {
-      try {
-        const data = await getPostList();
-        if (data.data.status == 200) {
-          console.log('200だった');
-          setPosts(data.data.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    handleGetPostList();
-  }, []);
-  // useEffect(() => {
-  //   const handleGetPostList = async () => {
-  //     try {
-  //       const posts = await getPostList();
-  //       console.log('200だった');
-  //       setPosts(posts);
-  //     } catch (err) {
-  //       console.log('だめよ');
-  //     }
-  //   };
-  //   handleGetPostList();
-  // }, []);
 
   if (!user) {
     return <div>Loading...</div>;

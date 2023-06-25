@@ -24,6 +24,7 @@ type AuthProviderProps = {
 //   }
 // );
 
+// 下記のkeyを持つオブジェクト型を作成
 type AuthContextProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;

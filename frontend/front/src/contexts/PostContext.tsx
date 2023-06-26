@@ -8,38 +8,46 @@ type PostProviderProps = {
 
 // 1
 type PostContextProps = {
-  posts: Post[];
+  posts: Post[] | undefined;
+  handleGetPostList: () => void;
 };
 
 // 2 デフォルト値はkeyがpostsの値が空の配列
-const PostContext = createContext<PostContextProps>({ posts: [] });
+const PostContext = createContext<PostContextProps | undefined>(undefined);
 
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getPostList();
-        if (data.data.status == 200) {
-          setPosts(data.data.data);
-        }
-      } catch (err) {
-        console.error(err);
+  const handleGetPostList = async () => {
+    try {
+      const data = await getPostList();
+      if (data.data.status == 200) {
+        setPosts(data.data.data);
+        console.log('handleGetPostListでpostがセット');
       }
-    };
-    fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    handleGetPostList();
   }, []);
 
   // .ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
   // valueプロパティを通じてデータを提供します。
   // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
-  return <PostContext.Provider value={{ posts }}>{children}</PostContext.Provider>;
+  return <PostContext.Provider value={{ posts, handleGetPostList }}>{children}</PostContext.Provider>;
 };
 
 // Postを取得するカスタムフック
-export const usePostContext = () => useContext(PostContext);
+export const usePostContext = () => {
+  const context = useContext(PostContext);
+  if (context === undefined) {
+    throw new Error('usePostContextはPostProvider内で使用しなければならない');
+  }
+  return context;
+};
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

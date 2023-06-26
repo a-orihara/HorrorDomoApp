@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import Modal from 'react-modal';
 import { AlertProvider } from '../contexts/AlertContext';
 import { AuthProvider } from '../contexts/AuthContext';
+import { PostProvider } from '../contexts/PostContext';
 import '../styles/globals.css';
 
 // 1 Appコンポーネントでアプリ全体の要素を設定する
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <AlertProvider>
-        <Component {...pageProps} />
+        <PostProvider>
+          <Component {...pageProps} />
+        </PostProvider>
       </AlertProvider>
     </AuthProvider>
   );

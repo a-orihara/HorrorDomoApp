@@ -1,18 +1,18 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import useGetPostList from '../../hooks/post/useGetPostList';
+import { usePostContext } from '../../contexts/PostContext';
 import useGetUserDataById from '../../hooks/user/useGetUserDataById';
 import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
 const ProfilePage = () => {
-  // const [user, setUser] = useState<User | null>(null);
-  const { posts } = useGetPostList();
+  const { posts } = usePostContext();
   const router = useRouter();
   // 1
   const { id } = router.query;
   const { user, handleGetUserDataById } = useGetUserDataById(id);
+  console.log(`ポスト${JSON.stringify(posts)}`);
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
@@ -26,11 +26,14 @@ const ProfilePage = () => {
   // ================================================================================================
   return (
     <div className='flex  flex-1 flex-col bg-green-200'>
-      <div className='flex h-full flex-col bg-blue-200'>
+      <div className='flex h-full flex-row bg-blue-200'>
         <Sidebar></Sidebar>
-        <UserInfo user={user}></UserInfo>
-        <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
-        <PostList posts={posts}></PostList>
+        <div className='bg-red-200'>
+          <UserInfo user={user}></UserInfo>
+        </div>
+        <div className='bg-blue-200'>
+          <PostList posts={posts}></PostList>
+        </div>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const ProfilePage = () => {
         <div className='bg-red-200'>
           <UserInfo user={user}></UserInfo>
         </div>
-        <div className='bg-blue-200'>
+        <div className='bg-green-200'>
           <PostList posts={posts}></PostList>
         </div>
       </div>

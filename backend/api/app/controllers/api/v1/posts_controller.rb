@@ -9,6 +9,16 @@ class Api::V1::PostsController < ApplicationController
     # 3
     render json: { status: '200', data: @posts }
   end
+
+  def show
+    user = User.find_by(id: params[:id])
+    if user
+      @posts = user.posts
+      render json: { status: '200', data: @posts }
+    else
+      render json: { status: '404', message: 'User not found' }
+    end
+  end
 end
 
 =begin

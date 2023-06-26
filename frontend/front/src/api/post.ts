@@ -10,3 +10,13 @@ export const getPostList = () => {
     },
   });
 };
+
+export const getPostById = (id: string) => {
+  return client.get(`/posts/${id}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};

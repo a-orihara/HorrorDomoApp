@@ -2,7 +2,7 @@ import { Post } from '../../types/post';
 import PostListItem from '../atoms/PostListItem';
 
 type PostListProps = {
-  posts: Post[] | undefined;
+  posts: Post[] | null;
 };
 
 const PostList = ({ posts }: PostListProps) => {

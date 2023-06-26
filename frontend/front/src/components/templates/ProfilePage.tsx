@@ -1,23 +1,26 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { usePostContext } from '../../contexts/PostContext';
-import useGetUserDataById from '../../hooks/user/useGetUserDataById';
+// import { usePostContext } from '../../contexts/PostContext';
+import { useGetPostById } from '../../hooks/post/useGetPostById';
+import useGetUserById from '../../hooks/user/useGetUserById';
 import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
 const ProfilePage = () => {
-  const { posts } = usePostContext();
+  // const { posts } = usePostContext();
   const router = useRouter();
   // 1
   const { id } = router.query;
-  const { user, handleGetUserDataById } = useGetUserDataById(id);
+  const { user, handleGetUserById } = useGetUserById(id);
+  const { posts, handleGetPostById } = useGetPostById(id);
   console.log(`ポスト${JSON.stringify(posts)}`);
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
-    handleGetUserDataById();
-  }, [handleGetUserDataById]);
+    handleGetUserById();
+    handleGetPostById();
+  }, [id, handleGetUserById, handleGetPostById]);
 
   if (!user) {
     return <div>Loading...</div>;

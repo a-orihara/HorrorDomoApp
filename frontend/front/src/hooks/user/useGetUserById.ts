@@ -3,12 +3,12 @@ import { getUserById } from '../../api/user';
 import { User } from '../../types/user';
 
 // 1 idで指定したユーザーのユーザー情報を取得する
-const useGetUserDataById = (id: string | string[] | undefined) => {
+const useGetUserById = (id: string | string[] | undefined) => {
   // ユーザー情報を格納するステート
   const [user, setUser] = useState<User | null>(null);
 
   // 2
-  const handleGetUserDataById = useCallback(async () => {
+  const handleGetUserById = useCallback(async () => {
     // 3
     if (!id) return;
     console.log('getUserDataById is called');
@@ -22,10 +22,10 @@ const useGetUserDataById = (id: string | string[] | undefined) => {
     }
   }, [id]);
 
-  return { user, handleGetUserDataById };
+  return { user, handleGetUserById };
 };
 
-export default useGetUserDataById;
+export default useGetUserById;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

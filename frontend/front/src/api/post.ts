@@ -11,6 +11,7 @@ export const getPostList = () => {
   });
 };
 
+// 指定したユーザーの投稿一覧を取得する
 export const getPostsByUserId = (userId: string) => {
   // 1
   return client.get(`/posts?user_id=${userId}`, {

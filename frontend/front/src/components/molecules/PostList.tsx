@@ -1,11 +1,13 @@
 import { Post } from '../../types/post';
+import { User } from '../../types/user';
 import PostListItem from '../atoms/PostListItem';
 
 type PostListProps = {
   posts: Post[] | null;
+  user: User;
 };
 
-const PostList = ({ posts }: PostListProps) => {
+const PostList = ({ posts, user }: PostListProps) => {
   // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
   if (!posts || posts.length === 0) {
     return (
@@ -16,12 +18,13 @@ const PostList = ({ posts }: PostListProps) => {
   }
   return (
     <div className='flex-1'>
-      <ul>
+      <h1 className='pl-1 font-spacemono text-lg md:text-3xl'>投稿データ</h1>
+      <ol>
         {/* 1 オプショナルチェインニング */}
         {posts?.map((post) => (
-          <PostListItem key={post.id} post={post}></PostListItem>
+          <PostListItem key={post.id} post={post} user={user}></PostListItem>
         ))}
-      </ul>
+      </ol>
     </div>
   );
 };

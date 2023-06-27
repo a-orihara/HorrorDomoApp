@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Sidebar = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useAuthContext();
   // ================================================================================================
   return (
-    <aside className='basic-border h-full w-32 bg-basic-purple p-4 md:w-48'>
+    <aside className='basic-border h-full bg-basic-purple p-4'>
       <nav className='h-full'>
         <ul className='flex  h-full flex-col items-center justify-around bg-basic-purple text-white md:text-2xl'>
           <h1 className='mb-2 text-black'>Account</h1>

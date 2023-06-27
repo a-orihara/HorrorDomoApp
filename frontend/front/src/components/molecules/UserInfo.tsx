@@ -8,7 +8,7 @@ type UserInfoProps = {
 const UserInfo = ({ user }: UserInfoProps) => {
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    <div className='flex-1'>
+    <div>
       {/* 1 */}
       <img
         src={user.avatarUrl || '/no_image_square.jpg'}

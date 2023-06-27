@@ -10,17 +10,19 @@ const PostList = ({ posts }: PostListProps) => {
   if (!posts || posts.length === 0) {
     return (
       <div>
-        <p>投稿がありません</p>
+        <h1>投稿がありません</h1>
       </div>
     );
   }
   return (
-    <ul>
-      {/* 1 オプショナルチェインニング */}
-      {posts?.map((post) => (
-        <PostListItem key={post.id} post={post}></PostListItem>
-      ))}
-    </ul>
+    <div className='flex-1'>
+      <ul>
+        {/* 1 オプショナルチェインニング */}
+        {posts?.map((post) => (
+          <PostListItem key={post.id} post={post}></PostListItem>
+        ))}
+      </ul>
+    </div>
   );
 };
 

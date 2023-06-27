@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { SignInParams } from '../../types';
+import { usePostContext } from '../../contexts/PostContext';
+import { SignInParams } from '../../types/user';
 
 // ================================================================================================
 export const useSignIn = () => {
@@ -15,6 +16,7 @@ export const useSignIn = () => {
   const { setIsSignedIn, setCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  const { handleGetPostList } = usePostContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -35,6 +37,7 @@ export const useSignIn = () => {
         Cookies.set('_uid', res.headers['uid']);
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
+        handleGetPostList();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

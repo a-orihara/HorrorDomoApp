@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { getAuthenticatedUser, signIn, signOut, signUp } from '../../src/api/auth';
 import client from '../../src/api/client';
-import { SignInParams, SignUpParams } from '../../src/types';
+import { SignInParams, SignUpParams } from '../../src/types/user';
 
 jest.mock('../../src/api/client');
 jest.mock('js-cookie');

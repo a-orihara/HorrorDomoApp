@@ -1,7 +1,7 @@
 import { render, waitFor } from '@testing-library/react';
 import { getAuthenticatedUser } from '../../src/api/auth';
 import { AuthContext, AuthProvider } from '../../src/contexts/AuthContext';
-import { User } from '../../src/types/index';
+import { User } from '../../src/types/user';
 
 jest.mock('../../src/api/auth');
 

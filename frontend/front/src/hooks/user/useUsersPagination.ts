@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { userIndex } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { User } from '../../types';
+import { User } from '../../types/user';
 
 // ユーザー一覧ページネーション用のカスタムフック
 export const useUsersPagination = (itemsPerPage: number) => {

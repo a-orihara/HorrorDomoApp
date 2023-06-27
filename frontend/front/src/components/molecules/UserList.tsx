@@ -1,4 +1,4 @@
-import { User } from '../../types';
+import { User } from '../../types/user';
 import UserListItem from '../atoms/UserListItem';
 
 type UserListProps = {

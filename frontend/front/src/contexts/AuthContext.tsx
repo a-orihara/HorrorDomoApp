@@ -5,25 +5,15 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
-import { User } from '../types';
+import { User } from '../types/user';
 // ================================================================================================
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
 // 1
-// export const AuthContext = createContext(
-//   {} as {
-//     loading: boolean;
-//     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-//     isSignedIn: boolean;
-//     setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-//     currentUser: User | undefined;
-//     setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-//     handleGetCurrentUser: () => Promise<void>;
-//   }
-// );
 
+// 下記のkeyを持つオブジェクト型を作成
 type AuthContextProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -53,9 +43,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
-      // console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
+      console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
       // サインインしていたら、
       if (res?.data.isLogin === true) {
+        // if (res && res.data.isLogin === true) {
         // サインイン状態に変更
         setIsSignedIn(true);
         // 現在のユーザー情報をセット
@@ -117,7 +108,6 @@ Contextではデータを渡す側をProviderと呼びデータを受け取る�
 全体で使用されるデータを保持するためのプレースホルダーを作成することです。このプレースホルダーには、アプリケーショ
 ンが実際のデータを取得する前に、一時的な値としてアクセスできるようにすることができます。また、この初期値は、別の値
 で上書きすることができるため、空のオブジェクトで定義することで柔軟性を持たせることもできます。
-
 ------------------------------------------------------------------------------------------------
 asは、TypeScriptの型アサーションの一種であり、ある型に対して強制的に別の型を割り当てるために使用されます。
 
@@ -135,7 +125,6 @@ let str = anyNum as string;
 て、変数strに代入しています。
 TypeScriptの型アサーションの一種である「as」は、開発者が明示的に型を規定するためのものです。asを使用することで、変
 数や式の型を、開発者が事前に定義することができます。
-
 ------------------------------------------------------------------------------------------------
 createContext の初期値として空オブジェクトを設定することで、AuthContext が作成される際に、特定の値がまだ設定
 されていなくても、コンテキストが適切に機能するようになります。
@@ -155,7 +144,6 @@ asで規定した型以外のプロパティは使えない？
 これはどういう時に見られる一般的な設定？
 これは、React のコンテキストを使用してアプリケーションの状態管理を行い、その状態を型安全に管理したい場合によく見
 られる設定です。TypeScript と組み合わせることで、状態管理に関連するバグのリスクを軽減できます。
-
 ------------------------------------------------------------------------------------------------
 currentUserをundefinedにすることで、現在のユーザーが存在しない状態を表現します。nullにする場合、あたかも値が存
 在しているように見えることがありますが、undefinedであれば、値が存在しないことを明示的に示すことができます。
@@ -176,7 +164,6 @@ JavaScriptでは、nullはオブジェクトが存在しないことを示すた
 getAuthenticatedUser()の返り値はユーザー情報か、undefinedです。
 その場合、elseが実行さconsole.log("No current user")で終了。
 tryで例外が発生すればcatchが実行される。
-
 ------------------------------------------------------------------------------------------------
 if (res?.data.isLogin === true)
 res?.data`の`?`は、オプショナルチェーニング演算子。もし `res` が `undefined` ならば、エラーを投げる代わりに
@@ -200,12 +187,10 @@ const [loading, setLoading] = useState(true);
 通常、API通信は非同期で行われるため、初期値にfalseを設定すると、初期レンダリング時にAPI通信が完了していないため
 に誤った結果が表示される可能性があります。そのため、初期状態ではAPI通信中であることを明示するため、trueを初期値と
 して設定するのが一般的です。
-
 ------------------------------------------------------------------------------------------------
 const [isSignedIn, setIsSignedIn] = useState(false);
 初期値をfalseと設定した理由は、最初は認証されていない状態から始まり、認証処理が完了してユーザーがログインするまで
 の間はfalseが維持されるからです。ログイン処理が完了した後には、isSignedInの値がtrueに更新されます。
-
 ------------------------------------------------------------------------------------------------
 const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 currentUser の型を User | undefined と定義することで、初期値として undefined を設定できるようにしています。
@@ -224,7 +209,6 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 がログインした状態でアプリケーションを開始した場合、currentUserが更新されるたびに、handleGetCurrentUser関数
 が実行されて、認証状態が確認されます。これにより、認証状態を迅速に反映し、アプリケーション全体で正しい挙動を実現す
 ることができます。
-
 ------------------------------------------------------------------------------------------------
 発火するタイミング
 
@@ -239,7 +223,6 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 し、現在の認証状態を確認する処理が行われることを意図しています。
 一般的には、初回レンダリング時のみuseEffectを実行させたい場合、依存配列に空の配列（[]）を指定するのが一般的です。
 これにより、useEffectはコンポーネントがマウントされた時にのみ実行されます。
-
 ------------------------------------------------------------------------------------------------
 AuthProvider を _app.tsx で使用すると、アプリケーション全体に認証機能を提供できます。AuthProvider の中にある
 useEffect の利用意図は、コンポーネントがマウントされたとき（アプリケーションが読み込まれたとき）に、認証済みのユー
@@ -279,4 +262,17 @@ useAuthContext` フック： このカスタムフックは、基本的に `useC
 
 `AuthContext.Provider` の子ではないコンポーネントで使用しようとすると、 `useContext(AuthContext)` は
 `undefined` を返します。
+
+@          @@          @@          @@          @@          @@          @@          @@          @
+export const AuthContext = createContext(
+  {} as {
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    isSignedIn: boolean;
+    setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
+    currentUser: User | undefined;
+    setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+    handleGetCurrentUser: () => Promise<void>;
+  }
+);
 */

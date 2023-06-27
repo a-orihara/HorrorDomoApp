@@ -1,10 +1,6 @@
 import axios, { AxiosInstance } from 'axios'; // eslint-disable-line import/named
 import applyCaseMiddleware from 'axios-case-converter';
 
-// applyCaseMiddleware:
-// axiosで受け取ったレスポンスの値をスネークケース→キャメルケースに変換
-// または送信するリクエストの値をキャメルケース→スネークケースに変換してくれるライブラリ
-
 // 1
 const options = {
   ignoreHeaders: true,
@@ -24,6 +20,10 @@ export default client;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+applyCaseMiddleware:
+axiosで受け取ったレスポンスの値をスネークケース→キャメルケースに変換
+または送信するリクエストの値をキャメルケース→スネークケースに変換してくれるライブラリ
+------------------------------------------------------------------------------------------------
 applyCaseMiddlewareに渡すオプションを設定。
 ignoreHeaders: trueは、HTTPヘッダーをキャメルケースに変換するのを無視するオプションである。
 ヘッダーに関してはケバブケースのままで良いので適用を無視するオプションを追加。

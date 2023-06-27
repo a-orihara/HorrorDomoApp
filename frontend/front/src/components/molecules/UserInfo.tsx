@@ -1,14 +1,14 @@
 // import Image from 'next/image';
-import { User } from '../../types';
+import { User } from '../../types/user';
 type UserInfoProps = {
   user: User;
   // avatarUrl: string | null;
 };
 
 const UserInfo = ({ user }: UserInfoProps) => {
-  // console.log(`UserInfoの${JSON.stringify(user)}`);
+  console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    <div className='flex-1'>
+    <div>
       {/* 1 */}
       <img
         src={user.avatarUrl || '/no_image_square.jpg'}

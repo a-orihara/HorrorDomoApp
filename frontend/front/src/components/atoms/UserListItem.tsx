@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useDeleteUser } from '../../hooks/user/useDeleteUser';
-import { User } from '../../types';
+import { User } from '../../types/user';
 // 複雑？
 
 // ================================================================================================

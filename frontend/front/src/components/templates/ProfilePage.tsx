@@ -1,39 +1,44 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import useGetUserDataById from '../../hooks/user/useGetUserDataById';
+// import { usePostContext } from '../../contexts/PostContext';
+import { useGetPostByUserId } from '../../hooks/post/useGetPostByUserId';
+import useGetUserById from '../../hooks/user/useGetUserById';
+import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
-
 // ================================================================================================
 const ProfilePage = () => {
-  // const [user, setUser] = useState<User | null>(null);
+  // const { posts } = usePostContext();
   const router = useRouter();
   // 1
   const { id } = router.query;
-  const { user, handleGetUserDataById } = useGetUserDataById(id);
+  const { user, handleGetUserById } = useGetUserById(id);
+  const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
-    handleGetUserDataById();
-  }, [handleGetUserDataById]);
+    handleGetUserById();
+    handleGetPostsByUserId();
+  }, [id, handleGetUserById, handleGetPostsByUserId]);
+
+  // 3
   if (!user) {
     return <div>Loading...</div>;
   }
-  // allowPasswordChange: false;
-  // email: 'soso@soso.com';
-  // id: 3;
-  // image: null;
-  // name: 'soso';
-  // provider: 'email';
-  // uid: 'soso@soso.com'
 
   // ================================================================================================
   return (
-    <div className='flex  flex-1 flex-col bg-green-200'>
-      <div className='flex h-full flex-row bg-blue-200'>
-        <Sidebar></Sidebar>
-        <UserInfo user={user}></UserInfo>
-        <h1>ここはユーザー詳細ページ:pages/users/[id]/index.tsx</h1>
+    <div className='flex w-full flex-1 flex-col bg-green-200'>
+      <div className='flex h-full flex-1 flex-row bg-blue-200'>
+        <div className='w-32  md:w-48'>
+          <Sidebar></Sidebar>
+        </div>
+        <div className='w-80 bg-red-200'>
+          <UserInfo user={user}></UserInfo>
+        </div>
+        <div className='flex-1 bg-green-200'>
+          <PostList posts={posts}></PostList>
+        </div>
       </div>
     </div>
   );
@@ -68,4 +73,14 @@ idが変更された場合、ユーザーデータを再度取得する必要が
 さらにuseCallback`により新しい `handleGetUserDataById` 関数が作成されますが、useCallbackは生成するだけで、
 この関数は自動的に実行されません。ProfilePage.tsx`の `useEffect` 内のように、明示的に呼び出されたときのみ実行
 されます。
+
+================================================================================================
+3
+return <div>Loading...</div>;を記載する理由
+<UserInfo user={user}></UserInfo>コンポーネントは、User型のuserプロパティを必須としています。
+しかし、ProfilePageコンポーネント内のuserはUser | null型です。そのため、userがnullの可能性があるときに、
+<UserInfo>コンポーネントをレンダリングしようとすると、TypeScriptは型の不一致を警告します。
+return <div>Loading...</div>;がある場合、userがnullのときにはこの行がレンダリングされ、以降のコード
+（<UserInfo user={user}></UserInfo>を含む）は実行されません。そのため、userがnullの場合でもTypeScriptのエ
+ラーは発生しないため、TypeScriptのエラーは表示されません。
 */

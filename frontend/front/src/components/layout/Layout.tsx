@@ -19,11 +19,8 @@ const Layout = ({ children, title = 'HorrorDomoApp' }: LayoutProps) => {
         <meta name='description' content='ホラー映画好きが集まる投稿サイトです' />
         <link rel='icon' href='/favicon.png' />
       </Head>
-
       <Header></Header>
-
       <main className='basic-border basic-border flex flex-1 flex-row bg-basic-orange'>{children}</main>
-
       <Footer></Footer>
     </div>
   );

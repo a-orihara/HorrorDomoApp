@@ -5,7 +5,7 @@ import { signUp } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { getErrorMessage } from '../../hooks/error';
-import { SignUpParams } from '../../types';
+import { SignUpParams } from '../../types/user';
 // ================================================================================================
 // サインアップ処理。非同期通信なので、async awaitを使う。
 const useSignUp = () => {

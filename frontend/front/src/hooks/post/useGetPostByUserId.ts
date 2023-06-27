@@ -1,17 +1,17 @@
 import { useCallback, useState } from 'react';
-import { getPostById } from '../../api/post';
+import { getPostsByUserId } from '../../api/post';
 import { Post } from '../../types/post';
 
 // frontend/front/src/hooks/post/useGetPostsByUserId.ts
-export const useGetPostById = (id: string | string[] | undefined) => {
+export const useGetPostByUserId = (id: string | string[] | undefined) => {
   const [posts, setPosts] = useState<Post[] | null>(null);
   // const { handleGetPostList } = usePostContext();
 
-  const handleGetPostById = useCallback(async () => {
+  const handleGetPostsByUserId = useCallback(async () => {
     if (!id) return;
     console.log('getPostsByUserId is called');
     try {
-      const res = await getPostById(id as string);
+      const res = await getPostsByUserId(id as string);
       const fetchedPosts: Post[] | null = res.data.data;
       // 仮定していますが、handleGetPostListが完了したら全てのポストが利用可能になり、
       // ここでuserIdに紐づくポストをフィルタリングすることができます
@@ -23,5 +23,5 @@ export const useGetPostById = (id: string | string[] | undefined) => {
     }
   }, [id]);
 
-  return { posts, handleGetPostById };
+  return { posts, handleGetPostsByUserId };
 };

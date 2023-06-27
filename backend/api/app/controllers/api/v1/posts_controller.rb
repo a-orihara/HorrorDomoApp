@@ -2,23 +2,33 @@ class Api::V1::PostsController < ApplicationController
   # 1
   before_action :authenticate_api_v1_user!
 
-  # 4
+  # 2
   def index
-    # 2
-    @posts = current_api_v1_user.posts
     # 3
+    if params[:user_id]
+      user = User.find_by(id: params[:user_id])
+      if user
+        @posts = user.posts
+      else
+        return render json: { status: '404', message: 'User not found' }
+      end
+    else
+      # 4
+      @posts = current_api_v1_user.posts
+    end
+    # 5
     render json: { status: '200', data: @posts }
   end
 
-  def show
-    user = User.find_by(id: params[:id])
-    if user
-      @posts = user.posts
-      render json: { status: '200', data: @posts }
-    else
-      render json: { status: '404', message: 'User not found' }
-    end
-  end
+  # def show
+  #   user = User.find_by(id: params[:id])
+  #   if user
+  #     @posts = user.posts
+  #     render json: { status: '200', data: @posts }
+  #   else
+  #     render json: { status: '404', message: 'User not found' }
+  #   end
+  # end
 end
 
 =begin
@@ -33,8 +43,45 @@ Devise Token Authによって提供されるメソッドで、APIリクエスト
 しかし、このメソッドが行うのは「認証」であり、「認可」ではありません。つまり、ユーザーがログインしていることは確認で
 きますが、そのユーザーが特定のリソース（ここではpost）に対して何を行って良いのか、というアクセス権限の管理はこれら
 のメソッドの範囲外です。
+
 ================================================================================================
 2
+/posts?user_id=${userId}で、rails側のpostコントローラーのindexアクション内の、if params[:user_id]が反応
+する仕組みは、HTTPリクエストが送られるときに、URLに含まれるクエリパラメータがRailsのparamsハッシュに自動的に追加
+されるためです。
+つまり、user_id=${userId}というクエリパラメータがURLに含まれていると、params[:user_id]でその値を取得すること
+ができます。
+------------------------------------------------------------------------------------------------
+paramsの仕組みは以下の通りです：
+paramsは、コントローラへ送られたリクエスト情報を含むハッシュのようなオブジェクトです。
+paramsには、URLのパスパラメータ、クエリパラメータ、POSTリクエストの本文など、リクエストに関連するさまざまな情報が
+含まれます。
+例えば、/users?name=Johnというリクエストがあった場合、params[:name]は"John"という値を返します。
+また、/users/1というリクエストがあった場合、params[:id]は"1"という値を返します。
+------------------------------------------------------------------------------------------------
+1. URLのパスパラメータとクエリパラメータの違いは次の通りです:
+
+- パスパラメータ:
+パスパラメータは、URLのパスの一部として渡されるパラメータです。
+例えば、`/users/:id`のようなURLパターンでは、`:id`がパスパラメータです。
+パスパラメータは、特定のリソース（ここではユーザー）を識別するために使用されます。
+パスパラメータは、Railsのルーティングで定義され、コントローラー内で`params[:id]`のようにアクセスされます。
+
+- クエリパラメータ:
+クエリパラメータは、URLの末尾に`?`を付けてキーと値のペアで指定されるパラメータです。
+例えば、`/users?name=John`のようなURLでは、`name=John`がクエリパラメータです。
+クエリパラメータは、特定のリクエストに関連する追加の情報を提供するために使用されます。
+クエリパラメータは、Railsのコントローラー内で`params[:name]`のようにアクセスされます。
+
+================================================================================================
+3
+if params[:user_id]
+この条件は、リクエストのパラメーターにuser_idが含まれているかどうかをチェックしています。
+もしuser_idが含まれていれば、指定されたuser_idに紐づくユーザーの投稿一覧を取得します。
+もしuser_idが含まれていない場合は、次のelse節の処理に進み、エラーになります。
+
+================================================================================================
+4
 current_api_v1_user
 Devise Token Auth gem が提供するヘルパーメソッドです。このメソッドは現在の認証済みユーザーを返します。
 そのため、そのユーザーの属性や関連するオブジェクト（例えば、そのユーザーが持つpostsなど）にアクセスすることができま
@@ -56,8 +103,16 @@ posts` は `User` モデルの `has_many :posts` 関連付けで `current_api_v1
 ストにアクセスすることができます。
 参考：user.posts
 User のマイクロポストの集合をかえす。
+------------------------------------------------------------------------------------------------
+エラー処理を書かない理由
+authenticate_api_v1_user!で認証済み確認。
+current_api_v1_userで、現在の認証済みユーザーに関する情報を取得。
+この二つにより、ユーザが自分の投稿にしかアクセスできない状態を実現している。
+このチェックは、authenticate_api_v1_user!とcurrent_api_v1_userにより自動的に行われる。
+そして、認証関連のエラー処理は、authenticate_api_v1_user!とcurrent_api_v1_userで自動的に行われるため。
+
 ================================================================================================
-3
+5
 render json: @postsから、render json: { data: @posts }へ変更
 ------------------------------------------------------------------------------------------------
 1.
@@ -83,11 +138,4 @@ render json: { data: @posts }
 各オブジェクトはそれぞれの投稿が持つ属性（id, content等）を表現しています。
 # { date:{ data:[{},{},{}] } } /（dataキーの値は、オブジェクトの配列というオブジェクトが返る。
 ================================================================================================
-4
-エラー処理を書かない理由
-authenticate_api_v1_user!で認証済み確認。
-current_api_v1_userで、現在の認証済みユーザーに関する情報を取得。
-この二つにより、ユーザが自分の投稿にしかアクセスできない状態を実現している。
-このチェックは、authenticate_api_v1_user!とcurrent_api_v1_userにより自動的に行われる。
-そして、認証関連のエラー処理は、authenticate_api_v1_user!とcurrent_api_v1_userで自動的に行われるため。
 =end

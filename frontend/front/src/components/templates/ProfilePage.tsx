@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 // import { usePostContext } from '../../contexts/PostContext';
-import { useGetPostById } from '../../hooks/post/useGetPostById';
+import { useGetPostByUserId } from '../../hooks/post/useGetPostByUserId';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
@@ -13,13 +13,13 @@ const ProfilePage = () => {
   // 1
   const { id } = router.query;
   const { user, handleGetUserById } = useGetUserById(id);
-  const { posts, handleGetPostById } = useGetPostById(id);
+  const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
     handleGetUserById();
-    handleGetPostById();
-  }, [id, handleGetUserById, handleGetPostById]);
+    handleGetPostsByUserId();
+  }, [id, handleGetUserById, handleGetPostsByUserId]);
 
   // 3
   if (!user) {

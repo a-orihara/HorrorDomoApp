@@ -6,7 +6,7 @@ type UserInfoProps = {
 };
 
 const UserInfo = ({ user }: UserInfoProps) => {
-  // console.log(`UserInfoの${JSON.stringify(user)}`);
+  console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     <div>
       {/* 1 */}

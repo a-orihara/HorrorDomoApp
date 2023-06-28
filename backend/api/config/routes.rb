@@ -11,8 +11,8 @@ Rails.application.routes.draw do
       resources :authenticated_users, only: %i[index]
       # api/v1/users
       resources :users, only: %i[index show]
-      # api/v1/microposts
-      resources :posts, only: %i[index show create destroy]
+      # api/v1/posts
+      resources :posts
 
       # api/v1/admin/users
       namespace :admin do
@@ -216,6 +216,29 @@ user_path                          # ユーザー情報を表示するGETリク�
 new_user_password_path            # パスワードリセット画面を表示するGETリクエスト用のパス
 edit_user_password_path           # パスワード再設定画面を表示するGETリクエスト用のパス
 user_password_path                # パスワード再設定処理を行うPUTリクエスト用のパス
+
+================================================================================================
+postのルート
+
+api_v1_posts GET    /api/v1/posts(.:format)     api/v1/posts#index
+            POST   /api/v1/posts(.:format)      api/v1/posts#create
+api_v1_post GET    /api/v1/posts/:id(.:format)  api/v1/posts#show
+            PATCH  /api/v1/posts/:id(.:format)  api/v1/posts#update
+            PUT    /api/v1/posts/:id(.:format)  api/v1/posts#update
+            DELETE /api/v1/posts/:id(.:format)  api/v1/posts#destroy
+------------------------------------------------------------------------------------------------
+生成されるパスのヘルパーメソッド
+- `api_v1_posts`: 対応するパスは`/api/v1/posts`で、HTTPメソッドは`GET`。全てのpostを取得するためのパス。
+- `new_api_v1_post`: 対応するパスは`/api/v1/posts/new`で、HTTPメソッドは`GET`。新規post作成画面のためのパ
+ス（APIではあまり使用されません）。
+- `edit_api_v1_post`: 対応するパスは`/api/v1/posts/:id/edit`で、HTTPメソッドは`GET`です。post編集画面のた
+めのパスです（APIではあまり使用されません）。
+- `api_v1_post`: 対応するパスは`/api/v1/posts/:id`で、HTTPメソッドは`GET`です。特定のpostを取得するパス。
+- `api_v1_posts`: 対応するパスは`/api/v1/posts`で、HTTPメソッドは`POST`です。新規postを作成するパス。
+- `api_v1_post`: 対応するパスは`/api/v1/posts/:id`で、HTTPメソッドは`PATCH`または`PUT`です。特定のpostを
+更新するためのパスです。
+- `api_v1_post`: 対応するパスは`/api/v1/posts/:id`で、HTTPメソッドは`DELETE`です。特定のpostを削除するた
+めのパスです。
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識

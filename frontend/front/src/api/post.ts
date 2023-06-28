@@ -11,6 +11,21 @@ export const getPostList = () => {
   });
 };
 
+export const createPost = (content: string) => {
+  return client.post('/posts', {
+    data: {
+      post: {
+        content: content,
+      },
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 export const getPostIndexByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {
     params: {

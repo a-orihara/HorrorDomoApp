@@ -9,13 +9,14 @@ class Api::V1::PostsController < ApplicationController
     per_page = params[:per_page] || 10
 
     if params[:user_id]
+      # 6
       user = User.find_by(id: params[:user_id])
       if user
         # @posts = user.posts
         @posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
       else
-        return render json: { status: '404', message: 'User not found' }
+        return render json: { status: '404', message: 'User not found' }, status: :not_found
       end
     else
       # 4
@@ -24,8 +25,7 @@ class Api::V1::PostsController < ApplicationController
       # total_posts = current_api_v1_user.posts.count
     end
     # 5
-    # render json: { status: '200', data: @posts }
-    render json: { status: '200', data: @posts, total_posts: total_posts }
+    render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
   end
 
   # def show
@@ -37,6 +37,27 @@ class Api::V1::PostsController < ApplicationController
   #     render json: { status: '404', message: 'User not found' }
   #   end
   # end
+
+  # 7
+  def create
+    # 7
+    @post = current_api_v1_user.posts.build(post_params)
+    if @post.save
+      # 8
+      render json: { status: '201', message: 'Post created', data: @post }, status: :created
+    else
+      # 9
+      render json: { status: '422', message: 'Post not created', errors: @post.errors }, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  # post_params で Strong Parameters を使っていることにより、content 属性だけWeb 経由で変更可能
+    def post_params
+      params.require(:post).permit(:content)
+    end
+
 end
 
 =begin
@@ -145,5 +166,91 @@ render json: { data: @posts }
 その内側のdataキーの値は投稿データを表現するオブジェクトの配列。
 各オブジェクトはそれぞれの投稿が持つ属性（id, content等）を表現しています。
 # { date:{ data:[{},{},{}] } } /（dataキーの値は、オブジェクトの配列というオブジェクトが返る。
+
 ================================================================================================
+6
+find_byはfindでも可能ですが、違いがあります。findメソッドは主キー（通常はid）を基にレコードを検索し、該当するレ
+コードがない場合はActiveRecord::RecordNotFoundエラーを発生させます。一方、find_byメソッドは指定した条件にマッ
+チする最初のレコードを返し、該当するレコードがない場合はnilを返します。つまり、find_byを使用すると、該当するレコー
+ドがない場合にアプリケーションがエラーで止まらずに、その後の処理を進めることができます。
+
+================================================================================================
+7
+current_api_v1_user
+DeviseTokenAuthが提供しており、ヘッダー情報に含まれる認証トークンを使用して、認証済みのユーザーを検索します。
+そして現在の認証済みのユーザーを取得します。
+------------------------------------------------------------------------------------------------
+posts
+現在のユーザーが持っている投稿を取得するためのメソッドです。
+has_many :postsのアソシエーションによってUserモデルはpostsメソッドを使えるようになります。これにより、特定のユ
+ーザーに関連する投稿を簡単に取得できます。
+post.ではダメです。なぜなら、has_many :postsのアソシエーションによりUserモデルは複数の投稿を持つことができ、
+postsメソッドを通じてこれらの投稿にアクセスすることができるからです。postではなくpostsを使用することで、ユーザー
+に関連するすべての投稿にアクセスできます。
+------------------------------------------------------------------------------------------------
+build(post_params)関数は、新しいPostオブジェクトをメモリ上に作成しますが、まだデータベースに保存はしません。
+引数post_paramsは、新しいPostオブジェクトを作成するためのパラメータです。post_paramsメソッドによって、パラメー
+タから必要な属性(:content)だけを抽出しています。
+buildはcreateでも可能ですが、違いがあります。buildは新しいオブジェクトをメモリ上に作成しますが、データベースには
+保存しません。一方、createは新しいオブジェクトを作成し、それをデータベースにすぐに保存します。なので、作成後に何ら
+かの処理を行いたい場合や、保存前にバリデーションを行いたい場合などはbuildを使用します。
+
+# -backend/api/app/controllers/api/v1/posts_controller.rb
+def create
+  @post = current_api_v1_user.posts.build(post_params)
+  if @post.save
+    render json: { status: '201', message: 'Post created', data: @post }, status: :created
+  else
+    render json: { status: '422', message: 'Post not created', errors: @post.errors }, status: :unprocessable_entity
+  end
+end
+
+================================================================================================
+8
+'201'はHTTPステータスコードで、「リソースが正常に作成された」という意味です。'200'は「リクエストが成功した」とい
+う一般的な成功を示すコードで、リソースが新規作成された場合には'201'を使用するのが一般的です。
+------------------------------------------------------------------------------------------------
+:createdはRailsで使用されるシンボルで、HTTPステータスコードの'201'を表します。このステータスコードは、リクエス
+トが成功し、新たにリソースが作成されたことを意味します。
+------------------------------------------------------------------------------------------------
+render json: { status: '201', message: 'Post created', data: @post }, status: :createdというコード
+におけるstatusの重複は、異なる目的のために存在します。
+内側のstatus: '201'はJSONレスポンスボディの一部で、フロントエンドがこのステータスを見てリクエストの結果を理解し
+ます。一方、外側のstatus: :createdはHTTPステータスコードを設定し、これはHTTPレスポンスヘッダーの一部として送信
+されます。
+フロントエンドはこのステータスコードを見てリクエストが成功したかどうかを瞬時に判断します。
+------------------------------------------------------------------------------------------------
+JSON レスポンス内の `status` キー (`{ status: '200', message: 'Post created', data: @post }`) は、
+フロントエンドアプリケーションのためのものです。このステータスは、JavaScript/TypeScript コードで直接使用するこ
+とができ、次に何をすべきかを決定することができます (例えば、エラー処理、リダイレクトなど)。
+
+レスポンスの HTTP ステータスコードを設定するために、Rails は `render json: {...}, status: :created` のよ
+うに JSON レスポンスの外側に `status: :created` を指定します。これはHTTPレスポンスヘッダの一部として送信され
+るステータスコードです。
+
+HTTPステータスコードは、リクエストの成功、失敗、その他の状態に関する情報を提供する標準化されたコードです。これらの
+ステータスコードは、ウェブブラウザを含むすべてのHTTPクライアントによって理解され、リクエストの低レベル処理に使用さ
+れます。冗長に見えますが、これらはそれぞれ異なる役割を担っています。
+------------------------------------------------------------------------------------------------
+1.HTTPステータスコードとJSONレスポンスボディ内のステータスコードの2つを設定する利点について詳しく説明します：
+
+**HTTPステータスコード**
+HTTPレスポンスのステータスラインに表示されるステータスコードです。これにより、フロントエンドはリクエストが成功した
+か、それとも何かエラーが発生したかを瞬時に知ることができます。これは一般的なプロトコルレベルの通信であり、ブラウザ
+や他のHTTPクライアントがリクエストの成功または失敗を自動的に判断できるようになっています。
+**JSONレスポンスボディ内のステータス**
+これはアプリケーションレベルの通信で、フロントエンドが具体的なアクション（例えば、新規作成、更新、削除など）が成功
+したかどうか、または特定のビジネスロジックが満たされたかどうかを理解するために使用します。これにより、フロントエン
+ドは更に詳細なエラーメッセージをユーザーに表示したり、特定のアクションをトリガーすることが可能になります。
+リクエストが成功したかどうかをフロントエンドが瞬時に判断できる利点は、ユーザーエクスペリエンスの向上につながります。
+具体的には、HTTPステータスコードを用いることで、フロントエンドはリクエストの結果を迅速に判断し、必要ならエラーメッ
+セージを即座に表示したり、成功した操作に基づいてUIを更新したりすることができます。その結果、アプリケーションのレス
+ポンスが速くなり、ユーザーにとって使いやすいアプリケーションとなります。
+
+================================================================================================
+9
+'422'はHTTPステータスコードで、「リクエストは適切に形成されているが、意味上のエラーや無効な操作のために処理できな
+い」を意味します。例えば、必要なパラメータが欠けている、またはパラメータの形式が無効であるといった場合に使われます。
+------------------------------------------------------------------------------------------------
+:unprocessable_entity（処理不能な実体）はRailsで使用されるシンボルで、HTTPステータスコードの'422'を表します。
 =end

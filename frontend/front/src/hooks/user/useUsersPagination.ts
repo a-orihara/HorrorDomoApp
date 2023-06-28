@@ -27,6 +27,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
         // 総ユーザー数をステートに格納する
         setTotalUsersCount(res.data.totalUsers);
       } catch (err: any) {
+        // userIndexのエラー処理
         setAlertSeverity('error');
         setAlertMessage(`${err.response.data.errors[0]}`);
         setAlertOpen(true);
@@ -122,7 +123,10 @@ handleGetUsersを使用してユーザー一覧を取得することができま
 handlePageChange
 ページネーションのページがクリックされた時に実行され、クリックされたページ番号を受け取り、
 setCurrentPage関数を使用して現在のページ番号を更新します。
-
+------------------------------------------------------------------------------------------------
+(selectedItem: { selected: number })
+引数はselectedプロパティを持つオブジェクトです。selectedプロパティには、クリックされたページ番号が格納されます。
+------------------------------------------------------------------------------------------------
 handlePageChange関数が発火すると、setCurrentPageが呼び出されてcurrentPageのステートが更新されます。
 このcurrentPageの更新により、useEffectの依存配列にcurrentPageが含まれているため、useEffectが発火します。これに
 よりhandleGetUsers関数が呼び出され、新しいページのユーザーデータが取得されます。
@@ -130,6 +134,22 @@ handlePageChange関数が発火すると、setCurrentPageが呼び出されてcu
 handlePageChange関数はこれらの値を変更しないので、useCallbackは発火しません。
 ただし、useCallbackによってメモ化されたhandleGetUsers関数がuseEffectによって呼び出されるため、関数自体は実行さ
 れます。
+------------------------------------------------------------------------------------------------
+`selectedItemオブジェクト`は、`ReactPaginate` コンポーネントからページ遷移時に提供されます。
+
+1. `handlePageChange`は`ReactPaginate`コンポーネントの`onPageChange`プロパティに指定されたコールバック関数
+です。
+2. ユーザーがページネーションで新しいページを選択すると、`ReactPaginate`はこの`onPageChange`関数を自動的に呼び
+出します。
+3. `ReactPaginate`は`onPageChange`関数を呼び出すとき、その引数として選択されたページの情報を含むオブジェクトを
+渡します。このオブジェクトには`selected`という名前のプロパティがあり、これが新しく選択されたページの番号（0から始
+まる）です。
+4. したがって、`handlePageChange`関数が呼び出されると、その引数として`selected`プロパティを持つオブジェクト
+（`selectedItem`）が渡されます。
+5. `handlePageChange`関数内で、`setCurrentPage(selectedItem.selected)`という記述により、ステートの現在の
+ページ番号が新しく選択されたページの番号に更新されます。
+
+以上の流れにより、ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

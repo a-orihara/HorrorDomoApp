@@ -11,10 +11,32 @@ export const getPostList = () => {
   });
 };
 
-// 指定したユーザーの投稿一覧を取得する
+export const getPostIndexByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
+  return client.get('/posts', {
+    params: {
+      // APIは1から始まるページ番号を期待しているため、+1を行います
+      page: page + 1,
+      per_page: itemsPerPage,
+      // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
+      user_id: userId,
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+    // res:指定したページの指定した表示件数分の、そのidで指定されたユーザーのpostと総post数
+  });
+};
+
+// 【改良予定】指定したユーザーの投稿一覧を取得する
 export const getPostsByUserId = (userId: string) => {
-  // 1
-  return client.get(`/posts?user_id=${userId}`, {
+  // 1 paramsオブジェクトを渡す事により、user_idがGETリクエストのURLクエリパラメータに自動的に変換される。
+  // = `/posts?user_id=${userId}`;
+  return client.get(`/posts`, {
+    params: {
+      user_id: userId,
+    },
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -25,6 +47,8 @@ export const getPostsByUserId = (userId: string) => {
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
+1
+以前の書き方：client.get(`/posts?user_id=${userId}`
 client.get(`/posts?user_id=${userId})とclient.get(`/posts/${id})の違い
 /posts?user_id=${userId}:
 GETリクエストのURLパラメータとしてuser_idを送信しています。ここで${userId}は特定のユーザーのIDを指します。

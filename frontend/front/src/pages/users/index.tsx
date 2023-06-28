@@ -13,6 +13,7 @@ const Index = () => {
     <Layout title={'Users'}>
       <div className='flex flex-1 flex-col'>
         <UserList users={users}></UserList>
+        {/* 一覧リストの下に表示されるページネーション部分のUI */}
         <UsersPagination
           totalUsersCount={totalUsersCount}
           itemsPerPage={itemsPerPage}

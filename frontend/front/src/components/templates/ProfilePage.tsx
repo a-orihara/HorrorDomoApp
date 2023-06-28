@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 // import { usePostContext } from '../../contexts/PostContext';
-import { useGetPostByUserId } from '../../hooks/post/useGetPostByUserId';
+import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import PostList from '../molecules/PostList';
+import PostsPagination from '../molecules/PostsPagination';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
@@ -12,15 +13,19 @@ const ProfilePage = () => {
   const router = useRouter();
   // 1
   const { id } = router.query;
+  // 4
+  const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // 選択したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(id);
-  const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
+  // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
+  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(6, userId);
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
     handleGetUserById();
-    handleGetPostsByUserId();
-  }, [id, handleGetUserById, handleGetPostsByUserId]);
+    // handleGetPostsByUserId();
+    // }, [id, handleGetUserById, handleGetPostsByUserId]);
+  }, [id, handleGetUserById]);
 
   // 3
   if (!user) {
@@ -39,6 +44,11 @@ const ProfilePage = () => {
         </div>
         <div className='flex-1 bg-green-200'>
           <PostList posts={posts} user={user}></PostList>
+          <PostsPagination
+            totalPostsCount={totalPostsCount}
+            itemsPerPage={5}
+            handlePageChange={handlePageChange}
+          ></PostsPagination>
         </div>
       </div>
     </div>
@@ -84,4 +94,48 @@ return <div>Loading...</div>;を記載する理由
 return <div>Loading...</div>;がある場合、userがnullのときにはこの行がレンダリングされ、以降のコード
 （<UserInfo user={user}></UserInfo>を含む）は実行されません。そのため、userがnullの場合でもTypeScriptのエ
 ラーは発生しないため、TypeScriptのエラーは表示されません。
+
+================================================================================================
+4
+ユーザーIDを[const id: string | string[] | undefined]型から、number型に変換してからusePostsPagination
+に渡します。
+ただし、変換する前に、idがundefinedまたは配列ではないこと、そして実際に数値に変換できることを確認しています。
+------------------------------------------------------------------------------------------------
+typeof
+与えられた値のデータ型を返すJavaScriptの演算子です。
+typeofは、単項演算子として使用され、次のように使用します: typeof value
+typeofは、データ型に基づいて異なる文字列を返します。例えば、"string"、"number"、"boolean"、"object"、など。
+------------------------------------------------------------------------------------------------
+isNaN
+与えられた値が"NaN"（非数）であるかどうかを判定するJavaScriptの関数です。
+isNaNは、引数に値を受け取り、その値がNaNである場合にtrueを返します。それ以外の場合はfalseを返します。
+Number(id)
+------------------------------------------------------------------------------------------------
+与えられた値を数値に変換するJavaScriptの関数です。
+Numberは、引数に値を受け取り、その値を数値に変換します。もし変換できない場合はNaNを返します。
+Number(id)は、文字列型のidを数値に変換するために使用されます。
+------------------------------------------------------------------------------------------------
+? Number(id) : undefined;
+これは条件（三項）演算子です。条件に基づいて異なる値を返します。
+typeof id === 'string' && !isNaN(Number(id))の条件を評価し、その結果に応じて値を返します。
+もしidが文字列型であり、かつ数値に変換可能な場合はNumber(id)を返します。
+それ以外の場合はundefinedを返します。
+このコードの役割は、idが適切な数値として解釈できる場合に数値に変換し、それ以外の場合はundefinedとして処理すること
+です。
+------------------------------------------------------------------------------------------------
+const id: string | string[] | undefinedは、idが文字列型、文字列の配列、または未定義のいずれかの値を取りうる
+ことを示しています。
+これは、typeof id === 'string' && !isNaN(Number(id))の条件分岐で、idの型が文字列であり、かつ数値に変換可能
+であることを確認するために使用されています。
+------------------------------------------------------------------------------------------------
+1. 全て`true`だと`userId`に値が入る場合：
+- `typeof id === 'string'`が`true`であり、かつ`id`が文字列型であることを確認します。
+- `!isNaN(Number(id))`が`true`であり、かつ`id`を数値に変換できることを確認します。
+- 上記の条件が両方とも`true`であれば、`Number(id)`で数値に変換した値が`userId`に代入されます。
+
+2. `false`の場合は`userId`に何の値が入るか：
+- 条件のいずれかが`false`である場合、つまり、`typeof id === 'string'`が`false`であるか、`id`が文字列型でな
+い場合、または`!isNaN(Number(id))`が`false`である場合、`userId`には`undefined`が代入されます。
+したがって、与えられたコードの場合、`userId`に値が入るのは`id`が文字列型であり、かつ数値に変換可能な場合のみです。
+それ以外の場合は`userId`に`undefined`が代入されます。
 */

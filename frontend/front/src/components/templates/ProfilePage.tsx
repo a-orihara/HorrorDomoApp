@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const router = useRouter();
   // 1
   const { id } = router.query;
+  // 選択したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(id);
   const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // ------------------------------------------------------------------------------------------------
@@ -37,7 +38,7 @@ const ProfilePage = () => {
           <UserInfo user={user}></UserInfo>
         </div>
         <div className='flex-1 bg-green-200'>
-          <PostList posts={posts}></PostList>
+          <PostList posts={posts} user={user}></PostList>
         </div>
       </div>
     </div>

@@ -1,12 +1,14 @@
 // 1
 
 import Layout from '../../../components/layout/Layout';
+import PostForm from '../../../components/molecules/PostForm';
 import ProfilePage from '../../../components/templates/ProfilePage';
 
 const profile = () => {
   return (
     <Layout title='Profile'>
       <ProfilePage></ProfilePage>
+      <PostForm></PostForm>
     </Layout>
   );
 };

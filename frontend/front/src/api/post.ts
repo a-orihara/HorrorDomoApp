@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { CreatePostParams } from '../types/post';
 import client from './client';
 
 export const getPostList = () => {
@@ -11,19 +12,33 @@ export const getPostList = () => {
   });
 };
 
-export const createPost = (content: string) => {
-  return client.post('/posts', {
-    data: {
-      post: {
-        content: content,
+// ログインエラー
+// export const createPost = (params: CreatePostParams) => {
+//   return client.post('/posts', {
+//     post: params, // 'post' キーを追加
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
+
+// 2
+export const createPost = (params: CreatePostParams) => {
+  return client.post(
+    '/posts',
+    // 第二引数はリクエストのbody部分
+    { post: params },
+    // 第三引数にヘッダ情報を指定
+    {
+      headers: {
+        'access-token': Cookies.get('_access_token'),
+        client: Cookies.get('_client'),
+        uid: Cookies.get('_uid'),
       },
-    },
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
+    }
+  );
 };
 
 export const getPostIndexByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
@@ -101,4 +116,59 @@ paramsには、URLのパスパラメータ、クエリパラメータ、POSTリ�
 例えば、`/users?name=John`のようなURLでは、`name=John`がクエリパラメータです。
 クエリパラメータは、特定のリクエストに関連する追加の情報を提供するために使用されます。
 クエリパラメータは、Railsのコントローラー内で`params[:name]`のようにアクセスされます。
+================================================================================================
+2
+axiosのpostメソッドは通常、以下の3つの引数を取ります。
+第一引数: URL（エンドポイント）
+第二引数: リクエストボディ（送信するデータ）
+第三引数: 設定（ヘッダーやタイムアウトなど）
+------------------------------------------------------------------------------------------------
+axios.post(url, data, config)
+url: リクエストを送信するサーバーのURL（エンドポイント）を指定します。
+data: サーバーに送信するデータを指定します。ここにはオブジェクトや文字列を指定することが可能です。
+config: リクエストの設定を指定します。例えば、ヘッダー情報やタイムアウトなどを指定します。
+------------------------------------------------------------------------------------------------
+失敗例
+
+export const createPost = (params: CreatePostParams) => {
+  return client.post('/posts', {
+    post: params,
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  }
+  );
+};
+------------------------------------------------------------------------------------------------
+初めに試したコードでは、第二引数（リクエストボディ）に'params'（送信データ）と'headers'（ヘッダー情報）の両方を
+設定していました。これは誤りで、リクエストボディ部分にヘッダー情報を含めると、サーバー側はそれをデータとして解釈し、
+結果として正常な認証情報を受け取れないためエラーが発生しました。
+修正後のコードでは、'post'と'params'（送信データ）を第二引数に設定し、'headers'（ヘッダー情報）を第三引数に設定
+することで、リクエストボディとヘッダー情報を適切に送信でき、正常にリクエストが処理されました。
+------------------------------------------------------------------------------------------------
+コントローラは post キーの下に content キーが存在することを期待しているため、{ post: params },つまり、
+{ post: {content: "内容" } },になる。
+
+1. 通常、Railsのコントローラはリクエストパラメータとして、特定のリソース（この場合は 'post'）の名前のキーの下に、
+そのリソースの属性を表すキー（この場合は 'content'）を持つハッシュを期待します。これはストロングパラメータという
+機能の一部であり、意図しないデータがデータベースに保存されることを防ぐためのものです。
+
+2. Railsのコントローラは、'params' メソッドを通じてクライアントから送られてきたデータにアクセスします。コントロ
+ーラのアクション内で 'params[:post]' というコードを書いた場合、その値はクライアントが送信したデータ内の 'post'
+キーに対応する値になります。
+
+3. ストロングパラメータは、createやupdateなどのアクションで使用する属性をホワイトリストに追加することで、意図し
+ない属性が更新されることを防ぎます。例えば、'params.require(:post).permit(:content)' のように記述すること
+で、'post' リソースの 'content' 属性のみが許可され、それ以外のパラメータは拒否されます。
+
+4. したがって、フロントエンドから送信するリクエストデータは、Railsのストロングパラメータの要件を満たす形にする必
+要があります。上記のコードでは、クライアントが送信するデータの形式を 'post' キーの下に 'content' キーが存在す
+る形に修正することで、Railsのコントローラが期待するデータ形式を満たし、リクエストが成功するようになりました。
+
+参考
+def post_params
+  params.require(:post).permit(:content)
+end
 */

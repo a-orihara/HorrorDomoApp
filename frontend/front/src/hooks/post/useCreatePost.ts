@@ -24,13 +24,18 @@ export const useCreatePost = () => {
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
       } else {
+        console.log('elseが反応');
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.fullMessages}`);
+        // setAlertMessage(`${res.data.errors.content[0]}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
+      console.log('errorが反応');
       setAlertSeverity('error');
-      setAlertMessage(`${err.response.data.errors}`);
+      // setAlertMessage(`${err.response.data.errors}`);
+      // setAlertMessage(`${err.response.data.errors.content[0]}`);
+      setAlertMessage(`${err.res.data.errors}`);
       setAlertOpen(true);
     }
   };

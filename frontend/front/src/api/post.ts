@@ -12,18 +12,6 @@ export const getCurrentUserPostList = () => {
   });
 };
 
-// ログインエラー
-// export const createPost = (params: CreatePostParams) => {
-//   return client.post('/posts', {
-//     post: params, // 'post' キーを追加
-//     headers: {
-//       'access-token': Cookies.get('_access_token'),
-//       client: Cookies.get('_client'),
-//       uid: Cookies.get('_uid'),
-//     },
-//   });
-// };
-
 // 2
 export const createPost = (params: CreatePostParams) => {
   return client.post(
@@ -41,11 +29,13 @@ export const createPost = (params: CreatePostParams) => {
   );
 };
 
+// 3 postの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
 export const getPostListByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {
     params: {
-      // APIは1から始まるページ番号を期待しているため、+1を行います
+      // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います
       page: page + 1,
+      // 1ページ当たりの表示件数
       per_page: itemsPerPage,
       // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
       user_id: userId,
@@ -171,4 +161,23 @@ export const createPost = (params: CreatePostParams) => {
 def post_params
   params.require(:post).permit(:content)
 end
+
+================================================================================================
+3
+getPostListByUserId の引数 (page: number, itemsPerPage: number, userId?: number) については、
+page: number : handlePageChange 関数から提供され、それは ReactPaginate からのページ番号（0から始まる）。
+itemsPerPage: number : usePostsPagination フックから提供され、その値は ProfilePage コンポーネントで指定さ
+れた 5。
+------------------------------------------------------------------------------------------------
+page: 現在のページ番号を表します。この値に基づいて表示する投稿の範囲が決定されます。
+itemsPerPage: 1ページあたりに表示する投稿の数を指定します。この値に基づいて表示する投稿の数が決定されます。
+userId: 取得したいユーザーの投稿を指定するためのIDです。この引数が指定されない場合、ログインしているユーザー自身の
+投稿が取得されます。
+------------------------------------------------------------------------------------------------
+paramsオブジェクトは、APIリクエスト時にサーバーに送るデータを格納します。indexアクションでこれらの値が利用されま
+す。
+pageとper_pageは、indexアクション内でそれぞれ現在のページ番号、1ページ当たりの表示数として使われ、これらにより取
+得する投稿の範囲が決定されます。
+user_idは、indexアクション内で投稿を取得するユーザーを決定します。指定されたuser_idが存在する場合はそのユーザー
+の投稿を、存在しない場合はログインユーザーの投稿を取得します。
 */

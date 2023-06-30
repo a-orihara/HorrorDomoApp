@@ -67,7 +67,6 @@ useCallbackを使用すると、同じ関数インスタンスを再生成せず
 ReactのコンポーネントでReactPaginateを使用して非同期のAPI呼び出しを行う場合、useEffectとuseCallbackを使うこ
 とが一般的です。
 useEffectの依存関係に関数を入れると、再評価されるたびにuseEffectが実行され、無限ループが発生するためです。
-
 ------------------------------------------------------------------------------------------------
 [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity]
 useCallbackは第二引数の依存配列の値が変化した時にのみコールバック関数を再生成します。

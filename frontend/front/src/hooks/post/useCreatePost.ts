@@ -18,7 +18,7 @@ export const useCreatePost = () => {
       const res = await createPost(params);
       // リソースが新規作成された場合にはHTTPステータスコード'201'を使用するのが一般的。
       if (res.status === 201) {
-        // 作成更新後のpostの投稿一覧を取得
+        // 作成更新後のpostの投稿一覧を取得。
         handleGetCurrentUserPostList();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
@@ -40,3 +40,7 @@ export const useCreatePost = () => {
     handleCreatePost,
   };
 };
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+
+*/

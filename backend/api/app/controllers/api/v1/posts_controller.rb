@@ -13,6 +13,7 @@ class Api::V1::PostsController < ApplicationController
       user = User.find_by(id: params[:user_id])
       if user
         # @posts = user.posts
+        # 指定したページの1ページ当たりの表示件数分のpostを取得
         @posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
       else

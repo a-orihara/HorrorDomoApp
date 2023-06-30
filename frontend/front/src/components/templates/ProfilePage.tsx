@@ -19,7 +19,8 @@ const ProfilePage = () => {
   // 選択したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(id);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
-  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(6, userId);
+  // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
+  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(5, userId);
   // const { handleGetPostsCountByUserId, postsCount } = usePostContext();
   const { currentUserPostsCount } = usePostContext();
   // ------------------------------------------------------------------------------------------------
@@ -44,10 +45,13 @@ const ProfilePage = () => {
           <Sidebar></Sidebar>
         </div>
         <div className='w-80 bg-red-200'>
+          {/* 5 */}
           <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
         </div>
         <div className='flex-1 bg-green-200'>
+          {/* 6 */}
           <PostList posts={posts} user={user}></PostList>
+          {/* 7 */}
           <PostsPagination
             totalPostsCount={totalPostsCount}
             itemsPerPage={5}
@@ -142,4 +146,25 @@ const id: string | string[] | undefinedは、idが文字列型、文字列の配
 い場合、または`!isNaN(Number(id))`が`false`である場合、`userId`には`undefined`が代入されます。
 したがって、与えられたコードの場合、`userId`に値が入るのは`id`が文字列型であり、かつ数値に変換可能な場合のみです。
 それ以外の場合は`userId`に`undefined`が代入されます。
+
+================================================================================================
+5
+[user]は、useGetUserById(id)からのuser（指定したidのuser情報）
+[currentUserPostsCount]は、usePostContextからのcurrentUserPostsCount（カレントユーザーの投稿数）
+
+================================================================================================
+6
+postsは、usePostsPaginationからのposts（指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分
+のpost）
+userは、useGetUserById(id)からのuser（指定したidのuser情報）
+
+================================================================================================
+7
+totalPostsCountは、usePostsPaginationからのtotalPostsCount（指定したidのuserの投稿総数）
+handlePageChangeは、usePostsPaginationからのhandlePageChange（ページ切り替えで発火。ページネーションのペー
+ジ変更時の処理[カレントページのset。ページ切り替え]）
+------------------------------------------------------------------------------------------------
+ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
+それはカレントページが依存配列で、カレントページが変更されるたびに、handleGetPostListByUserIdが再実行されるため
+です。
 */

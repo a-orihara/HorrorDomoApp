@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { CreatePostParams } from '../types/post';
 import client from './client';
 
-export const getPostList = () => {
+export const getCurrentUserPostList = () => {
   return client.get('/posts', {
     headers: {
       'access-token': Cookies.get('_access_token'),
@@ -41,7 +41,7 @@ export const createPost = (params: CreatePostParams) => {
   );
 };
 
-export const getPostIndexByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
+export const getPostListByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {
     params: {
       // APIは1から始まるページ番号を期待しているため、+1を行います
@@ -60,20 +60,20 @@ export const getPostIndexByUserId = async (page: number, itemsPerPage: number, u
 };
 
 // 【改良予定】指定したユーザーの投稿一覧を取得する
-export const getPostsByUserId = (userId: string) => {
-  // 1 paramsオブジェクトを渡す事により、user_idがGETリクエストのURLクエリパラメータに自動的に変換される。
-  // = `/posts?user_id=${userId}`;
-  return client.get(`/posts`, {
-    params: {
-      user_id: userId,
-    },
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
+// export const getPostsByUserId = (userId: string) => {
+//   // 1 paramsオブジェクトを渡す事により、user_idがGETリクエストのURLクエリパラメータに自動的に変換される。
+//   // = `/posts?user_id=${userId}`;
+//   return client.get(`/posts`, {
+//     params: {
+//       user_id: userId,
+//     },
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

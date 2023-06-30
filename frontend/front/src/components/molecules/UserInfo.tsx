@@ -2,10 +2,11 @@
 import { User } from '../../types/user';
 type UserInfoProps = {
   user: User;
+  postsCount: number | undefined;
   // avatarUrl: string | null;
 };
 
-const UserInfo = ({ user }: UserInfoProps) => {
+const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     <div>
@@ -21,7 +22,7 @@ const UserInfo = ({ user }: UserInfoProps) => {
       <h2>Email: {user.email}</h2>
       <h2>Profile: {user.profile || 'profileは設定されていません。'}</h2>
       {/* {avatarUrl && <Image src={avatarUrl} alt='User Avatar' width={200} height={200} />} */}
-      <h1 className='text-blue-500'>*詳細は今後実装予定</h1>
+      <h2>総投稿数: {postsCount || 0}</h2>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
@@ -19,11 +20,14 @@ const ProfilePage = () => {
   const { user, handleGetUserById } = useGetUserById(id);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   const { posts, totalPostsCount, handlePageChange } = usePostsPagination(6, userId);
+  // const { handleGetPostsCountByUserId, postsCount } = usePostContext();
+  const { currentUserPostsCount } = usePostContext();
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
     handleGetUserById();
-    // handleGetPostsByUserId();
+
+    // handleGetPostsCountByUserId;
     // }, [id, handleGetUserById, handleGetPostsByUserId]);
   }, [id, handleGetUserById]);
 
@@ -40,7 +44,7 @@ const ProfilePage = () => {
           <Sidebar></Sidebar>
         </div>
         <div className='w-80 bg-red-200'>
-          <UserInfo user={user}></UserInfo>
+          <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
         </div>
         <div className='flex-1 bg-green-200'>
           <PostList posts={posts} user={user}></PostList>

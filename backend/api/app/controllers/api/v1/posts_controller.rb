@@ -20,13 +20,14 @@ class Api::V1::PostsController < ApplicationController
       end
     else
       # 4
-      @posts = current_api_v1_user.posts
-      # @posts = current_api_v1_user.posts.page(page).per(per_page)
-      # total_posts = current_api_v1_user.posts.count
+      # @posts = current_api_v1_user.posts
+      @posts = current_api_v1_user.posts.page(page).per(per_page)
+      total_posts = current_api_v1_user.posts.count
     end
     # 5
     render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
   end
+
 
   # def show
   #   user = User.find_by(id: params[:id])

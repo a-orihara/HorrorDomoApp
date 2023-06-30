@@ -16,7 +16,7 @@ export const useSignIn = () => {
   const { setIsSignedIn, setCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  const { handleGetPostList } = usePostContext();
+  const { handleGetCurrentUserPostList } = usePostContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -37,7 +37,8 @@ export const useSignIn = () => {
         Cookies.set('_uid', res.headers['uid']);
         setIsSignedIn(true);
         setCurrentUser(res.data.data);
-        handleGetPostList();
+        console.log('成功1');
+        handleGetCurrentUserPostList();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -46,12 +47,14 @@ export const useSignIn = () => {
         }, 2000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.fullMessages}`);
+        // setAlertMessage(`${res.data.errors.fullMessages}`);
+        setAlertMessage(`${res.data.errors[0]}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
       setAlertSeverity('error');
       setAlertMessage(`${err.response.data.errors}`);
+      // setAlertMessage(`${err.response}`);
       setAlertOpen(true);
     }
   };

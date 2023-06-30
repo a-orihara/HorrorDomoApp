@@ -13,7 +13,7 @@ export const useSignIn = () => {
   const [password, setPassword] = useState('');
   // setIsSignedIn:ログイン状態を管理、setCurrentUser:ログインユーザーの情報を管理
   // const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
-  const { setIsSignedIn, setCurrentUser } = useAuthContext();
+  const { handleGetCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const { handleGetCurrentUserPostList } = usePostContext();
@@ -35,9 +35,8 @@ export const useSignIn = () => {
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
-        setIsSignedIn(true);
-        setCurrentUser(res.data.data);
-        console.log('成功1');
+        // 1
+        handleGetCurrentUser();
         handleGetCurrentUserPostList();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
@@ -68,3 +67,11 @@ export const useSignIn = () => {
     handleSignIn,
   };
 };
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+setIsSignedIn(true);
+setCurrentUser(res.data.data);
+だとサインイン直後にHomePageに行ってもavatarが表示されない。非同期処理が関係？
+*/

@@ -1,6 +1,7 @@
 class Api::V1::PostsController < ApplicationController
   # 1
   before_action :authenticate_api_v1_user!
+  before_action :correct_user, only: :destroy
 
   # 2
   def index
@@ -54,6 +55,16 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  def destroy
+    if @post.destroy
+    render json: { status: '200', message: '投稿を削除しました', data: @post }, status: :ok
+    else
+    # render json: { error: '削除に失敗しました' }, status: :unprocessable_entity
+    # correct_userのエラーメッセージに合わせるため、
+    render json: { status: '422', message: '削除に失敗しました', errors: @post.errors.full_messages.join(', ') }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   # 10 post_params で Strong Parameters を使っていることにより、content 属性だけWeb 経由で変更可能
@@ -61,6 +72,13 @@ class Api::V1::PostsController < ApplicationController
       params.require(:post).permit(:content)
     end
 
+    # 「現在のユーザーが操作しようとしている投稿が自分のものであるか（つまり、削除操作が許可されているか）」を確認
+    def correct_user
+      @post = current_api_v1_user.posts.find_by(id: params[:id])
+      if @post.nil?
+        render json: { status: '404', message: '自分の投稿のみ削除できます', errors: '自分の投稿のみ削除できます' }, status: :not_found
+      end
+    end
 end
 
 =begin

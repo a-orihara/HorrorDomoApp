@@ -29,6 +29,16 @@ export const createPost = (params: CreatePostParams) => {
   );
 };
 
+export const deletePost = (postId: number) => {
+  return client.delete(`/posts/${postId}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // 3 postの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
 export const getPostListByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {

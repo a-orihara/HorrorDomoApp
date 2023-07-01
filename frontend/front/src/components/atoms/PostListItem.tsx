@@ -3,6 +3,8 @@ import ja from 'date-fns/locale/ja';
 import { differenceInDays, formatDistanceToNow } from 'date-fns';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import Link from 'next/link';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { useDeletePost } from '../../hooks/post/useDeletePost';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
 
@@ -14,12 +16,6 @@ type PostListItemProps = {
 
 // 1 関数コンポーネントの引数は基本的にオブジェクト型。
 const PostListItem = ({ post, user }: PostListItemProps) => {
-  // return (
-  //   <li key={post.id}>
-  //     <p className='text-center text-base md:text-xl'>{post.content}</p>
-  //   </li>
-  // );
-
   // 2 date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
   const japanTime = utcToZonedTime(post.createdAt, 'Asia/Tokyo');
   // 3
@@ -30,6 +26,8 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const displayTime = differenceInDays(new Date(), japanTime) >= 3 ? formattedTime : relativeTime;
 
   const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
+  const { currentUser } = useAuthContext();
+  const { handleDeletePost } = useDeletePost();
 
   return (
     <li key={post.id} className='my-px bg-slate-100'>
@@ -48,7 +46,26 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
             </Link>
           </p>
           <p className='text-center text-sm md:text-xl'>{truncateContent}</p>
-          <p>作成日時:{displayTime}</p>
+          <div className='flex'>
+            <p className='mr-5'>作成日時:{displayTime}</p>
+            {/* {currentUser?.id === post.userId && (
+              <a className='hover:cursor-pointer' onClick={() => handleDeletePost(post.id)}>
+                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+              </a>
+            )} */}
+            {currentUser?.id === post.userId && (
+              <a
+                className='hover:cursor-pointer'
+                onClick={() => {
+                  if (window.confirm('投稿を削除しますか？')) {
+                    handleDeletePost(post.id);
+                  }
+                }}
+              >
+                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </li>

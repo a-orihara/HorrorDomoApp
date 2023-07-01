@@ -49,6 +49,7 @@ const useSignUp = () => {
         setAlertMessage(getErrorMessage(res.data));
         setAlertOpen(true);
       }
+      // 6
     } catch (err: any) {
       console.error(err);
       setAlertSeverity('error');
@@ -137,5 +138,16 @@ token-type: Bearer
 
 uid: momo@momo.com
 認証ヘッダの一種であるuidの値を示す。
-
+================================================================================================
+6
+if文の条件で `res.status === 200` が満たされない場合、すなわちレスポンスステータスコードが201以外の場合に、
+else文のブロック内が実行されます。これは何らかの理由でステータスコードが200以外が返された場合を含みます。
+通信エラーの際は、catchブロックに入ります。これは、ネットワークエラーなど、HTTPリクエストそのものが失敗した場合を
+指します。
+その他、catchブロックは、次のような状況でも実行されます：
+- tryブロック内で予期しないエラー（例えば、TypeErrorやReferenceErrorなどのJavaScriptの実行エラー）が発生し
+た場合
+- HTTPリクエスト自体は成功したが、サーバーがエラーステータスコード
+（例えば、404 Not Found、500 Internal Server Error等）を返した場合。ただし、axiosではエラーステータスコード
+を返すときもPromiseがrejectされ、catchブロックが実行されます。
 */

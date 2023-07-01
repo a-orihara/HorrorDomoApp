@@ -18,7 +18,7 @@ export const useDeleteUser = () => {
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/users');
-        }, 500);
+        }, 2000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`else${res.data.errors.fullMessages[0]}`);

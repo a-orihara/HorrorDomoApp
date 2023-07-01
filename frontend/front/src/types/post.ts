@@ -5,3 +5,7 @@ export type Post = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CreatePostParams = {
+  content: string;
+};

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
@@ -10,6 +11,8 @@ const HomePage = () => {
   // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
   const { showWelcomeMessage } = useFirstTimeLogin();
   // console.log('HomePage.tsxのcurrentUser:', currentUser);
+  const { currentUserPostsCount } = usePostContext();
+  console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
 
   return (
     <div className='flex  flex-1 flex-col bg-green-200'>
@@ -24,7 +27,7 @@ const HomePage = () => {
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!
               </h1>
             )}
-            <UserInfo user={currentUser}></UserInfo>
+            <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
             <h1>ここはホームページ</h1>
           </div>
         </div>

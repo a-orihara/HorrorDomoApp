@@ -13,10 +13,10 @@ export const useSignIn = () => {
   const [password, setPassword] = useState('');
   // setIsSignedIn:ログイン状態を管理、setCurrentUser:ログインユーザーの情報を管理
   // const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
-  const { setIsSignedIn, setCurrentUser } = useAuthContext();
+  const { handleGetCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  const { handleGetPostList } = usePostContext();
+  const { handleGetCurrentUserPostList } = usePostContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -35,9 +35,9 @@ export const useSignIn = () => {
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
-        setIsSignedIn(true);
-        setCurrentUser(res.data.data);
-        handleGetPostList();
+        // 1
+        handleGetCurrentUser();
+        handleGetCurrentUserPostList();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -46,12 +46,14 @@ export const useSignIn = () => {
         }, 2000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors.fullMessages}`);
+        // setAlertMessage(`${res.data.errors.fullMessages}`);
+        setAlertMessage(`${res.data.errors[0]}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
       setAlertSeverity('error');
       setAlertMessage(`${err.response.data.errors}`);
+      // setAlertMessage(`${err.response}`);
       setAlertOpen(true);
     }
   };
@@ -65,3 +67,11 @@ export const useSignIn = () => {
     handleSignIn,
   };
 };
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+setIsSignedIn(true);
+setCurrentUser(res.data.data);
+だとサインイン直後にHomePageに行ってもavatarが表示されない。非同期処理が関係？
+*/

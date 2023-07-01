@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getPostList } from '../api/post';
+import { getCurrentUserPostList, getPostListByUserId } from '../api/post';
 import { Post } from '../types/post';
 
 type PostProviderProps = {
@@ -9,7 +9,9 @@ type PostProviderProps = {
 // 1
 type PostContextProps = {
   posts: Post[] | undefined;
-  handleGetPostList: () => void;
+  currentUserPostsCount: number | undefined;
+  handleGetCurrentUserPostList: () => void;
+  handleGetPostsCountByUserId: (userId: number) => void;
 };
 
 // 2 デフォルト値はkeyがpostsの値が空の配列
@@ -18,26 +20,47 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
 
-  const handleGetPostList = async () => {
+  // getPostListByUserIdのresのtotalPostsを使ってid指定のユーザーのpost総数を取得
+  const handleGetPostsCountByUserId = async (userId: number) => {
     try {
-      const data = await getPostList();
+      const data = await getPostListByUserId(0, 1000, userId);
+      if (data.data.status == 200) {
+        setCurrentUserPostsCount(data.data.totalPosts);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleGetCurrentUserPostList = async () => {
+    try {
+      const data = await getCurrentUserPostList();
       if (data.data.status == 200) {
         setPosts(data.data.data);
+        setCurrentUserPostsCount(data.data.totalPosts);
         console.log('handleGetPostListでpostがセット');
       }
     } catch (err) {
       console.error(err);
     }
   };
+  // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {
-    handleGetPostList();
+    handleGetCurrentUserPostList();
   }, []);
 
   // .ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
   // valueプロパティを通じてデータを提供します。
   // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
-  return <PostContext.Provider value={{ posts, handleGetPostList }}>{children}</PostContext.Provider>;
+  return (
+    <PostContext.Provider
+      value={{ posts, currentUserPostsCount, handleGetCurrentUserPostList, handleGetPostsCountByUserId }}
+    >
+      {children}
+    </PostContext.Provider>
+  );
 };
 
 // Postを取得するカスタムフック

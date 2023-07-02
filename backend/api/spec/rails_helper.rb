@@ -7,11 +7,13 @@ require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+
 # Add additional requires below this line. Rails is not loaded until this point!
 # [この行の下に追加のrequireを追加します。この時点までRailsはロードされていません！]
 # 2
 require 'devise'
 # requireFile.expand_path("spec/support/controller_macros.rb")
+# spec/support/test_macros.rb（自作）を読み込む
 require 'support/test_macros'
 # require 'support/request_macros'
 
@@ -91,7 +93,8 @@ RSpec.configure do |config|
   # config.extend TestMacros, type: :request
   config.include TestMacros, type: :request
 end
-# Shoulda Matchersを使う際に必要な設定を行っている
+# Shoulda Matchers（RSpec内で使用できるライブラリで、複雑なテストをワンライナーで書くことができる）を使う際に必要
+# な設定を行っている
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     # test_frameworkをRSpecに指定
@@ -129,20 +132,24 @@ rails_helper.rbはRSpecの設定ファイルです。このファイルはRSpec�
 require 'devise'
 Deviseを使用したテストで必要となる、Deviseのライブラリを読み込むための記述です。RSpecを使ったテストでDeviseを使
 用する場合はこのようにライブラリを読み込む必要があります。
-
 ------------------------------------------------------------------------------------------------
 require 'support/controller_macros'
 Controllerテストでよく使われる、ログインを簡単に行うためのコントローラマクロを定義したファイルを読み込むための記
 述です。コントローラマクロは、Deviseのテストヘルパーを使って、コントローラのテスト中にログイン処理を実行するため
 のコードをまとめたものであり、このファイルを読み込むことでコントローラテストを書きやすくすることができます。
-
 ------------------------------------------------------------------------------------------------
 require 'support/request_macros'
 リクエストスペックでよく使われる、APIリクエストのテストに必要な認証トークンを取得するためのリクエストマクロを定義
 したファイルを読み込むための記述です。リクエストマクロは、Devise Token Authを使って、リクエストのヘッダーに必要
 な認証トークンを付与するためのコードをまとめたものであり、このファイルを読み込むことでAPIリクエストのテストを書き
 やすくすることができます。
-
+------------------------------------------------------------------------------------------------
+require 'support/test_macros'
+テストスイート内で定義されたテスト支援機能（テストマクロ）を読み込むためのコードです。具体的には、Railsアプリケーシ
+ョンのテストコードで、テストの記述を簡素化するためのカスタムメソッドやヘルパー関数を提供するために使用されます。
+------------------------------------------------------------------------------------------------
+「マクロ」は、コードの断片を再利用可能な形で定義し、繰り返し使用するための機能です。マクロは一連のコードを一つの名前
+でまとめることができ、その名前を呼び出すことで定義したコードを展開します。モジュールみたいなもの。
 ================================================================================================
 3
 このコードを加えることで、以下のようにrspecのテストコード中でFactory_botのメソッドを使用する際に、クラス

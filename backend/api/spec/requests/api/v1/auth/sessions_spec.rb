@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
   let(:user) { create(:user) }
 
-  # api/v1/auth/sessions#createのテスト
+  # api/v1/auth/sessions#create（サインイン）のテスト
   describe 'POST /api/v1/auth/sign_in' do
     context '有効なパラメータが与えられた場合' do
       before do
@@ -40,7 +40,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
     end
   end
 
-  # api/v1/auth/sessions#destroyのテスト
+  # api/v1/auth/sessions#destroy（サインアウト）のテスト
   describe 'DELETE /api/v1/auth/sign_out' do
     context 'ユーザーがログインしている場合' do
       before do
@@ -49,6 +49,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
           email: user.email,
           password: 'testtest'
         }
+        # response.headersは、直前のpost api_v1_user_session_pathのレスポンスヘッダー。
         delete destroy_api_v1_user_session_path, headers: {
           'uid' => response.header['uid'],
           'access-token' => response.header['access-token'],
@@ -82,10 +83,8 @@ end
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 :success はHTTPステータスコードであり、一般的には200 OKを表します。
-
 ================================================================================================
 2
-# :unauthorized はHTTPステータスコードであり、401 Unauthorizedを表します。
-
-
+:unauthorized はHTTPステータスコードであり、401 Unauthorizedを表します。
+================================================================================================
 =end

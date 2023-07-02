@@ -31,6 +31,7 @@ RSpec.describe Post, type: :model do
     # 3
     expect(most_recent_post).to eq described_class.first
   end
+
   # it '投稿したユーザが削除された場合、そのユーザのpostも削除されること' do
   #   # ユーザーを作成
   #   user = create(:user)

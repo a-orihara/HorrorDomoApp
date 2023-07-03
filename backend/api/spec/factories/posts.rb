@@ -3,6 +3,7 @@ FactoryBot.define do
   # 2
   factory :post do
     content { "Content" }
+    title { "Title" }
     # 3 user { association :user }の省略形
     user
   end

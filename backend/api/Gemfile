@@ -16,10 +16,6 @@ gem 'puma', '~> 5.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# [アクティブストレージのバリアントを使用する]
-# 'image_processing'は'mini_magick'も一緒にインストールする
-gem 'image_processing', '~> 1.2'
-
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
@@ -32,7 +28,10 @@ gem 'devise_token_auth'
 gem 'rails-i18n' # 日本語化
 gem 'devise-i18n' # deviseの日本語化
 gem 'kaminari' # ページネーション
-
+gem 'active_storage_validations' # active_starageのバリデーション設定
+# [アクティブストレージのバリアントを使用する]
+# 'image_processing'は'mini_magick'も一緒にインストールする
+gem 'image_processing', '~> 1.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

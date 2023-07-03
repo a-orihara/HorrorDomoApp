@@ -1,5 +1,6 @@
 export type Post = {
   id: number;
+  title: string;
   content: string;
   userId: number;
   createdAt: string;
@@ -7,5 +8,6 @@ export type Post = {
 };
 
 export type CreatePostParams = {
+  title: string;
   content: string;
 };

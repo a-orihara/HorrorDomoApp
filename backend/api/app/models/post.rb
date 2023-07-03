@@ -7,7 +7,7 @@ class Post < ApplicationRecord
   # belongs_to :userで自動的にuser_idが設定され、マイグレーションでnilチェックしているが、明示的に記載
   validates :user_id, presence: true
   validates :content, presence: true, length: { maximum: 140 }
-  validates :title, presence: true, length: { maximum: 30 }
+  validates :title, presence: true, length: { maximum: 20 }
 end
 
 =begin

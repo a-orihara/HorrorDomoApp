@@ -7,6 +7,8 @@ RSpec.describe 'Api::V1::Admin::Users', type: :request do
   # 一般ユーザーを作成
   let(:user) { create(:user) }
   # headersにadminユーザーで生成したトークンを代入。adminはletで定義したadmin。
+  # request_login_userはspec/support/test_macros.rbで定義。戻り値はトークンを設定したheaderハッシュ
+  # このメソッドにより、テスト内で認証済みのユーザーとしてAPIリクエストを送ることができます
   let(:headers) { request_login_user(admin) }
 
   # DELETE /api/v1/admin/users/:id api/v1/admin/users#destroy
@@ -41,4 +43,5 @@ end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
+1
 =end

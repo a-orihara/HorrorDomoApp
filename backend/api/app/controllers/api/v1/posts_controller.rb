@@ -30,7 +30,6 @@ class Api::V1::PostsController < ApplicationController
     render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
   end
 
-
   # def show
   #   user = User.find_by(id: params[:id])
   #   if user
@@ -75,9 +74,11 @@ class Api::V1::PostsController < ApplicationController
     # 「現在のユーザーが操作しようとしている投稿が自分のものであるか（つまり、削除操作が許可されているか）」を確認
     def correct_user
       @post = current_api_v1_user.posts.find_by(id: params[:id])
-      if @post.nil?
-        render json: { status: '404', message: '自分の投稿のみ削除できます', errors: '自分の投稿のみ削除できます' }, status: :not_found
-      end
+      # ↓ rubocopにより、下記を1行に修正
+      # if @post.nil?
+      #   render json: { status: '404', message: '自分の投稿のみ削除できます', errors: '自分の投稿のみ削除できます' }, status: :not_found
+      # end
+      render json: { status: '404', message: '自分の投稿のみ削除できます', errors: '自分の投稿のみ削除できます' }, status: :not_found if @post.nil?
     end
 end
 

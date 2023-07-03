@@ -34,7 +34,8 @@ RSpec.describe "Api::V1::Posts", type: :request do
   describe 'POST /api/v1/posts' do
     context '有効なパラメータの場合' do
       it '201 Createdを返すこと' do
-        post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }, headers: auth_headers
+        # post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }, headers: auth_headers
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'テストタイトル' } }, headers: auth_headers
         expect(response).to have_http_status(201)
       end
     end
@@ -42,6 +43,16 @@ RSpec.describe "Api::V1::Posts", type: :request do
     context '無効なパラメータの場合' do
       it '422 Unprocessable Entityを返すこと' do
         post api_v1_posts_path, params: { post: { content: '' } }, headers: auth_headers
+        expect(response).to have_http_status(422)
+      end
+
+      it 'タイトルが空の場合、422 Unprocessable Entityを返すこと' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: '' } }, headers: auth_headers
+        expect(response).to have_http_status(422)
+      end
+
+      it 'タイトルが21文字以上の場合、422 Unprocessable Entityを返すこと' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'a' * 21 } }, headers: auth_headers
         expect(response).to have_http_status(422)
       end
     end

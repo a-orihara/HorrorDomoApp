@@ -12,7 +12,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
   # 戻り値はトークンを設定したheaderハッシュ、それをauth_headersに代入
   let(:auth_headers) { request_login_user(user) }
 
-  #  1投稿の数が正しいかを確認します。
+  #  1 indexアクションのテスト 投稿の数が正しいかを確認します。
   describe 'GET /api/v1/posts' do
     # 2
     before do
@@ -45,6 +45,14 @@ RSpec.describe "Api::V1::Posts", type: :request do
         expect(response).to have_http_status(422)
       end
     end
+
+    context 'サインインしていないユーザーの場合' do
+      it '401 Unauthorizedを返すこと' do
+        # headers:なし
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   # 4 destroyアクションのテスト
@@ -65,6 +73,13 @@ RSpec.describe "Api::V1::Posts", type: :request do
         # delete api_v1_post_path(post.id), headers: other_auth_headers
         delete api_v1_post_path(test_post.id), headers: other_auth_headers
         expect(response).to have_http_status(404)
+      end
+    end
+
+    context 'サインインしていないユーザーの場合' do
+      it '401 Unauthorizedを返すこと' do
+        delete api_v1_post_path(test_post.id)
+        expect(response).to have_http_status(401)
       end
     end
   end

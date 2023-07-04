@@ -1,13 +1,13 @@
 // frontend/front/src/pages/posts/new.tsx
 
-import React from 'react';
+import Layout from '../../components/layout/Layout';
+import { PostFormPage } from '../../components/templates/PostFormPage';
 
-const NewPost: React.FC = () => {
+const NewPost = () => {
   return (
-    <div>
-      <h1>New Post</h1>
-      {/* ここにフォームの内容を記述します */}
-    </div>
+    <Layout title='Post Form'>
+      <PostFormPage></PostFormPage>
+    </Layout>
   );
 };
 

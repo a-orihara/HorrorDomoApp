@@ -33,7 +33,6 @@ RSpec.describe "Api::V1::Posts", type: :request do
   # 3 createアクションのテスト
   describe 'POST /api/v1/posts' do
     context '有効なパラメータの場合' do
-
       it 'タイトルと内容が正しく設定されている場合、201 Createdを返すこと' do
         post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'テストタイトル' } }, headers: auth_headers
         expect(response).to have_http_status(201)

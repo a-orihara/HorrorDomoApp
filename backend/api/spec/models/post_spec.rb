@@ -41,7 +41,6 @@ RSpec.describe Post, type: :model do
     post.title = 'a' * 21
     expect(post).not_to be_valid
   end
-
 end
 
 =begin

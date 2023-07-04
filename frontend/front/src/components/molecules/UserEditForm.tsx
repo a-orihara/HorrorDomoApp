@@ -89,7 +89,7 @@ const UserEditForm = () => {
         </div>
         <div>
           <Button
-            className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            className='m-auto mb-2 mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
             onClick={handleUpdateUser}
           >
             Save Changes

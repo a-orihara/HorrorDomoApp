@@ -11,8 +11,10 @@ const PostForm: React.FC = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>New Post</h1>
-      <form className='mt-6 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
+      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
+        Let&apos;s post it!
+      </h1>
+      <form className='mt-2 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
         <div>
           <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='title'>
             Title:
@@ -30,8 +32,12 @@ const PostForm: React.FC = () => {
             }}
           ></Input>
         </div>
-        <div>
+        <div className='flex flex-1 flex-col'>
+          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='profile'>
+            Content:
+          </Label>
           <TextArea
+            className='m-auto w-2/5 flex-1'
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder='何を思っている？'
@@ -39,7 +45,9 @@ const PostForm: React.FC = () => {
           />
         </div>
         <div>
-          <Button type='submit'>投稿</Button>
+          <Button className='m-auto mb-2 mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' type='submit'>
+            投稿
+          </Button>
         </div>
       </form>
     </div>

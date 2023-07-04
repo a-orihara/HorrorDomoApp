@@ -30,15 +30,10 @@ class Api::V1::PostsController < ApplicationController
     render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
   end
 
-  # def show
-  #   user = User.find_by(id: params[:id])
-  #   if user
-  #     @posts = user.posts
-  #     render json: { status: '200', data: @posts }
-  #   else
-  #     render json: { status: '404', message: 'User not found' }
-  #   end
-  # end
+  def show
+    @post = Post.find(params[:id])
+    render json: { status: 200, data: @post }
+  end
 
   # 7
   def create

@@ -21,7 +21,6 @@ const ProfilePage = () => {
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
   const { posts, totalPostsCount, handlePageChange } = usePostsPagination(5, userId);
-  // const { handleGetPostsCountByUserId, postsCount } = usePostContext();
   const { currentUserPostsCount } = usePostContext();
   // ------------------------------------------------------------------------------------------------
   // 2

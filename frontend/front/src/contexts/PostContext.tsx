@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getCurrentUserPostList, getPostListByUserId } from '../api/post';
+import { getCurrentUserPostList } from '../api/post';
 import { Post } from '../types/post';
 
 type PostProviderProps = {
@@ -11,7 +11,6 @@ type PostContextProps = {
   currentUserPosts: Post[] | undefined;
   currentUserPostsCount: number | undefined;
   handleGetCurrentUserPostList: () => void;
-  handleGetPostsCountByUserId: (userId: number) => void;
 };
 
 // 2 デフォルト値はkeyがpostsの値が空の配列
@@ -21,18 +20,6 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
-
-  // getPostListByUserIdのresのtotalPostsを使ってid指定のユーザーのpost総数を取得
-  const handleGetPostsCountByUserId = async (userId: number) => {
-    try {
-      const data = await getPostListByUserId(0, 1000, userId);
-      if (data.data.status == 200) {
-        setCurrentUserPostsCount(data.data.totalPosts);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleGetCurrentUserPostList = async () => {
     try {
@@ -55,9 +42,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // valueプロパティを通じてデータを提供します。
   // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
   return (
-    <PostContext.Provider
-      value={{ currentUserPosts, currentUserPostsCount, handleGetCurrentUserPostList, handleGetPostsCountByUserId }}
-    >
+    <PostContext.Provider value={{ currentUserPosts, currentUserPostsCount, handleGetCurrentUserPostList }}>
       {children}
     </PostContext.Provider>
   );

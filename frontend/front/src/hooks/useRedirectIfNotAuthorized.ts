@@ -22,7 +22,7 @@ export const useRedirectIfNotAuthorized = () => {
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/signin');
-        }, 2000);
+        }, 1000);
       }
       // 2
       else if (typeof router.query.id === 'string' && currentUser?.id !== parseInt(router.query.id)) {
@@ -31,7 +31,7 @@ export const useRedirectIfNotAuthorized = () => {
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/');
-        }, 2000);
+        }, 1000);
       }
     }
   }, [currentUser, router, setAlertMessage, setAlertOpen, setAlertSeverity, loading]);

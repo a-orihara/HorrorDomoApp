@@ -8,11 +8,13 @@ export const useCreatePost = () => {
   const [content, setContent] = useState('');
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const { handleGetCurrentUserPostList } = usePostContext();
+  const [title, setTitle] = useState('');
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
     const params: CreatePostParams = {
       content: content,
+      title: title,
     };
     try {
       const res = await createPost(params);
@@ -37,6 +39,8 @@ export const useCreatePost = () => {
     }
   };
   return {
+    title,
+    setTitle,
     content,
     setContent,
     handleCreatePost,

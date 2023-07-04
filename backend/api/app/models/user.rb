@@ -20,10 +20,11 @@ class User < ApplicationRecord
   validates :email, length: { maximum: 255 }
   # presence: trueがないので、プロフィールが空でもいい
   validates :profile, length: { maximum: 160 }
-  validates :avatar,   content_type: { in: %w[image/jpeg image/gif image/png],
-                                       message: "有効な画像フォーマットではありません" },
-                       size:         { less_than: 5.megabytes,
-                                       message: "サイズは5MB以下までです" }
+  #   6
+  validates :avatar, content_type: { in: %w[image/jpeg image/gif image/png],
+                                     message: :invalid_image_format },
+                     size: { less_than: 5.megabytes,
+                             message: :size_over }
 end
 
 =begin
@@ -133,5 +134,6 @@ dependent: :destroy
 
 ================================================================================================
 6
-
+message: :invalid_image_format
+config/locales/ja.ymlの日本語化ファイルからエラーメッセージを取得。
 =end

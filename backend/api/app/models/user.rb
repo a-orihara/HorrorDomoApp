@@ -3,20 +3,28 @@
 # Rails 5.0 以降を使用している場合は、User < ActiveRecord::Baseから変更。
 class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # deviseやincludeなどのマクロスタイルの呼び出しは先頭に配置
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   # 4
   include DeviseTokenAuth::Concerns::User
+
+  # 3 has_one_attachedやhas_manyなどのアソシエーションはバリデーションの前に配置
+  has_one_attached :avatar
+  # 5
+  has_many :posts, dependent: :destroy
+
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形
   validates :name,  presence: true, length: { maximum: 30 }
   # 2
   validates :email, length: { maximum: 255 }
   # presence: trueがないので、プロフィールが空でもいい
   validates :profile, length: { maximum: 160 }
-  # 3
-  has_one_attached :avatar
-  # 5
-  has_many :posts, dependent: :destroy
+  #   6
+  validates :avatar, content_type: { in: %w[image/jpeg image/gif image/png],
+                                     message: :invalid_image_format },
+                     size: { less_than: 5.megabytes,
+                             message: :size_over }
 end
 
 =begin
@@ -123,4 +131,9 @@ dependent: :destroy
 ります。
 これは、管理者がシステムからユーザーを削除したとき、持ち主の存在しないマイクロポストがデータベースに取り残されてしま
 う問題を防ぎます。
+
+================================================================================================
+6
+message: :invalid_image_format
+config/locales/ja.ymlの日本語化ファイルからエラーメッセージを取得。
 =end

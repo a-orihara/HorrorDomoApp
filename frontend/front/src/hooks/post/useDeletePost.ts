@@ -40,8 +40,8 @@ export const useDeletePost = () => {
 
         // 削除後に特定のページにリダイレクトする場合は以下を利用
         setTimeout(() => {
-          router.push('/users');
-        }, 2000);
+          router.push('/');
+        }, 1000);
       } else {
         console.log('elseが反応');
         // レスポンスが失敗した場合の処理

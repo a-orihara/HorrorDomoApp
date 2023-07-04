@@ -43,7 +43,7 @@ export const useSignIn = () => {
         setAlertOpen(true);
         setTimeout(() => {
           router.push(`/users/${res.data.data.id}`);
-        }, 2000);
+        }, 1000);
       } else {
         setAlertSeverity('error');
         // setAlertMessage(`${res.data.errors.fullMessages}`);

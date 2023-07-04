@@ -32,14 +32,15 @@ RSpec.describe Post, type: :model do
     expect(most_recent_post).to eq described_class.first
   end
 
-  # it '投稿したユーザが削除された場合、そのユーザのpostも削除されること' do
-  #   # ユーザーを作成
-  #   user = create(:user)
-  #   # そのユーザーが投稿したpostを作成
-  #   create(:post, user: user)
-  #   # user.destroyを実行することによって、postの数が1つ減ることを確認
-  #   expect { user.destroy }.to change(post, :count).by(-1)
-  # end
+  it "タイトルが空（ブランク）なら無効であること" do
+    post.title = "   "
+    expect(post).not_to be_valid
+  end
+
+  it 'タイトルが21文字以上なら無効であること' do
+    post.title = 'a' * 21
+    expect(post).not_to be_valid
+  end
 end
 
 =begin

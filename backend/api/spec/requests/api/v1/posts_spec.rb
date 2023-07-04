@@ -12,7 +12,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
   # 戻り値はトークンを設定したheaderハッシュ、それをauth_headersに代入
   let(:auth_headers) { request_login_user(user) }
 
-  #  1投稿の数が正しいかを確認します。
+  #  1 indexアクションのテスト 投稿の数が正しいかを確認します。
   describe 'GET /api/v1/posts' do
     # 2
     before do
@@ -33,8 +33,13 @@ RSpec.describe "Api::V1::Posts", type: :request do
   # 3 createアクションのテスト
   describe 'POST /api/v1/posts' do
     context '有効なパラメータの場合' do
-      it '201 Createdを返すこと' do
-        post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }, headers: auth_headers
+      it 'タイトルと内容が正しく設定されている場合、201 Createdを返すこと' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'テストタイトル' } }, headers: auth_headers
+        expect(response).to have_http_status(201)
+      end
+
+      it 'タイトルが20文字以下であること' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'a' * 20 } }, headers: auth_headers
         expect(response).to have_http_status(201)
       end
     end
@@ -43,6 +48,24 @@ RSpec.describe "Api::V1::Posts", type: :request do
       it '422 Unprocessable Entityを返すこと' do
         post api_v1_posts_path, params: { post: { content: '' } }, headers: auth_headers
         expect(response).to have_http_status(422)
+      end
+
+      it 'タイトルが空の場合、422 Unprocessable Entityを返すこと' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: '' } }, headers: auth_headers
+        expect(response).to have_http_status(422)
+      end
+
+      it 'タイトルが21文字以上の場合、422 Unprocessable Entityを返すこと' do
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'a' * 21 } }, headers: auth_headers
+        expect(response).to have_http_status(422)
+      end
+    end
+
+    context 'サインインしていないユーザーの場合' do
+      it '401 Unauthorizedを返すこと' do
+        # headers:なし
+        post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }
+        expect(response).to have_http_status(401)
       end
     end
   end
@@ -65,6 +88,13 @@ RSpec.describe "Api::V1::Posts", type: :request do
         # delete api_v1_post_path(post.id), headers: other_auth_headers
         delete api_v1_post_path(test_post.id), headers: other_auth_headers
         expect(response).to have_http_status(404)
+      end
+    end
+
+    context 'サインインしていないユーザーの場合' do
+      it '401 Unauthorizedを返すこと' do
+        delete api_v1_post_path(test_post.id)
+        expect(response).to have_http_status(401)
       end
     end
   end

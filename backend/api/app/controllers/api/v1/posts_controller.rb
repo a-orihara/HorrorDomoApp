@@ -68,7 +68,7 @@ class Api::V1::PostsController < ApplicationController
 
   # 10 post_params で Strong Parameters を使っていることにより、content 属性だけWeb 経由で変更可能
     def post_params
-      params.require(:post).permit(:content)
+      params.require(:post).permit(:content, :title)
     end
 
     # 「現在のユーザーが操作しようとしている投稿が自分のものであるか（つまり、削除操作が許可されているか）」を確認

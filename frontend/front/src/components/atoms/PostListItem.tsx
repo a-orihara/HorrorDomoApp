@@ -45,6 +45,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               <a>{user.name}</a>
             </Link>
           </p>
+          <p className='text-sm md:text-xl'>タイトル:{post.title}</p>
           <p className='text-center text-sm md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5'>作成日時:{displayTime}</p>

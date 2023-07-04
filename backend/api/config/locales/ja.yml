@@ -6,6 +6,8 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+        invalid_image_format: "有効な画像フォーマットではありません"
+        size_over: "サイズは5MB以下までです"
   date:
     abbr_day_names:
       - 日

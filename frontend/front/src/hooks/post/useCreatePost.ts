@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { createPost } from '../../api/post';
 import { useAlertContext } from '../../contexts/AlertContext';
@@ -8,11 +9,14 @@ export const useCreatePost = () => {
   const [content, setContent] = useState('');
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const { handleGetCurrentUserPostList } = usePostContext();
+  const [title, setTitle] = useState('');
+  const router = useRouter();
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
     const params: CreatePostParams = {
       content: content,
+      title: title,
     };
     try {
       const res = await createPost(params);
@@ -23,6 +27,9 @@ export const useCreatePost = () => {
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
+        setTimeout(() => {
+          router.push(`/`);
+        }, 1000);
       } else {
         console.log('elseが反応');
         setAlertSeverity('error');
@@ -37,6 +44,8 @@ export const useCreatePost = () => {
     }
   };
   return {
+    title,
+    setTitle,
     content,
     setContent,
     handleCreatePost,

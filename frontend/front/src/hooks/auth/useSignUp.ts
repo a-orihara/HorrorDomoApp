@@ -43,7 +43,7 @@ const useSignUp = () => {
         localStorage.setItem('firstTimeLogin', 'true');
         setTimeout(() => {
           router.push('/');
-        }, 2000);
+        }, 1000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(getErrorMessage(res.data));

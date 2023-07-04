@@ -29,7 +29,7 @@ export const useSignOut = () => {
         // サインアウトしたら、トップページに遷移
         setTimeout(() => {
           router.push('/');
-        }, 2000);
+        }, 1000);
       } else {
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.fullMessages}`);

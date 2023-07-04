@@ -1,4 +1,5 @@
 // import Image from 'next/image';
+import Link from 'next/link';
 import { User } from '../../types/user';
 type UserInfoProps = {
   user: User;
@@ -23,6 +24,9 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
       <h2>Profile: {user.profile || 'profileは設定されていません。'}</h2>
       {/* {avatarUrl && <Image src={avatarUrl} alt='User Avatar' width={200} height={200} />} */}
       <h2>総投稿数: {postsCount || 0}</h2>
+      <Link href={'/post/new'}>
+        <a className='hover:text-basic-pink'>投稿する</a>
+      </Link>
     </div>
   );
 };

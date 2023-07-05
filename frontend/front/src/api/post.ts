@@ -2,16 +2,6 @@ import Cookies from 'js-cookie';
 import { CreatePostParams } from '../types/post';
 import client from './client';
 
-export const getCurrentUserPostList = () => {
-  return client.get('/posts', {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
 // 2
 export const createPost = (params: CreatePostParams) => {
   return client.post(
@@ -39,9 +29,9 @@ export const deletePost = (postId: number) => {
   });
 };
 
-// /posts/${id} #show
-export const getPostDetailByUserId = async (id: number) => {
-  return client.get(`/posts/${id}`, {
+// サインイン中のユーザーの投稿一覧を取得する
+export const getCurrentUserPostList = () => {
+  return client.get('/posts', {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -50,7 +40,18 @@ export const getPostDetailByUserId = async (id: number) => {
   });
 };
 
-// 3 postの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
+// 指定したuserIdのpostの詳細を取得する関数/#show
+export const getPostDetailByUserId = async (postId: number) => {
+  return client.get(`/posts/${postId}`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
+// 3 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
 export const getPostListByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {
     params: {

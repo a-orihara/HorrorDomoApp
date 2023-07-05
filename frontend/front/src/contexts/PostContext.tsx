@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { getCurrentUserPostList } from '../api/post';
+import { getCurrentUserPostList, getPostDetailByUserId } from '../api/post';
 import { Post } from '../types/post';
 
 type PostProviderProps = {
@@ -10,7 +10,9 @@ type PostProviderProps = {
 type PostContextProps = {
   currentUserPosts: Post[] | undefined;
   currentUserPostsCount: number | undefined;
+  postDetailByPostId: Post | undefined;
   handleGetCurrentUserPostList: () => void;
+  handleGetPostDetailByPostId: (userId: number) => void;
 };
 
 // 2 デフォルト値はkeyがpostsの値が空の配列
@@ -19,14 +21,31 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
+  const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
 
+  // サインイン中ユーザーのPost一覧を状態変数にセットする関数
   const handleGetCurrentUserPostList = async () => {
     try {
+      // サインイン中ユーザーのPost一覧を取得する関数
       const data = await getCurrentUserPostList();
       if (data.data.status == 200) {
         setCurrentUserPosts(data.data.data);
         setCurrentUserPostsCount(data.data.totalPosts);
+        console.log('handleGetPostListでpostがセット');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 指定したuserIdのpostの詳細を取得する関数
+  const handleGetPostDetailByPostId = async (postId: number) => {
+    try {
+      // 指定したuserIdのpostの詳細を取得する関数
+      const data = await getPostDetailByUserId(postId);
+      if (data.data.status == 200) {
+        setPostDetailByPostId(data.data.data);
         console.log('handleGetPostListでpostがセット');
       }
     } catch (err) {
@@ -42,7 +61,15 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // valueプロパティを通じてデータを提供します。
   // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
   return (
-    <PostContext.Provider value={{ currentUserPosts, currentUserPostsCount, handleGetCurrentUserPostList }}>
+    <PostContext.Provider
+      value={{
+        currentUserPosts,
+        currentUserPostsCount,
+        postDetailByPostId,
+        handleGetCurrentUserPostList,
+        handleGetPostDetailByPostId,
+      }}
+    >
       {children}
     </PostContext.Provider>
   );

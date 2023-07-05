@@ -24,7 +24,6 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const relativeTime = formatDistanceToNow(japanTime, { addSuffix: true, locale: ja });
   // 5 3日以上前の日付は「yyyy/MM/dd」形式に、それより新しい日付は「何分前」「何時間前」「何日前」にする
   const displayTime = differenceInDays(new Date(), japanTime) >= 3 ? formattedTime : relativeTime;
-
   const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();

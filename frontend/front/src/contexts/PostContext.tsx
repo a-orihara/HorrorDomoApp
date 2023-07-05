@@ -1,7 +1,7 @@
+import { useRouter } from 'next/router';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { getCurrentUserPostList, getPostDetailByUserId } from '../api/post';
 import { Post } from '../types/post';
-import { useAlertContext } from './AlertContext';
 
 type PostProviderProps = {
   children: React.ReactNode;
@@ -24,8 +24,9 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
+  const router = useRouter();
 
-  const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
+  // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
   // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
   const handleGetCurrentUserPostList = async () => {
@@ -44,6 +45,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
 
   // 指定したuserIdのpostの詳細を取得する関数 #show
   // PostDetailのuseEffectの依存配列に含まれる為、メモ化する
+  // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
       // 以下はコードの一部を省略しています。残りの部分は変更せずそのままにしてください。
@@ -53,19 +55,23 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         if (data.data.status == 200) {
           setPostDetailByPostId(data.data.data);
         } else if (data.data.status == 404) {
-          console.error(`ここelse${data.data.message}`);
+          alert('投稿を表示できません');
+          setTimeout(() => {
+            router.push(`/`);
+          }, 1000);
         }
       } catch (err: any) {
-        console.error(`ここerror${err}`);
-        // alert(`${err.response.data.message}`);
-        setAlertSeverity('error');
         // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
-        setAlertMessage(`${err.response.data.message}`);
-
-        setAlertOpen(true);
+        alert('投稿を表示できません');
+        setTimeout(() => {
+          router.push(`/`);
+        }, 1000);
+        // setAlertSeverity('error');
+        // setAlertMessage(`${err.response.data.message}`);
+        // setAlertOpen(true);
       }
     },
-    [setAlertSeverity, setAlertMessage, setAlertOpen]
+    [router]
   );
 
   // const handleGetPostDetailByPostId = async (postId: number) => {

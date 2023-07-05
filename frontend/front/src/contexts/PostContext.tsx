@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { getCurrentUserPostList, getPostDetailByUserId } from '../api/post';
 import { Post } from '../types/post';
+import { useAlertContext } from './AlertContext';
 
 type PostProviderProps = {
   children: React.ReactNode;
@@ -24,6 +25,8 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
 
+  const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
+
   // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
   const handleGetCurrentUserPostList = async () => {
     try {
@@ -40,21 +43,50 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   };
 
   // 指定したuserIdのpostの詳細を取得する関数 #show
-  const handleGetPostDetailByPostId = async (postId: number) => {
-    try {
-      // 指定したuserIdのpostの詳細を取得する関数
-      const data = await getPostDetailByUserId(postId);
-      if (data.data.status == 200) {
-        setPostDetailByPostId(data.data.data);
-        // console.log('handleGetPostListでpostがセット');
-      } else if (data.data.status == 404) {
-        // 必要に応じてエラーハンドリング
-        console.error(data.data.message);
+  // PostDetailのuseEffectの依存配列に含まれる為、メモ化する
+  const handleGetPostDetailByPostId = useCallback(
+    async (postId: number) => {
+      // 以下はコードの一部を省略しています。残りの部分は変更せずそのままにしてください。
+      try {
+        // 指定したuserIdのpostの詳細を取得する関数
+        const data = await getPostDetailByUserId(postId);
+        if (data.data.status == 200) {
+          setPostDetailByPostId(data.data.data);
+        } else if (data.data.status == 404) {
+          console.error(`ここelse${data.data.message}`);
+        }
+      } catch (err: any) {
+        console.error(`ここerror${err}`);
+        // alert(`${err.response.data.message}`);
+        setAlertSeverity('error');
+        // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
+        setAlertMessage(`${err.response.data.message}`);
+
+        setAlertOpen(true);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    },
+    [setAlertSeverity, setAlertMessage, setAlertOpen]
+  );
+
+  // const handleGetPostDetailByPostId = async (postId: number) => {
+  //   try {
+  //     // 指定したuserIdのpostの詳細を取得する関数
+  //     const data = await getPostDetailByUserId(postId);
+  //     if (data.data.status == 200) {
+  //       setPostDetailByPostId(data.data.data);
+  //     } else if (data.data.status == 404) {
+  //       console.error(`ここelse${data.data.message}`);
+  //     }
+  //   } catch (err: any) {
+  //     console.error(`ここerror${err}`);
+  //     // alert(`${err.response.data.message}`);
+  //     setAlertSeverity('error');
+  //     // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
+  //     setAlertMessage(`${err.response.data.message}`);
+
+  //     setAlertOpen(true);
+  //   }
+  // };
 
   // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {

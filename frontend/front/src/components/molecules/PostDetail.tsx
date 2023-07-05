@@ -14,7 +14,7 @@ export const PostDetail = () => {
     }
   }, [id, handleGetPostDetailByPostId]);
 
-  console.log(`ポスト：${JSON.stringify(postDetailByPostId)}`);
+  console.log(`ポストふは：${JSON.stringify(postDetailByPostId)}`);
 
   return (
     <div className='flex flex-1 flex-col'>

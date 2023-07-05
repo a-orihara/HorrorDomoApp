@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { usePostContext } from '../../contexts/PostContext';
 
-export const PostDetail = () => {
+export const PostDetailArea = () => {
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;
@@ -15,21 +15,16 @@ export const PostDetail = () => {
   }, [id, handleGetPostDetailByPostId]);
 
   return (
-    <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>投稿詳細ページ</h1>
-      <div>
-        {postDetailByPostId ? (
-          <div>
-            <h2>{postDetailByPostId.title}</h2>
-            <p>{postDetailByPostId.content}</p>
-            {/* 他の投稿詳細情報をここに表示 */}
-          </div>
-        ) : (
-          <p>投稿が見つかりませんでした。</p>
-        )}
-      </div>
-      <div className='flex flex-1 flex-col'></div>
-      <div></div>
+    <div>
+      {postDetailByPostId ? (
+        <div>
+          <h2>{postDetailByPostId.title}</h2>
+          <p>{postDetailByPostId.content}</p>
+          {/* 他の投稿詳細情報をここに表示 */}
+        </div>
+      ) : (
+        <p>投稿が見つかりませんでした。</p>
+      )}
     </div>
   );
 };

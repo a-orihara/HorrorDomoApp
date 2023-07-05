@@ -1,14 +1,14 @@
 // frontend/front/src/pages/posts/[id]/index.tsx
 
 import Layout from '../../../components/layout/Layout';
-import { PostDetail } from '../../../components/molecules/PostDetail';
+import { PostDetailPage } from '../../../components/templates/PostDetailPage';
 
-const PostDetailPage = () => {
+const PostDetail = () => {
   return (
     <Layout title='PostDetail'>
-      <PostDetail></PostDetail>;
+      <PostDetailPage></PostDetailPage>
     </Layout>
   );
 };
 
-export default PostDetailPage;
+export default PostDetail;

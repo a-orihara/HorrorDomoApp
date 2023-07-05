@@ -30,9 +30,14 @@ class Api::V1::PostsController < ApplicationController
     render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
   end
 
+  # 11
   def show
-    @post = Post.find(params[:id])
-    render json: { status: 200, data: @post }
+    @post = Post.find_by(id: params[:id])
+    if @post
+      render json: { status: 200, data: @post }
+    else
+      render json: { status: '404', message: '投稿が見つかりません' }, status: :not_found
+    end
   end
 
   # 7
@@ -367,4 +372,14 @@ contentのエラーが一つの場合でも、join(', ')メソッドは有用で
 4. したがって、フロントエンドから送信するリクエストデータは、Railsのストロングパラメータの要件を満たす形にする必
 要があります。上記のコードでは、クライアントが送信するデータの形式を 'post' キーの下に 'content' キーが存在す
 る形に修正することで、Railsのコントローラが期待するデータ形式を満たし、リクエストが成功するようになりました。
+
+================================================================================================
+11
+# @post = Post.find(params[:id])
+# render json: { status: 200, data: @post }
+------------------------------------------------------------------------------------------------
+ここでは、findメソッドの代わりにfind_byメソッドを使用しています。findメソッドは、該当するデータが見つからない場
+合にはActiveRecord::RecordNotFoundエラーを発生させます。
+一方、find_byメソッドは該当するデータが見つからない場合にはnilを返します。そのため、find_byメソッドを使用して該
+当するデータがない場合に適切なレスポンスを返すことができます。
 =end

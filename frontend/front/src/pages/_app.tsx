@@ -11,13 +11,13 @@ Modal.setAppElement('#__next');
 function MyApp({ Component, pageProps }: AppProps) {
   // console.log('_app.tsxが呼ばれた');
   return (
-    <AuthProvider>
-      <AlertProvider>
+    <AlertProvider>
+      <AuthProvider>
         <PostProvider>
           <Component {...pageProps} />
         </PostProvider>
-      </AlertProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </AlertProvider>
   );
 }
 

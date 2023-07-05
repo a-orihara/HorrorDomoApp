@@ -31,13 +31,11 @@ export const useCreatePost = () => {
           router.push(`/`);
         }, 1000);
       } else {
-        console.log('elseが反応');
         setAlertSeverity('error');
         setAlertMessage(`${res.data.errors.fullMessages}`);
         setAlertOpen(true);
       }
     } catch (err: any) {
-      console.log('errorが反応');
       setAlertSeverity('error');
       setAlertMessage(`${err.response.data.errors}`);
       setAlertOpen(true);

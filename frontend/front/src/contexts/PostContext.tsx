@@ -24,7 +24,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
 
-  // サインイン中ユーザーのPost一覧を状態変数にセットする関数
+  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
   const handleGetCurrentUserPostList = async () => {
     try {
       // サインイン中ユーザーのPost一覧を取得する関数
@@ -39,19 +39,23 @@ export const PostProvider = ({ children }: PostProviderProps) => {
     }
   };
 
-  // 指定したuserIdのpostの詳細を取得する関数
+  // 指定したuserIdのpostの詳細を取得する関数 #show
   const handleGetPostDetailByPostId = async (postId: number) => {
     try {
       // 指定したuserIdのpostの詳細を取得する関数
       const data = await getPostDetailByUserId(postId);
       if (data.data.status == 200) {
         setPostDetailByPostId(data.data.data);
-        console.log('handleGetPostListでpostがセット');
+        // console.log('handleGetPostListでpostがセット');
+      } else if (data.data.status == 404) {
+        // 必要に応じてエラーハンドリング
+        console.error(data.data.message);
       }
     } catch (err) {
       console.error(err);
     }
   };
+
   // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {
     handleGetCurrentUserPostList();
@@ -89,6 +93,21 @@ export const usePostContext = () => {
 1
 PostContextPropsはkey名postsの値がPost型の配列を持つオブジェクト型
 PostContextは関数コンポーネントで、関数コンポーネントに渡す引数は基本オブジェクト型
+------------------------------------------------------------------------------------------------
+Contextから関数を取得する実装はReactにおいて一般的に見られます。以下、その理由を説明します。
+
+1. Contextはグローバルな状態管理を行うためのツールで、コンポーネントツリー全体で共有したいデータを保存します。この
+データは、状態（state）だけでなく、その状態を操作するための関数も含まれます。状態とその操作方法を同時に提供すること
+で、コンポーネント間の一貫性とデータの一元管理を実現します。
+
+2. 関数をContextに含めることで、コンポーネントはその関数を直接利用でき、自身で関数を定義する必要がなくなります。こ
+れにより、コードの再利用性が向上し、コードの冗長性が低減します。
+
+3. Contextを用いた状態管理においては、関数自体が状態の一部となります。そのため、関数をContextから取得することは、
+状態を操作するための直感的な方法と言えます。
+
+以上の理由から、Contextから関数を取得する実装は一般的によく見られ、Reactの状態管理における効率的な手法となってい
+ます。
 ================================================================================================
 2
 createContextで新しいContextオブジェクトを作成（関数コンポーネントではない）。

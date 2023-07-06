@@ -16,29 +16,37 @@ const Navigation = () => {
     <nav className='basic-border flex h-16 w-1/2 items-center justify-around bg-red-200 text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
       <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
-        <Link href={'/'}>
-          <a className='hover:text-basic-pink'>HOME</a>
-        </Link>
+        <li>
+          <Link href={'/'}>
+            <a className='hover:text-basic-pink'>HOME</a>
+          </Link>
+        </li>
 
         {router.pathname !== '/signup' && !loading && !isSignedIn && (
-          <Link href={'/signup'}>
-            <a className='hover:text-basic-pink'>SignUp</a>
-          </Link>
+          <li>
+            <Link href={'/signup'}>
+              <a className='hover:text-basic-pink'>SignUp</a>
+            </Link>
+          </li>
         )}
 
         {!loading && !isSignedIn && (
-          <Link href={'/signin'}>
-            <a className='hover:text-basic-pink'>SignIn</a>
-          </Link>
+          <li>
+            <Link href={'/signin'}>
+              <a className='hover:text-basic-pink'>SignIn</a>
+            </Link>
+          </li>
         )}
 
         {!loading && isSignedIn && (
-          <Button
-            className='flex h-14 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:text-2xl'
-            onClick={handleSignOut}
-          >
-            SignOut
-          </Button>
+          <li>
+            <Button
+              className='flex h-14 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:text-2xl'
+              onClick={handleSignOut}
+            >
+              SignOut
+            </Button>
+          </li>
         )}
       </ul>
       <AlertMessage></AlertMessage>

@@ -13,7 +13,7 @@ const Navigation = () => {
   const handleSignOut = useSignOut();
   // ================================================================================================
   return (
-    <nav className='text-s basic-border mr-auto flex h-16  flex-grow bg-red-200  text-center font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className='basic-border mr-auto flex h-16 flex-grow  bg-red-200 text-center  text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
       <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
         <Link href={'/'}>
@@ -31,7 +31,7 @@ const Navigation = () => {
         )}
         {!loading && isSignedIn && (
           <Button
-            className='flex h-14 items-center justify-center bg-basic-green text-white hover:bg-basic-pink'
+            className='flex h-14 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:text-2xl'
             onClick={handleSignOut}
           >
             SignOut

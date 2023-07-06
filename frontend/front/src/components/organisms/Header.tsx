@@ -5,6 +5,7 @@ const Header = () => {
   return (
     <header className='basic-border flex h-16 flex-row items-center justify-around bg-basic-yellow font-spacemono text-2xl font-semibold outline md:text-2xl'>
       <div className='flex-grow'>
+        {/* Horror Domo Appにはこのh1（子）の個別設定が適用される */}
         <h1 className='text-basic-black ml-3 mr-auto text-center font-spacemono text-lg font-semibold tracking-tighter md:text-4xl'>
           Horror Domo App
         </h1>

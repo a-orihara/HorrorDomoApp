@@ -41,7 +41,7 @@ const Navigation = () => {
         {!loading && isSignedIn && (
           <li>
             <Button
-              className='flex h-14 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:text-2xl'
+              className='flex h-8 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:h-12 md:text-2xl'
               onClick={handleSignOut}
             >
               SignOut

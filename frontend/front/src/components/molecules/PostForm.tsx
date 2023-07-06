@@ -11,10 +11,10 @@ const PostForm: React.FC = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
+      <h1 className=' flex h-20 items-center justify-center bg-red-200 pt-4 text-2xl font-semibold md:text-4xl'>
         Let&apos;s post it!
       </h1>
-      <form className='mt-2 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
+      <form className='mt-4 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
         <div>
           <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='title'>
             Title:

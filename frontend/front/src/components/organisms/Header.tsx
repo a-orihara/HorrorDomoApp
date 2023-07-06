@@ -4,7 +4,7 @@ import Navigation from '../molecules/Navigation';
 const Header = () => {
   return (
     <header className='basic-border flex h-16 flex-row items-center justify-around bg-basic-yellow font-spacemono text-2xl font-semibold outline md:text-2xl'>
-      <div className=' flex-grow'>
+      <div className='flex-grow'>
         <h1 className='text-basic-black ml-3 mr-auto text-center font-spacemono text-lg font-semibold tracking-tighter sm:text-2xl md:text-4xl'>
           Horror Domo App
         </h1>

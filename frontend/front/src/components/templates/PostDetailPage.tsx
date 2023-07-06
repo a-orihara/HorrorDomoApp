@@ -15,7 +15,6 @@ export const PostDetailPage = () => {
   return (
     <div className='flex flex-1 flex-col'>
       <PostDetailArea></PostDetailArea>
-      <div className='flex flex-1 flex-col'></div>
     </div>
   );
 };

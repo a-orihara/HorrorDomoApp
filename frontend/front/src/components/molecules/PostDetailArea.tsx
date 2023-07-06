@@ -15,15 +15,18 @@ export const PostDetailArea = () => {
   }, [id, handleGetPostDetailByPostId]);
 
   return (
-    <div>
+    // <div className='flex flex-1 flex-col items-center  justify-center bg-green-200'>
+    <div className='flex flex-1 flex-col bg-green-200'>
       {postDetailByPostId ? (
-        <div>
-          <h2>{postDetailByPostId.title}</h2>
-          <p>{postDetailByPostId.content}</p>
-          {/* 他の投稿詳細情報をここに表示 */}
+        <div className=' mt-4 flex flex-1 flex-col items-center  bg-red-200'>
+          <h2 className='flex h-16 items-center justify-center bg-slate-400 text-center text-xl md:text-3xl'>
+            {postDetailByPostId.title}
+          </h2>
+          {/* whitespace-normal:文章折り返し */}
+          <p className='h-32 whitespace-normal bg-blue-200 text-center'>{postDetailByPostId.content}</p>
         </div>
       ) : (
-        <p>投稿が見つかりませんでした。</p>
+        <p className='text-center'>投稿が見つかりませんでした。</p>
       )}
     </div>
   );

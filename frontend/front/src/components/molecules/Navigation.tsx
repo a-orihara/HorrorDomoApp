@@ -13,14 +13,12 @@ const Navigation = () => {
   const handleSignOut = useSignOut();
   // ================================================================================================
   return (
-    <nav className='basic-border h-16 w-1/2  bg-red-200 text-center  text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className='basic-border flex h-16 w-1/2 items-center justify-around bg-red-200 text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
       <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
-        <li>
-          <Link href={'/'}>
-            <a className='hover:text-basic-pink'>HOME</a>
-          </Link>
-        </li>
+        <Link href={'/'}>
+          <a className='hover:text-basic-pink'>HOME</a>
+        </Link>
 
         {router.pathname !== '/signup' && !loading && !isSignedIn && (
           <Link href={'/signup'}>

@@ -34,19 +34,19 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <div className='mx-1'>
           <Link href={`/users/${user.id}`}>
             <a>
-              <img src={user.avatarUrl || '/no_image_square.jpg'} alt='user avatar' className='h-12 w-12' />
+              <img src={user.avatarUrl || '/no_image_square.jpg'} alt='user avatar' className='h-16 w-16' />
             </a>
           </Link>
         </div>
         <div>
           <p>
             <Link href={`/users/${user.id}`}>
-              <a>{user.name}</a>
+              <a className='text-lg'>{user.name}</a>
             </Link>
           </p>
           {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
           <Link href={`/post/${post.id}`}>
-            <a className='text-sm md:text-xl'>タイトル:{post.title}</a>
+            <a className='text-sm hover:cursor-pointer hover:text-basic-pink md:text-xl'>{post.title}</a>
           </Link>
           <p className='text-center text-sm md:text-xl'>{truncateContent}</p>
           <div className='flex'>

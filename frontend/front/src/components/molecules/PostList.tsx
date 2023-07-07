@@ -18,7 +18,6 @@ const PostList = ({ posts, user }: PostListProps) => {
   }
   return (
     <div className='flex-1'>
-      <h1 className='pl-1 font-spacemono text-lg md:text-3xl'>投稿データ</h1>
       <ol>
         {/* 1 オプショナルチェインニング */}
         {posts?.map((post) => (

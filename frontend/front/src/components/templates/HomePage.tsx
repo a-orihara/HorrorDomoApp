@@ -15,12 +15,13 @@ const HomePage = () => {
   console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
 
   return (
-    <div className='flex  flex-1 flex-col bg-green-200'>
+    <div className='flex flex-1 flex-col bg-green-200'>
       {isSignedIn && currentUser ? (
-        <div className='flex h-full flex-row bg-blue-200'>
-          <div className='w-32  md:w-48'>
+        <div className='h-full bg-blue-200 md:flex md:flex-row'>
+          <div className='sm:w-full md:h-full md:w-48'>
             <Sidebar></Sidebar>
           </div>
+
           <div className='flex-1'>
             {showWelcomeMessage && (
               <h1 className='bg-basic-pink text-2xl text-white'>
@@ -32,7 +33,7 @@ const HomePage = () => {
           </div>
         </div>
       ) : (
-        <div className='mx-auto flex flex-1 flex-col text-center'>
+        <div className='flex h-full w-full flex-1 flex-col text-center'>
           <h1 className='mt-36 scale-y-150 text-center font-spacemono text-3xl font-semibold tracking-tighter text-black md:text-6xl'>
             Welcome to the Horror Domo App!
           </h1>

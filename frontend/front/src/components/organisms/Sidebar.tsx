@@ -7,7 +7,7 @@ const Sidebar = () => {
   return (
     <aside className='basic-border h-full bg-basic-purple p-4'>
       <nav className='h-full'>
-        <ul className='flex  h-full flex-col items-center justify-around bg-basic-purple text-white md:text-2xl'>
+        <ul className='flex h-full flex-row items-center justify-around  text-white md:flex md:flex-col md:text-2xl'>
           <h1 className='mb-2 text-black'>Account</h1>
           <li className='mb-2'>
             <Link href={`/users/${currentUser?.id}/edit`}>

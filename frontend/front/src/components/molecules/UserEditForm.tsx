@@ -26,7 +26,7 @@ const UserEditForm = () => {
       <form className=' flex flex-1 flex-col' encType='multipart/form-data' method='post'>
         <div>
           {/* 1 */}
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
           </Label>
           <Input
@@ -43,7 +43,7 @@ const UserEditForm = () => {
           ></Input>
         </div>
         <div>
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
           <Input
@@ -59,7 +59,7 @@ const UserEditForm = () => {
           ></Input>
         </div>
         <div className='flex flex-col bg-red-200'>
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
             Profile:
           </Label>
           <TextArea

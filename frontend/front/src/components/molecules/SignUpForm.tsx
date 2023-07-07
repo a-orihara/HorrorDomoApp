@@ -26,7 +26,7 @@ const SignUpForm = () => {
       </h1>
       <form className='mt-4 flex flex-1 flex-col md:mt-12 lg:mt-8'>
         <div className='md:mt-4 lg:mt-0'>
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
           </Label>
           <Input
@@ -42,7 +42,7 @@ const SignUpForm = () => {
           ></Input>
         </div>
         <div className='md:mt-4 lg:mt-0'>
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
 
@@ -59,7 +59,7 @@ const SignUpForm = () => {
         </div>
 
         <div className='md:mt-4 lg:mt-0'>
-          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='password'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='password'>
             Password:
           </Label>
 
@@ -77,7 +77,7 @@ const SignUpForm = () => {
 
         <div className='md:mt-4 lg:mt-0'>
           <Label
-            className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5'
+            className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5'
             htmlFor='passwordConfirmation'
           >
             Password Confirmation:

@@ -23,12 +23,14 @@ const UserListItem = ({ user }: UserListItemProps) => {
     <li key={user.id}>
       <Link href={`/users/${user.id}`}>
         <a>
-          <h1 className='text-center text-base hover:text-basic-pink md:text-xl'>{user.name}</h1>
+          <p className='bg-red-100 text-center text-base tracking-widest hover:text-basic-pink md:text-xl'>
+            {user.name}
+          </p>
         </a>
       </Link>
       {isAdmin && isDifferentUser && (
         <a className='hover:cursor-pointer' onClick={() => handleDeleteUser(user.id)}>
-          <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+          <p className='text-center text-basic-green hover:text-basic-pink'>delete</p>
         </a>
       )}
     </li>

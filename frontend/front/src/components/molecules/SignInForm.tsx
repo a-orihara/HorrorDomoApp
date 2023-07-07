@@ -14,7 +14,7 @@ const SignInForm = () => {
       <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>
         Sign In
       </h1>
-      <form className='mt-20 flex flex-1 flex-col bg-amber-100'>
+      <form className='mt-12 flex flex-1 flex-col bg-amber-100 md:mt-20'>
         <div>
           <Label className='m-auto w-2/5 bg-red-100 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
             Email:
@@ -31,7 +31,7 @@ const SignInForm = () => {
             }}
           ></Input>
         </div>
-        <div>
+        <div className='md:mt-12 lg:mt-0'>
           <Label className='m-auto w-2/5 bg-red-100 pl-3 text-left text-lg md:text-2xl' htmlFor='password'>
             Password:
           </Label>
@@ -47,7 +47,7 @@ const SignInForm = () => {
             }}
           ></Input>
         </div>
-        <div>
+        <div className='md:mt-8 lg:mt-0'>
           <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSignIn}>
             Sign In!
           </Button>

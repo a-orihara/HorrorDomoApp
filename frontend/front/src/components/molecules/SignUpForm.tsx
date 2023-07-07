@@ -21,8 +21,10 @@ const SignUpForm = () => {
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign Up</h1>
-      <form className='mt-11 flex flex-1 flex-col'>
+      <h1 className='mt-4 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:mt-12 md:text-4xl lg:mt-8'>
+        Sign Up
+      </h1>
+      <form className='mt-4 flex flex-1 flex-col md:mt-12 lg:mt-8'>
         <div className='md:mt-4 lg:mt-0'>
           <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
@@ -93,7 +95,10 @@ const SignUpForm = () => {
           ></Input>
         </div>
         <div className='md:mt-8 lg:mt-0'>
-          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSignUp}>
+          <Button
+            className='m-auto mt-8 bg-basic-yellow font-semibold hover:bg-hover-yellow md:mt-4'
+            onClick={handleSignUp}
+          >
             Sign Up!
           </Button>
         </div>

@@ -22,17 +22,15 @@ const UserEditForm = () => {
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
-        Update your profile
-      </h1>
-      <form className='mt-6 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
+      <h1 className=' flex h-20 items-center justify-center text-2xl font-semibold md:text-4xl'>Update your profile</h1>
+      <form className=' flex flex-1 flex-col' encType='multipart/form-data' method='post'>
         <div>
           {/* 1 */}
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='name'>
+          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
             id='name'
             type='text'
             name='name'
@@ -45,11 +43,11 @@ const UserEditForm = () => {
           ></Input>
         </div>
         <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
+          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
             id='email'
             type='email'
             name='email'
@@ -61,11 +59,11 @@ const UserEditForm = () => {
           ></Input>
         </div>
         <div className='flex flex-col bg-red-200'>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='profile'>
+          <Label className='m-auto w-4/5 pl-3 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
             Profile:
           </Label>
           <TextArea
-            className='m-auto mb-4 mt-1 h-32 w-2/5 bg-blue-200'
+            className='m-auto mb-4  h-32 w-4/5  bg-blue-200 md:w-3/5 lg:w-2/5'
             id='profile'
             name='profile'
             value={profile || ''}
@@ -76,11 +74,11 @@ const UserEditForm = () => {
           ></TextArea>
         </div>
         <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='avatar'>
             Avatar:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
             id='avatar'
             type='file'
             accept='image/*'
@@ -89,7 +87,7 @@ const UserEditForm = () => {
         </div>
         <div>
           <Button
-            className='m-auto mb-2 mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            className='m-auto mb-4 mt-2 bg-basic-yellow font-semibold hover:bg-hover-yellow'
             onClick={handleUpdateUser}
           >
             Save Changes

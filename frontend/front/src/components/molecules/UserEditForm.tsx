@@ -22,9 +22,11 @@ const UserEditForm = () => {
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center text-2xl font-semibold md:text-4xl'>Update your profile</h1>
-      <form className=' flex flex-1 flex-col' encType='multipart/form-data' method='post'>
-        <div>
+      <h1 className='mt-4 flex h-16 items-center justify-center text-2xl font-semibold md:mt-8 md:text-4xl lg:mt-4'>
+        Update your profile
+      </h1>
+      <form className='mt-0 flex flex-1 flex-col md:mt-4 lg:mt-0' encType='multipart/form-data' method='post'>
+        <div className='md:mt-4 lg:mt-0'>
           {/* 1 */}
           <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
@@ -42,7 +44,7 @@ const UserEditForm = () => {
             }}
           ></Input>
         </div>
-        <div>
+        <div className='md:mt-4 lg:mt-0'>
           <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
@@ -58,12 +60,12 @@ const UserEditForm = () => {
             }}
           ></Input>
         </div>
-        <div className='flex flex-col bg-red-200'>
+        <div className='flex flex-col md:mt-4 lg:mt-0'>
           <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
             Profile:
           </Label>
           <TextArea
-            className='m-auto mb-4  h-32 w-4/5  bg-blue-200 md:w-3/5 lg:w-2/5'
+            className='m-auto mb-2 h-32 w-4/5  bg-blue-200 md:w-3/5 lg:w-2/5'
             id='profile'
             name='profile'
             value={profile || ''}
@@ -73,7 +75,7 @@ const UserEditForm = () => {
             }}
           ></TextArea>
         </div>
-        <div>
+        <div className='md:mt-4 lg:mt-0'>
           <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='avatar'>
             Avatar:
           </Label>
@@ -85,9 +87,9 @@ const UserEditForm = () => {
             onChange={handleAvatarChange}
           />
         </div>
-        <div>
+        <div className='md:mt-8 lg:mt-0'>
           <Button
-            className='m-auto mb-4 mt-2 bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            className='m-auto mb-4 mt-4 bg-basic-yellow font-semibold hover:bg-hover-yellow'
             onClick={handleUpdateUser}
           >
             Save Changes

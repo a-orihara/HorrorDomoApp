@@ -18,7 +18,7 @@ const HomePage = () => {
     <div className='flex flex-1 flex-col bg-green-200'>
       {isSignedIn && currentUser ? (
         <div className='h-full bg-blue-200 md:flex md:flex-row'>
-          <div className='sm:w-full md:h-full md:w-48'>
+          <div className='h-12 w-full md:h-full md:w-48'>
             <Sidebar></Sidebar>
           </div>
 

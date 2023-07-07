@@ -31,10 +31,14 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   return (
     <li key={post.id} className='my-px bg-slate-100'>
       <div className='flex'>
-        <div className='mx-1'>
+        <div className='mx-4'>
           <Link href={`/users/${user.id}`}>
             <a>
-              <img src={user.avatarUrl || '/no_image_square.jpg'} alt='user avatar' className='h-16 w-16' />
+              <img
+                src={user.avatarUrl || '/no_image_square.jpg'}
+                alt='user avatar'
+                className='h-16 w-16 rounded-full'
+              />
             </a>
           </Link>
         </div>

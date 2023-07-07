@@ -21,7 +21,7 @@ const SignInForm = () => {
           </Label>
           <br />
           <Input
-            className='m-auto mb-4 mt-1 w-4/5 bg-blue-100 md:w-3/5 lg:w-2/5'
+            className='m-auto mb-4 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='email'
             type='email'
             name='email'
@@ -37,7 +37,7 @@ const SignInForm = () => {
           </Label>
           <br />
           <Input
-            className='m-auto mb-4 mt-1 w-4/5 bg-blue-100 md:w-3/5 lg:w-2/5'
+            className='m-auto mb-4 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='password'
             type='password'
             name='password'

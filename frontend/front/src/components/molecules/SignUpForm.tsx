@@ -28,7 +28,7 @@ const SignUpForm = () => {
             Name:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='name'
             type='text'
             name='name'
@@ -45,7 +45,7 @@ const SignUpForm = () => {
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='email'
             type='email'
             name='email'
@@ -62,7 +62,7 @@ const SignUpForm = () => {
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='password'
             type='password'
             name='password'
@@ -79,7 +79,7 @@ const SignUpForm = () => {
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='passwordConfirmation'
             type='password'
             name='passwordConfirmation'
@@ -89,7 +89,7 @@ const SignUpForm = () => {
             }}
           ></Input>
         </div>
-        <div>
+        <div className='md:mt-8 lg:mt-0'>
           <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSignUp}>
             Sign Up!
           </Button>

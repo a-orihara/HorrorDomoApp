@@ -20,7 +20,7 @@ const Layout = ({ children, title = 'HorrorDomoApp' }: LayoutProps) => {
         <link rel='icon' href='/favicon.png' />
       </Head>
       <Header></Header>
-      <main className='basic-border basic-border flex flex-1 bg-basic-orange md:flex-row'>{children}</main>
+      <main className='basic-border basic-border flex flex-1 flex-col bg-basic-orange lg:flex-row'>{children}</main>
       <Footer></Footer>
     </div>
   );

@@ -39,11 +39,11 @@ const ProfilePage = () => {
   // ================================================================================================
   return (
     <div className='flex w-full flex-1  flex-col bg-green-200'>
-      <div className='flex h-full flex-1 flex-col bg-blue-200 lg:flex-row'>
-        <div className='w-full lg:w-48'>
+      <div className='flex-wraplg:flex-row flex h-full flex-1 flex-col bg-blue-200'>
+        <div className='h-16 lg:w-48'>
           <Sidebar></Sidebar>
         </div>
-        <div className='w-full bg-red-200 lg:w-80'>
+        <div className=' bg-red-200 lg:w-80'>
           {/* 5 */}
           <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
         </div>

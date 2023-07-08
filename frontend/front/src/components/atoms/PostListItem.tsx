@@ -50,9 +50,11 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           </p>
           {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
           <Link href={`/post/${post.id}`}>
-            <a className='text-sm hover:cursor-pointer hover:text-basic-pink md:text-xl'>{post.title}</a>
+            <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
+              {post.title}
+            </a>
           </Link>
-          <p className='text-center text-sm md:text-xl'>{truncateContent}</p>
+          <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5'>作成日時:{displayTime}</p>
             {/* {currentUser?.id === post.userId && (

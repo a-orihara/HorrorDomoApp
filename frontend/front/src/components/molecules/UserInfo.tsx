@@ -10,8 +10,8 @@ type UserInfoProps = {
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    <div className='flex flex-col rounded-xl border bg-orange-200 p-4 shadow-md md:p-5'>
-      <h1 className='mb-4 rounded-md bg-yellow-100 text-center text-3xl tracking-wide'>Profile</h1>
+    <div className='flex h-full flex-col justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5'>
+      <h1 className='mb-4 rounded-md bg-yellow-100 text-center text-xl tracking-wide'>Profile</h1>
       {/* 1 */}
       <img
         src={user.avatarUrl || '/no_image_square.jpg'}
@@ -21,13 +21,13 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
         style={{ objectFit: 'cover', objectPosition: 'top left' }}
         className='mb-2 rounded-full bg-green-100'
       />
-      <h2 className='mb-2 text-2xl'>Name: {user.name}</h2>
-      <h2 className='mb-2 text-xl'>Email: {user.email}</h2>
-      <h2 className='mb-2 text-xl'>{user.profile || 'profileは設定されていません。'}</h2>
+      <h2 className='mb-2 text-lg'>Name: {user.name}</h2>
+      <h2 className='mb-2 text-base'>Email: {user.email}</h2>
+      <h2 className='mb-2 text-base'>{user.profile || 'profileは設定されていません。'}</h2>
       {/* {avatarUrl && <Image src={avatarUrl} alt='User Avatar' width={200} height={200} />} */}
-      <h2 className='mb-2 text-xl'>総投稿数: {postsCount || 0}</h2>
+      <h2 className='mb-2 text-base'>総投稿数: {postsCount || 0}</h2>
       <Link href={'/post/new'}>
-        <a className='rounded-lg  border-2 text-center text-2xl  font-semibold hover:cursor-pointer hover:text-basic-pink'>
+        <a className='rounded-lg  border-2 bg-slate-500 text-center  text-xl font-semibold hover:cursor-pointer hover:text-basic-pink'>
           投稿を作成する
         </a>
       </Link>

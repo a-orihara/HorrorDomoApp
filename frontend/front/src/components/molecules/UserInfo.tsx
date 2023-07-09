@@ -11,9 +11,11 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>
-    <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'>
+    <div className='flex h-full flex-col rounded-xl border bg-orange-200 p-4 shadow-md md:p-5'>
       <div>
-        <h1 className='mb-4 rounded-md bg-yellow-100 text-center text-sm tracking-wide md:text-xl'>Profile</h1>
+        <h1 className='mb-2 rounded-md  text-center text-sm tracking-wide md:text-xl lg:mb-4'>Profile</h1>
+      </div>
+      <div className='flex flex-row'>
         {/* 1 */}
         <img
           src={user.avatarUrl || '/no_image_square.jpg'}
@@ -21,19 +23,24 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           width='160'
           height='160'
           style={{ objectFit: 'cover', objectPosition: 'top left' }}
-          className='mb-2 rounded-full bg-green-100'
+          className='mb-2 h-1/4 w-1/4 rounded-full bg-green-100 lg:h-full lg:w-full'
         />
-        <div>
+
+        <div className='mx-auto flex flex-col'>
           <h2 className='mb-2 text-sm md:text-lg '>{user.name}</h2>
           <h2 className='mb-2 text-xs md:text-base'>{user.email}</h2>
         </div>
       </div>
+
       <div>
         <h2 className='mb-2 text-xs md:text-base'>{user.profile || 'profileは設定されていません。'}</h2>
-        {/* {avatarUrl && <Image src={avatarUrl} alt='User Avatar' width={200} height={200} />} */}
       </div>
+
       <div>
         <h2 className='mb-2 text-xs md:text-base'>総投稿数: {postsCount || 0}</h2>
+      </div>
+
+      <div>
         <Link href={'/post/new'}>
           <a className='rounded-lg  border-2 bg-slate-500 text-center  text-xl font-semibold hover:cursor-pointer hover:text-basic-pink'>
             投稿を作成する

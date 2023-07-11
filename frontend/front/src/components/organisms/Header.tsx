@@ -4,7 +4,7 @@ import Navigation from '../molecules/Navigation';
 const Header = () => {
   return (
     <header className='basic-border flex h-16 flex-row items-center  bg-basic-pink  font-spacemono text-2xl font-semibold outline md:text-2xl'>
-      <div className='w-1/2 bg-slate-300'>
+      <div className='w-1/2'>
         {/* Horror Domo Appにはこのh1（子）の個別設定が適用される。h1にflex,items-center,justify-center設定で文字が真ん中に */}
         <h1 className='text-basic-black  flex items-center justify-center text-center font-spacemono text-lg font-semibold tracking-tighter md:text-4xl'>
           Horror Domo App

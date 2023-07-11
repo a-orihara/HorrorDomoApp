@@ -11,9 +11,9 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>
-    <div className='flex h-full flex-col rounded-xl border bg-orange-200 p-4 shadow-md md:p-5'>
+    <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>
       <div>
-        <h1 className='mb-2 rounded-md  text-center text-sm tracking-wide md:text-xl lg:mb-4'>Profile</h1>
+        <h1 className='mb-2 mt-2 rounded-md  text-center text-sm tracking-wide md:text-xl lg:mb-4'>Profile</h1>
       </div>
       <div className='flex flex-row'>
         {/* 1 */}
@@ -23,11 +23,11 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           width='160'
           height='160'
           style={{ objectFit: 'cover', objectPosition: 'top left' }}
-          className='mb-2 h-1/4 w-1/4 rounded-full bg-green-100 lg:h-full lg:w-full'
+          className='mb-2 h-1/6 w-1/6 rounded-full bg-green-100 lg:h-full lg:w-full'
         />
 
-        <div className='mx-auto flex flex-col'>
-          <h2 className='mb-2 text-sm md:text-lg '>{user.name}</h2>
+        <div className='ml-2 flex flex-col'>
+          <h2 className='mb-2  text-sm md:text-lg'>{user.name}</h2>
           <h2 className='mb-2 text-xs md:text-base'>{user.email}</h2>
         </div>
       </div>
@@ -37,12 +37,12 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
       </div>
 
       <div>
-        <h2 className='mb-2 text-xs md:text-base'>総投稿数: {postsCount || 0}</h2>
+        <h2 className='mb-2 text-center text-xs md:text-base'>総投稿数: {postsCount || 0}</h2>
       </div>
 
       <div>
         <Link href={'/post/new'}>
-          <a className='rounded-lg  border-2 bg-slate-500 text-center  text-xl font-semibold hover:cursor-pointer hover:text-basic-pink'>
+          <a className='mb-2  flex items-center justify-center rounded-lg border-2  bg-slate-500 text-xl font-semibold hover:cursor-pointer hover:text-basic-pink'>
             投稿を作成する
           </a>
         </Link>

@@ -45,7 +45,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <div>
           <p>
             <Link href={`/users/${user.id}`}>
-              <a className='text-lg'>{user.name}</a>
+              <a className='text-xs'>{user.name}</a>
             </Link>
           </p>
           {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
@@ -56,12 +56,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           </Link>
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
-            <p className='mr-5'>作成日時:{displayTime}</p>
-            {/* {currentUser?.id === post.userId && (
-              <a className='hover:cursor-pointer' onClick={() => handleDeletePost(post.id)}>
-                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
-              </a>
-            )} */}
+            <p className='mr-5 text-xs'>作成日時:{displayTime}</p>
             {currentUser?.id === post.userId && (
               <a
                 className='hover:cursor-pointer'
@@ -71,7 +66,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
                   }
                 }}
               >
-                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+                <h1 className='text-center text-sm text-basic-green hover:text-basic-pink'>delete</h1>
               </a>
             )}
           </div>

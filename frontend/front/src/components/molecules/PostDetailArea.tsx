@@ -1,28 +1,42 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { usePostContext } from '../../contexts/PostContext';
-// import useGetUserById from '../../hooks/user/useGetUserById';
+import useFormattedTime from '../../hooks/helpers/useFormattedTime';
+import useGetUserById from '../../hooks/user/useGetUserById';
 
 export const PostDetailArea = () => {
   // 選択された投稿の詳細と選択した投稿を取得する関数
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;
-  // const { user, handleGetUserById } = useGetUserById(postDetailByPostId?.userId);
+  const { user, handleGetUserById } = useGetUserById(
+    postDetailByPostId?.userId ? postDetailByPostId.userId.toString() : undefined
+  );
+
+  const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
 
   // 1
   useEffect(() => {
     if (id) {
       // 選択した投稿を取得する関数
       handleGetPostDetailByPostId(Number(id));
+      // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
+      handleGetUserById();
     }
-  }, [id, handleGetPostDetailByPostId]);
+  }, [id, handleGetPostDetailByPostId, handleGetUserById]);
 
   return (
     // <div className='flex flex-1 flex-col items-center  justify-center bg-green-200'>
     <div className='flex flex-1 flex-col bg-green-200'>
       {postDetailByPostId ? (
         <div className=' mt-8 flex flex-1 flex-col items-center  bg-red-200'>
+          <img
+            src={user.avatarUrl || '/no_image_square.jpg'}
+            alt='user avatar'
+            className='mt-2 h-16 w-16 rounded-full'
+          />
+          <p>{user?.name}</p>
+          <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
           <h2 className='flex h-16 w-1/3 items-center justify-center  bg-blue-200 text-center text-xl md:text-3xl'>
             {postDetailByPostId.title}
           </h2>

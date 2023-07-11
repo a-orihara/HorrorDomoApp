@@ -3,8 +3,12 @@ import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import { ja } from 'date-fns/locale';
 
-const useFormattedTime = (createdAt: string) => {
+// postContextから取得したpostを利用するので、undefinedの可能性がある
+const useFormattedTime = (createdAt: string | undefined) => {
   // 2 date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
+  if (!createdAt) {
+    return ''; // createdAtがundefinedの場合、空文字を返す
+  }
   const japanTime = utcToZonedTime(createdAt, 'Asia/Tokyo');
   // 3
   const formattedTime = format(japanTime, 'yyyy/MM/dd');

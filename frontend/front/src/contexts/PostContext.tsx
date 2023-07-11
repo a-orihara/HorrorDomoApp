@@ -21,11 +21,14 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
+  // 現在のユーザーの投稿一覧
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
-  const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
+  // 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
-  const router = useRouter();
+  // 選択された投稿の詳細
+  const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
 
+  const router = useRouter();
   // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
   // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
@@ -66,33 +69,10 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         setTimeout(() => {
           router.push(`/`);
         }, 1000);
-        // setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.message}`);
-        // setAlertOpen(true);
       }
     },
     [router]
   );
-
-  // const handleGetPostDetailByPostId = async (postId: number) => {
-  //   try {
-  //     // 指定したuserIdのpostの詳細を取得する関数
-  //     const data = await getPostDetailByUserId(postId);
-  //     if (data.data.status == 200) {
-  //       setPostDetailByPostId(data.data.data);
-  //     } else if (data.data.status == 404) {
-  //       console.error(`ここelse${data.data.message}`);
-  //     }
-  //   } catch (err: any) {
-  //     console.error(`ここerror${err}`);
-  //     // alert(`${err.response.data.message}`);
-  //     setAlertSeverity('error');
-  //     // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
-  //     setAlertMessage(`${err.response.data.message}`);
-
-  //     setAlertOpen(true);
-  //   }
-  // };
 
   // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {

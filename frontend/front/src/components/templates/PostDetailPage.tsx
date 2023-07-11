@@ -12,11 +12,7 @@ export const PostDetailPage = () => {
   //   }
   // }, [id, handleGetPostDetailByPostId]);
 
-  return (
-    <div className='flex flex-1 flex-col'>
-      <PostDetailArea></PostDetailArea>
-    </div>
-  );
+  return <PostDetailArea></PostDetailArea>;
 };
 
 /*

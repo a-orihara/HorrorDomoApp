@@ -11,9 +11,9 @@ const useGetUserById = (id: string | string[] | undefined) => {
   const handleGetUserById = useCallback(async () => {
     // 3
     if (!id) return;
-    console.log('getUserDataById is called');
     try {
       const res = await getUserById(id as string);
+      console.log('わお');
       const fetchedUser: User = res.data;
       // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       setUser(fetchedUser);

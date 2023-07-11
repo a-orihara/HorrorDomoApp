@@ -1,29 +1,53 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { usePostContext } from '../../contexts/PostContext';
+import useFormattedTime from '../../hooks/helpers/useFormattedTime';
+import useGetUserById from '../../hooks/user/useGetUserById';
 
 export const PostDetailArea = () => {
+  // 選択された投稿の詳細と選択した投稿を取得する関数
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;
+  const { user, handleGetUserById } = useGetUserById(
+    postDetailByPostId?.userId ? postDetailByPostId.userId.toString() : undefined
+  );
+
+  const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
 
   // 1
   useEffect(() => {
     if (id) {
+      // 選択した投稿を取得する関数
       handleGetPostDetailByPostId(Number(id));
+      // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
+      handleGetUserById();
     }
-  }, [id, handleGetPostDetailByPostId]);
+  }, [id, handleGetPostDetailByPostId, handleGetUserById]);
 
   return (
     // <div className='flex flex-1 flex-col items-center  justify-center bg-green-200'>
     <div className='flex flex-1 flex-col bg-green-200'>
       {postDetailByPostId ? (
-        <div className=' mt-4 flex flex-1 flex-col items-center  bg-red-200'>
-          <h2 className='flex h-16 items-center justify-center bg-slate-400 text-center text-xl md:text-3xl'>
+        <div className=' mt-8 flex flex-1 flex-col items-center  bg-red-200'>
+          <div className='flex w-1/3 justify-around'>
+            <img
+              src={user.avatarUrl || '/no_image_square.jpg'}
+              alt='user avatar'
+              className=' mt-2 h-16 w-16 rounded-full '
+            />
+            <p className='flex items-center justify-center'>{user?.name}</p>
+          </div>
+
+          <h2 className='flex h-16 w-1/3 items-center justify-center  bg-blue-200 text-center text-xl md:text-3xl'>
             {postDetailByPostId.title}
           </h2>
           {/* whitespace-normal:文章折り返し */}
-          <p className='h-32 whitespace-normal bg-blue-200 text-center'>{postDetailByPostId.content}</p>
+
+          <p className='mt-8 h-32 w-1/2 whitespace-normal border-2 border-solid border-gray-500 bg-blue-200'>
+            {postDetailByPostId.content}
+          </p>
+          <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
         </div>
       ) : (
         <p className='text-center'>投稿が見つかりませんでした。</p>

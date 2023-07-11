@@ -11,16 +11,16 @@ const PostForm: React.FC = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className=' flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>
+      <h1 className=' flex h-20 items-center justify-center bg-red-200 pt-4 text-2xl font-semibold md:text-4xl'>
         Let&apos;s post it!
       </h1>
-      <form className='mt-2 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
+      <form className='mt-4 flex flex-1 flex-col' method='post' onSubmit={handleCreatePost}>
         <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='title'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='title'>
             Title:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='title'
             type='text'
             name='title'
@@ -33,11 +33,11 @@ const PostForm: React.FC = () => {
           ></Input>
         </div>
         <div className='flex flex-1 flex-col'>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='profile'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
             Content:
           </Label>
           <TextArea
-            className='m-auto w-2/5 flex-1'
+            className='m-auto w-4/5 flex-1 md:w-3/5 lg:w-2/5'
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder='何を思っている？'

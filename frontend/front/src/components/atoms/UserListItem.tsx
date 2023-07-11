@@ -20,15 +20,19 @@ const UserListItem = ({ user }: UserListItemProps) => {
 
   // ================================================================================================
   return (
-    <li key={user.id}>
+    <li key={user.id} className='flex flex-row justify-center bg-blue-100'>
+      {/* 1 */}
       <Link href={`/users/${user.id}`}>
-        <a>
-          <h1 className='text-center text-base hover:text-basic-pink md:text-xl'>{user.name}</h1>
+        <a className=' bg-red-100 text-center text-base tracking-widest hover:text-basic-pink md:text-2xl lg:text-xl'>
+          {user.name}
         </a>
       </Link>
       {isAdmin && isDifferentUser && (
-        <a className='hover:cursor-pointer' onClick={() => handleDeleteUser(user.id)}>
-          <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+        <a
+          className='ml-4 text-center text-basic-green hover:cursor-pointer hover:text-basic-pink'
+          onClick={() => handleDeleteUser(user.id)}
+        >
+          delete
         </a>
       )}
     </li>
@@ -36,3 +40,21 @@ const UserListItem = ({ user }: UserListItemProps) => {
 };
 
 export default UserListItem;
+{
+  /* <a>
+          <p className='bg-red-100 text-center text-base tracking-widest hover:text-basic-pink md:text-xl'>
+            {user.name}
+          </p>
+        </a> */
+}
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+h1タグとpタグの使用について:タグの選択は、そのコンテンツの重要性と意味によります。
+<h1>タグは、ページの主要な見出しを表すために使用されます。そのため、各ページでは一度だけ使用するのが最善です。
+また、SEOにとっても重要な役割を果たします。
+<p>タグは、段落や一般的なテキストを表示するために使用されます。
+もしこのリンクがページの主要な見出しや重要なセクションの見出しを示すものであれば、<h1>を使用するべきです。ただし、
+一般的なテキストリンクや説明の一部としてリンクが含まれている場合は、<p>タグを使用するべきです。
+*/

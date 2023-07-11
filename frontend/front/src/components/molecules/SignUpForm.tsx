@@ -21,14 +21,16 @@ const SignUpForm = () => {
   // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
-      <h1 className='mt-10 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign Up</h1>
-      <form className='mt-11 flex flex-1 flex-col'>
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='name'>
+      <h1 className='mt-4 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:mt-12 md:text-4xl lg:mt-8'>
+        Sign Up
+      </h1>
+      <form className='mt-4 flex flex-1 flex-col md:mt-12 lg:mt-8'>
+        <div className='md:mt-4 lg:mt-0'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='name'>
             Name:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='name'
             type='text'
             name='name'
@@ -39,13 +41,13 @@ const SignUpForm = () => {
             }}
           ></Input>
         </div>
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='email'>
+        <div className='md:mt-4 lg:mt-0'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='email'
             type='email'
             name='email'
@@ -56,13 +58,13 @@ const SignUpForm = () => {
           ></Input>
         </div>
 
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='password'>
+        <div className='md:mt-4 lg:mt-0'>
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='password'>
             Password:
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='password'
             type='password'
             name='password'
@@ -73,13 +75,16 @@ const SignUpForm = () => {
           ></Input>
         </div>
 
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='passwordConfirmation'>
+        <div className='md:mt-4 lg:mt-0'>
+          <Label
+            className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5'
+            htmlFor='passwordConfirmation'
+          >
             Password Confirmation:
           </Label>
 
           <Input
-            className='m-auto mb-2 mt-1 w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
             id='passwordConfirmation'
             type='password'
             name='passwordConfirmation'
@@ -89,8 +94,11 @@ const SignUpForm = () => {
             }}
           ></Input>
         </div>
-        <div>
-          <Button className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow' onClick={handleSignUp}>
+        <div className='md:mt-8 lg:mt-0'>
+          <Button
+            className='m-auto mt-8 bg-basic-yellow font-semibold hover:bg-hover-yellow md:mt-4'
+            onClick={handleSignUp}
+          >
             Sign Up!
           </Button>
         </div>

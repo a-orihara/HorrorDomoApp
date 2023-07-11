@@ -20,8 +20,7 @@ const ProfilePage = () => {
   const { user, handleGetUserById } = useGetUserById(id);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
-  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(5, userId);
-  // const { handleGetPostsCountByUserId, postsCount } = usePostContext();
+  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, userId);
   const { currentUserPostsCount } = usePostContext();
   // ------------------------------------------------------------------------------------------------
   // 2
@@ -39,25 +38,22 @@ const ProfilePage = () => {
 
   // ================================================================================================
   return (
-    <div className='flex w-full flex-1 flex-col bg-green-200'>
-      <div className='flex h-full flex-1 flex-row bg-blue-200'>
-        <div className='w-32  md:w-48'>
-          <Sidebar></Sidebar>
-        </div>
-        <div className='w-80 bg-red-200'>
-          {/* 5 */}
-          <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
-        </div>
-        <div className='flex-1 bg-green-200'>
-          {/* 6 */}
-          <PostList posts={posts} user={user}></PostList>
-          {/* 7 */}
-          <PostsPagination
-            totalPostsCount={totalPostsCount}
-            itemsPerPage={5}
-            handlePageChange={handlePageChange}
-          ></PostsPagination>
-        </div>
+    <div className='flex flex-1 flex-col bg-blue-200 lg:flex-row'>
+      <Sidebar></Sidebar>
+
+      <div className=' bg-red-200 lg:w-80'>
+        {/* 5 */}
+        <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
+      </div>
+      <div className='flex-1 bg-green-200 lg:w-full'>
+        {/* 6 */}
+        <PostList posts={posts} user={user}></PostList>
+        {/* 7 */}
+        <PostsPagination
+          totalPostsCount={totalPostsCount}
+          itemsPerPage={10}
+          handlePageChange={handlePageChange}
+        ></PostsPagination>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
     def generate_avatar_url(user)
       # 8
       if user.avatar.attached?
-        variant = user.avatar.variant(resize: "100x100^", gravity: "center", crop: "100x100+0+0")
+        variant = user.avatar.variant(resize: "150x150^", gravity: "center", crop: "150x150+0+0")
         rails_representation_url(variant, only_path: false)
       end
     end

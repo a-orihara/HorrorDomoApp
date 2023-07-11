@@ -24,7 +24,6 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const relativeTime = formatDistanceToNow(japanTime, { addSuffix: true, locale: ja });
   // 5 3日以上前の日付は「yyyy/MM/dd」形式に、それより新しい日付は「何分前」「何時間前」「何日前」にする
   const displayTime = differenceInDays(new Date(), japanTime) >= 3 ? formattedTime : relativeTime;
-
   const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
@@ -32,28 +31,32 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   return (
     <li key={post.id} className='my-px bg-slate-100'>
       <div className='flex'>
-        <div className='mx-1'>
+        <div className='mx-4'>
           <Link href={`/users/${user.id}`}>
             <a>
-              <img src={user.avatarUrl || '/no_image_square.jpg'} alt='user avatar' className='h-12 w-12' />
+              <img
+                src={user.avatarUrl || '/no_image_square.jpg'}
+                alt='user avatar'
+                className='mt-2 h-16 w-16 rounded-full'
+              />
             </a>
           </Link>
         </div>
         <div>
           <p>
             <Link href={`/users/${user.id}`}>
-              <a>{user.name}</a>
+              <a className='text-xs lg:text-base lg:tracking-wider'>{user.name}</a>
             </Link>
           </p>
-          <p className='text-sm md:text-xl'>タイトル:{post.title}</p>
-          <p className='text-center text-sm md:text-xl'>{truncateContent}</p>
+          {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
+          <Link href={`/post/${post.id}`}>
+            <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
+              {post.title}
+            </a>
+          </Link>
+          <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
-            <p className='mr-5'>作成日時:{displayTime}</p>
-            {/* {currentUser?.id === post.userId && (
-              <a className='hover:cursor-pointer' onClick={() => handleDeletePost(post.id)}>
-                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
-              </a>
-            )} */}
+            <p className='mr-5 text-xs lg:text-base'>作成日時:{displayTime}</p>
             {currentUser?.id === post.userId && (
               <a
                 className='hover:cursor-pointer'
@@ -63,7 +66,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
                   }
                 }}
               >
-                <h1 className='text-center text-basic-green hover:text-basic-pink'>delete</h1>
+                <h1 className='text-center text-sm text-basic-green hover:text-basic-pink lg:text-base'>delete</h1>
               </a>
             )}
           </div>

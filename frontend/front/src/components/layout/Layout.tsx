@@ -11,16 +11,17 @@ type LayoutProps = {
 // flexを子に適用
 const Layout = ({ children, title = 'HorrorDomoApp' }: LayoutProps) => {
   return (
-    <div className='container mx-auto flex min-h-screen min-w-full flex-col font-spacemono outline'>
+    <div className='flex min-h-screen flex-col font-spacemono outline'>
       {/* 1 */}
       <Head>
         <title>{title}</title>
         <meta charSet='utf-8' />
         <meta name='description' content='ホラー映画好きが集まる投稿サイトです' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <link rel='icon' href='/favicon.png' />
       </Head>
       <Header></Header>
-      <main className='basic-border basic-border flex flex-1 flex-row bg-basic-orange'>{children}</main>
+      <main className='basic-border flex flex-1 flex-col bg-basic-orange lg:flex-row'>{children}</main>
       <Footer></Footer>
     </div>
   );

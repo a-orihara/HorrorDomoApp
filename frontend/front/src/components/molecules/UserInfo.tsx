@@ -13,9 +13,9 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
     // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>
     <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>
       <div>
-        <h1 className='mb-2 mt-2 rounded-md  text-center text-sm tracking-wide md:text-xl lg:mb-4'>Profile</h1>
+        <h1 className='mb-2 mt-2 rounded-md  text-center text-sm tracking-wide md:text-2xl lg:mb-4'>Profile</h1>
       </div>
-      <div className='flex flex-row'>
+      <div className='flex flex-row justify-evenly'>
         {/* 1 */}
         <img
           src={user.avatarUrl || '/no_image_square.jpg'}
@@ -26,10 +26,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           className='mb-2 h-1/6 w-1/6 rounded-full bg-green-100 lg:h-full lg:w-full'
         />
 
-        <div className='ml-2 flex flex-col'>
-          <h2 className='mb-2  text-sm md:text-lg'>{user.name}</h2>
-          <h2 className='mb-2 text-xs md:text-base'>{user.email}</h2>
-        </div>
+        <h2 className='mb-2  ml-2 flex items-center justify-center bg-slate-200 text-sm md:text-xl'>{user.name}</h2>
       </div>
 
       <div>

@@ -37,7 +37,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               <img
                 src={user.avatarUrl || '/no_image_square.jpg'}
                 alt='user avatar'
-                className='h-16 w-16 rounded-full'
+                className='mt-2 h-16 w-16 rounded-full'
               />
             </a>
           </Link>

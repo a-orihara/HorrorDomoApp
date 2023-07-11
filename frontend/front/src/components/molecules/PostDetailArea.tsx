@@ -45,7 +45,7 @@ export const PostDetailArea = () => {
           {/* whitespace-normal:文章折り返し */}
 
           <p className='mt-8 h-32 w-1/2 break-words border-2 border-solid border-gray-500 bg-blue-200'>
-            {postDetailByPostId.content}sssssssssssssssssssss
+            {postDetailByPostId.content}
           </p>
           <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
         </div>

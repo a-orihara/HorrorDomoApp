@@ -195,6 +195,7 @@ active_relationships
 ます。
 - `user.active_relationships.create(followed_id: other_user.id)`：`user` オブジェクトに関連する
 `active_relationships` を作成します。user と紐付けて能動的関係を作成/登録する。
+user.active_relationships.create(followed_id: 4)のように使う。
 - `user.active_relationships.create!(followed_id: other_user.id)`：`user` オブジェクトに関連する
 `active_relationships` を作成します。userを紐付けて能動的関係を作成/登録する(失敗時にエラーを出力)。
 ================================================================================================

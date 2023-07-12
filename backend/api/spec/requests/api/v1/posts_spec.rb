@@ -103,12 +103,14 @@ RSpec.describe "Api::V1::Posts", type: :request do
   describe 'GET /api/v1/posts/:id' do
     context '投稿が存在する場合' do
       before { get api_v1_post_path(test_post.id), headers: auth_headers }
+
       it '200 OKを返すこと' do
         expect(response).to have_http_status(200)
       end
 
       it 'リクエストした投稿の情報が正しく返ること' do
-        json = JSON.parse(response.body)
+        # json = JSON.parse(response.body)だとRubocopの警告が出るので、response.parsed_bodyを使う
+        json = response.parsed_body
         expect(json['data']['id']).to eq test_post.id
         expect(json['data']['content']).to eq test_post.content
       end

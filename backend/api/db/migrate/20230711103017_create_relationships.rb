@@ -2,7 +2,7 @@
 class CreateRelationships < ActiveRecord::Migration[6.1]
   def change
     create_table :relationships do |t|
-      # idのカラムを作成
+      # 2 idのカラムを作成。外部キーとして使用。
       t.integer :follower_id
       t.integer :followed_id
 
@@ -23,6 +23,11 @@ $ rails generate model Relationship follower_id:integer followed_id:integer
 
 ================================================================================================
 2
+foreign_keyとは、参照先を参照するための外部キーの名前を指定するもの。
+つまり、belongs_toで参照する相手（参照先:user）の外部キーを指定するために、belongs_toを行う側(relationship)
+のmodelファイルに記述しなければならないもの
+================================================================================================
+3
 add_index
 指定したテーブルにインデックスを追加。インデックスとは、データベースの検索性能を向上させるためのデータ構造。
 ------------------------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 # 1
 class Post < ApplicationRecord
-  # 2
+  # 2 postは一人のuserに属するので単数形で書く
   belongs_to :user
   # 3 { self.order(created_at: :desc) }のselfが省略されている
   default_scope -> { order(created_at: :desc) }

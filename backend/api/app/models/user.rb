@@ -11,16 +11,24 @@ class User < ApplicationRecord
 
   # 3 has_one_attachedやhas_manyなどのアソシエーションはバリデーションの前に配置
   has_one_attached :avatar
-  # 5
+  # 5 一人のuserは複数のpostを持つのでpostsと複数形にする
   has_many :posts, dependent: :destroy
-  # 7
+  # 7 一人のuserは複数のuserをフォローをするのでactive_relationshipsと複数形にする
   has_many :active_relationships, class_name: "Relationship",
                                   foreign_key: "follower_id",
                                   dependent: :destroy,
                                   # 8
                                   inverse_of: :follower
+
+  # 13
+  has_many :passive_relationships, class_name: "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent: :destroy
   # 9 引数の値にシンボルがあれば、rubyだとそれは慣習的にメソッドのこと。そのメソッドを呼び出す。
   has_many :following, through: :active_relationships, source: :followed
+  # 14
+  has_many :followers, through: :passive_relationships, source: :follower
+
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形
   validates :name,  presence: true, length: { maximum: 30 }
   # 2
@@ -32,18 +40,23 @@ class User < ApplicationRecord
                                      message: :invalid_image_format },
                      size: { less_than: 5.megabytes,
                              message: :size_over }
-  # ユーザーをフォローする
+
+  # ここ以下のメソッドは、privateにしていないので外部（コントローラー）から呼び出せる
+  # 10 ユーザーをフォローする。followingはhas_manyで定義したメソッド
   def follow(other_user)
+    # self.following << other_user
     following << other_user
   end
 
-  # ユーザーをフォロー解除する
+  # 11 ユーザーをフォロー解除する
   def unfollow(other_user)
+    #  self.active_relationships.find_by(followed_id: other_user.id).destroy
      active_relationships.find_by(followed_id: other_user.id).destroy
   end
 
-  # 現在のユーザーがフォローしてたら true を返す
+  # 12 現在のユーザーがフォローしてたら true を返す
   def following?(other_user)
+    # self.following.include?(other_user)
     following.include?(other_user)
   end
 end
@@ -148,6 +161,9 @@ include DeviseTokenAuth::Concerns::User
 ================================================================================================
 5
 has_many :posts
+一対多のテーブルを作成した時，テーブル user を参照先，テーブル post を参照元と呼びます。
+参照元には外部キーが必要です。
+------------------------------------------------------------------------------------------------
 has_many  <Model（クラス）名>で、そのクラス名を使ったメソッドが複数生成されます。
 そのメソッドはUserモデルを通して関連するPostモデルを取得するためのものです。
 つまり、Userモデルを通じて関連するPostモデルを取得することができます。これは、Userモデルが複数のPostモデルと関連
@@ -171,6 +187,9 @@ config/locales/ja.ymlの日本語化ファイルからエラーメッセージ�
 ================================================================================================
 7
 has_many <Model（クラス）名>
+一対多のテーブルを作成した時，テーブル user を参照先，テーブル active_relationships を参照元と呼びます。
+参照元には外部キーが必要です。
+------------------------------------------------------------------------------------------------
 has_many :active_relationships
 userモデルのインスタンスに、active_relationshipsというメソッドを作成する。
 ------------------------------------------------------------------------------------------------
@@ -217,12 +236,13 @@ active_relationships
 user.active_relationships.create(followed_id: 4)のように使う。
 - `user.active_relationships.create!(followed_id: other_user.id)`：`user` オブジェクトに関連する
 `active_relationships` を作成します。userを紐付けて能動的関係を作成/登録する(失敗時にエラーを出力)。
+
 ================================================================================================
 8
 inverse_of:
 これもclass_name:やforeign_key:と同じ、has_manyのオプション。
 :inverse_ofオプションは、その関連付けの逆関連付けとなるhas_many関連付けまたはhas_one関連付けの名前を指定します
-。
+
 ------------------------------------------------------------------------------------------------
 通常は、関連付けを双方向に機能させるために、2つのモデルの両方に関連付けを定義する必要があります。
 class Author < ApplicationRecord
@@ -251,6 +271,7 @@ foreign_key等を指定して関連付けされている場合、inverse_ofが�
 
 このように、片方向の関連付けしかない場合、関連するモデルの間で情報や操作を共有するための便利なメソッドやアクセスが
 制限されることになります。双方向関連付けを使用することで、より柔軟で便利な関連性を実現することができます。
+
 ================================================================================================
 9
 has_many :following, through: :active_relationships, source: :followed
@@ -305,4 +326,45 @@ Rails は「followeds」というシンボル名を見て、これを「followed
 しかし、user.followeds という名前は英語として不適切です。代わりに、user.following という名前を使うために、
 Rails のデフォルトを上書きする必要があります。ここでは:source パラメーターを使って、「following 配列の元は、
 followed id の集合である」ということを明示的に Rails に伝えます。
+------------------------------------------------------------------------------------------------
+followingメソッドの戻り値は、そのユーザーがフォローしているユーザーのリスト
+（ActiveRecord::Associations::CollectionProxyオブジェクト）です。
+
+================================================================================================
+10
+followメソッドの戻り値は、other_userをfollowing配列に追加した結果となります。これは、
+ActiveRecord::Associations::CollectionProxyオブジェクト（つまりフォロー中のユーザーのコレクション）です。
+------------------------------------------------------------------------------------------------
+<<
+<<はRubyのArrayのメソッドで、要素を配列の最後に追加します。following << other_userはother_userをfollowing
+配列の末尾に追加することを意味します。
+
+================================================================================================
+11
+unfollowメソッドの戻り値は、find_byメソッドにより見つけたactive_relationships（つまりフォロー関係）の、
+destroyメソッドの結果となります。成功した場合、削除されたRelationshipオブジェクトが返ります。
+find_byで該当するRelationshipが見つからない場合はnilが返ります。
+Railsのモデルのインスタンスのdestroyメソッドは、削除対象が存在しない場合：destroyメソッドはnilを返します。
+
+================================================================================================
+12
+include?は、配列が特定の要素を含むかどうかを確認します。
+following.include?(other_user)はfollowing配列がother_userを含むかどうかを確認します。
+------------------------------------------------------------------------------------------------
+following?と対照的な followed_by?メソッドを定義してもよかったのですが、サン プルアプリケーションで実際に使う場
+面がなかったのでこのメソッドは省略
+
+================================================================================================
+13
+詳細な説明は、7のhas_many :active_relationshipsを参考
+
+================================================================================================
+14
+9のhas_many :followingを参考
+------------------------------------------------------------------------------------------------
+これは:followers 属性の場合、Rails が「followers」を単数形にして自動的に外部キーfollower_id を探してくれるか
+ら、参照先(followers)を指定するための:source キーを省略してもよい。
+必要のない:source キー をそのまま残しているのは、has_many :followingとの類似性を強調させるためです。
+------------------------------------------------------------------------------------------------
+
 =end

@@ -32,6 +32,20 @@ class User < ApplicationRecord
                                      message: :invalid_image_format },
                      size: { less_than: 5.megabytes,
                              message: :size_over }
+  # ユーザーをフォローする
+  def follow(other_user)
+    following << other_user
+  end
+
+  # ユーザーをフォロー解除する
+  def unfollow(other_user)
+     active_relationships.find_by(followed_id: other_user.id).destroy
+  end
+
+  # 現在のユーザーがフォローしてたら true を返す
+  def following?(other_user)
+    following.include?(other_user)
+  end
 end
 
 =begin

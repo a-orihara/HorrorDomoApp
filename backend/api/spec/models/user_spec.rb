@@ -84,6 +84,15 @@ RSpec.describe User, type: :model do
       user.unfollow(other_user)
       expect(user.following?(other_user)).to be_falsey
     end
+
+    it '他のユーザーがユーザーをフォローしていること' do
+      expect(other_user.followers.include?(user)).to be_truthy
+    end
+
+    it '他のユーザーがユーザーのフォローを解除した場合' do
+      other_user.followers.delete(user)
+      expect(other_user.followers.include?(user)).to be_falsey
+    end
   end
 end
 

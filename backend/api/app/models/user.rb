@@ -23,7 +23,9 @@ class User < ApplicationRecord
   # 13
   has_many :passive_relationships, class_name: "Relationship",
                                    foreign_key: "followed_id",
-                                   dependent: :destroy
+                                   dependent: :destroy,
+                                   inverse_of: :followed
+
   # 9 引数の値にシンボルがあれば、rubyだとそれは慣習的にメソッドのこと。そのメソッドを呼び出す。
   has_many :following, through: :active_relationships, source: :followed
   # 14

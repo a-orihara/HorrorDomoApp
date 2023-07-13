@@ -10,7 +10,11 @@ Rails.application.routes.draw do
       # api/v1/authenticated_users
       resources :authenticated_users, only: %i[index]
       # api/v1/users
-      resources :users, only: %i[index show]
+      resources :users, only: %i[index show] do
+        member do
+          get :following, :followers
+        end
+      end
       # api/v1/posts
       resources :posts
 

@@ -30,7 +30,7 @@ active_relationships テーブル（クラス名：Relationship）の follower_i
 ------------------------------------------------------------------------------------------------
 belongs_to :follower, class_name: "User" によって生成されるメソッド
 follower
-`follower` の使用例は以下の通りです：
+`follower` の使用例は以下の通りです。relationshipインスタンスに対して：
 - `relationship.follower`：`relationship` オブジェクトのフォロワー（follower）を取得します。
 - `relationship.follower.name`：`relationship` オブジェクトのフォロワーの名前を取得します。
 - `relationship.follower.posts`：`relationship` オブジェクトのフォロワーが作成した投稿を取得します。

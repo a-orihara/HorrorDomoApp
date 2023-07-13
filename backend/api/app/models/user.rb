@@ -19,6 +19,8 @@ class User < ApplicationRecord
                                   dependent: :destroy,
                                   # 8
                                   inverse_of: :follower
+  # 9 引数の値にシンボルがあれば、rubyだとそれは慣習的にメソッドのこと。そのメソッドを呼び出す。
+  has_many :following, through: :active_relationships, source: :followed
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形
   validates :name,  presence: true, length: { maximum: 30 }
   # 2
@@ -155,6 +157,9 @@ config/locales/ja.ymlの日本語化ファイルからエラーメッセージ�
 ================================================================================================
 7
 has_many <Model（クラス）名>
+has_many :active_relationships
+userモデルのインスタンスに、active_relationshipsというメソッドを作成する。
+------------------------------------------------------------------------------------------------
 has_many :active_relationshipsだと、railsはactive_relationshipクラスを探しに行く。
 しかしそれは存在しないので、class_name:  "Relationship"で、Relationshipクラスを探しに行くように指定している。
 :active_relationshipsは任意の名前を設定している。railsの規約にない設定の為、こういう記述になる。
@@ -232,4 +237,58 @@ foreign_key等を指定して関連付けされている場合、inverse_ofが�
 
 このように、片方向の関連付けしかない場合、関連するモデルの間で情報や操作を共有するための便利なメソッドやアクセスが
 制限されることになります。双方向関連付けを使用することで、より柔軟で便利な関連性を実現することができます。
+================================================================================================
+9
+has_many :following, through: :active_relationships, source: :followed
+userインスタンスにfollowingメソッドを作成する。
+このfollowingメソッドは、userインスタンスのactive_relationshipsメソッドを通して、followed_idを取得する。
+
+has_many :through関連付けは、他方のモデルと「多対多」のつながりを設定する場合によく使われます。
+この関連付けでは、2つのモデル（この場合UserとUser）の間に「第3のモデル」（joinモデル:この場合Relationshipモデ
+ル）が介在し、それを経由（through）して相手のモデル（Userモデル）の「0個以上」のインスタンスとマッチします。
+------------------------------------------------------------------------------------------------
+userインスタンスに対して、active_relationshipsメソッドを実行し、それで得られたそれぞれのRelationshipのインス
+タンスデータ（自分がフォローしているデータの集合）の一つ一つに対して、followedメソッド（active_relationships.
+followed）を実行する。
+------------------------------------------------------------------------------------------------
+through オプション
+関連する別のモデル（Relationshipモデル）を介して関連を設定するためのオプションです。
+through: :active_relationships と指定することで、active_relationships テーブル（Relationshipモデル）を
+経由して関連を設定します。
+through オプションは、引数に、関連を設定するために使用する中間テーブル（アソシエーションテーブル:この場合
+Relationshipモデル）を指定するためのもの、中間テーブルを表すメソッドや直接中間テーブル名などを指定します。
+
+:active_relationships, class_name: "Relationship",より、
+through: :active_relationshipsは、Relationshipモデルのこと。
+------------------------------------------------------------------------------------------------
+source: :followed
+source オプションは、through オプションと組み合わせて使用され、中間テーブルで参照する関連を指定します。
+through オプションで指定した中間テーブルに、さらにその中間テーブルにおいて、followedを通して、関連するモデルの名
+前（User、フォローしているユーザー）を指定します。
+------------------------------------------------------------------------------------------------
+`through: :active_relationships` を指定している場合、`source: :followed` を追加することで、`User` モデル
+が `:following` という関連を通じて直接的に `:followed` の関連を持つことを示しています。
+
+`through: :active_relationships` と指定している場合、`has_many :following` によって返される関連オブジェク
+トは、`User` モデルが `active_relationships` テーブルを介して関連付けられた `Relationship` モデルのコレクシ
+ョンです。
+しかし、`Relationship` モデルそのものではなく、`User` モデルがフォローしているユーザーを取得したい場合に
+`source: :followed` を使用します。
+`source: :followed` は、`Relationship` モデルの中で関連するユーザーモデルの名前を指定しています。
+具体的には、`followed` という関連モデルを通じて `User` モデルと関連付けることで、`User` モデルがフォローしてい
+るユーザーを取得します。
+`followed` は `Relationship` モデルの中で `belongs_to :followed, class_name: "User"` のように定義されて
+いる関連です。
+したがって、`has_many :following, through: :active_relationships, source: :followed` は、「`User` モ
+デルが `active_relationships` テーブルを介して関連付けられた `Relationship` モデルを通じて、`followed` モ
+デル（つまり、`User` モデルがフォローしているユーザー）を取得する」という意味になります。
+------------------------------------------------------------------------------------------------
+has_many :followeds, through: :active_relationshipsだと、
+Rails は「followeds」というシンボル名を見て、これを「followed」という単数形に変え、 relationships テーブル（
+モデル）のfollowed_id を使って対象のユーザーを取得してきます。
+つまり、デフォルトのhas_many throughという関連付けでは、Rails はモデル名(relationship:単数形)に対応する外部キ
+ー(followed_id)を探します。
+しかし、user.followeds という名前は英語として不適切です。代わりに、user.following という名前を使うために、
+Rails のデフォルトを上書きする必要があります。ここでは:source パラメーターを使って、「following 配列の元は、
+followed id の集合である」ということを明示的に Rails に伝えます。
 =end

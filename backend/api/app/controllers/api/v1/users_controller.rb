@@ -46,6 +46,15 @@ class Api::V1::UsersController < ApplicationController
     render json: { status: '200', following_count: following_count }
   end
 
+  # GET /api/v1/users/:id/followers（memberメソッドでrouteは作成）
+  # followersはmodels/user.rbで定義
+  def followers
+    user  = User.find(params[:id])
+    followers_count = user.followers.count
+    # @users = @user.following.paginate(page: params[:page])
+    render json: { status: '200', followers_count: followers_count }
+  end
+
   private
 
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。

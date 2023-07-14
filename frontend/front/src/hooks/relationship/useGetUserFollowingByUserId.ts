@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { getUserFollowingByUserId } from '../../api/relationship';
 
+// ユーザーのフォロー数を取得するフック
 export const useGetUserFollowingByUserId = (userId: number) => {
   const [followingCount, setFollowingCount] = useState();
   const handleGetUserFollowingByUserId = async () => {

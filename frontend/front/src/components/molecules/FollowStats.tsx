@@ -15,12 +15,17 @@ const FollowStats = ({ userId }: { userId: number }) => {
   return (
     <div>
       <Link href={'/'}>
-        <a className='hover:text-basic-pink'>following</a>
+        <a className='hover:text-basic-pink'>
+          フォロー
+          <span className='underline'>{followingCount}</span>
+        </a>
       </Link>
-      <p>{followingCount}</p>
-      <p>{followersCount}</p>
-
-      <p>ここ</p>
+      <Link href={'/'}>
+        <a className='hover:text-basic-pink'>
+          フォロワー
+          <span className='underline'>{followersCount}</span>
+        </a>
+      </Link>
     </div>
   );
 };

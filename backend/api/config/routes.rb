@@ -258,6 +258,14 @@ Railsのルーティングで使用されるメソッドで、`resources`ブロ�
 - `/api/v1/users/:id/following`: 指定したIDのユーザーがフォローしているユーザーのリストを取得します。
 - `/api/v1/users/:id/followers`: 指定したIDのユーザーをフォローしているユーザーのリストを取得します。
 これらの`:id`部分は、対象となるユーザーのIDに置き換えられます。
+------------------------------------------------------------------------------------------------
+member do ブロック内に記述された get :following は、/api/v1/users/:id/following というパスに対する GET
+リクエストが送られたとき、そのリクエストを UsersController の following アクションにルーティングします。
+同様に、get :followers は /api/v1/users/:id/followers というパスに対する GET リクエストを followers アク
+ションにルーティングします。
+------------------------------------------------------------------------------------------------
+GET /users/1/following following following_user_path(1)
+GET /users/1/followers followers followers_user_path(1)
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識

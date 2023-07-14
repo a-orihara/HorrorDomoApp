@@ -13,7 +13,6 @@ const useGetUserById = (id: string | string[] | undefined) => {
     if (!id) return;
     try {
       const res = await getUserById(id as string);
-      console.log('わお');
       const fetchedUser: User = res.data;
       // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       setUser(fetchedUser);

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import client from './client';
 
-export const getUserFollowingByUserId = (userId: string) => {
+export const getUserFollowingByUserId = (userId: number) => {
   return client.get(`/users/${userId}/following`, {
     headers: {
       'access-token': Cookies.get('_access_token'),

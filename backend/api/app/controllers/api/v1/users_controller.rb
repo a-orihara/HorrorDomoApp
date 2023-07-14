@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index]
+  before_action :authenticate_api_v1_user!, only: [:index, :following]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -36,6 +36,15 @@ class Api::V1::UsersController < ApplicationController
   # PATCH/PUT /api/v1/users/1
   # def update
   # end
+
+  # GET /api/v1/users/:id/following（memberメソッドでrouteは作成）
+  # followingはmodels/user.rbで定義
+  def following
+    user  = User.find(params[:id])
+    following_count = user.following.count
+    # @users = @user.following.paginate(page: params[:page])
+    render json: { status: '200', following_count: following_count }
+  end
 
   private
 

@@ -59,6 +59,11 @@ end
   end
 end
 
+allusers = User.all
+following = allusers[2..5]
+followers = allusers[3..6]
+following.each { |followed| user1.follow(followed) }
+followers.each { |follower| follower.follow(user1) }
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @

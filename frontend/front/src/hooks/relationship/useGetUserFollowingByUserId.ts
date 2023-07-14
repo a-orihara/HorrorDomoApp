@@ -4,9 +4,13 @@ import { getUserFollowingByUserId } from '../../api/relationship';
 export const useGetUserFollowingByUserId = (userId: number) => {
   const [followingCount, setFollowingCount] = useState();
   const handleGetUserFollowingByUserId = async () => {
-    const data = await getUserFollowingByUserId(userId);
-    const count = data.data.followingCount;
-    setFollowingCount(count);
+    try {
+      const data = await getUserFollowingByUserId(userId);
+      const count = data.data.followingCount;
+      setFollowingCount(count);
+    } catch (error) {
+      console.log(error);
+    }
   };
   // 1 handleGetUserFollowingByUserId();
   return { followingCount, handleGetUserFollowingByUserId };

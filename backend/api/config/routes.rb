@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :authenticated_users, only: %i[index]
       # api/v1/users
       resources :users, only: %i[index show] do
+        # 2
         member do
           get :following, :followers
         end
@@ -243,6 +244,20 @@ api_v1_post GET    /api/v1/posts/:id(.:format)  api/v1/posts#show
 更新するためのパスです。
 - `api_v1_post`: 対応するパスは`/api/v1/posts/:id`で、HTTPメソッドは`DELETE`です。特定のpostを削除するた
 めのパスです。
+
+================================================================================================
+2
+`member`
+Railsのルーティングで使用されるメソッドで、`resources`ブロック内で使用されます。
+これは、そのリソースの特定のメンバー(つまり、特定のIDを持つレコード)に対する追加のルートを定義します。
+`member`はブロックとして引数を取り、そのブロック内でHTTP動詞メソッド(`get`, `post`, `patch`, `put`,
+  `delete`)を使用してルートを定義します。
+  今回のケースでは、`:following`と`:followers`という名前の`get`リクエストを受け取るルートが定義されています。
+------------------------------------------------------------------------------------------------
+作成されるルートパスは以下の2つとなります。
+- `/api/v1/users/:id/following`: 指定したIDのユーザーがフォローしているユーザーのリストを取得します。
+- `/api/v1/users/:id/followers`: 指定したIDのユーザーをフォローしているユーザーのリストを取得します。
+これらの`:id`部分は、対象となるユーザーのIDに置き換えられます。
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識

@@ -1,19 +1,24 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { useGetUserFollowersByUserId } from '../../hooks/relationship/useGetUserFollowersByUserId';
 import { useGetUserFollowingByUserId } from '../../hooks/relationship/useGetUserFollowingByUserId';
 const FollowStats = ({ userId }: { userId: number }) => {
   const { followingCount, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
+  const { followersCount, handleGetUserFollowersByUserId } = useGetUserFollowersByUserId(userId);
+
   useEffect(() => {
     handleGetUserFollowingByUserId();
-    console.log('もも');
-  }, [userId, handleGetUserFollowingByUserId]);
+    handleGetUserFollowersByUserId();
+  }, [userId, handleGetUserFollowingByUserId, handleGetUserFollowersByUserId]);
   // 1 handleGetUserFollowingByUserId();
+
   return (
     <div>
       <Link href={'/'}>
         <a className='hover:text-basic-pink'>following</a>
       </Link>
       <p>{followingCount}</p>
+      <p>{followersCount}</p>
 
       <p>ここ</p>
     </div>

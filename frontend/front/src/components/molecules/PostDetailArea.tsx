@@ -32,7 +32,7 @@ export const PostDetailArea = () => {
         <div className=' mt-8 flex flex-1 flex-col items-center  bg-red-200'>
           <div className='flex w-1/3 justify-around'>
             <img
-              src={user.avatarUrl || '/no_image_square.jpg'}
+              src={user?.avatarUrl || '/no_image_square.jpg'}
               alt='user avatar'
               className=' mt-2 h-16 w-16 rounded-full '
             />
@@ -44,7 +44,7 @@ export const PostDetailArea = () => {
           </h2>
           {/* whitespace-normal:文章折り返し */}
 
-          <p className='mt-8 h-32 w-1/2 whitespace-normal border-2 border-solid border-gray-500 bg-blue-200'>
+          <p className='mt-8 h-32 w-1/2 break-words border-2 border-solid border-gray-500 bg-blue-200'>
             {postDetailByPostId.content}
           </p>
           <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>

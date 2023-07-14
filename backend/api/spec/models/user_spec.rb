@@ -66,6 +66,34 @@ RSpec.describe User, type: :model do
       expect { user.destroy }.to change(Post, :count).by(-1)
     end
   end
+
+  # ユーザーのフォロー・フォロー解除（following関連のメソッドをテスト）
+  describe 'ユーザーのフォローとフォロー解除' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    before do
+      user.follow(other_user)
+    end
+
+    it 'ユーザーをフォローできること' do
+      expect(user.following?(other_user)).to be_truthy
+    end
+
+    it 'ユーザーのフォローを解除できること' do
+      user.unfollow(other_user)
+      expect(user.following?(other_user)).to be_falsey
+    end
+
+    it '他のユーザーがユーザーをフォローしていること' do
+      expect(other_user.followers.include?(user)).to be_truthy
+    end
+
+    it '他のユーザーがユーザーのフォローを解除した場合' do
+      other_user.followers.delete(user)
+      expect(other_user.followers.include?(user)).to be_falsey
+    end
+  end
 end
 
 =begin

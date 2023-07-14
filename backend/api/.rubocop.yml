@@ -142,6 +142,10 @@ RSpec/MultipleExpectations:
 RSpec/NestedGroups:
   Max: 4
 
+# RSpecのコードで特定のマッチャーの使用方法に関する警告
+RSpec/PredicateMatcher:
+  Enabled: false
+
 # ハッシュリテラルの書式に関するスタイルをチェックする
 # 紛らわしいので一旦オフにする
 Style/HashSyntax:

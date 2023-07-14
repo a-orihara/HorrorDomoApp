@@ -36,7 +36,7 @@ users = [user1, user2]
 users.each do |user|
   25.times do
     content = Faker::Lorem.characters(number: 77)
-    title = Faker::Lorem.sentence(word_count: 5)
+    title = Faker::Lorem.sentence(word_count: 3)
     user.posts.create!(content: content, title: title)
   end
 end
@@ -54,11 +54,16 @@ end
                 profile: profile) # プロフィールを追加
   20.times do
     content = Faker::Lorem.characters(number: 77)
-    title = Faker::Lorem.sentence(word_count: 5) # 追加
+    title = Faker::Lorem.sentence(word_count: 3) # 追加
     user.posts.create!(content: content, title: title)
   end
 end
 
+allusers = User.all
+following = allusers[2..5]
+followers = allusers[3..6]
+following.each { |followed| user1.follow(followed) }
+followers.each { |follower| follower.follow(user1) }
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @

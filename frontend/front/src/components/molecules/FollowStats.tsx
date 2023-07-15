@@ -16,13 +16,13 @@ const FollowStats = ({ userId }: { userId: number }) => {
     <div>
       <Link href={'/'}>
         <a className='hover:text-basic-pink'>
-          フォロー
+          フォロー:
           <span className='underline'>{followingCount}</span>
         </a>
       </Link>
       <Link href={'/'}>
         <a className='hover:text-basic-pink'>
-          フォロワー
+          フォロワー:
           <span className='underline'>{followersCount}</span>
         </a>
       </Link>

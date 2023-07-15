@@ -60,11 +60,14 @@ end
 end
 
 allusers = User.all
-following = allusers[2..5]
-followers = allusers[3..6]
+following = allusers[2..4]
+followers = allusers[3..5]
 following.each { |followed| user1.follow(followed) }
 followers.each { |follower| follower.follow(user1) }
-
+following = allusers[5..7]
+followers = allusers[6..8]
+following.each { |followed| user2.follow(followed) }
+followers.each { |follower| follower.follow(user2) }
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

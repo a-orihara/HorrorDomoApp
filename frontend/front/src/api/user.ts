@@ -40,7 +40,7 @@ export const userIndex = (page: number, itemsPerPage: number) => {
 };
 
 // 指定したIDのユーザー情報を取得する:GET /api/v1/users/1->users_controller#show
-export const getUserById = (userId: string) => {
+export const getUserById = (userId: number) => {
   // console.log('getUserByIdが呼ばれた');
   return client.get(`/users/${userId}`, {
     headers: {

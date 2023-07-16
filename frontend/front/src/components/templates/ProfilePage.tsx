@@ -18,7 +18,7 @@ const ProfilePage = () => {
   // 4
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // 選択したidに紐付くuserとpostsを取得
-  const { user, handleGetUserById } = useGetUserById(id);
+  const { user, handleGetUserById } = useGetUserById(userId);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
   // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
   const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, userId);

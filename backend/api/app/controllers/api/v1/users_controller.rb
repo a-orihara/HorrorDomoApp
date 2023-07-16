@@ -41,9 +41,10 @@ class Api::V1::UsersController < ApplicationController
   # followingはmodels/user.rbで定義
   def following
     user  = User.find(params[:id])
+    following = user.following
     following_count = user.following.count
     # @users = @user.following.paginate(page: params[:page])
-    render json: { status: '200', following_count: following_count }
+    render json: { status: '200', following: following, following_count: following_count }
   end
 
   # GET /api/v1/users/:id/followers（memberメソッドでrouteは作成）

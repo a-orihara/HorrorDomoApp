@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getUserFollowingByUserId } from '../../api/relationship';
 
 // ユーザーのフォロー数を取得するフック
-export const useGetUserFollowingByUserId = (userId: number) => {
+export const useGetUserFollowingByUserId = (userId: number | undefined) => {
   const [followingCount, setFollowingCount] = useState();
-  const handleGetUserFollowingByUserId = async () => {
+  const [following, setFollowing] = useState();
+
+  const handleGetUserFollowingByUserId = useCallback(async () => {
+    // console.log('handleGetUserFollowingが呼ばれました');
     try {
       const data = await getUserFollowingByUserId(userId);
+      const following = data.data.following;
       const count = data.data.followingCount;
+      setFollowing(following);
       setFollowingCount(count);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [userId]);
+
   // 1 handleGetUserFollowingByUserId();
-  return { followingCount, handleGetUserFollowingByUserId };
+  return { followingCount, following, handleGetUserFollowingByUserId };
 };
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

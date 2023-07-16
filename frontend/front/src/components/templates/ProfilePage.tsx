@@ -32,7 +32,7 @@ const ProfilePage = () => {
     // }, [id, handleGetUserById, handleGetPostsByUserId]);
   }, [id, handleGetUserById]);
 
-  // 3
+  // 3 この処理を通過するということは、userに値が存在し、型はUserとして扱うことができる
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -43,7 +43,7 @@ const ProfilePage = () => {
       <Sidebar></Sidebar>
 
       <div className=' bg-red-200 lg:w-80'>
-        {/* 5 */}
+        {/* 5  if (!user)の通過により、 user: Userになる */}
         <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
       </div>
       <div className='flex-1 bg-green-200 lg:w-full'>

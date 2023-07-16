@@ -37,7 +37,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           {user.name}
         </h2>
       </div>
-      <FollowStats userId={user.id}></FollowStats>
+      <FollowStats userId={userId}></FollowStats>
 
       <div>
         <h2 className='mb-2 text-xs md:text-base lg:mb-4'>{user.profile || 'profileは設定されていません。'}</h2>

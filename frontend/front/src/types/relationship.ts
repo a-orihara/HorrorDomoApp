@@ -1,0 +1,12 @@
+export type Following = {
+  id: number;
+  uid: string;
+  provider: string;
+  email: string;
+  name: string;
+  allowPasswordChange: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  admin: boolean;
+  profile: string | null;
+};

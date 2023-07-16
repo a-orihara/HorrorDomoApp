@@ -4,9 +4,9 @@ import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
+import Pagination from '../molecules/Pagination';
 
 import PostList from '../molecules/PostList';
-import PostsPagination from '../molecules/PostsPagination';
 import UserInfo from '../molecules/UserInfo';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
@@ -50,11 +50,12 @@ const ProfilePage = () => {
         {/* 6 */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}
-        <PostsPagination
+        {/* <PostsPagination
           totalPostsCount={totalPostsCount}
           itemsPerPage={10}
           handlePageChange={handlePageChange}
-        ></PostsPagination>
+        ></PostsPagination> */}
+        <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
       </div>
     </div>
   );

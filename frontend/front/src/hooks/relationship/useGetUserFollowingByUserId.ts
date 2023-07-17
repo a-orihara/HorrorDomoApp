@@ -19,8 +19,9 @@ export const useGetUserFollowingByUserId = (userId: number | undefined) => {
         setFollowing(followings);
         setFollowingCount(count);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      // ◆エラー仮実装
+      alert('ユーザーが存在しません');
     }
   }, [userId]);
 

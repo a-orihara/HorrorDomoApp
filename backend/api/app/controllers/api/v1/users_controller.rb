@@ -40,11 +40,15 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:id/following（memberメソッドでrouteは作成）
   # followingはmodels/user.rbで定義
   def following
-    user  = User.find(params[:id])
-    following = user.following
-    following_count = user.following.count
-    # @users = @user.following.paginate(page: params[:page])
-    render json: { status: '200', following: following, following_count: following_count }
+    # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
+    user = User.find_by(id: params[:id])
+    if user
+      following = user.following
+      following_count = user.following.count
+      render json: { status: '200', following: following, following_count: following_count }
+    else
+      render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
+    end
   end
 
   # GET /api/v1/users/:id/followers（memberメソッドでrouteは作成）

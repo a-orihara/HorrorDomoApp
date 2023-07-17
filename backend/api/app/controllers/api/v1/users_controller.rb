@@ -40,12 +40,16 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:id/following（memberメソッドでrouteは作成）
   # followingはmodels/user.rbで定義
   def following
+    puts "followingアクションが発火"
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
     # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
     user = User.find_by(id: params[:id])
     if user
       following = user.following
       following_count = user.following.count
-      render json: { status: '200', following: following, following_count: following_count }
+      following_pagenation = user.following.page(page).per(per_page)
+      render json: { status: '200', following: following, following_count: following_count, following_pagenation: following_pagenation }
     else
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end

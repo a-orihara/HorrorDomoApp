@@ -10,13 +10,15 @@ export const useGetUserFollowingByUserId = (userId: number | undefined) => {
   const [following, setFollowing] = useState<FollowUser[]>();
 
   const handleGetUserFollowingByUserId = useCallback(async () => {
-    // console.log('handleGetUserFollowingが呼ばれました');
+    if (!userId) return;
     try {
       const data = await getUserFollowingByUserId(userId);
       if (data.status == 200) {
-        const followings: FollowUser[] = data.data.following;
+        console.log('handleGetUserFollowingが呼ばれました');
+        const following: FollowUser[] = data.data.following;
+        console.log(`ここ${JSON.stringify(following)}`);
         const count: number = data.data.followingCount;
-        setFollowing(followings);
+        setFollowing(following);
         setFollowingCount(count);
       }
     } catch (err) {

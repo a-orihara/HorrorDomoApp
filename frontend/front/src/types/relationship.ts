@@ -1,4 +1,4 @@
-export type Following = {
+export type FollowUser = {
   id: number;
   uid: string;
   provider: string;

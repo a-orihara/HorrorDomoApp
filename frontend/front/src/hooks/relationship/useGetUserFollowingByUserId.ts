@@ -1,19 +1,24 @@
 import { useCallback, useState } from 'react';
 import { getUserFollowingByUserId } from '../../api/relationship';
+import { FollowUser } from '../../types/relationship';
 
-// ユーザーのフォロー数を取得するフック
+// ユーザーのフォローユーザーとその総数を取得するフック
+// (userId: number | undefined)はrouter.queryからidを取得する為
 export const useGetUserFollowingByUserId = (userId: number | undefined) => {
-  const [followingCount, setFollowingCount] = useState();
-  const [following, setFollowing] = useState();
+  // export const useGetUserFollowingByUserId = (userId: number) => {
+  const [followingCount, setFollowingCount] = useState<number>();
+  const [following, setFollowing] = useState<FollowUser[]>();
 
   const handleGetUserFollowingByUserId = useCallback(async () => {
     // console.log('handleGetUserFollowingが呼ばれました');
     try {
       const data = await getUserFollowingByUserId(userId);
-      const following = data.data.following;
-      const count = data.data.followingCount;
-      setFollowing(following);
-      setFollowingCount(count);
+      if (data.status == 200) {
+        const followings: FollowUser[] = data.data.following;
+        const count: number = data.data.followingCount;
+        setFollowing(followings);
+        setFollowingCount(count);
+      }
     } catch (error) {
       console.log(error);
     }

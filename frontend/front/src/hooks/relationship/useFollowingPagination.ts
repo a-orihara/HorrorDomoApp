@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { FollowUser } from '../../types/relationship';
 import { useGetUserFollowingByUserId } from './useGetUserFollowingByUserId';
@@ -13,5 +13,10 @@ export const useFollowingPagination = (userId: number | undefined) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  const { followingCount, following, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
+  const { followingCount, following, followingPagination, handleGetUserFollowingByUserId } =
+    useGetUserFollowingByUserId(userId);
+
+  useEffect(() => {
+    handleGetUserFollowingByUserId();
+  }, [handleGetUserFollowingByUserId]);
 };

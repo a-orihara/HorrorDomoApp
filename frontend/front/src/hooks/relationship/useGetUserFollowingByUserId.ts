@@ -8,6 +8,7 @@ export const useGetUserFollowingByUserId = (userId: number | undefined) => {
   // export const useGetUserFollowingByUserId = (userId: number) => {
   const [followingCount, setFollowingCount] = useState<number>();
   const [following, setFollowing] = useState<FollowUser[]>();
+  const [followingPagination, setFollowingPagination] = useState<FollowUser[]>();
 
   const handleGetUserFollowingByUserId = useCallback(async () => {
     if (!userId) return;
@@ -18,8 +19,10 @@ export const useGetUserFollowingByUserId = (userId: number | undefined) => {
         const following: FollowUser[] = data.data.following;
         console.log(`ここ${JSON.stringify(following)}`);
         const count: number = data.data.followingCount;
+        const followingPagination: FollowUser[] = data.data.followingPagination;
         setFollowing(following);
         setFollowingCount(count);
+        setFollowingPagination(followingPagination);
       }
     } catch (err) {
       // ◆エラー仮実装
@@ -28,7 +31,7 @@ export const useGetUserFollowingByUserId = (userId: number | undefined) => {
   }, [userId]);
 
   // 1 handleGetUserFollowingByUserId();
-  return { followingCount, following, handleGetUserFollowingByUserId };
+  return { followingCount, following, followingPagination, handleGetUserFollowingByUserId };
 };
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

@@ -13,7 +13,7 @@ export const FollowersListItem = ({ follower, user }: FollowersListItemProps) =>
   console.log(`そ:${JSON.stringify(follower)}`);
   return (
     <div>
-      <li className='my-px flex flex-row justify-center divide-y divide-slate-200 '>
+      <li className='my-px flex flex-row justify-center divide-y divide-slate-200'>
         <Link href={`/users/${follower.id}`}>
           <a>
             <img

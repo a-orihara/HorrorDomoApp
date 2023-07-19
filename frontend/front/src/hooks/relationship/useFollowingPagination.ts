@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { getFollowingPaginationByUserId } from '../../api/relationship';
+import { getFollowingByUserId } from '../../api/relationship';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { FollowUser } from '../../types/relationship';
 
@@ -17,14 +17,14 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   //   useGetUserFollowingByUserId(userId);
   console.log(`OK:useFollowingPaginationの${userId}`);
 
-  const handleGetFollowingPaginationByUserId = useCallback(
+  const handleGetFollowingByUserId = useCallback(
     async (page: number) => {
       try {
-        const res = await getFollowingPaginationByUserId(page, itemsPerPage, userId);
+        const res = await getFollowingByUserId(page, itemsPerPage, userId);
         setFollowing(res.data.following);
         setTotalFollowingCount(res.data.followingCount);
-        // console.log(`OK:handleGetFollowingPaginationByUserIdのtotalFollowing:${res.data.followingCount}`);
-        // console.log(`OK:handleGetFollowingPaginationByUserIdのfollowing:${JSON.stringify(res.data.following)}`);
+        // console.log(`OK:handleGetFollowingByUserIdのtotalFollowing:${res.data.followingCount}`);
+        // console.log(`OK:handleGetFollowingByUserIdのfollowing:${JSON.stringify(res.data.following)}`);
       } catch (err: any) {
         setAlertSeverity('error');
         // setAlertMessage(`${err.response.data.errors[0]}`);
@@ -41,9 +41,9 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   // router.queryの値が、初期レンダリング時にはまだundefinedである可能性がある為、条件分岐を記載
   useEffect(() => {
     if (userId !== undefined) {
-      handleGetFollowingPaginationByUserId(currentPage);
+      handleGetFollowingByUserId(currentPage);
     }
-  }, [handleGetFollowingPaginationByUserId, currentPage, userId]);
+  }, [handleGetFollowingByUserId, currentPage, userId]);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { getFollowersCountByUserId } from '../../api/relationship';
 
-// ユーザーのフォロワー数を取得するフック
+// idユーザーのフォローワーの総数を取得するフック
 export const useGetFollowersCountByUserId = (userId: number | undefined) => {
   // console.log('handleGetUserFollowerが呼ばれました');
   const [followersCount, setFollowersCount] = useState<number>();

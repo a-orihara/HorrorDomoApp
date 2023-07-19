@@ -1,5 +1,5 @@
 function FollowersPage() {
-  return <div>FollowersPage</div>;
+  return <div>ここはFollowersPage</div>;
 }
 
 export default FollowersPage;

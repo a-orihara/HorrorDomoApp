@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { useGetFollowingCountByUserId } from '../../hooks/relationship/useGetFollowingCountByUserId';
 import { useGetUserFollowersByUserId } from '../../hooks/relationship/useGetUserFollowersByUserId';
-import { useGetUserFollowingByUserId } from '../../hooks/relationship/useGetUserFollowingByUserId';
 const FollowStats = ({ userId }: { userId: number | undefined }) => {
-  const { followingCount, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
-
+  const { followingCount, handleGetFollowingCountByUserId } = useGetFollowingCountByUserId(userId);
   const { followersCount, handleGetUserFollowersByUserId } = useGetUserFollowersByUserId(userId);
 
   useEffect(() => {
     // console.log('FollowStatsのuseEffectが呼ばれました');
-    handleGetUserFollowingByUserId();
+    handleGetFollowingCountByUserId();
     handleGetUserFollowersByUserId();
-  }, [userId, handleGetUserFollowingByUserId, handleGetUserFollowersByUserId]);
+  }, [userId, handleGetFollowingCountByUserId, handleGetUserFollowersByUserId]);
   // 1 handleGetUserFollowingByUserId();
 
   return (

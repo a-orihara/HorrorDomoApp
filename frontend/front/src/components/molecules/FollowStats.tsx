@@ -4,6 +4,7 @@ import { useGetUserFollowersByUserId } from '../../hooks/relationship/useGetUser
 import { useGetUserFollowingByUserId } from '../../hooks/relationship/useGetUserFollowingByUserId';
 const FollowStats = ({ userId }: { userId: number | undefined }) => {
   const { followingCount, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
+
   const { followersCount, handleGetUserFollowersByUserId } = useGetUserFollowersByUserId(userId);
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const FollowStats = ({ userId }: { userId: number | undefined }) => {
 
   return (
     <div>
-      <Link href={'/'}>
+      <Link href={`/users/${userId}/following`}>
         <a className='hover:text-basic-pink'>
           フォロー:
           <span className='underline'>{followingCount}</span>

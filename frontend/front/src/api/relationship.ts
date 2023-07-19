@@ -2,16 +2,16 @@ import Cookies from 'js-cookie';
 import client from './client';
 
 // ユーザーのフォロー情報を取得するAPI
-// export const getUserFollowingByUserId = (userId: number | undefined) => {
-//   // export const getUserFollowingByUserId = (userId: number) => {
-//   return client.get(`/users/${userId}/following`, {
-//     headers: {
-//       'access-token': Cookies.get('_access_token'),
-//       client: Cookies.get('_client'),
-//       uid: Cookies.get('_uid'),
-//     },
-//   });
-// };
+export const getUserFollowingByUserId = (userId: number | undefined) => {
+  // export const getUserFollowingByUserId = (userId: number) => {
+  return client.get(`/users/${userId}/following`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
 
 export const getFollowingByUserId = async (page: number, itemsPerPage: number, userId: number | undefined) => {
   console.log(`getFollowingByUserIdの${userId}`);

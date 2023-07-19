@@ -38,3 +38,18 @@ export const getFollowersCountByUserId = (userId: number | undefined) => {
     },
   });
 };
+
+export const getFollowersByUserId = async (page: number, itemsPerPage: number, userId: number | undefined) => {
+  // console.log(`getFollowingByUserIdの${userId}`);
+  return client.get(`/users/${userId}/followers`, {
+    params: {
+      page: page + 1,
+      per_page: itemsPerPage,
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};

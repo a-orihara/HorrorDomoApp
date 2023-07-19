@@ -2,11 +2,11 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { getFollowersByUserId } from '../../api/relationship';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { Follower } from '../../types/relationship';
+import { FollowUser } from '../../types/relationship';
 
 export const useFollowersPagination = (itemsPerPage: number, userId?: number) => {
   // 指定したuserIdのフォローユーザー一覧
-  const [followers, setFollowers] = useState<Follower[]>([]);
+  const [followers, setFollowers] = useState<FollowUser[]>([]);
   // 指定したuserIdのフォローユーザーの総数
   const [totalFollowersCount, setTotalFollowersCount] = useState(0);
   // 現在のページ番号

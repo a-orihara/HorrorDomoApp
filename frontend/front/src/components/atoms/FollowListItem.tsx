@@ -1,20 +1,18 @@
 import Link from 'next/link';
-import { Follower } from '../../types/relationship';
+import { FollowUser } from '../../types/relationship';
 import { User } from '../../types/user';
 
-type FollowersListItemProps = {
+type FollowListItemProps = {
   // 非同期データ取得の前には、結果がまだ取得されていない（すなわちundefined）可能性がある
-  follower: Follower;
+  targetUser: FollowUser;
   user: User;
 };
 
-// followersはフォローしているユーザーの配列
-export const FollowersListItem = ({ follower, user }: FollowersListItemProps) => {
-  console.log(`そ:${JSON.stringify(follower)}`);
+export const FollowListItem = ({ targetUser, user }: FollowListItemProps) => {
   return (
     <div>
       <li className='my-px flex flex-row justify-center divide-y divide-slate-200 '>
-        <Link href={`/users/${follower.id}`}>
+        <Link href={`/users/${targetUser.id}`}>
           <a>
             <img
               src={user.avatarUrl || '/no_image_square.jpg'}
@@ -24,9 +22,9 @@ export const FollowersListItem = ({ follower, user }: FollowersListItemProps) =>
           </a>
         </Link>
         <div className='flex  items-center justify-center'>
-          <Link href={`/users/${follower.id}`}>
+          <Link href={`/users/${targetUser.id}`}>
             <a className='ml-4  text-sm text-black text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
-              {follower.name}
+              {targetUser.name}
             </a>
           </Link>
         </div>

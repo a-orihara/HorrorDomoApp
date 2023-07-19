@@ -61,13 +61,13 @@ end
 
 allusers = User.all
 following = allusers[2..30]
-followers = allusers[3..31]
+followers = allusers[4..31]
 # user1がフォロー
 following.each { |followed| user1.follow(followed) }
 # user1をフォロー
 followers.each { |follower| follower.follow(user1) }
 following = allusers[30..51]
-followers = allusers[3..31]
+followers = allusers[4..31]
 # user2がフォロー
 following.each { |followed| user2.follow(followed) }
 # user2をフォロー

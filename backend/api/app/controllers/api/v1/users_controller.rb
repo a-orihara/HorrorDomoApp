@@ -46,11 +46,13 @@ class Api::V1::UsersController < ApplicationController
     # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
     user = User.find_by(id: params[:id])
     if user
-      following = user.following
+      following = user.following.page(page).per(per_page)
       following_count = user.following.count
-      following_pagination = following.page(page).per(per_page)
-      render json: { status: '200', following: following, following_count: following_count, following_pagination: following_pagination }
+      # following_pagination = following.page(page).per(per_page)
+      render json: { status: '200', following: following, following_count: following_count}
+      puts "userいます3"
     else
+      puts "userいません"
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end
   end

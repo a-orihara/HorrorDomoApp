@@ -17,6 +17,7 @@ const ProfilePage = () => {
   const { id } = router.query;
   // 4
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
+  console.log(`ProfilePage.tsxのuserId: ${userId}`);
   // 選択したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(userId);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
@@ -27,7 +28,6 @@ const ProfilePage = () => {
   // 2
   useEffect(() => {
     handleGetUserById();
-
     // handleGetPostsCountByUserId;
     // }, [id, handleGetUserById, handleGetPostsByUserId]);
   }, [id, handleGetUserById]);
@@ -90,7 +90,16 @@ idが変更された場合、ユーザーデータを再度取得する必要が
 さらにuseCallback`により新しい `handleGetUserDataById` 関数が作成されますが、useCallbackは生成するだけで、
 この関数は自動的に実行されません。ProfilePage.tsx`の `useEffect` 内のように、明示的に呼び出されたときのみ実行
 されます。
+------------------------------------------------------------------------------------------------
+`useEffect`内の`handleGetUserById()`関数が再度呼び出される理由は、`id`が依存配列に含まれているためです。依存
+配列に`id`が含まれているということは、`id`の値が変わるたびに`useEffect`内のコードが再度実行されるということです。
 
+ここでの`id`は、`router.query`から取得されるURLのクエリパラメータです。ページが初めて読み込まれるとき、この`id`
+はまだ定義されていません（つまり`undefined`）。その後、URLのクエリパラメータが読み込まれると、`id`はその値に更新
+され、この更新により`useEffect`内のコードが再度実行されるのです。
+
+したがって、`useEffect`内の`handleGetUserById()`関数は、最初に`userId`が`undefined`だったとき、そしてURL
+のクエリパラメータが読み込まれて`userId`が更新されたときの、2回実行されます。
 ================================================================================================
 3
 return <div>Loading...</div>;を記載する理由

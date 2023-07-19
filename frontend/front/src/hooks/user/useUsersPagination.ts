@@ -96,14 +96,14 @@ useCallbackで作られた関数の動作が変わる可能性があるからで
 4
 [currentPage, handleGetUsers]
 依存配列にcurrentPageとhandleGetUsersを指定する理由
-
+------------------------------------------------------------------------------------------------
 currentPage
 ページ番号が変更された時に、handleGetUsers関数を実行するためです。currentPageが変更されると、ページ番号に基づい
 て異なるユーザー一覧を取得する必要があります。currentPageの値が変わるたびに、handleGetUsers関数が実行され、新し
 いページ番号に基づいたユーザー一覧が取得されます。
 currentPageが変化すると、新しいページのユーザー一覧を取得する必要があります。そのため、currentPageが変化した時に
 handleGetUsersを実行します。
-
+------------------------------------------------------------------------------------------------
 handleGetUsers
 handleGetUsers関数自体も依存配列に含まれています。これは、handleGetUsers関数でで使用されている変数のpage,
 itemsPerPageが変更される可能性があるためです。もし変更された場合、関数は変わりませんが、変数や値が変更されると、

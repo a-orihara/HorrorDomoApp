@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useGetUserFollowingByUserId } from '../../hooks/relationship/useGetUserFollowingByUserId';
+import { useFollowingPagination } from '../../hooks/relationship/useFollowingPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { FollowingList } from '../molecules/FollowingList';
+import Pagination from '../molecules/Pagination';
 
 const FollowingPage = () => {
   const router = useRouter();
@@ -12,19 +13,23 @@ const FollowingPage = () => {
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // ルーターパラメーターのidに対応するユーザー情報を取得
 
+  console.log(`FollowingPage.tsxのuserId: ${userId}`);
   const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
-  const { following, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
+  // const { following } = useGetUserFollowingByUserId(userId);
+  const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
+  // console.log(`FollowingPageの:${totalFollowingCount}`);
+  // console.log(`FollowingPageの:${JSON.stringify(following)}`);
 
+  // useEffect(() => {
+  //   // handleGetUserById();
+  // }, [userId, handleGetUserById]);
   useEffect(() => {
-    handleGetUserById();
-    handleGetUserFollowingByUserId();
-  }, [id, handleGetUserById, handleGetUserFollowingByUserId]);
+    if (userId !== undefined) {
+      handleGetUserById();
+    }
+  }, [userId, handleGetUserById]);
 
-  if (!following) {
-    return <div>Loading...</div>;
-  }
-  // 1
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -32,6 +37,7 @@ const FollowingPage = () => {
   return (
     <div>
       <FollowingList following={following} user={user}></FollowingList>
+      <Pagination totalCount={totalFollowingCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );
 };

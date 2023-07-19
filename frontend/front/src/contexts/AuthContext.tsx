@@ -39,11 +39,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
-    console.log('handleGetCurrentUserが発火');
+    // console.log('handleGetCurrentUserが発火');
     try {
       // 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
-      console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
+      // console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
       // サインインしていたら、
       if (res?.data.isLogin === true) {
         // if (res && res.data.isLogin === true) {
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setIsSignedIn(true);
         // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
-        console.log(`handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
+        // console.log(`handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
       } else {
         console.log('handleGetCurrentUser:ノーcurrent user');
       }
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
     handleGetCurrentUser();
-    console.log('AuthContext-useEffect-handleGetCurrentUserが発火');
+    // console.log('AuthContext-useEffect-handleGetCurrentUserが発火');
   }, []);
 
   // ================================================================================================

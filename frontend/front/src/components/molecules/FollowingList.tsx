@@ -9,9 +9,11 @@ type FollowingListProps = {
 
 export const FollowingList = ({ following, user }: FollowingListProps) => {
   return (
-    <div className='flex-1'>
-      <ol>
-        {/* 1 オプショナルチェインニング */}
+    <div className='flex flex-1 flex-col bg-red-200'>
+      <h1 className='mx-auto mb-2 mt-2 flex h-8 items-center justify-center text-2xl font-semibold  md:h-12 md:text-4xl'>
+        All Following
+      </h1>
+      <ol className='mb-4 flex flex-1 flex-col justify-around'>
         {following.map((followUser) => (
           <FollowingListItem key={followUser.id} followUser={followUser} user={user}></FollowingListItem>
         ))}

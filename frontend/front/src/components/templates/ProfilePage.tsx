@@ -28,7 +28,7 @@ const ProfilePage = () => {
   // 2
   useEffect(() => {
     handleGetUserById();
-    // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いるべき。
+    // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いる
   }, [userId, handleGetUserById]);
 
   // 3 この処理を通過するということは、userに値が存在し、型はUserとして扱うことができる

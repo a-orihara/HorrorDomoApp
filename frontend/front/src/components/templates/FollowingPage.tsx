@@ -21,19 +21,15 @@ const FollowingPage = () => {
 
   useEffect(() => {
     handleGetUserById();
+    // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いる
   }, [userId, handleGetUserById]);
-  // useEffect(() => {
-  //   if (userId !== undefined) {
-  //     handleGetUserById();
-  //   }
-  // }, [userId, handleGetUserById]);
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className='flex flex-1 flex-col'>
       <FollowingList following={following} user={user}></FollowingList>
       <Pagination totalCount={totalFollowingCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>

@@ -13,26 +13,22 @@ export const FollowingListItem = ({ followUser, user }: FollowingListItemProps) 
   console.log(`そ:${JSON.stringify(followUser)}`);
   return (
     <div>
-      <li className='my-px border-4 border-solid border-orange-200'>
-        <div className='flex'>
+      <li className='my-px flex flex-row justify-center divide-y divide-slate-200 '>
+        <Link href={`/users/${followUser.id}`}>
+          <a>
+            <img
+              src={user.avatarUrl || '/no_image_square.jpg'}
+              alt='user avatar'
+              className='mr-4 mt-2 h-16 w-16 rounded-full'
+            />
+          </a>
+        </Link>
+        <div className='flex  items-center justify-center'>
           <Link href={`/users/${followUser.id}`}>
-            <a>
-              <img
-                src={user.avatarUrl || '/no_image_square.jpg'}
-                alt='user avatar'
-                className='mt-2 h-16 w-16 rounded-full'
-              />
+            <a className='ml-4  text-sm text-black text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
+              {followUser.name}
             </a>
           </Link>
-          <div>
-            <p>
-              <Link href={`/users/${followUser.id}`}>
-                <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
-                  {followUser.name}
-                </a>
-              </Link>
-            </p>
-          </div>
         </div>
       </li>
     </div>

@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index, :following]
+  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -60,10 +60,21 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:id/followers（memberメソッドでrouteは作成）
   # followersはmodels/user.rbで定義
   def followers
-    user  = User.find(params[:id])
-    followers_count = user.followers.count
-    # @users = @user.following.paginate(page: params[:page])
-    render json: { status: '200', followers_count: followers_count }
+    puts "followersアクションが発火"
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
+    user = User.find_by(id: params[:id])
+    if user
+      followers = user.followers.page(page).per(per_page)
+      followers_count = user.followers.count
+      # followers_pagination = followers.page(page).per(per_page)
+      render json: { status: '200', followers: followers, followers_count: followers_count}
+      puts "userいます3"
+    else
+      puts "userいません"
+      render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
+    end
   end
 
   private

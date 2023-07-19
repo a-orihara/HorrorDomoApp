@@ -1,30 +1,30 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { getFollowingByUserId } from '../../api/relationship';
+import { getFollowersByUserId } from '../../api/relationship';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { FollowUser } from '../../types/relationship';
+import { Follower } from '../../types/relationship';
 
-export const useFollowingPagination = (itemsPerPage: number, userId?: number) => {
+export const useFollowersPagination = (itemsPerPage: number, userId?: number) => {
   // 指定したuserIdのフォローユーザー一覧
-  const [following, setFollowing] = useState<FollowUser[]>([]);
+  const [followers, setFollowers] = useState<Follower[]>([]);
   // 指定したuserIdのフォローユーザーの総数
-  const [totalFollowingCount, setTotalFollowingCount] = useState(0);
+  const [totalFollowersCount, setTotalFollowersCount] = useState(0);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // const { followingCount, following, followingPagination, handleGetUserFollowingByUserId } =
-  //   useGetUserFollowingByUserId(userId);
-  console.log(`OK:useFollowingPaginationの${userId}`);
+  // const { followersCount, followers, followersPagination, handleGetUserFollowersByUserId } =
+  //   useGetUserFollowersByUserId(userId);
+  console.log(`OK:useFollowersPaginationの${userId}`);
 
-  const handleGetFollowingByUserId = useCallback(
+  const handleGetFollowersByUserId = useCallback(
     async (page: number) => {
       try {
-        const res = await getFollowingByUserId(page, itemsPerPage, userId);
-        setFollowing(res.data.following);
-        setTotalFollowingCount(res.data.followingCount);
-        // console.log(`OK:handleGetFollowingByUserIdのtotalFollowing:${res.data.followingCount}`);
-        // console.log(`OK:handleGetFollowingByUserIdのfollowing:${JSON.stringify(res.data.following)}`);
+        const res = await getFollowersByUserId(page, itemsPerPage, userId);
+        setFollowers(res.data.followers);
+        setTotalFollowersCount(res.data.followersCount);
+        // console.log(`OK:handleGetFollowersByUserIdのtotalFollowers:${res.data.followersCount}`);
+        // console.log(`OK:handleGetFollowersByUserIdのfollowers:${JSON.stringify(res.data.followers)}`);
       } catch (err: any) {
         setAlertSeverity('error');
         // setAlertMessage(`${err.response.data.errors[0]}`);
@@ -41,13 +41,13 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   // router.queryの値が、初期レンダリング時にはまだundefinedである可能性がある為、条件分岐を記載
   useEffect(() => {
     if (userId !== undefined) {
-      handleGetFollowingByUserId(currentPage);
+      handleGetFollowersByUserId(currentPage);
     }
-  }, [handleGetFollowingByUserId, currentPage, userId]);
+  }, [handleGetFollowersByUserId, currentPage, userId]);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { following, totalFollowingCount, handlePageChange, currentPage };
+  return { followers, totalFollowersCount, handlePageChange, currentPage };
 };

@@ -1,27 +1,27 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useGetUserFollowersByUserId } from '../../hooks/relationship/useGetUserFollowersByUserId';
-import { useGetUserFollowingByUserId } from '../../hooks/relationship/useGetUserFollowingByUserId';
+import { useGetFollowersCountByUserId } from '../../hooks/relationship/useGetFollowersCountByUserId';
+import { useGetFollowingCountByUserId } from '../../hooks/relationship/useGetFollowingCountByUserId';
 const FollowStats = ({ userId }: { userId: number | undefined }) => {
-  const { followingCount, handleGetUserFollowingByUserId } = useGetUserFollowingByUserId(userId);
-  const { followersCount, handleGetUserFollowersByUserId } = useGetUserFollowersByUserId(userId);
+  const { followingCount, handleGetFollowingCountByUserId } = useGetFollowingCountByUserId(userId);
+  const { followersCount, handleGetFollowersCountByUserId } = useGetFollowersCountByUserId(userId);
 
   useEffect(() => {
     // console.log('FollowStatsのuseEffectが呼ばれました');
-    handleGetUserFollowingByUserId();
-    handleGetUserFollowersByUserId();
-  }, [userId, handleGetUserFollowingByUserId, handleGetUserFollowersByUserId]);
+    handleGetFollowingCountByUserId();
+    handleGetFollowersCountByUserId();
+  }, [userId, handleGetFollowingCountByUserId, handleGetFollowersCountByUserId]);
   // 1 handleGetUserFollowingByUserId();
 
   return (
     <div>
-      <Link href={'/'}>
+      <Link href={`/users/${userId}/following`}>
         <a className='hover:text-basic-pink'>
           フォロー:
           <span className='underline'>{followingCount}</span>
         </a>
       </Link>
-      <Link href={'/'}>
+      <Link href={`/users/${userId}/followers`}>
         <a className='hover:text-basic-pink'>
           フォロワー:
           <span className='underline'>{followersCount}</span>

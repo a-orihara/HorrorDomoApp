@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useFollowersPagination } from '../../hooks/relationship/useFollowersPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
-import { FollowersList } from '../molecules/FollowersList';
+import { FollowList } from '../molecules/FollowList';
 import Pagination from '../molecules/Pagination';
 
 const FollowersPage = () => {
@@ -30,7 +30,13 @@ const FollowersPage = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      <FollowersList followers={followers} user={user}></FollowersList>
+      {/* <FollowersList followers={followers} user={user}></FollowersList> */}
+      <FollowList
+        followUsers={followers}
+        user={user}
+        title={'All Followers'}
+        noFollowMessage={'フォロワーはいません'}
+      ></FollowList>
       <Pagination totalCount={totalFollowersCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );

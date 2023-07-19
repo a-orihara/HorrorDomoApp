@@ -35,7 +35,7 @@ const FollowingPage = () => {
         followUsers={following}
         user={user}
         title={'ALL Following'}
-        noFollowsMessage={'フォローユーザーはいません'}
+        noFollowMessage={'フォローユーザーはいません'}
       ></FollowList>
       <Pagination totalCount={totalFollowingCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>

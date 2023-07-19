@@ -1,9 +1,10 @@
 import Link from 'next/link';
+import { FollowUser } from '../../types/relationship';
 import { User } from '../../types/user';
 
 type FollowListItemProps = {
   // 非同期データ取得の前には、結果がまだ取得されていない（すなわちundefined）可能性がある
-  targetUser: User;
+  targetUser: FollowUser;
   user: User;
 };
 

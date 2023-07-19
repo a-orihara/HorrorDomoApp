@@ -21,7 +21,7 @@ const FollowStats = ({ userId }: { userId: number | undefined }) => {
           <span className='underline'>{followingCount}</span>
         </a>
       </Link>
-      <Link href={'/'}>
+      <Link href={`/users/${userId}/followers`}>
         <a className='hover:text-basic-pink'>
           フォロワー:
           <span className='underline'>{followersCount}</span>

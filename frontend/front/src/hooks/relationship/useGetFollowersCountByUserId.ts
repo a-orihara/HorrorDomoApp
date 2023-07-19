@@ -4,16 +4,21 @@ import { getFollowersCountByUserId } from '../../api/relationship';
 // ユーザーのフォロワー数を取得するフック
 export const useGetFollowersCountByUserId = (userId: number | undefined) => {
   // console.log('handleGetUserFollowerが呼ばれました');
-  const [followersCount, setFollowersCount] = useState();
+  const [followersCount, setFollowersCount] = useState<number>();
 
   const handleGetFollowersCountByUserId = useCallback(async () => {
+    if (!userId) return;
     try {
       const data = await getFollowersCountByUserId(userId);
-      const count = data.data.followersCount;
-      setFollowersCount(count);
+      if (data.status == 200) {
+        const count: number = data.data.followersCount;
+        setFollowersCount(count);
+      }
     } catch (error) {
-      console.log(error);
+      // ◆エラー仮実装
+      alert('ユーザーが存在しません');
     }
   }, [userId]);
+
   return { followersCount, handleGetFollowersCountByUserId };
 };

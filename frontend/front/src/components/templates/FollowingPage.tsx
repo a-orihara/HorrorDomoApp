@@ -12,23 +12,21 @@ const FollowingPage = () => {
   // 2 userIdはnumberかundefined型
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // ルーターパラメーターのidに対応するユーザー情報を取得
-
   console.log(`FollowingPage.tsxのuserId: ${userId}`);
   const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
-  // const { following } = useGetUserFollowingByUserId(userId);
   const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
   // console.log(`FollowingPageの:${totalFollowingCount}`);
   // console.log(`FollowingPageの:${JSON.stringify(following)}`);
 
-  // useEffect(() => {
-  //   // handleGetUserById();
-  // }, [userId, handleGetUserById]);
   useEffect(() => {
-    if (userId !== undefined) {
-      handleGetUserById();
-    }
+    handleGetUserById();
   }, [userId, handleGetUserById]);
+  // useEffect(() => {
+  //   if (userId !== undefined) {
+  //     handleGetUserById();
+  //   }
+  // }, [userId, handleGetUserById]);
 
   if (!user) {
     return <div>Loading...</div>;

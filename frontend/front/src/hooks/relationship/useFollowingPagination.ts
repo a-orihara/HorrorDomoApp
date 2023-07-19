@@ -38,9 +38,15 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
   );
 
+  // useEffect(() => {
+  //   handleGetFollowingPaginationByUserId(currentPage);
+  // }, [handleGetFollowingPaginationByUserId, currentPage]);
+  // router.queryの値が、初期レンダリング時にはまだundefinedである可能性がある為、条件分岐を記載
   useEffect(() => {
-    handleGetFollowingPaginationByUserId(currentPage);
-  }, [handleGetFollowingPaginationByUserId, currentPage]);
+    if (userId !== undefined) {
+      handleGetFollowingPaginationByUserId(currentPage);
+    }
+  }, [handleGetFollowingPaginationByUserId, currentPage, userId]);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);

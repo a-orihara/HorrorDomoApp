@@ -29,7 +29,7 @@ export const getFollowingByUserId = async (page: number, itemsPerPage: number, u
 };
 
 // ユーザーのフォロワー情報を取得するAPI
-export const getUserFollowersByUserId = (userId: number | undefined) => {
+export const getFollowersCountByUserId = (userId: number | undefined) => {
   return client.get(`/users/${userId}/followers`, {
     headers: {
       'access-token': Cookies.get('_access_token'),

@@ -30,7 +30,6 @@ const FollowingPage = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      {/* <FollowingList following={following} user={user}></FollowingList> */}
       <FollowList
         followUsers={following}
         user={user}

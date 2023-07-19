@@ -28,9 +28,8 @@ const ProfilePage = () => {
   // 2
   useEffect(() => {
     handleGetUserById();
-    // handleGetPostsCountByUserId;
-    // }, [id, handleGetUserById, handleGetPostsByUserId]);
-  }, [id, handleGetUserById]);
+    // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いるべき。
+  }, [userId, handleGetUserById]);
 
   // 3 この処理を通過するということは、userに値が存在し、型はUserとして扱うことができる
   if (!user) {

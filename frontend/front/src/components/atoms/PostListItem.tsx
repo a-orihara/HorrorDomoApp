@@ -14,8 +14,11 @@ type PostListItemProps = {
 
 // 1 関数コンポーネントの引数は基本的にオブジェクト型。
 const PostListItem = ({ post, user }: PostListItemProps) => {
+  // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);
+  // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
   const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
+  // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
 

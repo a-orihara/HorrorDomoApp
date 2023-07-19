@@ -3,7 +3,7 @@ import { getUserById } from '../../api/user';
 import { User } from '../../types/user';
 
 // 1 idで指定したユーザーのユーザー情報を取得する
-const useGetUserById = (id: string | string[] | undefined) => {
+const useGetUserById = (id: number | undefined) => {
   // ユーザー情報を格納するステート
   const [user, setUser] = useState<User | null>(null);
 
@@ -12,8 +12,7 @@ const useGetUserById = (id: string | string[] | undefined) => {
     // 3
     if (!id) return;
     try {
-      const res = await getUserById(id as string);
-      console.log('わお');
+      const res = await getUserById(id);
       const fetchedUser: User = res.data;
       // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       setUser(fetchedUser);

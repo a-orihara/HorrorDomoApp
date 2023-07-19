@@ -51,7 +51,8 @@ export const getPostDetailByUserId = async (postId: number) => {
   });
 };
 
-// 3 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
+// 3 指定userIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
+// userIdがなければカレントユーザーの投稿総数と、指定したページの1ページ当たりの表示件数分のpostを取得
 export const getPostListByUserId = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get('/posts', {
     params: {

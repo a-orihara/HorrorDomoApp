@@ -1,6 +1,6 @@
 import Layout from '../../components/layout/Layout';
+import Pagination from '../../components/molecules/Pagination';
 import UserList from '../../components/molecules/UserList';
-import UsersPagination from '../../components/molecules/UsersPagination';
 import { useUsersPagination } from '../../hooks/user/useUsersPagination';
 
 const Index = () => {
@@ -14,11 +14,16 @@ const Index = () => {
       <div className='flex flex-1 flex-col'>
         <UserList users={users}></UserList>
         {/* 一覧リストの下に表示されるページネーション部分のUI */}
-        <UsersPagination
+        {/* <UsersPagination
           totalUsersCount={totalUsersCount}
           itemsPerPage={itemsPerPage}
           handlePageChange={handlePageChange}
-        ></UsersPagination>
+        ></UsersPagination> */}
+        <Pagination
+          totalCount={totalUsersCount}
+          itemsPerPage={itemsPerPage}
+          handlePageChange={handlePageChange}
+        ></Pagination>
       </div>
     </Layout>
   );

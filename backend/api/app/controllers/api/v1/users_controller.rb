@@ -73,6 +73,17 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # ユーザーが特定のユーザーをフォローしているか確認するためのAPI
+  def is_following
+    current_user = User.find(params[:id])
+    other_user = User.find(params[:other_id])
+    if current_user.following?(other_user)
+      render json: { status: '200', message: 'Following this user.' }
+    else
+      render json: { status: '200', message: 'Not following this user.' }
+    end
+  end
+
   private
 
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。

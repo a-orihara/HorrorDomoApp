@@ -1,8 +1,3 @@
-// Context用のコンポーネント作成の為、AuthContext.js というファイルを作成
-// 1.createContext();でAuthContextというコンテキストオブジェクトを作成
-// AuthContextのProviderコンポーネントに渡す値（useState）を設定
-// 2.AuthContextのProviderコンポーネントでラップされた、AuthProviderコンポーネントを作成
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
 import { User } from '../types/user';
@@ -11,9 +6,7 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
-// 1
-
-// 下記のkeyを持つオブジェクト型を作成
+// 1 下記のkeyを持つオブジェクト型を作成
 type AuthContextProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -100,6 +93,11 @@ export const useAuthContext = () => {
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+Context用のコンポーネント作成の為、AuthContext.js というファイルを作成
+1.createContext();でAuthContextというコンテキストオブジェクトを作成
+AuthContextのProviderコンポーネントに渡す値（useState）を設定
+2.AuthContextのProviderコンポーネントでラップされた、AuthProviderコンポーネントを作成
+------------------------------------------------------------------------------------------------
 Contextオブジェクトの作成はcreateContextで行います。
 Contextではデータを渡す側をProviderと呼びデータを受け取る側をConsumerと呼びます。
 作成したAuthContextをexportしているのは他のコンポーネントでimportを行なって利用するためです。
@@ -224,14 +222,12 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 一般的には、初回レンダリング時のみuseEffectを実行させたい場合、依存配列に空の配列（[]）を指定するのが一般的です。
 これにより、useEffectはコンポーネントがマウントされた時にのみ実行されます。
 ------------------------------------------------------------------------------------------------
-AuthProvider を _app.tsx で使用すると、アプリケーション全体に認証機能を提供できます。AuthProvider の中にある
-useEffect の利用意図は、コンポーネントがマウントされたとき（アプリケーションが読み込まれたとき）に、認証済みのユー
-ザー情報を取得して、現在の認証状態を確認するためです。
-AuthProvider をアプリケーション全体のルートコンポーネント（_app.tsx）で使用することで、全ての子コンポーネントが
-レンダリングされる前に認証済みユーザーの状態が確認されるようになります。これにより、アプリケーション全体で認証情報を
-一元的に管理でき、各ページやコンポーネントで繰り返し認証チェックを行う必要がなくなります。また、認証に関連する状態
-（isSignedIn, currentUser など）や関数（setIsSignedIn, setCurrentUser など）を、アプリケーション内の他の
-全てのコンポーネントで使い回すことができるようになります。
+この`useEffect`の目的は、コンポーネントがマウントされたときに一度だけ`handleGetCurrentUser`を実行すること。
+そのため、依存配列が空のままで適切です。
+依存配列が空の場合、`useEffect`内のコードはコンポーネントがマウントされた直後に一度だけ実行されます。依存配列に何
+らかの変数を指定すると、その変数が変更されたときに`useEffect`内のコードが再度実行されます。
+今回のケースでは、認証済みのユーザー情報を取得する`handleGetCurrentUser`関数はコンポーネントがマウントされた時
+に一度だけ実行すればよいので、依存配列を空にするのが適切です。
 
 ================================================================================================
 5

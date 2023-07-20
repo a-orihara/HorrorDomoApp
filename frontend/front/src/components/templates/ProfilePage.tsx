@@ -49,11 +49,6 @@ const ProfilePage = () => {
         {/* 6 */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}
-        {/* <PostsPagination
-          totalPostsCount={totalPostsCount}
-          itemsPerPage={10}
-          handlePageChange={handlePageChange}
-        ></PostsPagination> */}
         <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
       </div>
     </div>

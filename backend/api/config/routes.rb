@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       namespace :admin do
         resources :users, only: [:destroy]
       end
+
+      # api/v1/relationships
+      resources :relationships, only: [:create, :destroy]
     end
   end
 end

@@ -40,6 +40,17 @@ export const createFollow = (userId: number) => {
   });
 };
 
+// ユーザーが特定のユーザーをフォローしているか確認するAPI
+export const isFollowing = (userId: number) => {
+  return client.post(`/users/${userId}/is_following`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // ユーザーのフォロワーの総数を取得するAPI
 export const getFollowersCountByUserId = (userId: number | undefined) => {
   return client.get(`/users/${userId}/followers`, {

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import { usePostsPagination } from '../../hooks/post/usePostsPagination';
@@ -25,6 +26,7 @@ const ProfilePage = () => {
   // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
   const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, userId);
   const { currentUserPostsCount } = usePostContext();
+  const { currentUser } = useAuthContext();
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
@@ -47,7 +49,8 @@ const ProfilePage = () => {
         <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
       </div>
       <div className='flex-1 bg-green-200 lg:w-full'>
-        <FollowForm></FollowForm>
+        {/* 8 */}
+        {currentUser && currentUser.id !== userId && <FollowForm></FollowForm>}
         {/* 6 */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}
@@ -170,4 +173,17 @@ handlePageChangeは、usePostsPaginationからのhandlePageChange（ページ切
 ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
 それはカレントページが依存配列で、カレントページが変更されるたびに、handleGetPostListByUserIdが再実行されるため
 です。
+
+================================================================================================
+8
+currentUser が存在し、かつ currentUser.id が userId と異なる場合に <FollowForm></FollowForm> コンポーネ
+ントが表示されます。
+------------------------------------------------------------------------------------------------
+判定ロジックを`ProfilePage.tsx`に記述する理由:
+- `ProfilePage.tsx`はユーザーのプロフィール情報を表示するコンポーネントであり、その中に`FollowForm`が含まれて
+いるため、それらの関連するロジックを同じコンポーネントに記述する方がコンテキストを理解しやすいです。
+- `FollowForm`の表示/非表示は、プロフィールページが表示するユーザーID(`userId`)と現在ログインしているユーザーID
+(`currentUser.id`)によって決定されます。この情報は`ProfilePage.tsx`で利用できるため、ここに記述するのが自然で
+す。
+
 */

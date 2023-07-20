@@ -4,6 +4,7 @@ import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
+import { FollowForm } from '../molecules/FollowForm';
 import Pagination from '../molecules/Pagination';
 
 import PostList from '../molecules/PostList';
@@ -46,6 +47,7 @@ const ProfilePage = () => {
         <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
       </div>
       <div className='flex-1 bg-green-200 lg:w-full'>
+        <FollowForm></FollowForm>
         {/* 6 */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}

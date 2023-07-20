@@ -49,10 +49,8 @@ class Api::V1::UsersController < ApplicationController
       following = user.following.page(page).per(per_page)
       following_count = user.following.count
       # following_pagination = following.page(page).per(per_page)
-      render json: { status: '200', following: following, following_count: following_count}
-      puts "userいます3"
+      render json: { status: '200', following: following, following_count: following_count }
     else
-      puts "userいません"
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end
   end
@@ -69,10 +67,8 @@ class Api::V1::UsersController < ApplicationController
       followers = user.followers.page(page).per(per_page)
       followers_count = user.followers.count
       # followers_pagination = followers.page(page).per(per_page)
-      render json: { status: '200', followers: followers, followers_count: followers_count}
-      puts "userいます3"
+      render json: { status: '200', followers: followers, followers_count: followers_count }
     else
-      puts "userいません"
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end
   end

@@ -52,14 +52,14 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
             className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
             onClick={handleUnFollowClick}
           >
-            unfollow
+            フォロー中
           </Button>
         ) : (
           <Button
             className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
             onClick={handleFollowClick}
           >
-            follow
+            フォローする
           </Button>
         )}
       </form>

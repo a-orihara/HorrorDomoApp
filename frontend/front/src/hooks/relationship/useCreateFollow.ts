@@ -3,6 +3,7 @@ import { useAlertContext } from '../../contexts/AlertContext';
 
 export const useCreateFollow = (otherUserId: number | undefined) => {
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+
   const handleCreateFollow = async () => {
     if (otherUserId !== undefined) {
       try {
@@ -21,5 +22,6 @@ export const useCreateFollow = (otherUserId: number | undefined) => {
       }
     }
   };
+
   return { handleCreateFollow };
 };

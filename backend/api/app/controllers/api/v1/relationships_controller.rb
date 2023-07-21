@@ -5,7 +5,7 @@ class Api::V1::RelationshipsController < ApplicationController
   # 2
   def create
     puts "Relationshipのcreateアクションが発火"
-    user = User.find(params[:followed_id])
+    user = User.find(params[:other_id])
     current_api_v1_user.follow(user)
   end
 

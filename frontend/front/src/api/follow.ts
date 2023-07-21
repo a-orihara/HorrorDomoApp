@@ -30,14 +30,20 @@ export const getFollowingByUserId = async (page: number, itemsPerPage: number, u
 };
 
 // ユーザーをフォローするAPI
-export const createFollow = (userId: number) => {
-  return client.post(`/users/${userId}/following`, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+export const createFollow = (userId: number, otherUserId: number) => {
+  return client.post(
+    `/users/${userId}/is_following`,
+    {
+      other_id: otherUserId,
     },
-  });
+    {
+      headers: {
+        'access-token': Cookies.get('_access_token'),
+        client: Cookies.get('_client'),
+        uid: Cookies.get('_uid'),
+      },
+    }
+  );
 };
 
 // 1 ユーザーが特定のユーザーをフォローしているか確認するAPI

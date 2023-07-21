@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { isFollowing } from '../../api/follow';
+import { createFollow, isFollowing } from '../../api/follow';
 import Button from '../atoms/Button';
 
 type FollowFormProps = {
@@ -36,7 +36,12 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
             unfollow
           </Button>
         ) : (
-          <Button className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'>follow</Button>
+          <Button
+            className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            onClick={createFollow(userId, otherUserId)}
+          >
+            follow
+          </Button>
         )}
       </form>
     </div>

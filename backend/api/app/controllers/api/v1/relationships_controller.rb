@@ -14,6 +14,13 @@ class Api::V1::RelationshipsController < ApplicationController
   end
 
   def destroy
+    puts "Relationshipのdestroyアクションが発火"
+    user = User.find(params[:other_id])
+    if current_api_v1_user.unfollow(user)
+      render json: { status: 200, message: 'フォロー解除しました' }
+    else
+      render json: { status: 500, message: 'フォロー解除に失敗しました' }, status: 500
+    end
 
   end
 end

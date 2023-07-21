@@ -15,11 +15,14 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
       // userId と otherUserId が undefined でないことを確認する
       if (userId !== undefined && otherUserId !== undefined) {
         const response = await isFollowing(userId, otherUserId);
-        setIsFollowed(response.data.is_following);
+        setIsFollowed(response.data.isFollowing);
       }
     };
     checkFollow();
   }, [userId, otherUserId]);
+  console.log(`FollowFormの判定${isFollowed}`);
+  console.log(`FollowFormのuserId:${userId}`);
+  console.log(`FollowFormのotherUserId:${otherUserId}`);
 
   // const test = () => {
   //   console.log('FollowForm');

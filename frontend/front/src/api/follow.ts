@@ -42,19 +42,16 @@ export const createFollow = (userId: number) => {
 
 // 1 ユーザーが特定のユーザーをフォローしているか確認するAPI
 export const isFollowing = (userId: number, otherUserId: number) => {
-  return client.post(
-    `/users/${userId}/is_following`,
-    {
+  return client.get(`/users/${userId}/is_following`, {
+    params: {
       other_id: otherUserId,
     },
-    {
-      headers: {
-        'access-token': Cookies.get('_access_token'),
-        client: Cookies.get('_client'),
-        uid: Cookies.get('_uid'),
-      },
-    }
-  );
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
 };
 
 // ユーザーのフォロワーの総数を取得するAPI
@@ -87,6 +84,34 @@ export const getFollowersByUserId = async (page: number, itemsPerPage: number, u
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+Axiosのgetメソッドについて:
+- Axiosのgetメソッドは、最大で2つの引数を受け取ります。
+- 最初の引数はリクエストのURLです。この例では`/users/${userId}/is_following`となります。
+- 二つ目の引数は設定オブジェクトで、リクエストに必要なパラメータやヘッダー情報を含めることができます。
+- `params`フィールドにはURLのクエリパラメータをオブジェクトとして指定します。この例では`other_id: otherUserId`
+と指定しています。
+- `headers`フィールドにはHTTPヘッダーをオブジェクトとして指定します。この例では認証に必要な情報を含めています。
+------------------------------------------------------------------------------------------------
+Axiosのgetメソッドとpostメソッドの違いについて:
+- getメソッドは通常、サーバからデータを取得するために使用され、データはURLのクエリパラメータとして渡されます。リク
+エストボディを持つことは一般的ではありません。
+- postメソッドはサーバーにデータを送信するために使用されます。データは通常、リクエストボディに含めて送信されます。
+- getメソッドの設定オブジェクトには、paramsフィールドを使用してクエリパラメータを指定しますが、postメソッドでは2
+つ目の引数が直接リクエストボディとなります。そのため、以下のような形式でデータを渡します
+return client.post(
+  `/users/${userId}/is_following`,
+  {
+    other_id: otherUserId,
+  },
+  {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  }
+);
+------------------------------------------------------------------------------------------------
 APIリクエストのbodyに含めるとは、HTTPリクエストを送信する際に、ヘッダー以外の部分に情報を添付することを指します。
 ここでの情報は主にサーバー側で処理するためのデータで、JSON形式などで送られます。Axiosを使ってリクエストを送信する
 際には、通常`axios.post(url, data, config)`という形式で関数を呼び出します。ここで`data`がリクエストのbodyに

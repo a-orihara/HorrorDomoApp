@@ -4,7 +4,7 @@ import Button from '../atoms/Button';
 
 type FollowFormProps = {
   userId: number;
-  otherUserId: number;
+  otherUserId: number | undefined;
 };
 
 export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
@@ -12,8 +12,11 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
 
   useEffect(() => {
     const checkFollow = async () => {
-      const response = await isFollowing(userId, otherUserId);
-      setIsFollowed(response.data.is_following);
+      // userId と otherUserId が undefined でないことを確認する
+      if (userId !== undefined && otherUserId !== undefined) {
+        const response = await isFollowing(userId, otherUserId);
+        setIsFollowed(response.data.is_following);
+      }
     };
     checkFollow();
   }, [userId, otherUserId]);

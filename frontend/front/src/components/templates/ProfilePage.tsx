@@ -50,7 +50,9 @@ const ProfilePage = () => {
       </div>
       <div className='flex-1 bg-green-200 lg:w-full'>
         {/* 8 */}
-        {currentUser && currentUser.id !== userId && <FollowForm></FollowForm>}
+        {currentUser && currentUser.id !== userId && (
+          <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
+        )}
         {/* 6 */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}

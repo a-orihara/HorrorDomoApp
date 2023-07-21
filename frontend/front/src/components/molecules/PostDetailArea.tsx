@@ -9,8 +9,9 @@ export const PostDetailArea = () => {
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;
+
   const { user, handleGetUserById } = useGetUserById(
-    postDetailByPostId?.userId ? postDetailByPostId.userId.toString() : undefined
+    postDetailByPostId?.userId !== undefined ? Number(postDetailByPostId.userId) : undefined
   );
 
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
@@ -26,7 +27,6 @@ export const PostDetailArea = () => {
   }, [id, handleGetPostDetailByPostId, handleGetUserById]);
 
   return (
-    // <div className='flex flex-1 flex-col items-center  justify-center bg-green-200'>
     <div className='flex flex-1 flex-col bg-green-200'>
       {postDetailByPostId ? (
         <div className=' mt-8 flex flex-1 flex-col items-center  bg-red-200'>

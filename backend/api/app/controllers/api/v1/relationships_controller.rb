@@ -6,7 +6,11 @@ class Api::V1::RelationshipsController < ApplicationController
   def create
     puts "Relationshipのcreateアクションが発火"
     user = User.find(params[:other_id])
-    current_api_v1_user.follow(user)
+    if current_api_v1_user.follow(user)
+      render json: { status: 200, message: 'フォローしました' }
+    else
+      render json: { status: 500, message: 'フォローに失敗しました' }, status: 500
+    end
   end
 
   # def create

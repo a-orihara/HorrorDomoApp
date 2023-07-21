@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createFollow, isFollowing } from '../../api/follow';
+import { isFollowing } from '../../api/follow';
+import { useCreateFollow } from '../../hooks/relationship/useCreateFollow';
 import Button from '../atoms/Button';
 
 type FollowFormProps = {
@@ -9,6 +10,13 @@ type FollowFormProps = {
 
 export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
+  const { handleCreateFollow } = useCreateFollow(otherUserId);
+
+  // 1
+  const handleFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+    handleCreateFollow();
+  };
 
   useEffect(() => {
     const checkFollow = async () => {
@@ -20,6 +28,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
     };
     checkFollow();
   }, [userId, otherUserId]);
+
   console.log(`FollowFormの判定${isFollowed}`);
   console.log(`FollowFormのuserId:${userId}`);
   console.log(`FollowFormのotherUserId:${otherUserId}`);
@@ -30,7 +39,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
 
   return (
     <div>
-      <form className='bg-red-200' action='post'>
+      <form className='bg-red-200'>
         {isFollowed ? (
           <Button className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'>
             unfollow
@@ -38,7 +47,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
         ) : (
           <Button
             className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
-            onClick={createFollow(userId, otherUserId)}
+            onClick={handleFollowClick}
           >
             follow
           </Button>
@@ -47,3 +56,9 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
     </div>
   );
 };
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+
+*/

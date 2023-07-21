@@ -30,9 +30,9 @@ export const getFollowingByUserId = async (page: number, itemsPerPage: number, u
 };
 
 // ユーザーをフォローするAPI
-export const createFollow = (userId: number, otherUserId: number) => {
+export const createFollow = (otherUserId: number) => {
   return client.post(
-    `/users/${userId}/is_following`,
+    `/relationships`,
     {
       other_id: otherUserId,
     },

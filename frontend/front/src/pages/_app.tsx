@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import Modal from 'react-modal';
 import { AlertProvider } from '../contexts/AlertContext';
 import { AuthProvider } from '../contexts/AuthContext';
+import { FollowProvider } from '../contexts/FollowContext';
 import { PostProvider } from '../contexts/PostContext';
 import '../styles/globals.css';
 
@@ -14,7 +15,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <AuthProvider>
       <AlertProvider>
         <PostProvider>
-          <Component {...pageProps} />
+          <FollowProvider>
+            <Component {...pageProps} />
+          </FollowProvider>
         </PostProvider>
       </AlertProvider>
     </AuthProvider>

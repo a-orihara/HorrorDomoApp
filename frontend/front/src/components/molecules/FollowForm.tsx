@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { isFollowing } from '../../api/follow';
+import { useFollowContext } from '../../contexts/FollowContext';
 import { useCreateFollow } from '../../hooks/relationship/useCreateFollow';
 import { useDeleteFollow } from '../../hooks/relationship/useDeleteFollow';
 import Button from '../atoms/Button';
@@ -13,17 +14,20 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
   const { handleCreateFollow } = useCreateFollow(otherUserId);
   const { handleDeleteFollow } = useDeleteFollow(otherUserId);
+  const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
 
   // 1
   const handleFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     handleCreateFollow().then(() => setIsFollowed(true));
+    handleGetFollowingCountByUserId(userId);
   };
 
   const handleUnFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (window.confirm('フォローを解除しますか？')) {
       event.preventDefault();
       handleDeleteFollow().then(() => setIsFollowed(false));
+      handleGetFollowersCountByUserId(userId);
     }
   };
 

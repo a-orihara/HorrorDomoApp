@@ -13,6 +13,7 @@ class Api::V1::RelationshipsController < ApplicationController
     end
   end
 
+  # 3
   def destroy
     puts "Relationshipのdestroyアクションが発火"
     user = User.find(params[:other_id])
@@ -21,7 +22,6 @@ class Api::V1::RelationshipsController < ApplicationController
     else
       render json: { status: 500, message: 'フォロー解除に失敗しました' }, status: 500
     end
-
   end
 end
 
@@ -35,5 +35,7 @@ Devise Token Authによって提供されるメソッドで、APIリクエスト
 2
 followは、models/user.rbで定義。ユーザーをフォローする。
 
-
+================================================================================================
+3
+Railsのルーティングにおいては、destroyアクションを行う際は対象となるリソースのIDが必要になります。
 =end

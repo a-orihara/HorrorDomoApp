@@ -48,7 +48,7 @@ export const createFollow = (otherUserId: number) => {
 
 // ユーザーをフォロー解除するAPI
 export const deleteFollow = (otherUserId: number) => {
-  return client.delete(`/relationships`, {
+  return client.delete(`/relationships/${otherUserId}`, {
     params: {
       other_id: otherUserId,
     },

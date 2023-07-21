@@ -12,7 +12,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
 
   useEffect(() => {
     const checkFollow = async () => {
-      // userId と otherUserId が undefined でないことを確認する
+      // userId（currentId）と otherUserId が undefined でないことを確認する
       if (userId !== undefined && otherUserId !== undefined) {
         const response = await isFollowing(userId, otherUserId);
         setIsFollowed(response.data.isFollowing);

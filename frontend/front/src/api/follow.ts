@@ -46,6 +46,20 @@ export const createFollow = (otherUserId: number) => {
   );
 };
 
+// ユーザーをフォロー解除するAPI
+export const deleteFollow = (otherUserId: number) => {
+  return client.delete(`/relationships`, {
+    params: {
+      other_id: otherUserId,
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // 1 ユーザーが特定のユーザーをフォローしているか確認するAPI
 export const isFollowing = (userId: number, otherUserId: number) => {
   return client.get(`/users/${userId}/is_following`, {

@@ -21,8 +21,10 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   };
 
   const handleUnFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    handleDeleteFollow().then(() => setIsFollowed(false));
+    if (window.confirm('フォローを解除しますか？')) {
+      event.preventDefault();
+      handleDeleteFollow().then(() => setIsFollowed(false));
+    }
   };
 
   useEffect(() => {

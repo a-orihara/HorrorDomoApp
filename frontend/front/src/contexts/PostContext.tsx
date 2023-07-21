@@ -42,6 +42,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         console.log('handleGetPostListでpostがセット');
       }
     } catch (err) {
+      console.log('handleGetCurrentUserPostListのエラー');
       console.error(err);
     }
   };

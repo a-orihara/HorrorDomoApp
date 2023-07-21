@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { getFollowersByUserId } from '../../api/relationship';
+import { getFollowersByUserId } from '../../api/follow';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { FollowUser } from '../../types/relationship';
 

@@ -6,27 +6,6 @@ export const useDeletePost = () => {
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
   const router = useRouter();
 
-  // const handleDeletePost = async (postId: number) => {
-  //   try {
-  //     const res = await deletePost(postId);
-  //     console.log(`deletePostのres.data${JSON.stringify(res.data)}`);
-  //     // レスポンスが成功した場合の処理
-  //     setAlertSeverity('success');
-  //     setAlertMessage(`${res.data.message}`);
-  //     setAlertOpen(true);
-  //     // 削除後に特定のページにリダイレクトする場合は以下を利用
-  //     setTimeout(() => {
-  //       router.push('/users');
-  //     }, 2000);
-  //   } catch (err: any) {
-  //     // エラーが発生した場合の処理
-  //     setAlertSeverity('error');
-  //     // setAlertMessage('Failed to delete post');
-  //     setAlertMessage(`${err.res.data.errors}`);
-  //     setAlertOpen(true);
-  //   }
-  // };
-
   const handleDeletePost = async (postId: number) => {
     try {
       const res = await deletePost(postId);

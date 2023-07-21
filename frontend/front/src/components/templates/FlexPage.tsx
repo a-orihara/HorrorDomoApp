@@ -17,12 +17,6 @@ const FlexPage = () => {
         </main>
       </div>
       <footer className='h-16 bg-blue-100'>フッター</footer>
-      <div className='flex flex-col'>
-        <p>a</p>
-        <p className='w-36 break-words border-2 bg-red-200 text-3xl'>
-          かかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかかか
-        </p>
-      </div>
     </div>
   );
 };

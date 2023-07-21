@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       resources :users, only: %i[index show] do
         # 2
         member do
-          get :following, :followers
+          get :following, :followers, :is_following
         end
       end
       # api/v1/posts
@@ -24,6 +24,8 @@ Rails.application.routes.draw do
         resources :users, only: [:destroy]
       end
 
+      # api/v1/relationships
+      resources :relationships, only: [:create, :destroy]
     end
   end
 end
@@ -264,8 +266,12 @@ member do ブロック内に記述された get :following は、/api/v1/users/:
 同様に、get :followers は /api/v1/users/:id/followers というパスに対する GET リクエストを followers アク
 ションにルーティングします。
 ------------------------------------------------------------------------------------------------
-GET /users/1/following following following_user_path(1)
-GET /users/1/followers followers followers_user_path(1)
+is_following
+ユーザーが特定のユーザーをフォローしているか確認するためのAPIエンドポイント
+------------------------------------------------------------------------------------------------
+GET api/v1/users/1/following following following_user_path(1)
+GET api/v1/users/1/followers followers followers_user_path(1)
+GET api/v1/users/:id/is_following
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識

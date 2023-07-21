@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers]
+  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -49,10 +49,8 @@ class Api::V1::UsersController < ApplicationController
       following = user.following.page(page).per(per_page)
       following_count = user.following.count
       # following_pagination = following.page(page).per(per_page)
-      render json: { status: '200', following: following, following_count: following_count}
-      puts "userいます3"
+      render json: { status: '200', following: following, following_count: following_count }
     else
-      puts "userいません"
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end
   end
@@ -69,13 +67,20 @@ class Api::V1::UsersController < ApplicationController
       followers = user.followers.page(page).per(per_page)
       followers_count = user.followers.count
       # followers_pagination = followers.page(page).per(per_page)
-      render json: { status: '200', followers: followers, followers_count: followers_count}
-      puts "userいます3"
+      render json: { status: '200', followers: followers, followers_count: followers_count }
     else
-      puts "userいません"
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end
   end
+
+  # 5 ユーザーが特定のユーザーをフォローしているか確認するためのAPI
+  def is_following
+    current_user = User.find(params[:id])
+    other_user = User.find(params[:other_id])
+    is_following = current_user.following?(other_user)
+    render json: { status: '200', is_following: is_following }
+  end
+
 
   private
 
@@ -175,4 +180,31 @@ current_api_v1_user が存在し、かつ admin? メソッドが呼び出せる�
 もし、unless current_api_v1_user.admin?だと、admin属性を正しくチェックしているように見えますが、
 current_api_v1_userがnil（ログインしていない状態）の場合にエラーが発生します。そのため、
 current_api_v1_user&.admin?として安全な参照を行います。
+
+================================================================================================
+5
+`current_user = User.find(params[:id])`の`params[:id]`は、ルーティングパラメーターのidを指しています。
+このidはURLの一部として送られ、Railsのルーティングによってパラメーターとして取り出されます。
+------------------------------------------------------------------------------------------------
+# models/user.rbで定義したfollowing?メソッドを使って、フォローしているかどうかを確認
+is_following = current_user.following?(other_user)
+------------------------------------------------------------------------------------------------
+フロントエンドでユーザーがあるユーザーをフォローしているかどうかを確認するには、APIを通じてバックエンドに問い合わせ
+るのが適切です。フロントエンドがその情報を保持するとなると、データの同期問題などが生じる可能性があります。
+
+バックエンド側で、ユーザーが他のユーザーをフォローしているかどうかを確認するには、Userモデルの`following?`メソッ
+ドを使うのが適切です。`following?`メソッドは引数で渡されたユーザーが`following`リストに含まれるかを確認します。
+
+バックエンドのロジックは主にコントローラーに書くのが適切です。今回の場合、ユーザーが特定のユーザーをフォローしている
+か確認するためのAPIエンドポイントを作成するため、`users_controller.rb`にそのロジックを追加します。
+------------------------------------------------------------------------------------------------
+フォローの状態はユーザーの一部の状態（属性）として考えることができます。したがって、特定のユーザーが他のユーザーをフ
+ォローしているかどうかを確認する操作は、ユーザーというリソースの一部を扱う操作と捉えることができます。
+それにより、users_controller.rbでその操作を処理するという選択がなされます。
+
+一般的にRESTfulな設計をする際、あるリソースに対する操作はそのリソースのコントローラーで行うのが基本です。しかし、実
+際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
+relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。
+ただし、users_controller.rbに書く方が単一責任の原則に近く、リソース指向設計の観点からは好ましいと思われます。
+
 =end

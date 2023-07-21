@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { getFollowingCountByUserId } from '../../api/relationship';
+import { getFollowingCountByUserId } from '../../api/follow';
 
 // idユーザーのフォローユーザーの総数を取得するフック
 // (userId: number | undefined)はrouter.queryからidを取得する為

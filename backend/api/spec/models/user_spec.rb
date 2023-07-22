@@ -68,7 +68,7 @@ RSpec.describe User, type: :model do
   end
 
   # ユーザーのフォロー・フォロー解除（following関連のメソッドをテスト）
-  describe 'ユーザーのフォローとフォロー解除' do
+  describe 'ユーザーのフォローとフォロー解除（following関連のメソッドをテスト）' do
     let(:user) { create(:user) }
     let(:other_user) { create(:user) }
 
@@ -92,6 +92,25 @@ RSpec.describe User, type: :model do
     it '他のユーザーがユーザーのフォローを解除した場合' do
       other_user.followers.delete(user)
       expect(other_user.followers.include?(user)).to be_falsey
+    end
+  end
+
+  # follow, unfollow, following?のテスト
+  describe 'ユーザーのフォローとフォロー解除（follow, unfollow, following?のテスト）' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    before do
+      user.follow(other_user)
+    end
+
+    it '他のユーザーをフォローし、その状況を確認できること' do
+      expect(user.following?(other_user)).to be_truthy
+    end
+
+    it '他のユーザーのフォローを解除し、その状況を確認できること' do
+      user.unfollow(other_user)
+      expect(user.following?(other_user)).to be_falsey
     end
   end
 end

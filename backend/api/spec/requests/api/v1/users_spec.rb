@@ -67,6 +67,71 @@ RSpec.describe "Api::V1::Users", type: :request do
       end
     end
   end
+
+  # following:フォロー中のユーザー取得のテスト
+  describe 'GET /api/v1/users/:id/following' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    before do
+      user.follow(other_user)
+      # getメソッドにヘッダー情報を追加して、followingアクションを実行
+      get following_api_v1_user_path(user.id), headers: user.create_new_auth_token
+    end
+
+    it '200 OKを返すこと' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'フォロー中のユーザーが取得できること' do
+      json = response.parsed_body
+      expect(json['following'].length).to eq 1
+      expect(json['following'][0]['id']).to eq other_user.id
+    end
+  end
+
+  # followers:フォロワー取得のテスト
+  describe 'GET /api/v1/users/:id/followers' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    before do
+      other_user.follow(user)
+      # getメソッドにヘッダー情報を追加して、followersアクションを実行
+      get followers_api_v1_user_path(user.id), headers: user.create_new_auth_token
+    end
+
+    it '200 OKを返すこと' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'フォロワーが取得できること' do
+      json = response.parsed_body
+      expect(json['followers'].length).to eq 1
+      expect(json['followers'][0]['id']).to eq other_user.id
+    end
+  end
+
+  # is_following:フォロー確認のテスト
+  describe 'GET /api/v1/users/:id/is_following' do
+    let(:user) { create(:user) }
+    let(:other_user) { create(:user) }
+
+    before do
+      user.follow(other_user)
+      # getメソッドにヘッダー情報を追加して、is_followingアクションを実行
+      get is_following_api_v1_user_path(user.id), params: { other_id: other_user.id }, headers: user.create_new_auth_token
+    end
+
+    it '200 OKを返すこと' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'フォロー確認が取得できること' do
+      json = response.parsed_body
+      expect(json['is_following']).to be true
+    end
+  end
 end
 
 =begin

@@ -40,6 +40,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       const data = await getFollowersCountByUserId(userId);
       if (data.status == 200) {
         const count: number = data.data.followersCount;
+        console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
         setFollowersCount(count);
       }
     } catch (error) {

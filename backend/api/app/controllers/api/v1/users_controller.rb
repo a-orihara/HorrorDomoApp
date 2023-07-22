@@ -81,7 +81,6 @@ class Api::V1::UsersController < ApplicationController
     render json: { status: '200', is_following: is_following }
   end
 
-
   private
 
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。

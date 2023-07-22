@@ -1,30 +1,33 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useGetFollowersCountByUserId } from '../../hooks/relationship/useGetFollowersCountByUserId';
-import { useGetFollowingCountByUserId } from '../../hooks/relationship/useGetFollowingCountByUserId';
+import { useFollowContext } from '../../contexts/FollowContext';
+// import { useGetFollowersCountByUserId } from '../../hooks/relationship/useGetFollowersCountByUserId';
+
 const FollowStats = ({ userId }: { userId: number | undefined }) => {
-  const { followingCount, handleGetFollowingCountByUserId } = useGetFollowingCountByUserId(userId);
-  const { followersCount, handleGetFollowersCountByUserId } = useGetFollowersCountByUserId(userId);
+  // const { followingCount, handleGetFollowingCountByUserId } = useGetFollowingCountByUserId(userId);
+  const { followingCount, followersCount, handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } =
+    useFollowContext();
+  // const { followersCount, handleGetFollowersCountByUserId } = useGetFollowersCountByUserId(userId);
 
   useEffect(() => {
     // console.log('FollowStatsのuseEffectが呼ばれました');
-    handleGetFollowingCountByUserId();
-    handleGetFollowersCountByUserId();
+    handleGetFollowingCountByUserId(userId);
+    handleGetFollowersCountByUserId(userId);
   }, [userId, handleGetFollowingCountByUserId, handleGetFollowersCountByUserId]);
   // 1 handleGetUserFollowingByUserId();
 
   return (
     <div>
       <Link href={`/users/${userId}/following`}>
-        <a className='hover:text-basic-pink'>
-          フォロー:
-          <span className='underline'>{followingCount}</span>
+        <a className='mr-4 hover:text-basic-pink'>
+          <span className='mr-2 underline'>{followingCount}</span>
+          フォロー
         </a>
       </Link>
       <Link href={`/users/${userId}/followers`}>
         <a className='hover:text-basic-pink'>
-          フォロワー:
-          <span className='underline'>{followersCount}</span>
+          <span className='mr-2 underline'>{followersCount}</span>
+          フォロワー
         </a>
       </Link>
     </div>

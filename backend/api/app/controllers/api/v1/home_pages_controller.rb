@@ -13,5 +13,4 @@ class Api::V1::HomePagesController < ApplicationController
         return render json: { status: '404', message: 'User not found' }, status: :not_found
       end
   end
-
 end

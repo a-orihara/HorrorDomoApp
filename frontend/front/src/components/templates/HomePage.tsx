@@ -29,7 +29,6 @@ const HomePage = () => {
               </h1>
             )}
             <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
-            <h1>ここはホームページ</h1>
           </div>
         </div>
       ) : (

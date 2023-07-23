@@ -51,6 +51,16 @@ export const getUserById = (userId: number | undefined) => {
   });
 };
 
+export const getUserFeed = (userId: number | undefined) => {
+  return client.get(`/`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 // export const signIn = (params: SignInParams) => {
 //   return client.post('/auth/sign_in', params);
 // };

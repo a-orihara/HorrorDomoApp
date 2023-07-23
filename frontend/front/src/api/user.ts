@@ -51,13 +51,23 @@ export const getUserById = (userId: number | undefined) => {
   });
 };
 
-export const getUserFeed = (userId: number | undefined) => {
+// currentUserのfeedを取得する
+export const getUserFeed = async (page: number, itemsPerPage: number, userId: number) => {
   return client.get(`/`, {
+    params: {
+      // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います
+      page: page + 1,
+      // 1ページ当たりの表示件数
+      per_page: itemsPerPage,
+      // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
+      user_id: userId,
+    },
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
       uid: Cookies.get('_uid'),
     },
+    // res:指定したページの指定した表示件数分の、そのidで指定されたユーザーのpostと総post数
   });
 };
 

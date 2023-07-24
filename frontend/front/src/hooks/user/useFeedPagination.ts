@@ -4,7 +4,7 @@ import { getUserFeed } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { Post } from '../../types/post';
 
-export const useFeedPagination = (itemsPerPage: number, userId?: number) => {
+export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 指定したuserIdのユーザーの投稿一覧
   const [posts, setPosts] = useState<Post[]>([]);
   // 指定したuserIdのユーザーの投稿数
@@ -30,7 +30,7 @@ export const useFeedPagination = (itemsPerPage: number, userId?: number) => {
         // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostをセット
         setPosts(res.data.data);
         // 指定したuserIdのユーザーの投稿総数をセット
-        setTotalPostsCount(res.data.totalPosts);
+        setTotalPostsCount(res.data.totalCount);
       } catch (err: any) {
         // setAlertSeverity('error');
         // setAlertMessage(`${err.response.data.errors[0]}`);

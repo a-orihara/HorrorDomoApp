@@ -2,10 +2,9 @@ import Link from 'next/link';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
-import { useFeedPagination } from '../../hooks/user/useFeedPagination';
-import Pagination from '../molecules/Pagination';
-import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
+import Feed from '../organisms/Feed';
+
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
@@ -16,10 +15,9 @@ const HomePage = () => {
   // console.log('HomePage.tsxのcurrentUser:', currentUser);
   const { currentUserPostsCount } = usePostContext();
   const userId = currentUser ? currentUser.id : undefined;
-  const { posts, totalPostsCount, handlePageChange } = useFeedPagination(10, userId);
+  // const { posts, totalPostsCount, handlePageChange } = useFeedPagination(10, userId);
 
   console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
-  console.log(`ホームページの諸々の値${totalPostsCount}`);
 
   return (
     <div className='flex flex-1 flex-col bg-green-200'>
@@ -37,8 +35,9 @@ const HomePage = () => {
             )}
             <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
           </div>
-          <PostList user={currentUser} posts={posts}></PostList>
-          <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+          <Feed user={currentUser}></Feed>
+          {/* <PostList user={currentUser} posts={posts}></PostList>
+          <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination> */}
         </div>
       ) : (
         <div className='flex h-full w-full flex-1 flex-col text-center'>

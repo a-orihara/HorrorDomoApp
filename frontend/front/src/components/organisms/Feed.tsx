@@ -8,13 +8,14 @@ type Feed = {
 };
 
 const Feed = ({ user }: Feed) => {
-  const { posts, totalPostsCount, handlePageChange } = useFeedPagination(10, user.id);
-  console.log(`ホームページの諸々の値totalPostsCount:${totalPostsCount}`);
-  console.log(`ホームページの諸々の値posts:${JSON.stringify(posts)}`);
+  const { feedPosts, totalFeedPostsCount, handlePageChange } = useFeedPagination(10, user.id);
+  console.log(`ホームページの諸々の値totalPostsCount:${totalFeedPostsCount}`);
+  console.log(`ホームページの諸々の値feedPosts:${JSON.stringify(feedPosts)}`);
+  // const { } = useGetUserById()
   return (
     <div>
-      <PostList user={user} posts={posts}></PostList>
-      <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <PostList user={user} posts={feedPosts}></PostList>
+      <Pagination totalCount={totalFeedPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );
 };

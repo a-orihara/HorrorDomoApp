@@ -62,7 +62,7 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
-  # 15 ユーザーのステータスフィードを返す
+  # 15 Feed（自ユーザーとフォローユーザーの投稿データ）を返す。戻り値はpostの配列
   def feed
     following_ids = "SELECT followed_id FROM relationships
                      WHERE follower_id = :user_id"

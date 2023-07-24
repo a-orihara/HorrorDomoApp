@@ -39,7 +39,7 @@ users.each do |user|
     title = Faker::Lorem.sentence(word_count: 3)
     # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
-    user.posts.create!(content: content, title: title)
+    user.posts.create!(content: content, title: title, created_at: created_at)
   end
 end
 
@@ -58,7 +58,7 @@ end
     content = Faker::Lorem.characters(number: 77)
     title = Faker::Lorem.sentence(word_count: 3)
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
-    user.posts.create!(content: content, title: title)
+    user.posts.create!(content: content, title: title, created_at: created_at)
   end
 end
 

@@ -13,7 +13,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   const router = useRouter();
   const { id } = router.query;
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
-  console.log(`UserInfoの${JSON.stringify(user)}`);
+  // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>
     <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>

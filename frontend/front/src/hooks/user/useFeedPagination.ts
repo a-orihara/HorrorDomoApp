@@ -4,7 +4,7 @@ import { getUserFeed } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { Post } from '../../types/post';
 
-export const useUserFeedPagination = (itemsPerPage: number, userId: number) => {
+export const useFeedPagination = (itemsPerPage: number, userId?: number) => {
   // 指定したuserIdのユーザーの投稿一覧
   const [posts, setPosts] = useState<Post[]>([]);
   // 指定したuserIdのユーザーの投稿数
@@ -18,6 +18,10 @@ export const useUserFeedPagination = (itemsPerPage: number, userId: number) => {
   // 引数pageは、ページネーションで選択したページ。
   const handleGetUserFeed = useCallback(
     async (page: number) => {
+      // ユーザーが認証されていない場合、処理を終了する
+      if (!userId) {
+        return;
+      }
       // console.log('handleGetPostListByUserIdが発火');
       try {
         // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
@@ -28,20 +32,26 @@ export const useUserFeedPagination = (itemsPerPage: number, userId: number) => {
         // 指定したuserIdのユーザーの投稿総数をセット
         setTotalPostsCount(res.data.totalPosts);
       } catch (err: any) {
-        setAlertSeverity('error');
-        setAlertMessage(`${err.response.data.errors[0]}`);
-        setAlertOpen(true);
-        setTimeout(() => {
-          router.push('/');
-        }, 2000);
+        // setAlertSeverity('error');
+        // setAlertMessage(`${err.response.data.errors[0]}`);
+        // setAlertOpen(true);
+        // setTimeout(() => {
+        //   router.push('/');
+        // }, 2000);
+        alert('feedのエラー');
       }
     },
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
   );
 
+  // useEffect(() => {
+  //   handleGetUserFeed(currentPage);
+  // }, [currentPage, handleGetUserFeed]);
   useEffect(() => {
-    handleGetUserFeed(currentPage);
-  }, [currentPage, handleGetUserFeed]);
+    if (userId) {
+      handleGetUserFeed(currentPage);
+    }
+  }, [currentPage, handleGetUserFeed, userId]);
 
   // 3
   const handlePageChange = (selectedItem: { selected: number }) => {

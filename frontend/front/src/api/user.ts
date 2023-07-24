@@ -52,7 +52,7 @@ export const getUserById = (userId: number | undefined) => {
 };
 
 // currentUserのfeedを取得する
-export const getUserFeed = async (page: number, itemsPerPage: number, userId: number) => {
+export const getUserFeed = async (page: number, itemsPerPage: number, userId?: number) => {
   return client.get(`/`, {
     params: {
       // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います

@@ -63,6 +63,8 @@ export const PostProvider = ({ children }: PostProviderProps) => {
           setTimeout(() => {
             router.push(`/`);
           }, 1000);
+        } else {
+          console.log('handleGetPostDetailByPostId:ノーポスト');
         }
       } catch (err: any) {
         // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}

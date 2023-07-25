@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useFollowersPagination } from '../../hooks/relationship/useFollowersPagination';
+import { useFollowersPagination } from '../../hooks/follow/useFollowersPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { FollowList } from '../molecules/FollowList';
 import Pagination from '../molecules/Pagination';

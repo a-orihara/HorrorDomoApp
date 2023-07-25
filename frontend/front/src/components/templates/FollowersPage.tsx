@@ -30,12 +30,7 @@ const FollowersPage = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
-      <FollowList
-        followUsers={followers}
-        user={user}
-        title={'All Followers'}
-        noFollowMessage={'フォロワーはいません'}
-      ></FollowList>
+      <FollowList followUsers={followers} title={'All Followers'} noFollowMessage={'フォロワーはいません'}></FollowList>
       <Pagination totalCount={totalFollowersCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );

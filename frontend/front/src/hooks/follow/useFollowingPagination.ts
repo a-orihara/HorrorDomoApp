@@ -15,7 +15,7 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   const router = useRouter();
   // const { followingCount, following, followingPagination, handleGetUserFollowingByUserId } =
   //   useGetUserFollowingByUserId(userId);
-  console.log(`OK:useFollowingPaginationの${userId}`);
+  // console.log(`OK:useFollowingPaginationの${userId}`);
 
   const handleGetFollowingByUserId = useCallback(
     async (page: number) => {

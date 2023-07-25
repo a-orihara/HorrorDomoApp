@@ -1,3 +1,4 @@
+// フォロー、フォロワー双方で使用する型定義
 export type FollowUser = {
   id: number;
   uid: string;

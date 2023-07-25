@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { getFollowingByUserId } from '../../api/follow';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { FollowUser } from '../../types/relationship';
+import { FollowUser } from '../../types/follow';
 
 export const useFollowingPagination = (itemsPerPage: number, userId?: number) => {
   // 指定したuserIdのフォローユーザー一覧

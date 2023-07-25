@@ -1,4 +1,4 @@
-import { FollowUser } from '../../types/relationship';
+import { FollowUser } from '../../types/follow';
 import { User } from '../../types/user';
 import { FollowListItem } from '../atoms/FollowListItem';
 

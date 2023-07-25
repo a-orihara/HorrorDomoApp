@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { useFollowContext } from '../../contexts/FollowContext';
-// import { useGetFollowersCountByUserId } from '../../hooks/relationship/useGetFollowersCountByUserId';
 
-const FollowStats = ({ userId }: { userId: number | undefined }) => {
-  // const { followingCount, handleGetFollowingCountByUserId } = useGetFollowingCountByUserId(userId);
+type FollowStatsProps = {
+  userId: number | undefined;
+};
+
+const FollowStats = ({ userId }: FollowStatsProps) => {
   const { followingCount, followersCount, handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } =
     useFollowContext();
-  // const { followersCount, handleGetFollowersCountByUserId } = useGetFollowersCountByUserId(userId);
 
   useEffect(() => {
     // console.log('FollowStatsのuseEffectが呼ばれました');

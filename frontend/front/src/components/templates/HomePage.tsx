@@ -14,10 +14,8 @@ const HomePage = () => {
   const { showWelcomeMessage } = useFirstTimeLogin();
   // console.log('HomePage.tsxのcurrentUser:', currentUser);
   const { currentUserPostsCount } = usePostContext();
-  const userId = currentUser ? currentUser.id : undefined;
-  // const { posts, totalPostsCount, handlePageChange } = useFeedPagination(10, userId);
 
-  console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
+  // console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
 
   return (
     <div className='flex flex-1 flex-col bg-green-200'>
@@ -36,8 +34,6 @@ const HomePage = () => {
             <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
           </div>
           <Feed user={currentUser}></Feed>
-          {/* <PostList user={currentUser} posts={posts}></PostList>
-          <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination> */}
         </div>
       ) : (
         <div className='flex h-full w-full flex-1 flex-col text-center'>

@@ -12,6 +12,7 @@ type UserInfoProps = {
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   const router = useRouter();
   const { id } = router.query;
+  console.log(`UserInfoのid: ${id}`);
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (

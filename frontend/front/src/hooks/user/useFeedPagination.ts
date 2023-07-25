@@ -22,15 +22,14 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   const handleGetUserFeed = useCallback(
     async (page: number) => {
       // ユーザーが認証されていない場合、処理を終了する
-      if (!userId) {
-        return;
-      }
+      // if (!userId) {
+      //   return;
+      // }
       // console.log('handleGetPostListByUserIdが発火');
       try {
-        // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
-        // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
+        // ユーザーのフィード情報を取得
         const res = await getUserFeed(page, itemsPerPage, userId);
-        // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostをセット
+        // 1 ユーザーとそのフォローユーザーの両方の、指定したページの1ページ当たりの表示件数分の投稿をセット
         setFeedPosts(res.data.data);
         // 指定したuserIdのユーザーの投稿総数をセット
         setTotalFeedPostsCount(res.data.feedTotalCount);

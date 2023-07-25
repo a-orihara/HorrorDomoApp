@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useFollowContext } from '../../contexts/FollowContext';
 import { usePostContext } from '../../contexts/PostContext';
 import { SignInParams } from '../../types/user';
 
@@ -17,6 +18,7 @@ export const useSignIn = () => {
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const { handleGetCurrentUserPostList } = usePostContext();
+  const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -38,6 +40,9 @@ export const useSignIn = () => {
         // 1
         handleGetCurrentUser();
         handleGetCurrentUserPostList();
+        // ここで設定するとHomePageでfollowing数が表示される
+        handleGetFollowingCountByUserId(res.data.data.id);
+        handleGetFollowersCountByUserId(res.data.data.id);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

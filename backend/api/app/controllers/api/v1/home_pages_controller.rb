@@ -6,13 +6,13 @@ class Api::V1::HomePagesController < ApplicationController
       page = params[:page] || 1
       per_page = params[:per_page] || 10
       if params[:user_id]
-        # user = User.find_by(id: params[:user_id])
+        user = User.find_by(id: params[:user_id])
         # feed_itemはmicropostインスタンスの集合
         feed_items = current_api_v1_user.feed.page(page).per(per_page)
         feed_total_count = current_api_v1_user.feed.count
         # 1 ここにユーザーの配列?
         # feed_itemsのfeed_user_idsである事に注意
-        feed_user_ids = feed_items.feed.map(&:user_id).uniq
+        feed_user_ids = feed_items.map(&:user_id).uniq
         # feed_user_idsに紐づくuser情報を取得
         feed_users = User.where(id: feed_user_ids)
         # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合

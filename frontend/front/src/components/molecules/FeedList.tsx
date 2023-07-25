@@ -1,12 +1,16 @@
 // frontend/front/src/components/molecules/FeedList.tsx
 import { Post } from '../../types/post';
+import { User } from '../../types/user';
 
 type FeedListProps = {
   feedPosts: Post[];
-  feedUserIds: number[];
+  feedUsers: User[];
 };
-const FeedList = ({ feedPosts, feedUserIds }: FeedListProps) => {
-  const postUserIds = feedPosts.map((feedPost) => feedPost.userId);
+const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
+  // posts
+  // ポストのidの集合
+  // usersの集合 = feedUsers
+  // const postUserIds = feedPosts.map((feedPost) => feedPost.userId);
 
   if (!feedPosts || feedPosts.length === 0) {
     return (
@@ -20,7 +24,7 @@ const FeedList = ({ feedPosts, feedUserIds }: FeedListProps) => {
     <div className='flex-1'>
       <ol>
         {feedPosts?.map((feedPost) => {
-          const user = feedUserIds.find((feedUserId) => feedUserId === postUserId);
+          const user = feedUsers.find((feedUser) => feedUser.id === feedPost.userId);
           return <FeedListItem key={feedPost.id} post={feedPost} user={user}></FeedListItem>;
         })}
       </ol>

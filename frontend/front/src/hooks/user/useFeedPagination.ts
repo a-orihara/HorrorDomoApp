@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getUserFeed } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { Post } from '../../types/post';
+import { User } from '../../types/user';
 
 export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 指定したuserIdのユーザーの投稿一覧
@@ -11,6 +12,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   const [totalFeedPostsCount, setTotalFeedPostsCount] = useState(0);
   // 現在のページ番号
   const [feedUserIds, setFeedUserIds] = useState<number[]>([]);
+  const [feedUsers, setFeedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
@@ -33,6 +35,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
         // 指定したuserIdのユーザーの投稿総数をセット
         setTotalFeedPostsCount(res.data.feedTotalCount);
         setFeedUserIds(res.data.feedUserIds);
+        setFeedUsers(res.data.feedUsers);
       } catch (err: any) {
         // setAlertSeverity('error');
         // setAlertMessage(`${err.response.data.errors[0]}`);
@@ -60,5 +63,5 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { feedPosts, totalFeedPostsCount, handlePageChange, feedUserIds, currentPage };
+  return { feedPosts, totalFeedPostsCount, feedUserIds, feedUsers, handlePageChange, currentPage };
 };

@@ -15,13 +15,18 @@ class Api::V1::HomePagesController < ApplicationController
         feed_user_ids = feed_items.map(&:user_id).uniq
         # feed_user_idsに紐づくuser情報を取得
         feed_users = User.where(id: feed_user_ids)
+        # 各ユーザに対してgenerate_avatar_urlを実行し、as_jsonとmergeを使って、avatar_urlを含む新しいハッシュを生成
+        feed_users_with_avatar = feed_users.map do |user|
+          avatar_url = generate_avatar_url(user)
+          user.as_json.merge(avatar_url: avatar_url)
+        end
         # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合
         render json: {
           status: '200',
           data: feed_items,
           feed_total_count: feed_total_count,
           feed_user_ids: feed_user_ids,
-          feed_users: feed_users
+          feed_users: feed_users_with_avatar
         }, status: :ok
       else
         render json: { status: '404', message: 'User not found' }, status: :not_found

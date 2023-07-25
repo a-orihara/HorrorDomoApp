@@ -1,7 +1,7 @@
 import { useFeedPagination } from '../../hooks/user/useFeedPagination';
 import { User } from '../../types/user';
+import FeedList from '../molecules/FeedList';
 import Pagination from '../molecules/Pagination';
-import PostList from '../molecules/PostList';
 
 type Feed = {
   user: User;
@@ -16,7 +16,7 @@ const Feed = ({ user }: Feed) => {
   // const { } = useGetUserById()
   return (
     <div>
-      <PostList user={user} posts={feedPosts}></PostList>
+      <FeedList feedUsers={feedUsers} feedPosts={feedPosts}></FeedList>
       <Pagination totalCount={totalFeedPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );

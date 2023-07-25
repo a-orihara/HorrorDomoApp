@@ -23,4 +23,5 @@ export type Follower = {
   updatedAt: Date;
   admin: boolean;
   profile: string | null;
+  avatarUrl: string | null;
 };

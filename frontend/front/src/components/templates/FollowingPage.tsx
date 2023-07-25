@@ -32,7 +32,6 @@ const FollowingPage = () => {
     <div className='flex flex-1 flex-col'>
       <FollowList
         followUsers={following}
-        user={user}
         title={'ALL Following'}
         noFollowMessage={'フォローユーザーはいません'}
       ></FollowList>

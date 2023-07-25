@@ -17,7 +17,7 @@ const FollowingPage = () => {
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
   const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
   // console.log(`FollowingPageの:${totalFollowingCount}`);
-  // console.log(`FollowingPageの:${JSON.stringify(following)}`);
+  console.log(`FollowingPageのfollowing:${JSON.stringify(following)}`);
 
   useEffect(() => {
     handleGetUserById();

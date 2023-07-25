@@ -46,10 +46,16 @@ class Api::V1::UsersController < ApplicationController
     # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
     user = User.find_by(id: params[:id])
     if user
-      following = user.following.page(page).per(per_page)
+      # following = user.following.page(page).per(per_page)
+      following_users = user.following.page(page).per(per_page)
+      # 追加: 各ユーザに対してgenerate_avatar_urlを実行し、as_jsonとmergeを使って、avatar_urlを含む新しいハッシュを生成
+      following_users_with_avatar = following_users.map do |f_user|
+        avatar_url = generate_avatar_url(f_user)
+        f_user.as_json.merge(avatar_url: avatar_url)
+      end
       following_count = user.following.count
       # following_pagination = following.page(page).per(per_page)
-      render json: { status: '200', following: following, following_count: following_count }
+      render json: { status: '200', following: following_users_with_avatar, following_count: following_count }
     else
       render json: { status: '404', message: 'フォローユーザーが見つかりません' }, status: :not_found
     end

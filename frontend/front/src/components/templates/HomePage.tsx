@@ -3,6 +3,8 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import UserInfo from '../molecules/UserInfo';
+import Feed from '../organisms/Feed';
+
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
@@ -12,7 +14,8 @@ const HomePage = () => {
   const { showWelcomeMessage } = useFirstTimeLogin();
   // console.log('HomePage.tsxのcurrentUser:', currentUser);
   const { currentUserPostsCount } = usePostContext();
-  console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
+
+  // console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
 
   return (
     <div className='flex flex-1 flex-col bg-green-200'>
@@ -29,8 +32,8 @@ const HomePage = () => {
               </h1>
             )}
             <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
-            <h1>ここはホームページ</h1>
           </div>
+          <Feed user={currentUser}></Feed>
         </div>
       ) : (
         <div className='flex h-full w-full flex-1 flex-col text-center'>
@@ -49,3 +52,22 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+1. `useFeedPagination(10, currentUser.id)`について警告が出る理由:
+`currentUser`は`User | undefined`型として定義されており、そのため`currentUser.id`を参照する際に
+`currentUser`が`undefined`かもしれないという可能性をTypeScriptは考慮します。その結果、'currentUser'は
+'undefined'の可能性がありますという警告が発生します。
+
+2. `const userId = currentUser ? currentUser.id : undefined;`について何も警告が出ない理由:
+`currentUser ? currentUser.id : undefined`の構文は、`currentUser`が`undefined`の場合は、
+`userId`に`undefined`を割り当て、`undefined`ではない場合は`currentUser.id`を`userId`に割り当てます。この
+ように分岐処理を行うことで、`userId`は常に定義されていることが保証され、したがって可能性がありますの警告は発生しま
+せん。
+`userId`はすべての実行パスで定義されることが保証されているため、警告は発生しません。
+currentUserがundefinedであるかどうかに関わらず、userIdの値は必ず何かしら設定されます（currentUserが存在すれ
+ばcurrentUser.id、そうでなければundefined）。そのため、'userId' はすべての実行パスで「エラーが発生せずに値が定
+義される」ことが保証されているのです。
+*/

@@ -6,7 +6,8 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations',
         sessions: 'api/v1/auth/sessions',
       }
-
+      # 3
+      root 'home_pages#home'
       # api/v1/authenticated_users
       resources :authenticated_users, only: %i[index]
       # api/v1/users
@@ -273,6 +274,20 @@ GET api/v1/users/1/following following following_user_path(1)
 GET api/v1/users/1/followers followers followers_user_path(1)
 GET api/v1/users/:id/is_following
 
+================================================================================================
+3
+root メソッドを使ってルート URL "/" をコントローラーのアクションに紐付け。
+それ以外にも、生のURLではなく、名前付きルートを使ってURLを参照することができるようになります。
+例えばルート URL を定義すると、root_path や root_url といったメソッドを通して、URL を参照することができます。
+ちなみに前者はルート URL 以下の文字列を、後者は完全な URL の文字列を返し ます。
+root_path -> '/'
+root_url -> 'https://www.example.com/'
+なお、Rails チュートリアルでは一般的な規約に従い、基本的には_path 書式を使い、リダイレクトの場合のみ_url 書式を使
+うようにします。これは HTTP の標準としては、リダイレクトのときに完全な URL が要求されるためです。ただしほとんどのブ
+ラウザでは、どちらの方法でも動作します。
+
+/home_pages/home というURLに対するgetリクエストを、HomePagesコントローラのhomeアクションと結びつけています。
+get 'home_pages/home'
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識
 @          @@          @@          @@          @@          @@          @@          @@          @

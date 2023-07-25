@@ -1,21 +1,15 @@
 // import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/FollowStats';
 type UserInfoProps = {
   user: User;
   postsCount: number | undefined;
-  // avatarUrl: string | null;
 };
 
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
-  console.log(`UserInfoの${JSON.stringify(user)}`);
+  // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>
     <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>
       <div>
         <h1 className='mb-2 mt-2 rounded-md text-center text-sm  tracking-wide md:text-2xl  lg:mb-6 lg:mt-4 lg:tracking-widest'>
@@ -37,7 +31,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           {user.name}
         </h2>
       </div>
-      <FollowStats userId={userId}></FollowStats>
+      <FollowStats userId={user.id}></FollowStats>
 
       <div>
         <h2 className='mb-2 text-xs md:text-base lg:mb-4'>{user.profile || 'profileは設定されていません。'}</h2>

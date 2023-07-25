@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useFollowingPagination } from '../../hooks/relationship/useFollowingPagination';
+import { useFollowingPagination } from '../../hooks/follow/useFollowingPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { FollowList } from '../molecules/FollowList';
 import Pagination from '../molecules/Pagination';
@@ -17,7 +17,7 @@ const FollowingPage = () => {
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
   const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
   // console.log(`FollowingPageの:${totalFollowingCount}`);
-  // console.log(`FollowingPageの:${JSON.stringify(following)}`);
+  console.log(`FollowingPageのfollowing:${JSON.stringify(following)}`);
 
   useEffect(() => {
     handleGetUserById();
@@ -32,7 +32,6 @@ const FollowingPage = () => {
     <div className='flex flex-1 flex-col'>
       <FollowList
         followUsers={following}
-        user={user}
         title={'ALL Following'}
         noFollowMessage={'フォローユーザーはいません'}
       ></FollowList>

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { getFollowersByUserId } from '../../api/follow';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { FollowUser } from '../../types/relationship';
+import { FollowUser } from '../../types/follow';
 
 export const useFollowersPagination = (itemsPerPage: number, userId?: number) => {
   // 指定したuserIdのフォローユーザー一覧
@@ -15,7 +15,7 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
   const router = useRouter();
   // const { followersCount, followers, followersPagination, handleGetUserFollowersByUserId } =
   //   useGetUserFollowersByUserId(userId);
-  console.log(`OK:useFollowersPaginationの${userId}`);
+  // console.log(`OK:useFollowersPaginationのfollowers:${JSON.stringify(followers)}`);
 
   const handleGetFollowersByUserId = useCallback(
     async (page: number) => {

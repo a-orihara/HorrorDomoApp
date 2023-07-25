@@ -9,6 +9,7 @@ export type FollowUser = {
   updatedAt: Date;
   admin: boolean;
   profile: string | null;
+  avatarUrl: string | null;
 };
 
 export type Follower = {

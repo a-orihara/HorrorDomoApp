@@ -22,7 +22,7 @@ export const FollowList = ({ followUsers, user, title, noFollowMessage }: Follow
       ) : (
         <ol className='mb-4 flex flex-1 flex-col justify-around'>
           {followUsers.map((targetUser) => (
-            <FollowListItem key={targetUser.id} targetUser={targetUser} user={user}></FollowListItem>
+            <FollowListItem key={targetUser.id} targetUser={targetUser}></FollowListItem>
           ))}
         </ol>
       )}

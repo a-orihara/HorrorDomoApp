@@ -10,6 +10,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 指定したuserIdのユーザーの投稿数
   const [totalFeedPostsCount, setTotalFeedPostsCount] = useState(0);
   // 現在のページ番号
+  const [feedUserIds, setFeedUserIds] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
@@ -30,7 +31,8 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
         // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostをセット
         setFeedPosts(res.data.data);
         // 指定したuserIdのユーザーの投稿総数をセット
-        setTotalFeedPostsCount(res.data.totalCount);
+        setTotalFeedPostsCount(res.data.feedTotalCount);
+        setFeedUserIds(res.data.feedUserIds);
       } catch (err: any) {
         // setAlertSeverity('error');
         // setAlertMessage(`${err.response.data.errors[0]}`);
@@ -58,5 +60,5 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { feedPosts, totalFeedPostsCount, handlePageChange, currentPage };
+  return { feedPosts, totalFeedPostsCount, handlePageChange, feedUserIds, currentPage };
 };

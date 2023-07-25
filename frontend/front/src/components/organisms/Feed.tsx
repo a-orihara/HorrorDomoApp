@@ -8,9 +8,10 @@ type Feed = {
 };
 
 const Feed = ({ user }: Feed) => {
-  const { feedPosts, totalFeedPostsCount, handlePageChange } = useFeedPagination(10, user.id);
+  const { feedPosts, totalFeedPostsCount, feedUserIds, handlePageChange } = useFeedPagination(10, user.id);
   console.log(`ホームページの諸々の値totalPostsCount:${totalFeedPostsCount}`);
   console.log(`ホームページの諸々の値feedPosts:${JSON.stringify(feedPosts)}`);
+  console.log(`ホームページの諸々の値feedUserIds:${feedUserIds}`);
   // const { } = useGetUserById()
   return (
     <div>

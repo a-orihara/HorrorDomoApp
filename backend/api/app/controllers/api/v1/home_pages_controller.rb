@@ -6,15 +6,25 @@ class Api::V1::HomePagesController < ApplicationController
       page = params[:page] || 1
       per_page = params[:per_page] || 10
       if params[:user_id]
-        user = User.find_by(id: params[:user_id])
+        # user = User.find_by(id: params[:user_id])
         # feed_itemはmicropostインスタンスの集合
         feed_items = current_api_v1_user.feed.page(page).per(per_page)
         feed_total_count = current_api_v1_user.feed.count
         # 1 ここにユーザーの配列?
-        user_ids = feed_items.map(&:user_id).uniq
-        render json: { status: '200', data: feed_items, total_count: feed_total_count }, status: :ok
+        # feed_itemsのfeed_user_idsである事に注意
+        feed_user_ids = feed_items.feed.map(&:user_id).uniq
+        # feed_user_idsに紐づくuser情報を取得
+        feed_users = User.where(id: feed_user_ids)
+        # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合
+        render json: {
+          status: '200',
+          data: feed_items,
+          feed_total_count: feed_total_count,
+          feed_user_ids: feed_user_ids,
+          feed_users: feed_users
+        }, status: :ok
       else
-        return render json: { status: '404', message: 'User not found' }, status: :not_found
+        render json: { status: '404', message: 'User not found' }, status: :not_found
       end
   end
 end
@@ -38,4 +48,5 @@ unique_numbers = numbers.uniq
 
 numbers 配列自体は変更されないため、unique_numbers を使って重複のない配列を取得できます。
 これは重複を除去した一意の値のリストを作成する際によく使用されるメソッドです。
+------------------------------------------------------------------------------------------------
 =end

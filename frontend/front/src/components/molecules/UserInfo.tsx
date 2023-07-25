@@ -1,6 +1,5 @@
 // import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/FollowStats';
 type UserInfoProps = {
@@ -10,10 +9,11 @@ type UserInfoProps = {
 };
 
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
-  const router = useRouter();
-  const { id } = router.query;
-  console.log(`UserInfoのid: ${id}`);
-  const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
+  // const router = useRouter();
+  // const { id } = router.query;
+  // console.log(`UserInfoのid: ${id}`);
+  // const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
+  const userId = user.id;
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     // <div className='flex h-full flex-row justify-around rounded-xl border bg-orange-200 p-4 shadow-md md:p-5 lg:flex-col'></div>

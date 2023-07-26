@@ -25,7 +25,7 @@ const HomePage = () => {
             <Sidebar></Sidebar>
           </div>
 
-          <div className='bg-green-400 lg:w-96'>
+          <div className=' lg:w-96'>
             {showWelcomeMessage && (
               <h1 className='bg-basic-pink text-2xl text-white'>
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!

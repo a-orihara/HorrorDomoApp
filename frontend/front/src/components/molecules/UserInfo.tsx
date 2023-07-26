@@ -9,7 +9,7 @@ type UserInfoProps = {
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>
+    <div className='flex  flex-col rounded-xl border bg-red-200 shadow-md md:p-1'>
       <section>
         <h1 className='mb-2 mt-2 rounded-md text-center text-sm  tracking-wide md:text-2xl  lg:mb-6 lg:mt-4 lg:tracking-widest'>
           User Info
@@ -24,8 +24,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           width='160'
           height='160'
           style={{ objectFit: 'cover', objectPosition: 'top left' }}
-          className='mb-2 h-1/6 w-1/6 rounded-full bg-green-100 lg:h-36  lg:w-36'
-          // className='mb-2 flex-1 rounded-full bg-green-100'
+          className='mb-2 h-16 w-16 rounded-full bg-green-100 lg:h-36  lg:w-36'
         />
         {/* 2 */}
         <section className='flex flex-col'>
@@ -40,15 +39,15 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
 
       <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
 
-      <section className='flex flex-col bg-blue-200'>
-        <h1 className='flex items-center justify-center break-all text-xs text-gray-500 md:text-lg lg:text-base lg:tracking-wide'>
+      <section className='mb-2 flex flex-col bg-blue-200'>
+        <h1 className='mb-2 flex items-center justify-center break-all text-xs text-gray-500 md:text-lg lg:text-base lg:tracking-wide'>
           Profile:
         </h1>
         <p className='mb-4 break-all text-xs md:text-lg lg:mb-4'>{user.profile || 'profileは設定されていません。'}</p>
       </section>
 
       <section>
-        <h2 className='mb-2 text-center text-xs md:text-base lg:mb-4'>総投稿数: {postsCount || 0}</h2>
+        <h2 className='mb-2 text-center text-xs md:text-base'>総投稿数: {postsCount || 0}</h2>
       </section>
     </div>
   );

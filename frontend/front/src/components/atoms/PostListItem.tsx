@@ -23,7 +23,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   const { handleDeletePost } = useDeletePost();
 
   return (
-    <li key={post.id} className='my-px bg-slate-100'>
+    <li key={post.id} className='basic-border my-px'>
       <div className='flex'>
         <div className='mx-4'>
           <Link href={`/users/${user.id}`}>

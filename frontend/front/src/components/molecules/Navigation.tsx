@@ -13,9 +13,9 @@ const Navigation = () => {
   const handleSignOut = useSignOut();
   // ================================================================================================
   return (
-    <nav className='basic-border flex h-16 w-1/2 items-center justify-around bg-red-200 text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className=' flex h-16 w-1/2 items-center justify-around  text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 1 */}
-      <ul className='flex flex-1 flex-row items-center justify-around bg-blue-200'>
+      <ul className='flex flex-1 flex-row items-center justify-around '>
         <li>
           <Link href={'/'}>
             <a className='hover:text-basic-pink'>HOME</a>

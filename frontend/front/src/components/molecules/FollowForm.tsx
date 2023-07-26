@@ -49,7 +49,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
 
   return (
     <div>
-      <form className='bg-red-200'>
+      <form>
         {isFollowed ? (
           <Button
             className='m-auto mt-3 flex h-8 items-center justify-center rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow md:h-12'

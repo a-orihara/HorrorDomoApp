@@ -20,10 +20,10 @@ const UserListItem = ({ user }: UserListItemProps) => {
 
   // ================================================================================================
   return (
-    <li key={user.id} className='flex flex-row justify-center bg-blue-100'>
+    <li key={user.id} className='flex flex-row justify-center'>
       {/* 1 */}
       <Link href={`/users/${user.id}`}>
-        <a className=' bg-red-100 text-center text-base tracking-widest hover:text-basic-pink md:text-2xl lg:text-xl'>
+        <a className='text-center text-base tracking-widest hover:text-basic-pink md:text-2xl lg:text-xl'>
           {user.name}
         </a>
       </Link>

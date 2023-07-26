@@ -44,7 +44,7 @@ const ProfilePage = () => {
     <div className='flex flex-1 flex-col bg-blue-200 lg:flex-row'>
       <Sidebar></Sidebar>
 
-      <div className=' bg-red-200 lg:w-80'>
+      <div className=' bg-red-200 lg:w-96'>
         {/* 5  if (!user)の通過により、 user: Userになる */}
         <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
       </div>

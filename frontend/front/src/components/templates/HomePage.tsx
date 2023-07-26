@@ -4,7 +4,6 @@ import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import UserInfo from '../molecules/UserInfo';
 import Feed from '../organisms/Feed';
-
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
@@ -18,14 +17,14 @@ const HomePage = () => {
   // console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
 
   return (
-    <div className='flex flex-1 flex-col bg-green-200'>
+    <div className='flex flex-1 flex-col'>
       {isSignedIn && currentUser ? (
-        <div className='h-full bg-blue-200 lg:flex lg:flex-row'>
+        <div className='flex h-full bg-blue-200 lg:flex-row'>
           <div className='h-12 w-full lg:h-full lg:w-48'>
             <Sidebar></Sidebar>
           </div>
 
-          <div className='flex-1'>
+          <div className='lg:w-80'>
             {showWelcomeMessage && (
               <h1 className='bg-basic-pink text-2xl text-white'>
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!
@@ -33,7 +32,10 @@ const HomePage = () => {
             )}
             <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
           </div>
-          <Feed user={currentUser}></Feed>
+
+          <div className='flex-1 bg-green-200 lg:w-full'>
+            <Feed user={currentUser}></Feed>
+          </div>
         </div>
       ) : (
         <div className='flex h-full w-full flex-1 flex-col text-center'>

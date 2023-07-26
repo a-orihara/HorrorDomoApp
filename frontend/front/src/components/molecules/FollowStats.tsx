@@ -21,13 +21,13 @@ const FollowStats = ({ userId, className }: FollowStatsProps) => {
   return (
     <div className={className}>
       <Link href={`/users/${userId}/following`}>
-        <a className='mr-4 hover:text-basic-pink'>
+        <a className='mr-4 text-xs hover:text-basic-pink md:text-base'>
           <span className='mr-2 underline'>{followingCount}</span>
           フォロー
         </a>
       </Link>
       <Link href={`/users/${userId}/followers`}>
-        <a className='hover:text-basic-pink'>
+        <a className='text-xs hover:text-basic-pink md:text-base'>
           <span className='mr-2 underline'>{followersCount}</span>
           フォロワー
         </a>

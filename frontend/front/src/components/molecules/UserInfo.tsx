@@ -1,5 +1,4 @@
 // import Image from 'next/image';
-import Link from 'next/link';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/FollowStats';
 type UserInfoProps = {
@@ -34,7 +33,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
         </h2>
       </section>
 
-      <FollowStats userId={user.id}></FollowStats>
+      <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
 
       <section>
         <h2 className='mb-2 break-all text-xs md:text-base lg:mb-4'>
@@ -44,14 +43,6 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
 
       <section>
         <h2 className='mb-2 text-center text-xs md:text-base lg:mb-4'>総投稿数: {postsCount || 0}</h2>
-      </section>
-
-      <section>
-        <Link href={'/post/new'}>
-          <a className='mb-2  flex items-center justify-center rounded-lg border-2  bg-slate-500 text-xl font-semibold hover:cursor-pointer hover:text-basic-pink lg:text-2xl'>
-            投稿を作成する
-          </a>
-        </Link>
       </section>
     </div>
   );

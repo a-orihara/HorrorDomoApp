@@ -1,7 +1,8 @@
 class Api::V1::LikesController < ApplicationController
   before_action :authenticate_api_v1_user!
+  # 1
   def create
-    like = current_api_v1_user.likes.create(post_id: params[:post_id])
+    like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
       render json: { status: '201', data: like }, status: :ok
     else
@@ -18,3 +19,16 @@ class Api::V1::LikesController < ApplicationController
     end
   end
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+likes.build.newでも良い。
+.newと.buildは同じ動作をします。どちらも新しいオブジェクトをメモリ上に生成しますが、そのオブジェクトはまだデータベ
+ースに保存されていません。一般的にはどちらを使っても問題ないですが、アソシエーションが絡む場合は.buildを使うことが
+多いです。
+------------------------------------------------------------------------------------------------
+like = current_api_v1_user.likes.create(post_id: params[:post_id])のように、createメソッドは使わない。
+createメソッドはオブジェクトをメモリ上に作成するだけでなく、そのオブジェクトをデータベースにも保存します。そのため、
+.createの直後に.saveを呼び出すと、同じデータを二度保存することになります。
+=end

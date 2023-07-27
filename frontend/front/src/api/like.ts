@@ -10,3 +10,13 @@ export const createLike = (postId: number) => {
     },
   });
 };
+
+export const deleteLike = (postId: number) => {
+  return client.delete(`/posts/${postId}/likes`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};

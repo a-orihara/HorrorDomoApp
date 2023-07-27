@@ -29,12 +29,12 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
         setTotalFeedPostsCount(res.data.feedTotalCount);
         setFeedUsers(res.data.feedUsers);
       } catch (err: any) {
-        // setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.errors[0]}`);
-        // setAlertOpen(true);
-        // setTimeout(() => {
-        //   router.push('/');
-        // }, 2000);
+        setAlertSeverity('error');
+        setAlertMessage(`${err.response.data.message}`);
+        setAlertOpen(true);
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
         alert('feedのエラー');
       }
     },

@@ -1,6 +1,7 @@
 class Api::V1::HomePagesController < ApplicationController
   before_action :authenticate_api_v1_user!
 
+  # UserHomePageで取得するfeedをhomeアクションから取得
   # current_api_v1_userは使える？
   def home
       page = params[:page] || 1
@@ -28,7 +29,7 @@ class Api::V1::HomePagesController < ApplicationController
           feed_users: feed_users_with_avatar
         }, status: :ok
       else
-        render json: { status: '404', message: 'User not found' }, status: :not_found
+        render json: { status: '404', message: 'ユーザーを取得出来ません' }, status: :not_found
       end
   end
 end

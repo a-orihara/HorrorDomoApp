@@ -2,6 +2,9 @@ class Like < ApplicationRecord
   # 1
   belongs_to :post
   belongs_to :user
+  # 2
+  validates :user_id, presence: true
+  validates :micropost_id, presence: true
 end
 
 =begin
@@ -81,4 +84,8 @@ ActiveRecord::RecordInvalid例外が発生する。
 ータベースに保存する。
 - `user.likes.create!(attributes)` : `create`の例外を投げるバージョン。保存に失敗した場合、
 ActiveRecord::RecordInvalid例外が発生する。
+
+================================================================================================
+2
+Likeにはuser_id、micropost_idが必須。1人が１つの投稿に対して、１つしかいいねをつけられない。
 =end

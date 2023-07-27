@@ -57,6 +57,7 @@ export const useSignIn = () => {
       }
     } catch (err: any) {
       setAlertSeverity('error');
+      // エラーはresと省略するとエラーになる
       setAlertMessage(`${err.response.data.errors}`);
       // setAlertMessage(`${err.response}`);
       setAlertOpen(true);

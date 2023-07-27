@@ -72,22 +72,6 @@ export const getPostListByUserId = async (page: number, itemsPerPage: number, us
   });
 };
 
-// 【改良予定】指定したユーザーの投稿一覧を取得する
-// export const getPostsByUserId = (userId: string) => {
-//   // 1 paramsオブジェクトを渡す事により、user_idがGETリクエストのURLクエリパラメータに自動的に変換される。
-//   // = `/posts?user_id=${userId}`;
-//   return client.get(`/posts`, {
-//     params: {
-//       user_id: userId,
-//     },
-//     headers: {
-//       'access-token': Cookies.get('_access_token'),
-//       client: Cookies.get('_client'),
-//       uid: Cookies.get('_uid'),
-//     },
-//   });
-// };
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

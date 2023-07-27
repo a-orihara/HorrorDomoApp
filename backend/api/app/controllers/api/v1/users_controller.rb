@@ -91,7 +91,7 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: {
         status: '404',
-        message: 'フォローユーザーが見つかりません'
+        message: 'フォロワーが見つかりません'
       }, status: :not_found
     end
   end

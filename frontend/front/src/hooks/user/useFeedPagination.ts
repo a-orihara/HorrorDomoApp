@@ -10,8 +10,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   const [feedPosts, setFeedPosts] = useState<Post[]>([]);
   // 指定したuserIdのユーザーの投稿数
   const [totalFeedPostsCount, setTotalFeedPostsCount] = useState(0);
-  // 現在のページ番号
-  const [feedUserIds, setFeedUserIds] = useState<number[]>([]);
+
   const [feedUsers, setFeedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
@@ -21,11 +20,6 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 引数pageは、ページネーションで選択したページ。
   const handleGetUserFeed = useCallback(
     async (page: number) => {
-      // ユーザーが認証されていない場合、処理を終了する
-      // if (!userId) {
-      //   return;
-      // }
-      // console.log('handleGetPostListByUserIdが発火');
       try {
         // ユーザーのフィード情報を取得
         const res = await getUserFeed(page, itemsPerPage, userId);
@@ -33,7 +27,6 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
         setFeedPosts(res.data.data);
         // 指定したuserIdのユーザーの投稿総数をセット
         setTotalFeedPostsCount(res.data.feedTotalCount);
-        setFeedUserIds(res.data.feedUserIds);
         setFeedUsers(res.data.feedUsers);
       } catch (err: any) {
         // setAlertSeverity('error');
@@ -62,5 +55,5 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { feedPosts, totalFeedPostsCount, feedUserIds, feedUsers, handlePageChange, currentPage };
+  return { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, currentPage };
 };

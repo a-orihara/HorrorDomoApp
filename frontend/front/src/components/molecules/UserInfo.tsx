@@ -1,5 +1,4 @@
 // import Image from 'next/image';
-import Link from 'next/link';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/FollowStats';
 type UserInfoProps = {
@@ -10,12 +9,13 @@ type UserInfoProps = {
 const UserInfo = ({ user, postsCount }: UserInfoProps) => {
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
-    <div className='flex h-full flex-col rounded-xl border bg-orange-200 shadow-md md:p-5'>
-      <div>
+    <div className='flex  flex-col rounded-xl border bg-red-200 shadow-md md:p-1'>
+      <section>
         <h1 className='mb-2 mt-2 rounded-md text-center text-sm  tracking-wide md:text-2xl  lg:mb-6 lg:mt-4 lg:tracking-widest'>
-          Profile
+          User Info
         </h1>
-      </div>
+      </section>
+
       <div className='flex flex-row justify-evenly lg:mb-4 lg:mt-4'>
         {/* 1 */}
         <img
@@ -24,30 +24,31 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
           width='160'
           height='160'
           style={{ objectFit: 'cover', objectPosition: 'top left' }}
-          className='mb-2 h-1/6 w-1/6 rounded-full bg-green-100 lg:h-24 lg:h-full lg:w-24 lg:w-full'
+          className='mb-2 h-16 w-16 rounded-full bg-green-100 lg:h-36  lg:w-36'
         />
-
-        <h2 className='mb-2  ml-2 flex items-center justify-center bg-slate-200 text-sm md:text-xl lg:text-lg lg:tracking-wide'>
-          {user.name}
-        </h2>
-      </div>
-      <FollowStats userId={user.id}></FollowStats>
-
-      <div>
-        <h2 className='mb-2 text-xs md:text-base lg:mb-4'>{user.profile || 'profileは設定されていません。'}</h2>
-      </div>
-
-      <div>
-        <h2 className='mb-2 text-center text-xs md:text-base lg:mb-4'>総投稿数: {postsCount || 0}</h2>
+        {/* 2 */}
+        <section className='flex flex-col'>
+          <h1 className='flex items-center justify-center break-all  text-xs text-gray-500 md:text-lg lg:text-base lg:tracking-wide'>
+            Name:
+          </h1>
+          <p className='mb-2  ml-2 flex flex-1 items-center justify-center break-all text-sm md:text-xl lg:text-lg lg:tracking-wide'>
+            {user.name}
+          </p>
+        </section>
       </div>
 
-      <div>
-        <Link href={'/post/new'}>
-          <a className='mb-2  flex items-center justify-center rounded-lg border-2  bg-slate-500 text-xl font-semibold hover:cursor-pointer hover:text-basic-pink lg:text-2xl'>
-            投稿を作成する
-          </a>
-        </Link>
-      </div>
+      <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
+
+      <section className='mb-2 flex flex-col bg-blue-200'>
+        <h1 className='mb-2 flex items-center justify-center break-all text-xs text-gray-500 md:text-lg lg:text-base lg:tracking-wide'>
+          Profile:
+        </h1>
+        <p className='mb-4 break-all text-xs md:text-lg lg:mb-4'>{user.profile || 'profileは設定されていません。'}</p>
+      </section>
+
+      <section>
+        <h2 className='mb-2 text-center text-xs md:text-base'>総投稿数: {postsCount || 0}</h2>
+      </section>
     </div>
   );
 };
@@ -64,4 +65,9 @@ objectFit: 'cover':
 画像のアスペクト比を維持しつつ、指定した領域に画像をピッタリとフィットさせることを意味します。
 objectPosition: 'top left':
 画像を領域内での位置を指定します。top leftは、画像を領域の左上に配置することを意味します。
+
+================================================================================================
+2
+break-wordsだと日本語は折り返すが、英語は折り返さない。
+break-allに変更すると、英語の単語でも途中で改行が行われ、コンテナから文字列が溢れ出ることを防ぐことができます。
 */

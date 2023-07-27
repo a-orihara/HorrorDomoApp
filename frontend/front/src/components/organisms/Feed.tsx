@@ -8,7 +8,7 @@ type Feed = {
 };
 
 const Feed = ({ user }: Feed) => {
-  const { feedPosts, totalFeedPostsCount, feedUserIds, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
+  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
 
   // const { } = useGetUserById()
   return (

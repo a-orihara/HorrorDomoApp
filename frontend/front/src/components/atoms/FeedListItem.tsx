@@ -24,18 +24,19 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
 
   return (
     <li key={feedPost.id} className='my-px bg-slate-100'>
-      <div className='flex'>
+      <div className='flex flex-row'>
         <div className='mx-4'>
           <Link href={`/users/${feedUser.id}`}>
             <a>
               <img
                 src={feedUser.avatarUrl || '/no_image_square.jpg'}
                 alt='user avatar'
-                className='mt-2 h-16 w-16 rounded-full'
+                className='mt-2 h-8 w-8 rounded-full md:h-16 md:w-16'
               />
             </a>
           </Link>
         </div>
+
         <div>
           <p>
             <Link href={`/users/${feedUser.id}`}>

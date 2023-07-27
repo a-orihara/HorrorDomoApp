@@ -25,7 +25,6 @@ class Api::V1::HomePagesController < ApplicationController
           status: '200',
           data: feed_items,
           feed_total_count: feed_total_count,
-          feed_user_ids: feed_user_ids,
           feed_users: feed_users_with_avatar
         }, status: :ok
       else

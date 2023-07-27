@@ -49,17 +49,17 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
 
   return (
     <div>
-      <form className='bg-red-200'>
+      <form>
         {isFollowed ? (
           <Button
-            className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            className='m-auto mb-1 mt-1 flex h-8 items-center justify-center rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow md:h-12'
             onClick={handleUnFollowClick}
           >
             フォロー中
           </Button>
         ) : (
           <Button
-            className='m-auto mt-3 rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow'
+            className='m-auto mb-1 mt-1 flex h-8 items-center justify-center rounded-lg bg-basic-yellow font-semibold placeholder:m-auto hover:bg-hover-yellow md:h-12'
             onClick={handleFollowClick}
           >
             フォローする

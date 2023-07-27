@@ -30,6 +30,9 @@ class User < ApplicationRecord
   has_many :following, through: :active_relationships, source: :followed
   # 14
   has_many :followers, through: :passive_relationships, source: :follower
+  has_many :likes, dependent: :destroy
+  # 16
+  has_many :liked_posts, through: :likes, source: :post
 
   # 1 ↓validates(:name, { presence: true, length: { maximum: 30 } })の省略形
   validates :name,  presence: true, length: { maximum: 30 }
@@ -181,7 +184,7 @@ has_many  <Model（クラス）名>で、そのクラス名を使ったメソッ
 具体的には、Userインスタンスから関連するすべてのPostインスタンスを取得することができます。
 ------------------------------------------------------------------------------------------------
 has_many :postsで、自動で外部キーが設定される。
-外部キー（2つのテーブルを繋ぐ）はuser_idです。この外部キーはPostモデルに付与されます。
+外部キー（2つのテーブルを繋ぐ）はuser_idです。この外部キーはPostモデルに付与されます。Userモデルではない。
 ------------------------------------------------------------------------------------------------
 dependent: :destroy
 ユーザーが削除されたときに、そ のユーザーに紐付いた(そのユーザーが投稿した)マイクロポストも一緒に削除されるようにな
@@ -484,4 +487,23 @@ WHERE user_id IN (SELECT followed_id FROM relationships
   （`user_id = :user_id`）であるレコードです。
   - この`feed`メソッドを用いることで、自分自身と自分がフォローしているユーザーが投稿したマイクロポストを取得する
   ことができます。
+
+================================================================================================
+16
+1. `liked_posts`メソッドは、ユーザがいいねした投稿（posts）を返します。これは中間テーブル`likes`を通して行われ
+ます。したがって、`user.liked_posts`とすると、そのユーザがいいねした全ての投稿を取得することができます。
+
+2. `liked_posts`を定義する意図は、直接的にユーザと投稿の間に関連付けがない場合でも、`likes`という中間テーブルを
+通してユーザがいいねした投稿を簡単に取得できるようにするためです。このようにすることで、どの投稿をユーザがいいねした
+のか、という情報を簡単に取り出すことができます。
+
+3. `through: :likes`は`likes`テーブル（中間テーブル）を経由して関連付けを行うことを指定しています。つまり、
+`likes`テーブルを通じて`liked_posts`を取得します。
+`source: :post`は、中間テーブル`likes`のどの関連付けを`liked_posts`の元にするのかを指定しています。つまり、
+`likes`テーブルの`post`関連付けを`liked_posts`の元とします。この記述があることで、Railsは`likes`テーブルの
+`post_id`を使って投稿を取得します。この`source`オプションがないと、Railsは`liked_posts`という名前から投稿を
+取得しようとしますが、そのような関連付けは`likes`テーブルに存在しないため、エラーになります。
+
+4. liked_postsという命名は、liked_postsという名前から、これが「ユーザーがいいねした投稿」を表していることが直
+感的にわかります。
 =end

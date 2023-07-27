@@ -18,7 +18,10 @@ Rails.application.routes.draw do
         end
       end
       # api/v1/posts
-      resources :posts
+      resources :posts do, only: [:index, :show, :create, :destroy] do
+        # 4 api/v1/posts/:post_id/likes
+        resources :likes, only: [:create, :destroy]
+      end
 
       # api/v1/admin/users
       namespace :admin do
@@ -288,6 +291,22 @@ root_url -> 'https://www.example.com/'
 
 /home_pages/home というURLに対するgetリクエストを、HomePagesコントローラのhomeアクションと結びつけています。
 get 'home_pages/home'
+
+================================================================================================
+4
+likesがpostsにネストされる形でroutesが定義されています。これにより、ある投稿(post)に対するいいね(like)を作成し
+たり削除したりする際に、どの投稿に対する操作なのかをURLのパスから直接判断できます。この形式は、RESTfulなURL設計の
+一部として推奨されています。
+------------------------------------------------------------------------------------------------
+以下のようにルートが作成されます:
+
+1. いいねを作成するためのルート:`/posts/:post_id/likes`, HTTPメソッド: `POST`
+
+2. いいねを削除するためのルート:`/posts/:post_id/likes/:id`, HTTPメソッド: `DELETE`
+------------------------------------------------------------------------------------------------
+
+
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識
 @          @@          @@          @@          @@          @@          @@          @@          @

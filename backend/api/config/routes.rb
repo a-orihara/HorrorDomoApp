@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         # 2
         member do
           get :following, :followers, :is_following
+          get 'likes/:post_id', to: 'likes#liked'
         end
       end
       # api/v1/posts

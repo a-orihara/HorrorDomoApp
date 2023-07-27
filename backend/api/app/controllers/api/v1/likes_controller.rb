@@ -2,6 +2,7 @@ class Api::V1::LikesController < ApplicationController
   before_action :authenticate_api_v1_user!
   # 1
   def create
+    # 投稿に対していいねを作成する
     like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
       render json: { status: '201', data: like }, status: :ok

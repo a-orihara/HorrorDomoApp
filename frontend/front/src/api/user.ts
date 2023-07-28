@@ -71,9 +71,6 @@ export const getUserFeed = async (page: number, itemsPerPage: number, userId?: n
   });
 };
 
-// export const signIn = (params: SignInParams) => {
-//   return client.post('/auth/sign_in', params);
-// };
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

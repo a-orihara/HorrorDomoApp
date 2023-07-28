@@ -104,9 +104,20 @@ class Api::V1::UsersController < ApplicationController
     render json: { status: '200', is_following: is_following }
   end
 
-  # 6 いいね済みかどうかを返す
+  # 6 ユーザーがその投稿をいいね済みかどうかを返す
   def already_liked?(post)
     self.likes.exists?(post_id: post.id)
+  end
+
+  # ユーザーのいいね総数を返す
+  def total_likes
+    user = User.find_by(id: params[:id])
+    if user
+      total_likes = user.likes.count
+      render json: { status: '200', total_likes: total_likes }
+    else
+      render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
+    end
   end
 
   private

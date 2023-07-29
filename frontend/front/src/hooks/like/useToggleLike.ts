@@ -21,6 +21,7 @@ export const useToggleLike = () => {
     } catch (err: any) {
       setAlertSeverity('error');
       const message = err.response.message || err.response.data.errors[0];
+
       setAlertMessage(message);
       setAlertOpen(true);
     }

@@ -12,12 +12,23 @@ class Api::V1::LikesController < ApplicationController
     end
   end
 
+  # 旧
+  # def destroy
+  #   like = Like.find_by(post_id: params[:post_id], user_id: current_api_v1_user.id)
+  #   if like.destroy
+  #     render json: { status: '200', message: 'Like was successfully destroyed.' }, status: :ok
+  #   else
+  #     render json: { status: '422', message: 'Failed to destroy the like.' }, status: :unprocessable_entity
+  #   end
+  # end
+
   def destroy
-    like = Like.find_by(post_id: params[:post_id], user_id: current_api_v1_user.id)
-    if like.destroy
+    like = current_api_v1_user.likes.find_by(post_id: params[:post_id])
+    if like
+      like.destroy
       render json: { status: '200', message: 'Like was successfully destroyed.' }, status: :ok
     else
-      render json: { status: '422', message: 'Failed to destroy the like.' }, status: :unprocessable_entity
+      render json: { status: '404', message: 'Like not found.' }, status: :not_found
     end
   end
 end

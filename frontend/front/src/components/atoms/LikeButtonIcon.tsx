@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useCreateLike } from '../../hooks/like/useCreateLike';
 
+type LikeButtonIconProps = {
+  postId: number;
+};
 // 1
-export const LikeButtonIcon = () => {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-
-  // アイコンがクリックされたときのハンドラ。いいね状態を反転する
-  const handleClick = () => {
-    setIsLiked(!isLiked);
-  };
+export const LikeButtonIcon = ({ postId }: LikeButtonIconProps) => {
+  // useCreateLikeは、いいね機能の状態を管理し、いいねの作成とエラー処理を行います。
+  const { isLiked, handleCreateLike } = useCreateLike();
 
   return (
-    <button onClick={handleClick}>
+    <button onClick={() => handleCreateLike(postId)}>
       <svg
         xmlns='http://www.w3.org/2000/svg'
         fill={isLiked ? '#F22C5A' : 'none'}

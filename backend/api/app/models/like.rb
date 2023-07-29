@@ -4,7 +4,7 @@ class Like < ApplicationRecord
   belongs_to :user
   # 2
   validates :user_id, presence: true
-  validates :micropost_id, presence: true
+  validates :post_id, presence: true
 end
 
 =begin

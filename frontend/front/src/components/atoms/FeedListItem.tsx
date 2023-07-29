@@ -53,7 +53,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{feedPostCreatedTime}</p>
-            <LikeButtonIcon></LikeButtonIcon>
+            <LikeButtonIcon postId={feedPost.id}></LikeButtonIcon>
             {currentUser?.id === feedPost.userId && (
               <a
                 className='hover:cursor-pointer'

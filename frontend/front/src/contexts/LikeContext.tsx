@@ -1,15 +1,14 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
+import { Like } from '../types/like';
 
 type LikeProviderProps = {
   children: React.ReactNode;
 };
 
 type LikeContextProps = {
-  currentUserPosts: Post[] | undefined;
-  currentUserPostsCount: number | undefined;
-  postDetailByPostId: Post | undefined;
-  // followingCount: number | undefined;
-  // followersCount: number | undefined;
+  currentUserLikes: Like[] | undefined;
+  currentUserLikesCount: number | undefined;
+  // postDetailByPostId: Like | undefined;
   // handleGetFollowingCountByUserId: (userId: number | undefined) => Promise<void>;
   // handleGetFollowersCountByUserId: (userId: number | undefined) => Promise<void>;
 };
@@ -17,11 +16,13 @@ type LikeContextProps = {
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 
 export const LikeProvider = ({ children }: LikeProviderProps) => {
-  return <LikeContext.Provider>{children}</LikeContext.Provider>;
+  const [currentUserLikes, setCurrentUserLikes] = useState<Like[]>([]);
+  const [currentUserLikesCount, setCurrentUserLikesCount] = useState<number | undefined>(undefined);
+  return <LikeContext.Provider value={{ currentUserLikes, currentUserLikesCount }}>{children}</LikeContext.Provider>;
 };
 
 export const useLikeContext = () => {
-  const context = useContext(LikewContext);
+  const context = useContext(LikeContext);
   if (context === undefined) {
     throw new Error('useFollowContextはFollowProvider内で使用しなければならない');
   }

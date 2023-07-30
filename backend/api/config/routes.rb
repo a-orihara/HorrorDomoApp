@@ -15,10 +15,19 @@ Rails.application.routes.draw do
         # 2
         member do
           get :following, :followers, :is_following
+          # GET  /api/v1/users/:id/likes/:post_id(.:format)  api/v1/likes#liked
+          get 'likes/:post_id', to: 'likes#liked'
+          get :total_likes
         end
       end
       # api/v1/posts
-      resources :posts
+      resources :posts, only: [:index, :show, :create, :destroy] do
+        # 4 api/v1/posts/:post_id/likes
+        resources :likes, only: [:create]
+      end
+
+      # `/api/v1/likes/:id` likeリソース単体に対するdestroyのルーティングを追加
+      resources :likes, only: [:destroy]
 
       # api/v1/admin/users
       namespace :admin do
@@ -254,8 +263,8 @@ api_v1_post GET    /api/v1/posts/:id(.:format)  api/v1/posts#show
 Railsのルーティングで使用されるメソッドで、`resources`ブロック内で使用されます。
 これは、そのリソースの特定のメンバー(つまり、特定のIDを持つレコード)に対する追加のルートを定義します。
 `member`はブロックとして引数を取り、そのブロック内でHTTP動詞メソッド(`get`, `post`, `patch`, `put`,
-  `delete`)を使用してルートを定義します。
-  今回のケースでは、`:following`と`:followers`という名前の`get`リクエストを受け取るルートが定義されています。
+`delete`)を使用してルートを定義します。
+今回のケースでは、`:following`と`:followers`という名前の`get`リクエストを受け取るルートが定義されています。
 ------------------------------------------------------------------------------------------------
 作成されるルートパスは以下の2つとなります。
 - `/api/v1/users/:id/following`: 指定したIDのユーザーがフォローしているユーザーのリストを取得します。
@@ -273,6 +282,35 @@ is_following
 GET api/v1/users/1/following following following_user_path(1)
 GET api/v1/users/1/followers followers followers_user_path(1)
 GET api/v1/users/:id/is_following
+------------------------------------------------------------------------------------------------
+. `get :following, :followers, :is_following`の仕組みについて
+- `get :following, :followers, :is_following`は、Railsのルーティングの一部です。
+- `get`メソッドはHTTP GETリクエストを指定のコントローラーのアクションにマッピングします。この場合、それらは
+`UsersController` の `following`、`followers`、`is_following`アクションにマッピングされます。
+- `:following`, `:followers`, `:is_following`の部分はアクションの名前を示し、それらはパスの一部になります。
+これらが存在すると、Railsはそれぞれ`/api/v1/users/:id/following`、`/api/v1/users/:id/followers`、
+`/api/v1/users/:id/is_following`というパスを生成します。
+- `member do ... end` ブロック内でこれらが定義されているため、それらのパスは特定のユーザー(つまり`:id`パラメー
+ターを含む)に対してのみアクセス可能となります。
+------------------------------------------------------------------------------------------------
+. `:following`, `:followers`, `:is_following`の仕組みについて
+- `:following`, `:followers`, `:is_following` はシンボルとして渡され、それぞれ対応するコントローラのアクショ
+ンとして解釈されます。それらのシンボルは自動的に文字列に変換され、アクションメソッド名として解釈されます。
+-Railsのルーティングには"resources"というメソッドが存在し、このメソッドに対して特定のシンボルを渡すと、それに基づ
+いた7つの基本的なルーティング (index, new, create, show, edit, update, destroy) を自動的に生成します。
+-それぞれのシンボルがアクション名として解釈されるのは、ルーティングを設定する際に、対応するコントローラのアクションと
+して指定されるからです。その際、指定されたアクションに対応するパスが自動的に生成されます。
+------------------------------------------------------------------------------------------------
+. `get 'likes/:post_id', to: 'likes#liked'`の引数について
+- `'likes/:post_id'`は、HTTP GETリクエストが送られるパスを表しています。この場合、`:post_id`は動的セグメント
+と呼ばれ、実際のリクエスト時に特定の値（この場合、投稿のID）に置き換えられます。
+- `to: 'likes#liked'`は、このルートにマッピングされるコントローラのアクションを示しています。`likes#liked`は
+`LikesController`の`liked`アクションを指しています。
+- この行全体は、URLパス`likes/:post_id`に対するGETリクエストを`LikesController`の`liked`アクションにルーテ
+ィングするようにRailsに指示します。
+- 通常、ルーティングでパラメーターを含むような場合 (この場合の ':post_id') は、具体的にパスを書く必要があります。
+これはRailsのルーティングが基本的に静的なパスに対して設定されるためで、そのためこちらはシンボルだけで書くことは出来
+ません。
 
 ================================================================================================
 3
@@ -288,6 +326,24 @@ root_url -> 'https://www.example.com/'
 
 /home_pages/home というURLに対するgetリクエストを、HomePagesコントローラのhomeアクションと結びつけています。
 get 'home_pages/home'
+
+================================================================================================
+4
+likesがpostsにネストされる形でroutesが定義されています。これにより、ある投稿(post)に対するいいね(like)を作成し
+たり削除したりする際に、どの投稿に対する操作なのかをURLのパスから直接判断できます。この形式は、RESTfulなURL設計の
+一部として推奨されています。
+------------------------------------------------------------------------------------------------
+以下のようにルートが作成されます:
+
+1. いいねを作成するためのルート:`/posts/:post_id/likes`, HTTPメソッド: `POST`
+------------------------------------------------------------------------------------------------
+コレクション（index/new/createのような、idを持たないもの）のアクションだけを親のスコープの下で生成するという手法
+があります。このとき、メンバー（show/edit/update/destroyのような、idを必要とするもの）のアクションをネストに含
+めないようにするのがポイントです。
+1. 削除するためのルート:`/api/v1/likes/:id`, api/v1/likes#destroy, DELETE
+------------------------------------------------------------------------------------------------
+
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識
 @          @@          @@          @@          @@          @@          @@          @@          @

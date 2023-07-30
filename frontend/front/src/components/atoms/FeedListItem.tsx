@@ -5,6 +5,7 @@ import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import { useDeletePost } from '../../hooks/post/useDeletePost';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
+import { LikeButtonIcon } from './LikeButtonIcon';
 
 // FeedListItemPropsはkey名がfeedPostで値にPost型を持つオブジェクト型;
 type FeedListItemProps = {
@@ -52,6 +53,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{feedPostCreatedTime}</p>
+            <LikeButtonIcon postId={feedPost.id}></LikeButtonIcon>
             {currentUser?.id === feedPost.userId && (
               <a
                 className='hover:cursor-pointer'

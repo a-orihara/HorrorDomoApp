@@ -18,7 +18,8 @@ export const createLike = (postId: number) => {
 
 // 2
 export const deleteLike = (postId: number) => {
-  return client.delete(`/posts/${postId}/likes`, {
+  // `/api/v1/likes/:id`;
+  return client.delete(`/likes/${postId}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

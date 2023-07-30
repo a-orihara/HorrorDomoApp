@@ -26,7 +26,7 @@ Rails.application.routes.draw do
         resources :likes, only: [:create]
       end
 
-      # likeリソース単体に対するdestroyのルーティングを追加
+      # `/api/v1/likes/:id` likeリソース単体に対するdestroyのルーティングを追加
       resources :likes, only: [:destroy]
 
       # api/v1/admin/users

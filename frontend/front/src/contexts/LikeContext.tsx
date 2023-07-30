@@ -5,6 +5,9 @@ type LikeProviderProps = {
 };
 
 type LikeContextProps = {
+  currentUserPosts: Post[] | undefined;
+  currentUserPostsCount: number | undefined;
+  postDetailByPostId: Post | undefined;
   // followingCount: number | undefined;
   // followersCount: number | undefined;
   // handleGetFollowingCountByUserId: (userId: number | undefined) => Promise<void>;

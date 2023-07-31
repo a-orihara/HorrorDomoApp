@@ -22,6 +22,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
+  // console.log(`feedPost:の${feedPost.liked}`);
 
   return (
     <li key={feedPost.id} className='my-px bg-slate-100'>
@@ -53,7 +54,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{feedPostCreatedTime}</p>
-            <LikeButtonIcon postId={feedPost.id}></LikeButtonIcon>
+            <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked}></LikeButtonIcon>
             {currentUser?.id === feedPost.userId && (
               <a
                 className='hover:cursor-pointer'

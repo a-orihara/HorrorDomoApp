@@ -2,7 +2,6 @@ class Api::V1::HomePagesController < ApplicationController
   before_action :authenticate_api_v1_user!
 
   # UserHomePageで取得するfeedをhomeアクションから取得
-  # current_api_v1_userは使える？
   def home
       page = params[:page] || 1
       per_page = params[:per_page] || 10
@@ -31,9 +30,11 @@ class Api::V1::HomePagesController < ApplicationController
         # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合
         render json: {
           status: '200',
-          # data: feed_items,
+          # いいねしているかの真偽値を持たせたfeed_
           data: feed_items_with_likes,
+          # feed_total_countはpaginationに必要
           feed_total_count: feed_total_count,
+          # avatar情報付属したfeed_users
           feed_users: feed_users_with_avatar
         }, status: :ok
       else

@@ -10,6 +10,13 @@ class Api::V1::HomePagesController < ApplicationController
         user = User.find_by(id: params[:user_id])
         # feed_itemはpostインスタンスの集合
         feed_items = current_api_v1_user.feed.page(page).per(per_page)
+        # feed_itemsにいいねしているかの真偽値を持たせる
+        feed_items_with_likes = feed_items.map do |item|
+          # いいねしているかの真偽値をlikedに代入
+          liked = current_api_v1_user.already_liked?(item)
+          # 2
+          item.as_json.merge(liked: liked)
+        end
         feed_total_count = current_api_v1_user.feed.count
         # 1 ここにユーザーの配列?
         # feed_itemsのfeed_user_idsである事に注意
@@ -24,7 +31,8 @@ class Api::V1::HomePagesController < ApplicationController
         # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合
         render json: {
           status: '200',
-          data: feed_items,
+          # data: feed_items,
+          data: feed_items_with_likes,
           feed_total_count: feed_total_count,
           feed_users: feed_users_with_avatar
         }, status: :ok
@@ -53,5 +61,17 @@ unique_numbers = numbers.uniq
 
 numbers 配列自体は変更されないため、unique_numbers を使って重複のない配列を取得できます。
 これは重複を除去した一意の値のリストを作成する際によく使用されるメソッドです。
-------------------------------------------------------------------------------------------------
+================================================================================================
+2
+`item.as_json.merge(liked: liked)`
+- `item.as_json`: `item`（`post` インスタンス）をハッシュ形式に変換します。このハッシュには `item` の属性が
+キーとして、その属性値が値として含まれます。
+- `liked: liked`: `liked` の値（真偽値）を `item` のハッシュに `liked` というキーで追加します。これにより、
+`item` のハッシュに `liked` というキーで、`liked` 変数（`current_api_v1_user.already_liked?(item)` の
+結果）の真偽値が格納されます。
+- `item.as_json.merge(liked: liked)` は、`item` の属性を含むハッシュに `liked` の情報（真偽値）を追加した
+新しいハッシュを生成します。この操作により、各 `item` の「いいね」情報を格納した `feed_items_with_likes` 配列
+が作成されます。
+- `merge` メソッドは、ハッシュ同士を結合するために使用されます。引数として与えられたハッシュのキーと値を、元のハッ
+シュに追加して新しいハッシュを生成します。重複するキーがある場合は、引数として与えられたハッシュの値が優先されます。
 =end

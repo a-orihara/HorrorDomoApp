@@ -22,10 +22,6 @@ Rails.application.routes.draw do
       end
       # api/v1/posts
       resources :posts, only: [:index, :show, :create, :destroy] do
-        # 旧1
-        # resources :likes, only: [:create]
-        # 旧2
-        # resources :likes, only: [:create, :destroy]
         # 4 api/v1/posts/:post_id/likes
         resources :likes, only: [:create] do
           # 5
@@ -353,6 +349,9 @@ only: [:create] により、likes リソースには create アクション以�
 
 ================================================================================================
 5
+resources :likes, only: [:create, :destroy]、にすると、destroyアクションでlike_idをフロントのapi関数で
+渡さなければならないので、それを避けるために、destroyアクションをネストする。
+------------------------------------------------------------------------------------------------
 on: :collection を collection do ... end で書き換え
 
 resources :posts, only: [:index, :show, :create, :destroy] do

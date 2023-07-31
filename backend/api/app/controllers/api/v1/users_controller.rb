@@ -120,6 +120,21 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  # ユーザーのいいねの全データを返す
+  def current_user_all_likes
+    user = current_api_v1_user
+    if user
+      user_likes = user.likes.includes(:post)
+      likes_data_with_post = user_likes.map do |like|
+        { like_data: like, post_data: like.post }
+      end
+      render json: { status: '200', likes: likes_data_with_post }
+    else
+      render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
+    end
+  end
+
+
   private
 
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。

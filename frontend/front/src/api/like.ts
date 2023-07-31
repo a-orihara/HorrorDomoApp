@@ -16,10 +16,21 @@ export const createLike = (postId: number) => {
   );
 };
 
-// 2
+// 2 旧
+// export const deleteLike = (postId: number) => {
+//   // `/api/v1/likes/:id`;
+//   return client.delete(`/likes/${postId}`, {
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
+
 export const deleteLike = (postId: number) => {
-  // `/api/v1/likes/:id`;
-  return client.delete(`/likes/${postId}`, {
+  // `/api/v1/posts/:post_id/likes`;
+  return client.delete(`/posts/${postId}/likes`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

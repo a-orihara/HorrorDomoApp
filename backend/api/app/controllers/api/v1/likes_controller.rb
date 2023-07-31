@@ -1,5 +1,9 @@
 class Api::V1::LikesController < ApplicationController
+  # before_action :authenticate_api_v1_user!
   before_action :authenticate_api_v1_user!
+  before_action :set_post, only: [:destroy]
+  before_action :set_like, only: [:destroy]
+
   # 1
 
   def index
@@ -48,14 +52,34 @@ class Api::V1::LikesController < ApplicationController
   #   end
   # end
 
+  # 旧2
+  # def destroy
+  #   like = current_api_v1_user.likes.find_by(post_id: params[:post_id])
+  #   if like
+  #     like.destroy
+  #     render json: { status: '200', message: 'Like was successfully destroyed.' }, status: :ok
+  #   else
+  #     render json: { status: '404', message: 'Like not found.' }, status: :not_found
+  #   end
+  # end
+
   def destroy
-    like = current_api_v1_user.likes.find_by(post_id: params[:post_id])
-    if like
-      like.destroy
-      render json: { status: '200', message: 'Like was successfully destroyed.' }, status: :ok
+    puts "Likeのdestroyアクションが発火"
+    if @like.destroy
+      render json: { status: 'SUCCESS', message: 'Unliked the post', data: @post }
     else
-      render json: { status: '404', message: 'Like not found.' }, status: :not_found
+      render json: { status: 'ERROR', message: 'Unliking the post failed', data: @like.errors }
     end
+  end
+
+  private
+
+  def set_post
+    @post = Post.find(params[:post_id])
+  end
+
+  def set_like
+    @like = @post.likes.find_by(user_id: current_api_v1_user.id)
   end
 end
 

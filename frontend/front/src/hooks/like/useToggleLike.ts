@@ -4,7 +4,7 @@ import { useAlertContext } from '../../contexts/AlertContext';
 
 // いいねのトグルフック
 export const useToggleLike = (liked: boolean, postId: number) => {
-  // いいね済みかの真偽値
+  // いいね済みかの真偽値。初期値はBDから取得したpostのliked
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
 
@@ -20,7 +20,6 @@ export const useToggleLike = (liked: boolean, postId: number) => {
       if (res.status === 200 || res.status === 201) {
         // isLikedをfalseからtrue、またはtrueからfalseに変更
         setIsLiked(!isLiked);
-        console.log('いいねの状態をトグルした');
       }
     } catch (err: any) {
       setAlertSeverity('error');

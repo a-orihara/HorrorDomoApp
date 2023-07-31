@@ -5,6 +5,7 @@ type LikeButtonIconProps = {
   liked: boolean;
 };
 
+// postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得
 export const LikeButtonIcon = ({ postId, liked }: LikeButtonIconProps) => {
   // useToggleLikeは、いいね機能の状態を管理し、いいねの作成と削除をトグルします。
   const { isLiked, handleToggleLike } = useToggleLike(liked, postId);

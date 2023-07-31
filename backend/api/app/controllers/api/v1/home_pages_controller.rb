@@ -8,7 +8,7 @@ class Api::V1::HomePagesController < ApplicationController
       per_page = params[:per_page] || 10
       if params[:user_id]
         user = User.find_by(id: params[:user_id])
-        # feed_itemはmicropostインスタンスの集合
+        # feed_itemはpostインスタンスの集合
         feed_items = current_api_v1_user.feed.page(page).per(per_page)
         feed_total_count = current_api_v1_user.feed.count
         # 1 ここにユーザーの配列?

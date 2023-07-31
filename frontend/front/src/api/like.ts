@@ -16,10 +16,22 @@ export const createLike = (postId: number) => {
   );
 };
 
-// 2
+// 2 旧
+// export const deleteLike = (postId: number) => {
+//   // `/api/v1/likes/:id`;
+//   return client.delete(`/likes/${postId}`, {
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
+
+// 2 #destroy: `/posts/:post_id/likes/destroy`
 export const deleteLike = (postId: number) => {
-  // `/api/v1/likes/:id`;
-  return client.delete(`/likes/${postId}`, {
+  // `/api/v1/posts/:post_id/likes`;
+  return client.delete(`/posts/${postId}/likes`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),
@@ -92,6 +104,9 @@ export const createLike = (postId: number) => {
 
 ================================================================================================
 2
+like_idはBD側で、user_id, post_idの組み合わせで一意になる（特定出来る）ように設定している為、引数にlike_idは
+不要。
+------------------------------------------------------------------------------------------------
 axiosのdeleteの引数の数と、その構造についての解説：
 - `axios.delete(url, [config])` の形式で利用されます。
   - `url`：リクエストするURL

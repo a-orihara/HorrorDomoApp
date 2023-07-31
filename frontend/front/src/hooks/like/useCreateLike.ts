@@ -15,8 +15,7 @@ export const useCreateLike = () => {
       }
     } catch (err: any) {
       setAlertSeverity('error');
-      // setAlertMessage(`${err.response.data.errors[0]}`);
-      // authenticate_api_v1_user!のエラーレスポンスの形式:{err.response.data.errors[0]}
+
       const message = err.response.message || err.response.data.errors[0];
       setAlertMessage(message);
       setAlertOpen(true);

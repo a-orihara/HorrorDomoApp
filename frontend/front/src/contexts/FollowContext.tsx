@@ -63,11 +63,10 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
   );
 };
 
-// Postを取得するカスタムフック
 export const useFollowContext = () => {
   const context = useContext(FollowContext);
   if (context === undefined) {
-    throw new Error('useFollowContextはPostProvider内で使用しなければならない');
+    throw new Error('useFollowContextはFollowProvider内で使用しなければならない');
   }
   return context;
 };

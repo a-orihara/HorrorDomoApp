@@ -104,11 +104,6 @@ class Api::V1::UsersController < ApplicationController
     render json: { status: '200', is_following: is_following }
   end
 
-  # 6 ユーザーがその投稿をいいね済みかどうかを返す
-  def already_liked?(post)
-    self.likes.exists?(post_id: post.id)
-  end
-
   # ユーザーのいいね総数を返す
   def total_likes
     user = User.find_by(id: params[:id])
@@ -119,6 +114,21 @@ class Api::V1::UsersController < ApplicationController
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
   end
+
+  # ユーザーのいいねの全データを返す
+  def current_user_all_likes
+    user = current_api_v1_user
+    if user
+      user_likes = user.likes.includes(:post)
+      likes_data_with_post = user_likes.map do |like|
+        { like_data: like, post_data: like.post }
+      end
+      render json: { status: '200', likes: likes_data_with_post }
+    else
+      render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
+    end
+  end
+
 
   private
 
@@ -245,27 +255,5 @@ is_following = current_user.following?(other_user)
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。
 ただし、users_controller.rbに書く方が単一責任の原則に近く、リソース指向設計の観点からは好ましいと思われます。
 
-================================================================================================
-6
-`self.liked_posts.`
-`has_many :liked_posts, through: :likes, source: :post`というコードにより、Userオブジェクトは自身が「い
-いね」したPostオブジェクトの集合に対して直接アクセスできます。それらのPostオブジェクトの集合を参照するために、
-`liked_posts`というメソッドを使用します。
-------------------------------------------------------------------------------------------------
-`exists?`
-ActiveRecordの関連付けのコレクションに対して、指定した条件に一致するレコードが存在するかどうかを確認します。
-`exists?`メソッドはデータベースに直接問い合わせを行い、該当するレコードが見つかった時点で検索を終了します。これに
-より、大量のレコードの中から検索を行う場合でも、パフォーマンスを効率的に維持することが可能です。
-------------------------------------------------------------------------------------------------
-`include?`
-ある配列やコレクションに特定の要素が含まれているかどうかを調べるメソッド。真偽値を返す。
-たとえば、`[1, 2, 3].include?(2)`は`2`が配列`[1, 2, 3]`に含まれているかを調べるため、結果は`true`となる。
-`self.liked_posts.include?(post)`は`self`が「いいね」した投稿(`liked_posts`)の中に`post`が含まれているか
-どうかを判定しています。
-------------------------------------------------------------------------------------------------
-`include?`と`exists?`の違いは、以下の通りです。
-`include?`メソッドは、全ての関連付けられたレコードをメモリにロードし、その後で特定のレコードが含まれているかを、
-Rubyのレベルで検索します。これはレコードの数が少ない場合には問題ありませんが、レコードの数が多い場合にはメモリ消費が
-大きくなり、パフォーマンスに影響を及ぼす可能性があります。
-したがって、大量のレコードの中から検索を行うような場合には、`exists?`メソッドを使用することが推奨されます。
+
 =end

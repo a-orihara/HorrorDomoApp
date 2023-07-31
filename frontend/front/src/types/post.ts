@@ -3,6 +3,7 @@ export type Post = {
   title: string;
   content: string;
   userId: number;
+  liked: boolean;
   createdAt: string;
   updatedAt: string;
 };

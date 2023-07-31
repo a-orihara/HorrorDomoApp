@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following]
+  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following, :current_user_all_likes]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -123,11 +123,15 @@ class Api::V1::UsersController < ApplicationController
       likes_data_with_post = user_likes.map do |like|
         { like_data: like, post_data: like.post }
       end
-      render json: { status: '200', likes: likes_data_with_post }
+      # いいねの総数を取得
+      total_likes = user.likes.count
+      # いいねの全データとその総数をレスポンスとして返す
+      render json: { status: '200', likes: likes_data_with_post, total_likes: total_likes }
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
   end
+
 
 
   private
@@ -254,6 +258,32 @@ is_following = current_user.following?(other_user)
 際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。
 ただし、users_controller.rbに書く方が単一責任の原則に近く、リソース指向設計の観点からは好ましいと思われます。
+================================================================================================
+6
+. `user_likes = user.likes.includes(:post)`は適切です。
+- `user.likes.includes(:post)`は、ログインユーザーがいいねした投稿（Post）を取得する際にN+1問題を解消するた
+めの記述です。
+- このコードは現在のログインユーザー（`user`）のいいねデータ（`likes`）とそれに関連する投稿データ（`:post`）を一
+度のクエリで取得します。この処理は、`user.likes`を繰り返す度に投稿（`:post`）のデータを毎回データベースから取得す
+る必要を無くすためのものです。
+- `includes`はActiveRecord::Relationのメソッドで、主にN+1問題の解消に使われます。このメソッドを使用すると、
+関連データを一度に事前読み込み（プリロード）することができ、データベースへの不必要な問い合わせを減らすことが可能で
+す。
+- つまり、`user.likes.includes(:post)`は、「ユーザーの「いいね」データとそれに関連する投稿データを一度の問い合
+わせで取得する」という意味になります。
+------------------------------------------------------------------------------------------------
+N+1問題はデータベースとのやり取りにおいて頻出するパフォーマンス問題で、主に関連するデータを取得する際に発生します。
+N+1問題は、まず1回のクエリで「親」データを取得し（これが「+1」）、次にそれぞれの「親」について「子」データを取得す
+るためにN回のクエリを発行する（これが「N」）、という過剰なデータベースへの問い合わせが行われる問題です。
 
-
+`user.likes`だけで取得する場合、以下の手順でデータベースとのやり取りが行われます。
+1. ユーザーが「いいね」した全ての「いいね」データを取得（これが「+1」の部分）
+2. それぞれの「いいね」に紐づく投稿データ（`:post`）を取得するために「いいね」の数だけクエリを発行（これが「N」の
+部分）
+例えば、もしユーザーが10個の「いいね」をしている場合、それぞれの「いいね」について投稿データを取得するため、合計で11
+回（1（ユーザーのいいね取得） + 10（各いいねに対する投稿データの取得））のデータベースへの問い合わせが発生します。
+これがN+1問題です。
+対策として`includes(:post)`を使用すると、以下の手順でデータベースとのやり取りが行われます。
+1. ユーザーが「いいね」した全ての「いいね」データとそれに関連する投稿データを一度のクエリで取得
+その結果、データベースへの問い合わせ回数が大幅に削減され、アプリケーションのパフォーマンスが向上します。
 =end

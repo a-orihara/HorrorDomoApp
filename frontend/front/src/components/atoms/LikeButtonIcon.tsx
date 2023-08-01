@@ -3,12 +3,13 @@ import { useToggleLike } from '../../hooks/like/useToggleLike';
 type LikeButtonIconProps = {
   postId: number;
   liked: boolean;
+  userId: number;
 };
 
 // postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得
-export const LikeButtonIcon = ({ postId, liked }: LikeButtonIconProps) => {
-  // useToggleLikeは、いいね機能の状態を管理し、いいねの作成と削除をトグルします。
-  const { isLiked, handleToggleLike } = useToggleLike(liked, postId);
+export const LikeButtonIcon = ({ postId, liked, userId }: LikeButtonIconProps) => {
+  // useToggleLikeは、いいねの作成と削除、いいね総数の更新を処理する。
+  const { isLiked, handleToggleLike } = useToggleLike(liked, postId, userId);
 
   return (
     <button onClick={() => handleToggleLike()}>

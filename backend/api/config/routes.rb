@@ -17,7 +17,7 @@ Rails.application.routes.draw do
           get :following, :followers, :is_following
           # GET  /api/v1/users/:id/likes/:post_id(.:format)  api/v1/likes#liked
           get 'likes/:post_id', to: 'likes#liked'
-          get :total_likes, :all_likes
+          get :current_user_all_likes
         end
       end
       # api/v1/posts

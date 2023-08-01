@@ -52,15 +52,15 @@ export const isAlreadyLiked = (userId: number, postId: number) => {
 };
 
 // 特定のユーザーが行った「いいね」の総数を取得する
-export const getTotalLikes = (userId: number) => {
-  return client.get(`/users/${userId}/total_likes`, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
+// export const getTotalLikes = (userId: number) => {
+//   return client.get(`/users/${userId}/total_likes`, {
+//     headers: {
+//       'access-token': Cookies.get('_access_token'),
+//       client: Cookies.get('_client'),
+//       uid: Cookies.get('_uid'),
+//     },
+//   });
+// };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

@@ -57,7 +57,11 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{feedPostCreatedTime}</p>
             {/* 2 postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得 */}
-            {currentUser && <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />}
+            {/* {currentUser && <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />}
+             */}
+            {currentUser && currentUser.id !== feedPost.userId && (
+              <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />
+            )}
             {currentUser?.id === feedPost.userId && (
               <a
                 className='hover:cursor-pointer'

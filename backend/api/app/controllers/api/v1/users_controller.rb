@@ -124,9 +124,9 @@ class Api::V1::UsersController < ApplicationController
       # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
       liked_posts = user_likes.map { |like| like.post }
       # いいねの総数を取得
-      total_liked_posts = liked_posts.count
+      total_liked_counts = liked_posts.count
       # currentUserがいいねした投稿の集合と、その総数をレスポンスとして返す
-      render json: { status: '200', posts: liked_posts, total_posts: total_liked_posts }
+      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_posts }
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end

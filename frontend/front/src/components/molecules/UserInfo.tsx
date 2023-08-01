@@ -1,6 +1,7 @@
 // import Image from 'next/image';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/FollowStats';
+import { LikeStats } from './LikeStats';
 type UserInfoProps = {
   user: User;
   postsCount: number | undefined;
@@ -37,7 +38,10 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
         </section>
       </div>
 
-      <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
+      <div className='flex flex-row justify-evenly lg:mb-4 lg:mt-4'>
+        <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
+        <LikeStats userId={user.id}></LikeStats>
+      </div>
 
       <section className='mb-2 flex flex-col bg-blue-200'>
         <h1 className='mb-2 flex items-center justify-center break-all text-xs text-gray-500 md:text-lg lg:text-base lg:tracking-wide'>

@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following, :current_user_all_likes]
+  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following, :all_likes]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -126,7 +126,7 @@ class Api::V1::UsersController < ApplicationController
       # いいねの総数を取得
       total_liked_counts = liked_posts.count
       # currentUserがいいねした投稿の集合と、その総数をレスポンスとして返す
-      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_posts }
+      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_counts }
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end

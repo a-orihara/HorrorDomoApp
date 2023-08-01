@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import { AlertProvider } from '../contexts/AlertContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { FollowProvider } from '../contexts/FollowContext';
+import { LikeProvider } from '../contexts/LikeContext';
 import { PostProvider } from '../contexts/PostContext';
 import '../styles/globals.css';
 
@@ -16,7 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AlertProvider>
         <PostProvider>
           <FollowProvider>
-            <Component {...pageProps} />
+            <LikeProvider>
+              <Component {...pageProps} />
+            </LikeProvider>
           </FollowProvider>
         </PostProvider>
       </AlertProvider>

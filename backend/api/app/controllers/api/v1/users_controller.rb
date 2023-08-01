@@ -117,7 +117,8 @@ class Api::V1::UsersController < ApplicationController
 
   # 6 ユーザーのいいねの全データを返す
   def all_likes
-    user = current_api_v1_user
+    # 与えられたユーザーIDでユーザーを検索
+    user = User.find(params[:id])
     if user
       # n+1問題が発生するため、user.likes.allで取得しない。
       user_likes = user.likes.includes(:post)
@@ -131,6 +132,7 @@ class Api::V1::UsersController < ApplicationController
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
   end
+
 
 
 

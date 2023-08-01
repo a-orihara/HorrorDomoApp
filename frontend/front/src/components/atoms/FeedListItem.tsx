@@ -21,6 +21,8 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   const truncateContent = feedPost.content.length > 30 ? `${feedPost.content.substring(0, 30)}...` : feedPost.content;
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
+  // // 現在のユーザーが未定義かどうかを確認
+  // const userId = currentUser?.id;
   const { handleDeletePost } = useDeletePost();
   // console.log(`feedPost:の${feedPost.liked}`);
 
@@ -54,8 +56,8 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{feedPostCreatedTime}</p>
-            {/* postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得 */}
-            <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked}></LikeButtonIcon>
+            {/* 2 postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得 */}
+            {currentUser && <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />}
             {currentUser?.id === feedPost.userId && (
               <a
                 className='hover:cursor-pointer'
@@ -105,8 +107,17 @@ const hello = (name:FeedListItemProps) =>{
 *オブジェクトで渡す場合は、引数の型をオブジェクト型にする必要がある。
 hello({myName:"Mike"});
 
-
 ================================================================================================
-
-
+2
+currentUserが定義されている場合にのみLikeButtonIconコンポーネントを描画します。
+よって、LikeButtonIconコンポーネントに渡されるuserIdは常にnumber型となり、undefinedは渡されません。
+------------------------------------------------------------------------------------------------
+. 一般的には `undefined` を可能な限り早く処理することでエラーの可能性を最小限に抑えることが推奨されています。した
+がって、この場合、`FeedListItem` コンポーネントで `currentUser` が `undefined` かどうかを確認し、
+`LikeButtonIcon` コンポーネントには `undefined` を渡さないようにするのが一般的に良いとされています。
+. この修正により、currentUserが定義されていない場合には、LikeButtonIcon自体がレンダリングされません。よって、
+LikeButtonIconにundefinedが渡されることはありません。
+. Reactのコンポーネントは可能な限り "pure"（純粋）であるべきです。つまり、ある入力が与えられた時に同じ出力を返すべ
+きです。したがって、undefinedやnullが許容されないpropsを持つコンポーネントにそれらの値を渡すべきではありません。
+これにより、コンポーネントの安定性と予測可能性が保証されます。
 */

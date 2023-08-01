@@ -16,18 +16,6 @@ export const createLike = (postId: number) => {
   );
 };
 
-// 2 旧
-// export const deleteLike = (postId: number) => {
-//   // `/api/v1/likes/:id`;
-//   return client.delete(`/likes/${postId}`, {
-//     headers: {
-//       'access-token': Cookies.get('_access_token'),
-//       client: Cookies.get('_client'),
-//       uid: Cookies.get('_uid'),
-//     },
-//   });
-// };
-
 // 2 #destroy: `/posts/:post_id/likes/destroy`
 export const deleteLike = (postId: number) => {
   // `/api/v1/posts/:post_id/likes`;
@@ -51,9 +39,9 @@ export const isAlreadyLiked = (userId: number, postId: number) => {
   });
 };
 
-// 特定のユーザーが行った「いいね」の総数を取得する
-export const getTotalLikes = (userId: number) => {
-  return client.get(`/users/${userId}/total_likes`, {
+// currentUserがいいねした投稿の集合と、その総数を取得する
+export const getAllLikes = (userId: number) => {
+  return client.get(`/users/${userId}/all_likes`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

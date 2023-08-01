@@ -14,10 +14,9 @@ Rails.application.routes.draw do
       resources :users, only: %i[index show] do
         # 2
         member do
-          get :following, :followers, :is_following
+          get :following, :followers, :is_following, :all_likes
           # GET  /api/v1/users/:id/likes/:post_id(.:format)  api/v1/likes#liked
           get 'likes/:post_id', to: 'likes#liked'
-          get :total_likes, :all_likes
         end
       end
       # api/v1/posts

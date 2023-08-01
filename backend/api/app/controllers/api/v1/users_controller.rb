@@ -1,7 +1,7 @@
 # 1
 class Api::V1::UsersController < ApplicationController
   # 2 index,showアクションはdeviseにはないので、before_actionを自分で定義する必要がある。
-  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following]
+  before_action :authenticate_api_v1_user!, only: [:index, :following, :followers, :is_following, :all_likes]
   before_action :set_user, only: [:show]
 
   # GET /api/v1/users
@@ -105,29 +105,34 @@ class Api::V1::UsersController < ApplicationController
   end
 
   # ユーザーのいいね総数を返す
-  def total_likes
-    user = User.find_by(id: params[:id])
+  # def total_likes
+  #   user = User.find_by(id: params[:id])
+  #   if user
+  #     total_likes = user.likes.count
+  #     render json: { status: '200', total_likes: total_likes }
+  #   else
+  #     render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
+  #   end
+  # end
+
+  # 6 ユーザーのいいねの全データを返す
+  def all_likes
+    user = current_api_v1_user
     if user
-      total_likes = user.likes.count
-      render json: { status: '200', total_likes: total_likes }
+      # n+1問題が発生するため、user.likes.allで取得しない。
+      user_likes = user.likes.includes(:post)
+      # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
+      liked_posts = user_likes.map { |like| like.post }
+      # いいねの総数を取得
+      total_liked_counts = liked_posts.count
+      # currentUserがいいねした投稿の集合と、その総数をレスポンスとして返す
+      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_counts }
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
   end
 
-  # ユーザーのいいねの全データを返す
-  def current_user_all_likes
-    user = current_api_v1_user
-    if user
-      user_likes = user.likes.includes(:post)
-      likes_data_with_post = user_likes.map do |like|
-        { like_data: like, post_data: like.post }
-      end
-      render json: { status: '200', likes: likes_data_with_post }
-    else
-      render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
-    end
-  end
+
 
 
   private
@@ -254,6 +259,66 @@ is_following = current_user.following?(other_user)
 際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。
 ただし、users_controller.rbに書く方が単一責任の原則に近く、リソース指向設計の観点からは好ましいと思われます。
+================================================================================================
+6
+. `user_likes = user.likes.includes(:post)`は適切です。
+includesメソッドの基本構文
+モデル名.includes(:関連名) # 関連名はテーブル名ではない
+includesメソッドに渡す引数は、テーブル名ではなくアソシエーションで定義した関連名を指定します。
+例えば関連名は、belongs_to :postの場合はpostになります。
+------------------------------------------------------------------------------------------------
+`user_likes = user.likes.includes(:post)` の `user_likes` の中身は、ログインユーザー（`user`）がいいね
+した `Like` オブジェクトの配列です。
+[id: 29,
+  post_id: 617,
+  user_id: 2,
+  created_at: Mon, 31 Jul 2023 09:00:11.878736000 UTC +00:00,
+  updated_at: Mon, 31 Jul 2023 09:00:11.878736000 UTC +00:00>, ..., ...,
+]
+ここで `includes(:post)` は事前に `post` を読み込むための命令で、これにより後の処理（`like.post`）で毎回デー
+タベースにアクセスすることなく `post` の情報を取得できます。
+つまり、`user_likes` の各要素は `Like` オブジェクトで、それぞれがいいねした `post` の情報も含んでいます。
+`Like` テーブルのレコードのみに見えますが、内部的には `Like` テーブルに関連する `post` テーブルのレコードも含め
+て取得する事が出来ています。
+つまり、こう
+[
+  # いいねオブジェクトの例
+  <Like id: 1, user_id: 1, post_id: 2, created_at: "2023-06-01 00:00:00", updated_at: "2023-06-01 00:00:00",
+    post: <Post id: 2, title: "Post title", content: "Post content", user_id: 3, created_at: "2023-06-01 00:00:00", updated_at: "2023-06-01 00:00:00">>,
+...
+]
+したがって、次の行の `user_likes.map { |like| like.post }` で各 `Like` オブジェクトから `post` を取り出し
+、それを `liked_posts` 配列に格納することが出来ます。これが includes(:post) によって可能になります。
+------------------------------------------------------------------------------------------------
+- `user.likes.includes(:post)`は、ログインユーザーがいいねした投稿（Post）を取得する際にN+1問題を解消するた
+めの記述です。
+- このコードは現在のログインユーザー（`user`）のいいねデータ（`likes`）とそれに関連する投稿データ（`:post`）を一
+度のクエリで取得します。この処理は、`user.likes`を繰り返す度に投稿（`:post`）のデータを毎回データベースから取得す
+る必要を無くすためのものです。
+- `includes`はActiveRecord::Relationのメソッドで、主にN+1問題の解消に使われます。このメソッドを使用すると、
+関連データを一度に事前読み込み（プリロード）することができ、データベースへの不必要な問い合わせを減らすことが可能で
+す。
+- つまり、`user.likes.includes(:post)`は、「ユーザーの「いいね」データとそれに関連する投稿データを一度の問い合
+わせで取得する」という意味になります。
+------------------------------------------------------------------------------------------------
+N+1問題はデータベースとのやり取りにおいて頻出するパフォーマンス問題で、主に関連するデータを取得する際に発生します。
+N+1問題は、まず1回のクエリで「親」データを取得し（これが「+1」）、次にそれぞれの「親」について「子」データを取得す
+るためにN回のクエリを発行する（これが「N」）、という過剰なデータベースへの問い合わせが行われる問題です。
 
+`user.likes`だけで取得する場合、以下の手順でデータベースとのやり取りが行われます。
+1. ユーザーが「いいね」した全ての「いいね」データを取得（これが「+1」の部分）
+2. それぞれの「いいね」に紐づく投稿データ（`:post`）を取得するために「いいね」の数だけクエリを発行（これが「N」の
+部分）
+例えば、もしユーザーが10個の「いいね」をしている場合、それぞれの「いいね」について投稿データを取得するため、合計で11
+回（1（ユーザーのいいね取得） + 10（各いいねに対する投稿データの取得））のデータベースへの問い合わせが発生します。
+これがN+1問題です。
+対策として`includes(:post)`を使用すると、以下の手順でデータベースとのやり取りが行われます。
+1. ユーザーが「いいね」した全ての「いいね」データとそれに関連する投稿データを一度のクエリで取得
+その結果、データベースへの問い合わせ回数が大幅に削減され、アプリケーションのパフォーマンスが向上します。
+------------------------------------------------------------------------------------------------
+. `likes_data_with_post = user_likes.map do |like| { like_data: like, post_data: like.post } end`
+- この部分は、取得した「いいね」（`user_likes`）に対して`.map`メソッドを使用しています。`.map`メソッドは、元の配列の各要素に対してブロック内の処理を行い、その結果を新たな配列として返すメソッドです。
+- ここでは、各「いいね」データ（`like`）とそれに対応する投稿データ（`like.post`）をハッシュ形式で格納しています。これにより、`likes_data_with_post`という配列が作成され、各要素はユーザーの「いいね」とその「いいね」に対応する投稿データのハッシュになります。
 
+以上の処理により、ユーザーの全ての「いいね」データとそれに対応する投稿データを効率的に取得し、それをレスポンスとして返す準備ができています。
 =end

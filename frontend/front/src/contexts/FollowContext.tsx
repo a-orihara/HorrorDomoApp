@@ -24,7 +24,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
     if (!userId) return;
     try {
       const data = await getFollowingCountByUserId(userId);
-      if (data.status == 200) {
+      if (data.status === 200) {
         const count: number = data.data.followingCount;
         setFollowingCount(count);
       }

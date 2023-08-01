@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { createLike, deleteLike } from '../../api/like';
 import { useAlertContext } from '../../contexts/AlertContext';
+import { useLikeContext } from '../../contexts/LikeContext';
 
-// いいねのトグルフック
-export const useToggleLike = (liked: boolean, postId: number) => {
+// いいねのトグルフック。いいね総数を更新する為、引数にuserIdを追加
+export const useToggleLike = (liked: boolean, postId: number, userId: number) => {
   // いいね済みかの真偽値。初期値はBDから取得したpostのliked
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  // いいねがトグルされたらいいね総数を更新する為、handleGetAllLikesを取得
+  const { handleGetAllLikes } = useLikeContext();
 
   const handleToggleLike = async () => {
     try {
@@ -20,6 +23,8 @@ export const useToggleLike = (liked: boolean, postId: number) => {
       if (res.status === 200 || res.status === 201) {
         // isLikedをfalseからtrue、またはtrueからfalseに変更
         setIsLiked(!isLiked);
+        // いいね総数を更新
+        handleGetAllLikes(userId);
       }
     } catch (err: any) {
       setAlertSeverity('error');

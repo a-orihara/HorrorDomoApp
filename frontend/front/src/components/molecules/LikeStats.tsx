@@ -7,8 +7,8 @@ type LikeStatsProps = {
 };
 
 export const LikeStats = ({ userId }: LikeStatsProps) => {
-  const { currentUserLikedCount, handleGetAllLikes } = useLikeContext();
-  console.log(`LikeStatsのcurrentUserLikedCount:${currentUserLikedCount}`);
+  const { userLikedCount, handleGetAllLikes } = useLikeContext();
+  console.log(`LikeStatsのuserLikedCount:${userLikedCount}`);
 
   useEffect(() => {
     handleGetAllLikes(userId);
@@ -17,7 +17,7 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
     <div>
       <Link href={`/users/${userId}/following`}>
         <a className='mr-4 text-xs hover:text-basic-pink md:text-base'>
-          <span className='mr-2 underline'>{currentUserLikedCount}</span>
+          <span className='mr-2 underline'>{userLikedCount}</span>
           いいね
         </a>
       </Link>

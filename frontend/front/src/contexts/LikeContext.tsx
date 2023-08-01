@@ -7,16 +7,16 @@ type LikeProviderProps = {
 };
 
 type LikeContextProps = {
-  currentUserLikes: Like[] | undefined;
-  currentUserLikedCount: number | undefined;
+  userLikes: Like[] | undefined;
+  userLikedCount: number | undefined;
   handleGetAllLikes: (userId: number | undefined) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 
 export const LikeProvider = ({ children }: LikeProviderProps) => {
-  const [currentUserLikes, setCurrentUserLikes] = useState<Like[]>([]);
-  const [currentUserLikedCount, setCurrentUserLikedCount] = useState<number | undefined>(undefined);
+  const [userLikes, setCurrentUserLikes] = useState<Like[]>([]);
+  const [userLikedCount, setCurrentUserLikedCount] = useState<number | undefined>(undefined);
 
   const handleGetAllLikes = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
@@ -35,9 +35,7 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   }, []);
 
   return (
-    <LikeContext.Provider value={{ currentUserLikes, currentUserLikedCount, handleGetAllLikes }}>
-      {children}
-    </LikeContext.Provider>
+    <LikeContext.Provider value={{ userLikes, userLikedCount, handleGetAllLikes }}>{children}</LikeContext.Provider>
   );
 };
 

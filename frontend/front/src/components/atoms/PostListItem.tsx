@@ -5,6 +5,7 @@ import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import { useDeletePost } from '../../hooks/post/useDeletePost';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
+import { LikeButtonIcon } from './LikeButtonIcon';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
 type PostListItemProps = {
@@ -51,6 +52,9 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
+            {currentUser && currentUser.id !== post.userId && (
+              <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
+            )}
             {currentUser?.id === post.userId && (
               <a
                 className='hover:cursor-pointer'

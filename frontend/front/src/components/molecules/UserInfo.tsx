@@ -39,7 +39,7 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
       </div>
 
       <div className='flex flex-row justify-evenly lg:mb-4 lg:mt-4'>
-        <FollowStats userId={user.id} className={'mb-4'}></FollowStats>
+        <FollowStats userId={user.id}></FollowStats>
         <LikeStats userId={user.id}></LikeStats>
       </div>
 

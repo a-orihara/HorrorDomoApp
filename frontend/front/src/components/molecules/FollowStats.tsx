@@ -4,10 +4,9 @@ import { useFollowContext } from '../../contexts/FollowContext';
 
 type FollowStatsProps = {
   userId: number | undefined;
-  className?: string;
 };
 
-const FollowStats = ({ userId, className }: FollowStatsProps) => {
+const FollowStats = ({ userId }: FollowStatsProps) => {
   const { followingCount, followersCount, handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } =
     useFollowContext();
 
@@ -19,7 +18,7 @@ const FollowStats = ({ userId, className }: FollowStatsProps) => {
   // 1 handleGetUserFollowingByUserId();
 
   return (
-    <div className={className}>
+    <div className='mb-4'>
       <Link href={`/users/${userId}/following`}>
         <a className='mr-4 text-xs hover:text-basic-pink md:text-base'>
           <span className='mr-2 underline'>{followingCount}</span>

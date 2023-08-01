@@ -8,11 +8,6 @@ type FeedListProps = {
   feedUsers: User[];
 };
 const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
-  // posts
-  // ポストのidの集合
-  // usersの集合 = feedUsers
-  // const postUserIds = feedPosts.map((feedPost) => feedPost.userId);
-
   // 1
   if (!feedPosts || feedPosts.length === 0) {
     return (

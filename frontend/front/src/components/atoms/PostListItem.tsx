@@ -53,6 +53,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
             {currentUser && currentUser.id !== post.userId && (
+              // 2
               <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
             )}
             {currentUser?.id === post.userId && (
@@ -104,8 +105,8 @@ const hello = (name:PostListItemProps) =>{
 *オブジェクトで渡す場合は、引数の型をオブジェクト型にする必要がある。
 hello({myName:"Mike"});
 
-
 ================================================================================================
-
+2
+userIdにcurrentUser.idを渡すと、いいねをした際に、いいね数の表示がcurrentUserのものに切り替わってしまう。
 
 */

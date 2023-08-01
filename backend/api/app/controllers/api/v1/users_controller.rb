@@ -116,7 +116,7 @@ class Api::V1::UsersController < ApplicationController
   # end
 
   # 6 ユーザーのいいねの全データを返す
-  def current_user_all_likes
+  def all_likes
     user = current_api_v1_user
     if user
       # n+1問題が発生するため、user.likes.allで取得しない。

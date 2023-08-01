@@ -18,6 +18,10 @@ const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 export const LikeProvider = ({ children }: LikeProviderProps) => {
   const [currentUserLikes, setCurrentUserLikes] = useState<Like[]>([]);
   const [currentUserLikesCount, setCurrentUserLikesCount] = useState<number | undefined>(undefined);
+
+  const handleGetCurrentUserLikes = async (userId: number | undefined) => {
+    if (!userId) return;
+  };
   return <LikeContext.Provider value={{ currentUserLikes, currentUserLikesCount }}>{children}</LikeContext.Provider>;
 };
 

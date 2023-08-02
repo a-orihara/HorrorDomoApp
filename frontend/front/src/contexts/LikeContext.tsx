@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { getAllLikes } from '../api/like';
+import { getAllLikesByUserId } from '../api/like';
 import { Like } from '../types/like';
 
 type LikeProviderProps = {
@@ -7,21 +7,23 @@ type LikeProviderProps = {
 };
 
 type LikeContextProps = {
-  userLikes: Like[] | undefined;
-  userLikedCount: number | undefined;
-  handleGetAllLikes: (userId: number | undefined) => Promise<void>;
+  currentUserLikes: Like[] | undefined;
+  currentUserLikedCount: number | undefined;
+  handleGetAllLikesByCurrentUserId: (userId: number | undefined) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 
 export const LikeProvider = ({ children }: LikeProviderProps) => {
-  const [userLikes, setCurrentUserLikes] = useState<Like[]>([]);
-  const [userLikedCount, setCurrentUserLikedCount] = useState<number | undefined>(undefined);
+  const [currentUserLikes, setCurrentUserLikes] = useState<Like[]>([]);
+  const [currentUserLikedCount, setCurrentUserLikedCount] = useState<number | undefined>(undefined);
 
-  const handleGetAllLikes = useCallback(async (userId: number | undefined) => {
+  // 指定userIDがいいねした投稿の集合と、その総数を取得し、stateに格納する
+  const handleGetAllLikesByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
-      const data = await getAllLikes(userId);
+      // 指定userIDがいいねした投稿の集合と、その総数を取得する
+      const data = await getAllLikesByUserId(userId);
       if (data.status === 200) {
         const likes: Like[] = data.data.likedPosts;
         setCurrentUserLikes(likes);
@@ -35,7 +37,9 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   }, []);
 
   return (
-    <LikeContext.Provider value={{ userLikes, userLikedCount, handleGetAllLikes }}>{children}</LikeContext.Provider>
+    <LikeContext.Provider value={{ currentUserLikes, currentUserLikedCount, handleGetAllLikesByCurrentUserId }}>
+      {children}
+    </LikeContext.Provider>
   );
 };
 

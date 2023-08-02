@@ -9,7 +9,7 @@ export const useToggleLike = (liked: boolean, postId: number, userId: number) =>
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // いいねがトグルされたらいいね総数を更新する為、handleGetAllLikesを取得
-  const { handleGetAllLikes } = useLikeContext();
+  const { handleGetAllLikesByUserId } = useLikeContext();
 
   const handleToggleLike = async () => {
     try {
@@ -24,7 +24,7 @@ export const useToggleLike = (liked: boolean, postId: number, userId: number) =>
         // isLikedをfalseからtrue、またはtrueからfalseに変更
         setIsLiked(!isLiked);
         // いいね総数を更新
-        handleGetAllLikes(userId);
+        handleGetAllLikesByUserId(userId);
       }
     } catch (err: any) {
       setAlertSeverity('error');

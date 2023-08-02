@@ -39,8 +39,8 @@ export const isAlreadyLiked = (userId: number, postId: number) => {
   });
 };
 
-// currentUserがいいねした投稿の集合と、その総数を取得する
-export const getAllLikes = (userId: number) => {
+// 指定userIDがいいねした投稿の集合と、その総数を取得する
+export const getAllLikesByUserId = (userId: number) => {
   return client.get(`/users/${userId}/all_likes`, {
     headers: {
       'access-token': Cookies.get('_access_token'),

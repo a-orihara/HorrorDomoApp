@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { getAllLikesByUserId } from '../api/like';
+import { getTotalLikesCountByUserId } from '../api/like';
 import { Like } from '../types/like';
 
 type LikeProviderProps = {
@@ -25,11 +25,27 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
   // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
+  // const handleGetAllLikesByCurrentUserId = useCallback(async (userId: number | undefined) => {
+  //   if (!userId) return;
+  //   try {
+  //     // currentUserがいいねした投稿の集合と、その総数を取得する
+  //     const data = await getAllLikesByUserId(userId);
+  //     if (data.status === 200) {
+  //       const likes: Like[] = data.data.likedPosts;
+  //       setCurrentUserLikedPosts(likes);
+  //       const totalLikedCount: number = data.data.totalLikedCounts;
+  //       setCurrentUserLikedPostCount(totalLikedCount);
+  //     }
+  //   } catch (err) {
+  //     // ◆エラー仮実装
+  //     alert('ユーザーが存在しません');
+  //   }
+  // }, []);
   const handleGetAllLikesByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // currentUserがいいねした投稿の集合と、その総数を取得する
-      const data = await getAllLikesByUserId(userId);
+      const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
         const likes: Like[] = data.data.likedPosts;
         setCurrentUserLikedPosts(likes);
@@ -43,11 +59,27 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   }, []);
 
   // otherUserがいいねした投稿の集合と、その総数を取得し、otherUserのstateに格納する
+  // const handleGetAllLikesByOtherUserId = useCallback(async (userId: number | undefined) => {
+  //   if (!userId) return;
+  //   try {
+  //     // otherUserがいいねした投稿の集合と、その総数を取得する
+  //     const data = await getAllLikesByUserId(userId);
+  //     if (data.status === 200) {
+  //       const likes: Like[] = data.data.likedPosts;
+  //       setOtherUserLikedPosts(likes);
+  //       const totalLikedCount: number = data.data.totalLikedCounts;
+  //       setOtherUserLikedPostsCount(totalLikedCount);
+  //     }
+  //   } catch (err) {
+  //     // ◆エラー仮実装
+  //     alert('ユーザーが存在しません');
+  //   }
+  // }, []);
   const handleGetAllLikesByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // otherUserがいいねした投稿の集合と、その総数を取得する
-      const data = await getAllLikesByUserId(userId);
+      const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
         const likes: Like[] = data.data.likedPosts;
         setOtherUserLikedPosts(likes);

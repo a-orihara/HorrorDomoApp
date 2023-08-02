@@ -24,7 +24,8 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   // // 現在のユーザーが未定義かどうかを確認
   // const userId = currentUser?.id;
   const { handleDeletePost } = useDeletePost();
-  // console.log(`feedPost:の${feedPost.liked}`);
+  console.log(`feedPost:の${feedPost.liked}`);
+  console.log(`feedListItemのpost:${JSON.stringify(feedPost)}`);
 
   return (
     <li key={feedPost.id} className='my-px bg-slate-100'>

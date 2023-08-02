@@ -22,6 +22,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
+  // console.log(`PostListItemのpost:${JSON.stringify(post)}`);
 
   return (
     <li key={post.id} className='basic-border my-px'>

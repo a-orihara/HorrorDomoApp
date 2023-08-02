@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { createLike, deleteLike } from '../../api/like';
 import { useAlertContext } from '../../contexts/AlertContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { useLikeContext } from '../../contexts/LikeContext';
 
 // いいねのトグルフック。いいね総数を更新する為、引数にuserIdを追加
 export const useToggleLike = (liked: boolean, postId: number, userId: number) => {
   // いいね済みかの真偽値。初期値はBDから取得したpostのliked
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  const { currentUser } = useAuthContext();
   // いいねがトグルされたらいいね総数を更新する為、handleGetAllLikesを取得
-  const { handleGetAllLikesByUserId } = useLikeContext();
+  const { handleGetAllLikesByCurrentUserId, handleGetAllLikesByOtherUserId } = useLikeContext();
+  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  console.log(`post.idは:${postId}、likeの状態は:${isLiked}`);
 
   const handleToggleLike = async () => {
     try {
@@ -17,14 +20,21 @@ export const useToggleLike = (liked: boolean, postId: number, userId: number) =>
       // いいね済みならいいねを削除、いいねしていなければいいねを作成
       if (isLiked) {
         res = await deleteLike(postId);
+        setIsLiked(false);
       } else {
         res = await createLike(postId);
+        setIsLiked(true);
       }
       if (res.status === 200 || res.status === 201) {
         // isLikedをfalseからtrue、またはtrueからfalseに変更
         setIsLiked(!isLiked);
-        // いいね総数を更新
-        handleGetAllLikesByUserId(userId);
+        if (currentUser && userId === currentUser.id) {
+          handleGetAllLikesByCurrentUserId(currentUser.id);
+        } else {
+          // いいね総数を更新
+          console.log('handleGetAllLikesByOtherUserIdが発火');
+          handleGetAllLikesByOtherUserId(userId);
+        }
       }
     } catch (err: any) {
       setAlertSeverity('error');

@@ -23,7 +23,7 @@ export const useSignIn = () => {
   // サインインユーザーのfollowing数とfollowers数を管理
   const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
   // サインインユーザーがいいねした投稿の集合と、その総数を管理
-  const { handleGetAllLikesByUserId } = useLikeContext();
+  const { handleGetAllLikesByCurrentUserId } = useLikeContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ export const useSignIn = () => {
         handleGetFollowingCountByUserId(res.data.data.id);
         handleGetFollowersCountByUserId(res.data.data.id);
         // サインインユーザーがいいねした投稿の集合と、その総数を取得しセット
-        handleGetAllLikesByUserId(res.data.data.id);
+        handleGetAllLikesByCurrentUserId(res.data.data.id);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

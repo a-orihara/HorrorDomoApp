@@ -13,7 +13,12 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   const [totalLikedPostsCount, setTotalLikedPostsCount] = useState(0);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
-  const { handleGetAllLikesByCurrentUserId, handleGetAllLikesByOtherUserId } = useLikeContext();
+  const {
+    handleGetAllLikesByCurrentUserId,
+    handleGetAllLikesByOtherUserId,
+    currentUserLikedPosts,
+    otherUserLikedPosts,
+  } = useLikeContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 

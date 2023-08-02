@@ -104,26 +104,19 @@ class Api::V1::UsersController < ApplicationController
     render json: { status: '200', is_following: is_following }
   end
 
-  # ユーザーのいいね総数を返す
-  # def total_likes
-  #   user = User.find_by(id: params[:id])
-  #   if user
-  #     total_likes = user.likes.count
-  #     render json: { status: '200', total_likes: total_likes }
-  #   else
-  #     render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
-  #   end
-  # end
-
-  # 6 ユーザーのいいねの全データを返す
+  # 6 ユーザーがいいねした投稿の集合と、その総数を返す
   def all_likes
+    puts "all_likesアクションが発火"
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
     # 与えられたユーザーIDでユーザーを検索
     user = User.find(params[:id])
     if user
       # n+1問題が発生するため、user.likes.allで取得しない。
       user_likes = user.likes.includes(:post)
       # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
-      liked_posts = user_likes.map { |like| like.post }
+      # liked_posts = user_likes.map { |like| like.post }
+      liked_posts = user_likes.map { |like| like.post }.page(page).per(per_page)
       # いいねの総数を取得
       total_liked_counts = liked_posts.count
       # currentUserがいいねした投稿の集合と、その総数をレスポンスとして返す
@@ -132,10 +125,6 @@ class Api::V1::UsersController < ApplicationController
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
   end
-
-
-
-
 
   private
 

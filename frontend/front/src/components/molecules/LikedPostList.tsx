@@ -12,7 +12,7 @@ const LikedPostList = ({ posts, user }: LikedPostListProps) => {
   if (!posts || posts.length === 0) {
     return (
       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
-        <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿がありません</p>
+        <p className='border-b-2 border-slate-200 text-base md:text-xl'>いいねした投稿がありません</p>
       </div>
     );
   }

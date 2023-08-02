@@ -13,7 +13,6 @@ type LikedPostListItemProps = {
   user: User;
 };
 
-// 1 関数コンポーネントの引数は基本的にオブジェクト型。
 const LikedPostListItem = ({ post, user }: LikedPostListItemProps) => {
   // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);
@@ -80,33 +79,5 @@ export default LikedPostListItem;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-分割代入を使わない場合は、
-
-const PostListItem = (props: PostListItemProps) => {
-  const post = props.post;
-  return (
-    <li key={post.id}>
-      <p className='text-center text-base md:text-xl'>{post.content}</p>
-    </li>
-  );
-};
-------------------------------------------------------------------------------------------------
-オブジェクトのプロパティを取り出す例、
-
-type PostListItemProps = {
-  myName: string;
-};
-
-const hello = (name:PostListItemProps) =>{
-    const helloName = name.myName
-    console.log(`こんにちは${helloName}さん`)
-}
-
-*オブジェクトで渡す場合は、引数の型をオブジェクト型にする必要がある。
-hello({myName:"Mike"});
-
-================================================================================================
-2
-userIdにcurrentUser.idを渡すと、いいねをした際に、いいね数の表示がcurrentUserのものに切り替わってしまう。
 
 */

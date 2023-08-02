@@ -16,6 +16,7 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
     handleGetAllLikesByOtherUserId,
   } = useLikeContext();
 
+  // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
     // 1
     if (currentUser && userId === currentUser.id) {
@@ -29,6 +30,7 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
 
   // 3
   const userLikedCount = currentUser && userId === currentUser.id ? currentUserLikedCount : otherUserLikedCount;
+  console.log(`LikeStatsのuserId:${userId}`);
 
   return (
     <div>

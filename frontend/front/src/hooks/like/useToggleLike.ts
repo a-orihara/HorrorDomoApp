@@ -12,7 +12,7 @@ export const useToggleLike = (liked: boolean, postId: number, userId: number) =>
   // いいねがトグルされたらいいね総数を更新する為、handleGetAllLikesを取得
   const { handleGetAllLikesByCurrentUserId } = useLikeContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  console.log(`user.idは:${userId}、likeの状態は:${isLiked}`);
+  // console.log(`user.idは:${userId}、likeの状態は:${isLiked}`);
 
   const handleToggleLike = async () => {
     try {

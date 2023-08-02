@@ -3,11 +3,11 @@ import { User } from '../../types/user';
 import FeedList from '../molecules/FeedList';
 import Pagination from '../molecules/Pagination';
 
-type FeedProps = {
+type LikedPostAreaProps = {
   user: User;
 };
 
-const Feed = ({ user }: FeedProps) => {
+const LikedPostArea = ({ user }: LikedPostAreaProps) => {
   const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
 
   // const { } = useGetUserById()
@@ -19,4 +19,4 @@ const Feed = ({ user }: FeedProps) => {
   );
 };
 
-export default Feed;
+export default LikedPostArea;

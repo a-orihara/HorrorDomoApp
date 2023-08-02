@@ -13,11 +13,11 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   const [totalLikedPostsCount, setTotalLikedPostsCount] = useState(0);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
-  const { handleGetAllLikesByUserId } = useLikeContext();
+  const { handleGetAllLikesByCurrentUserId, handleGetAllLikesByOtherUserId } = useLikeContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
-  // 4 指定userIdのlikedPost一覧を取得、likedPost一覧とlikedPost総数をステートに格納。
+  // 指定userIdのlikedPost一覧を取得、likedPost一覧とlikedPost総数をステートに格納。
   // 引数pageは、ページネーションで選択したページ。
   const handleGetPostListByUserId = useCallback(
     async (page: number) => {

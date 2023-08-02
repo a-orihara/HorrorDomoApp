@@ -10,9 +10,9 @@ type LikeStatsProps = {
 export const LikeStats = ({ userId }: LikeStatsProps) => {
   const { currentUser } = useAuthContext();
   const {
-    currentUserLikedCount,
+    currentUserLikedPostCount,
     handleGetAllLikesByCurrentUserId,
-    otherUserLikedCount,
+    otherUserLikedPostsCount,
     handleGetAllLikesByOtherUserId,
   } = useLikeContext();
 
@@ -29,7 +29,8 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
   }, [userId, handleGetAllLikesByCurrentUserId, handleGetAllLikesByOtherUserId, currentUser?.id, currentUser]);
 
   // 3
-  const userLikedCount = currentUser && userId === currentUser.id ? currentUserLikedCount : otherUserLikedCount;
+  const userLikedCount =
+    currentUser && userId === currentUser.id ? currentUserLikedPostCount : otherUserLikedPostsCount;
   console.log(`LikeStatsのuserId:${userId}`);
 
   return (

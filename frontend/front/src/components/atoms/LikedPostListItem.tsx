@@ -53,7 +53,8 @@ const LikedPostListItem = ({ post, user }: LikedPostListItemProps) => {
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
             {currentUser && currentUser.id !== post.userId && (
               // 2
-              <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
+              // <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
+              <LikeButtonIcon postId={post.id} liked={post.liked} />
             )}
             {currentUser?.id === post.userId && (
               <a

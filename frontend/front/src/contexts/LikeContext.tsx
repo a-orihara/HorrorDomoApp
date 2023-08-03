@@ -12,8 +12,8 @@ type LikeContextProps = {
   currentUserLikedPostCount: number | undefined;
   otherUserLikedPosts: Like[] | undefined;
   otherUserLikedPostsCount: number | undefined;
-  handleGetAllLikesByCurrentUserId: (userId: number | undefined) => Promise<void>;
-  handleGetAllLikesByOtherUserId: (userId: number | undefined) => Promise<void>;
+  handleGetTotalLikesCountByCurrentUserId: (userId: number | undefined) => Promise<void>;
+  handleGetTotalLikesCountByOtherUserId: (userId: number | undefined) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
@@ -41,14 +41,16 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   //     alert('ユーザーが存在しません');
   //   }
   // }, []);
-  const handleGetAllLikesByCurrentUserId = useCallback(async (userId: number | undefined) => {
+
+  // currentUserのいいね総数を取得し、CurrentUserLikedPostCountのstateに格納する
+  const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // currentUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
-        const likes: Like[] = data.data.likedPosts;
-        setCurrentUserLikedPosts(likes);
+        // const likes: Like[] = data.data.likedPosts;
+        // setCurrentUserLikedPosts(likes);
         const totalLikedCount: number = data.data.totalLikedCounts;
         setCurrentUserLikedPostCount(totalLikedCount);
       }
@@ -75,14 +77,14 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   //     alert('ユーザーが存在しません');
   //   }
   // }, []);
-  const handleGetAllLikesByOtherUserId = useCallback(async (userId: number | undefined) => {
+  const handleGetTotalLikesCountByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // otherUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
-        const likes: Like[] = data.data.likedPosts;
-        setOtherUserLikedPosts(likes);
+        // const likes: Like[] = data.data.likedPosts;
+        // setOtherUserLikedPosts(likes);
         const totalLikedCount: number = data.data.totalLikedCounts;
         setOtherUserLikedPostsCount(totalLikedCount);
       }
@@ -97,10 +99,10 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
       value={{
         currentUserLikedPosts,
         currentUserLikedPostCount,
-        handleGetAllLikesByCurrentUserId,
+        handleGetTotalLikesCountByCurrentUserId,
         otherUserLikedPosts,
         otherUserLikedPostsCount,
-        handleGetAllLikesByOtherUserId,
+        handleGetTotalLikesCountByOtherUserId,
       }}
     >
       {children}

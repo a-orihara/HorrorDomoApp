@@ -14,8 +14,8 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   const {
-    handleGetAllLikesByCurrentUserId,
-    handleGetAllLikesByOtherUserId,
+    handleGetTotalLikesCountByCurrentUserId,
+    handleGetTotalLikesCountByOtherUserId,
     currentUserLikedPosts,
     otherUserLikedPosts,
   } = useLikeContext();

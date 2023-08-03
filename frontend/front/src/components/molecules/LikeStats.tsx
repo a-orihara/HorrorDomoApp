@@ -11,9 +11,9 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
   const { currentUser } = useAuthContext();
   const {
     currentUserLikedPostCount,
-    handleGetAllLikesByCurrentUserId,
+    handleGetTotalLikesCountByCurrentUserId,
     otherUserLikedPostsCount,
-    handleGetAllLikesByOtherUserId,
+    handleGetTotalLikesCountByOtherUserId,
   } = useLikeContext();
 
   // currentUserまたはotherUserのいいね総数を取得、更新する
@@ -21,12 +21,18 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
     // 1
     if (currentUser && userId === currentUser.id) {
       // currentUserがundefinedでない場合のみ処理
-      handleGetAllLikesByCurrentUserId(userId);
+      handleGetTotalLikesCountByCurrentUserId(userId);
     } else {
-      handleGetAllLikesByOtherUserId(userId);
+      handleGetTotalLikesCountByOtherUserId(userId);
     }
     // currentUser?.id でundefinedの場合にエラーを防ぐ
-  }, [userId, handleGetAllLikesByCurrentUserId, handleGetAllLikesByOtherUserId, currentUser?.id, currentUser]);
+  }, [
+    userId,
+    handleGetTotalLikesCountByCurrentUserId,
+    handleGetTotalLikesCountByOtherUserId,
+    currentUser?.id,
+    currentUser,
+  ]);
 
   // 3
   const userLikedCount =

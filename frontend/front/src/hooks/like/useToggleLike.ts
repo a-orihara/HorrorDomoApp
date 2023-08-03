@@ -5,12 +5,12 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useLikeContext } from '../../contexts/LikeContext';
 
 // いいねのトグルフック。いいね総数を更新する為、引数にuserId（/users/:idのid）を追加
-export const useToggleLike = (liked: boolean, postId: number, userId: number) => {
+export const useToggleLike = (liked: boolean, postId: number) => {
   // いいね済みかの真偽値。初期値はBDから取得したpostのliked
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const { currentUser } = useAuthContext();
   // いいねがトグルされたらいいね総数を更新する為、handleGetAllLikesを取得
-  const { handleGetAllLikesByCurrentUserId } = useLikeContext();
+  const { handleGetTotalLikesCountByCurrentUserId } = useLikeContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // console.log(`user.idは:${userId}、likeの状態は:${isLiked}`);
 
@@ -29,7 +29,7 @@ export const useToggleLike = (liked: boolean, postId: number, userId: number) =>
       if (res.status === 200 || res.status === 201) {
         // このuserIdはusers/:idのid
         if (currentUser) {
-          handleGetAllLikesByCurrentUserId(currentUser.id);
+          handleGetTotalLikesCountByCurrentUserId(currentUser.id);
         }
         // } else {
         //   // いいね総数を更新

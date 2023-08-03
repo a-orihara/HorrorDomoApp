@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { getUserLikedPostsByUserId } from '../../api/like';
 // import { useAlertContext } from '../../contexts/AlertContext';
 import { Post } from '../../types/post';
+import { User } from '../../types/user';
 // import { useLikeContext } from '../../contexts/LikeContext';
 
 // 指定userIDのlikedPost一覧、likedPost総数、現在のページ番号を返す
@@ -11,6 +12,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   const [likedPosts, setLikedPosts] = useState<Post[]>([]);
   // 指定したuserIdのlikedPost総数
   const [totalLikedPostsCount, setTotalLikedPostsCount] = useState(0);
+  const [LikedUsers, setLikedUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   // const {
@@ -32,10 +34,12 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
         // currentUserがいいねした投稿の集合と、その総数を取得する
         const data = await getUserLikedPostsByUserId(userId, page, itemsPerPage);
         if (data.status === 200) {
-          const likes: Post[] = data.data.likedPosts;
-          setLikedPosts(likes);
+          const likedPost: Post[] = data.data.likedPosts;
+          setLikedPosts(likedPost);
           const totalLikedCount: number = data.data.totalLikedCounts;
           setTotalLikedPostsCount(totalLikedCount);
+          const likedUsers: User[] = data.data.likedUsers;
+          setLikedUsers(likedUsers);
         }
       } catch (err) {
         // ◆エラー仮実装
@@ -54,7 +58,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
     setCurrentPage(selectedItem.selected);
   };
 
-  return { likedPosts, totalLikedPostsCount, handlePageChange, currentPage };
+  return { likedPosts, totalLikedPostsCount, LikedUsers, handlePageChange, currentPage };
 };
 
 /*

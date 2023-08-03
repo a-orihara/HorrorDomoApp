@@ -132,14 +132,19 @@ class Api::V1::UsersController < ApplicationController
     user = User.find(params[:id])
     if user
       # n+1問題が発生するため、user.likes.allで取得しない。
-      user_likes = user.likes.includes(:post)
+      # user_likes = user.likes.includes(:post)
+
       # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
       # liked_posts = user_likes.map { |like| like.post }
-      liked_posts = user_likes.map { |like| like.post }.page(page).per(per_page)
+      # liked_posts = user_likes.map { |like| like.post }.page(page).per(per_page)
+
+      liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
+      # liked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
+      liked_users = liked_posts.map { |post| post.user }.uniq
       # いいねの総数を取得
       total_liked_counts = liked_posts.count
-      # currentUserがいいねした投稿の集合と、その総数をレスポンスとして返す
-      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_counts }
+      # 1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づくuserの集合を返す
+      render json: { status: '200', liked_posts: liked_posts, total_liked_counts: total_liked_counts, liked_users: liked_users }
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end

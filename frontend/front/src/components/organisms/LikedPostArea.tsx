@@ -1,6 +1,6 @@
-import { useFeedPagination } from '../../hooks/user/useFeedPagination';
+import { useLikedPostsPagination } from '../../hooks/like/useLikedPostsPagination';
 import { User } from '../../types/user';
-import FeedList from '../molecules/FeedList';
+import LikedPostList from '../molecules/LikedPostList';
 import Pagination from '../molecules/Pagination';
 
 type LikedPostAreaProps = {
@@ -8,13 +8,12 @@ type LikedPostAreaProps = {
 };
 
 const LikedPostArea = ({ user }: LikedPostAreaProps) => {
-  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
+  const { likedPosts, totalLikedPostsCount, handlePageChange } = useLikedPostsPagination(10, user.id);
 
-  // const { } = useGetUserById()
   return (
     <div>
-      <FeedList feedUsers={feedUsers} feedPosts={feedPosts}></FeedList>
-      <Pagination totalCount={totalFeedPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <LikedPostList user={user} posts={likedPosts}></LikedPostList>
+      <Pagination totalCount={totalLikedPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import CreatePostLink from '../atoms/CreatePostLink';
 import UserInfo from '../molecules/UserInfo';
 import Feed from '../organisms/Feed';
+import LikedPostArea from '../organisms/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
 
 const HomePage = () => {
@@ -37,6 +38,7 @@ const HomePage = () => {
 
           <div className='flex-1 bg-green-200 lg:w-full'>
             <Feed user={currentUser}></Feed>
+            <LikedPostArea user={currentUser}></LikedPostArea>
           </div>
         </div>
       ) : (

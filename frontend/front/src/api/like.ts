@@ -40,7 +40,7 @@ export const isAlreadyLiked = (userId: number, postId: number) => {
 };
 
 // 指定userIDがいいねした投稿の集合と、その総数を取得する
-export const getAllLikesByUserId = (userId: number, page: number, itemsPerPage: number) => {
+export const getUserLikedPostsByUserId = (userId: number, page: number, itemsPerPage: number) => {
   return client.get(`/users/${userId}/all_likes`, {
     params: {
       // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います

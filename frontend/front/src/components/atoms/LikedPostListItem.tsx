@@ -13,6 +13,7 @@ type LikedPostListItemProps = {
   user: User;
 };
 
+// post:投稿、user:投稿者のuserで、current又はotherUserらが入る
 const LikedPostListItem = ({ post, user }: LikedPostListItemProps) => {
   // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);

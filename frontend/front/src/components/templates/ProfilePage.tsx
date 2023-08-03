@@ -53,7 +53,7 @@ const ProfilePage = () => {
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
-        {/* 6 */}
+        {/* 6 post:投稿、user:投稿者のuserで、指定idのUser */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}
         <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>

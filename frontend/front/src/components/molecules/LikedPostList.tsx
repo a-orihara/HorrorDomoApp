@@ -7,6 +7,7 @@ type LikedPostListProps = {
   user: User;
 };
 
+// post:投稿、user:投稿者のuserで、current又はotherUserらが入る
 const LikedPostList = ({ posts, user }: LikedPostListProps) => {
   // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
   if (!posts || posts.length === 0) {

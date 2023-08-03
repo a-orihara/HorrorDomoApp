@@ -27,7 +27,7 @@ class Api::V1::HomePagesController < ApplicationController
           avatar_url = generate_avatar_url(user)
           user.as_json.merge(avatar_url: avatar_url)
         end
-        # 返り値:feed,feed総数,feedのuserIdの集合,feedのuserIdに紐づくuserの集合
+        # 返り値:feed（1.feedPostの集合, 2.feedPost総数, 3.feedのuserIdに紐づくfeeduserの集合）
         render json: {
           status: '200',
           # いいねしているかの真偽値を持たせたfeed_

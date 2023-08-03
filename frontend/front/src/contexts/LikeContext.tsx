@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { getTotalLikesCountByUserId } from '../api/like';
+import { getTotalLikesCountByUserId, getUserLikedPostsByUserId } from '../api/like';
 import { Like } from '../types/like';
 
 type LikeProviderProps = {
@@ -14,6 +14,7 @@ type LikeContextProps = {
   otherUserLikedPostsCount: number | undefined;
   handleGetTotalLikesCountByCurrentUserId: (userId: number | undefined) => Promise<void>;
   handleGetTotalLikesCountByOtherUserId: (userId: number | undefined) => Promise<void>;
+  handleGetCurrentUserLikedPosts: (userId: number | undefined, page: number, itemsPerPage: number) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
@@ -25,22 +26,25 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
   // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
-  // const handleGetAllLikesByCurrentUserId = useCallback(async (userId: number | undefined) => {
-  //   if (!userId) return;
-  //   try {
-  //     // currentUserがいいねした投稿の集合と、その総数を取得する
-  //     const data = await getAllLikesByUserId(userId);
-  //     if (data.status === 200) {
-  //       const likes: Like[] = data.data.likedPosts;
-  //       setCurrentUserLikedPosts(likes);
-  //       const totalLikedCount: number = data.data.totalLikedCounts;
-  //       setCurrentUserLikedPostCount(totalLikedCount);
-  //     }
-  //   } catch (err) {
-  //     // ◆エラー仮実装
-  //     alert('ユーザーが存在しません');
-  //   }
-  // }, []);
+  const handleGetCurrentUserLikedPosts = useCallback(
+    async (userId: number | undefined, page: number, itemsPerPage: number) => {
+      if (!userId) return;
+      try {
+        // currentUserがいいねした投稿の集合と、その総数を取得する
+        const data = await getUserLikedPostsByUserId(userId, page, itemsPerPage);
+        if (data.status === 200) {
+          const likes: Like[] = data.data.likedPosts;
+          setCurrentUserLikedPosts(likes);
+          const totalLikedCount: number = data.data.totalLikedCounts;
+          setCurrentUserLikedPostCount(totalLikedCount);
+        }
+      } catch (err) {
+        // ◆エラー仮実装
+        alert('ユーザーが存在しません');
+      }
+    },
+    []
+  );
 
   // currentUserのいいね総数を取得し、CurrentUserLikedPostCountのstateに格納する
   const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
@@ -103,6 +107,7 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
         otherUserLikedPosts,
         otherUserLikedPostsCount,
         handleGetTotalLikesCountByOtherUserId,
+        handleGetCurrentUserLikedPosts,
       }}
     >
       {children}

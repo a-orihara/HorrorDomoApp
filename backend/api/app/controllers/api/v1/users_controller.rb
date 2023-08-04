@@ -128,11 +128,12 @@ class Api::V1::UsersController < ApplicationController
     puts "all_likesアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
-    # 与えられたユーザーIDでユーザーを検索
+    # 指定ユーザーIDでユーザーを検索
     user = User.find(params[:id])
     if user
       # 8
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
+      # 指定ユーザーのいいねの真偽値情報を取得
       liked_posts_with_likes = liked_posts.map do |post|
           # いいねしているかの真偽値をlikedに代入
           liked = user.already_liked?(post)

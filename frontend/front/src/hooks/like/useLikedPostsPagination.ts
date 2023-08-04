@@ -39,7 +39,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
           const totalLikedCount: number = data.data.totalLikedCounts;
           setTotalLikedPostsCount(totalLikedCount);
           const likedUsers: User[] = data.data.likedUsers;
-          console.log(`likedUsers: ${JSON.stringify(likedUsers)}`);
+          // console.log(`likedUsers: ${JSON.stringify(likedUsers)}`);
           setLikedUsers(likedUsers);
         }
       } catch (err) {

@@ -13,14 +13,14 @@ type LikedPostListItemProps = {
   likedUser: User;
 };
 
-// post:投稿、user:投稿者のuserで、current又はotherUserらが入る
+// 指定userIdのlikedPost, likedUser
 const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => {
-  // postの作成日時を形成するカスタムフック
+  // likedPostの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(likedPost.createdAt);
-  // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
+  // likedPostの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
   const truncateContent =
     likedPost.content.length > 30 ? `${likedPost.content.substring(0, 30)}...` : likedPost.content;
-  // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
+  // currentUserと指定userIdが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
 
@@ -55,8 +55,9 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
             {currentUser && currentUser.id !== likedPost.userId && (
               // 2
-              // <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
+              // 指定userIdのlikedPostのidとliked（真偽値）
               <LikeButtonIcon postId={likedPost.id} liked={likedPost.liked} />
+              // <LikeButtonIcon postId={likedPost.id} liked={isCurrentUserLiked} />
             )}
             {currentUser?.id === likedPost.userId && (
               <a

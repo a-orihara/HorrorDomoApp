@@ -7,28 +7,7 @@ class Api::V1::LikesController < ApplicationController
   # 1
 
   def index
-    # page = params[:page] || 1
-    # per_page = params[:per_page] || 10
 
-    # if params[:user_id]
-    #   # 6
-    #   user = User.find_by(id: params[:user_id])
-    #   if user
-    #     # @posts = user.posts
-    #     # 指定したページの1ページ当たりの表示件数分のpostを取得
-    #     @posts = user.posts.page(page).per(per_page)
-    #     total_posts = user.posts.count
-    #   else
-    #     return render json: { status: '404', message: 'User not found' }, status: :not_found
-    #   end
-    # else
-    #   # 4
-    #   # @posts = current_api_v1_user.posts
-    #   @posts = current_api_v1_user.posts.page(page).per(per_page)
-    #   total_posts = current_api_v1_user.posts.count
-    # end
-    # # 5
-    # render json: { status: '200', data: @posts, total_posts: total_posts }, status: :ok
 
   end
   def create

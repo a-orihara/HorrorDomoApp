@@ -7,7 +7,7 @@ type LikedPostListProps = {
   likedUsers: User[];
 };
 
-// post:投稿、likedUser:投稿者のuserで、current又はotherUserらが入る
+// 指定userIdのlikedPost一覧, likedUser一覧
 const LikedPostList = ({ likedPosts, likedUsers }: LikedPostListProps) => {
   // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
   if (!likedPosts || likedPosts.length === 0) {
@@ -27,6 +27,7 @@ const LikedPostList = ({ likedPosts, likedUsers }: LikedPostListProps) => {
           // ユーザーが存在すれば投稿を表示
           if (likedUser) {
             return (
+              // 指定userIdのlikedPost, likedUser
               <LikedPostListItem key={likedPost.id} likedPost={likedPost} likedUser={likedUser}></LikedPostListItem>
             );
           } else {

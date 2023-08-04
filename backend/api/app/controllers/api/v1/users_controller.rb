@@ -7,7 +7,8 @@ class Api::V1::UsersController < ApplicationController
     :followers,
     :is_following,
     :all_likes,
-    :total_likes_count
+    :total_likes_count,
+    :current_user_liked_posts_ids
   ]
   before_action :set_user, only: [:show]
 
@@ -35,14 +36,6 @@ class Api::V1::UsersController < ApplicationController
     avatar_url = generate_avatar_url(@user)
     render json: @user.as_json.merge(avatar_url: avatar_url)
   end
-
-  # POST /api/v1/users
-  # def create
-  # end
-
-  # PATCH/PUT /api/v1/users/1
-  # def update
-  # end
 
   # GET /api/v1/users/:id/following（memberメソッドでrouteは作成）
   # followingはmodels/user.rbで定義
@@ -158,6 +151,15 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
+  end
+
+
+  def current_user_liked_posts_ids
+    puts "liked_posts_idsアクションが発火"
+    user = current_api_v1_user
+    # pluck: liked_posts関連付けに対してカラムidの値を抽出して配列として取得する。
+    liked_posts_ids = user.liked_posts.pluck(:id)
+    render json: { status: '200', liked_posts_ids: liked_posts_ids }
   end
 
   private

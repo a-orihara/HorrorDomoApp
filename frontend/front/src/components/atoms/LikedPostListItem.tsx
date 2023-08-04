@@ -9,28 +9,29 @@ import { LikeButtonIcon } from './LikeButtonIcon';
 
 // LikedPostListItemPropsはkey名がpostで値にLikedPost型を持つオブジェクト型;
 type LikedPostListItemProps = {
-  post: Post;
-  user: User;
+  likedPost: Post;
+  likedUser: User;
 };
 
 // post:投稿、user:投稿者のuserで、current又はotherUserらが入る
-const LikedPostListItem = ({ post, user }: LikedPostListItemProps) => {
+const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => {
   // postの作成日時を形成するカスタムフック
-  const postCreatedTime = useFormattedTime(post.createdAt);
+  const postCreatedTime = useFormattedTime(likedPost.createdAt);
   // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
-  const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
+  const truncateContent =
+    likedPost.content.length > 30 ? `${likedPost.content.substring(0, 30)}...` : likedPost.content;
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
 
   return (
-    <li key={post.id} className='basic-border my-px'>
+    <li key={likedPost.id} className='basic-border my-px'>
       <div className='flex'>
         <div className='mx-4'>
-          <Link href={`/users/${user.id}`}>
+          <Link href={`/users/${likedUser.id}`}>
             <a>
               <img
-                src={user.avatarUrl || '/no_image_square.jpg'}
+                src={likedUser.avatarUrl || '/no_image_square.jpg'}
                 alt='user avatar'
                 className='mt-2 h-8 w-8 rounded-full md:h-16 md:w-16'
               />
@@ -39,30 +40,30 @@ const LikedPostListItem = ({ post, user }: LikedPostListItemProps) => {
         </div>
         <div>
           <p>
-            <Link href={`/users/${user.id}`}>
-              <a className='text-xs lg:text-base lg:tracking-wider'>{user.name}</a>
+            <Link href={`/users/${likedUser.id}`}>
+              <a className='text-xs lg:text-base lg:tracking-wider'>{likedUser.name}</a>
             </Link>
           </p>
-          {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
-          <Link href={`/post/${post.id}`}>
+          {/* <p className='text-sm md:text-xl'>タイトル:{likedPost.title}</p> */}
+          <Link href={`/post/${likedPost.id}`}>
             <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
-              {post.title}
+              {likedPost.title}
             </a>
           </Link>
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
-            {currentUser && currentUser.id !== post.userId && (
+            {currentUser && currentUser.id !== likedPost.userId && (
               // 2
               // <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
-              <LikeButtonIcon postId={post.id} liked={post.liked} />
+              <LikeButtonIcon postId={likedPost.id} liked={likedPost.liked} />
             )}
-            {currentUser?.id === post.userId && (
+            {currentUser?.id === likedPost.userId && (
               <a
                 className='hover:cursor-pointer'
                 onClick={() => {
                   if (window.confirm('投稿を削除しますか？')) {
-                    handleDeletePost(post.id);
+                    handleDeletePost(likedPost.id);
                   }
                 }}
               >

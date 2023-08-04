@@ -3,14 +3,14 @@ import { User } from '../../types/user';
 import LikedPostListItem from '../atoms/LikedPostListItem';
 
 type LikedPostListProps = {
-  posts: Post[] | null;
-  user: User;
+  likedPosts: Post[];
+  likedUsers: User[];
 };
 
-// post:投稿、user:投稿者のuserで、current又はotherUserらが入る
-const LikedPostList = ({ posts, user }: LikedPostListProps) => {
+// post:投稿、likedUser:投稿者のuserで、current又はotherUserらが入る
+const LikedPostList = ({ likedPosts, likedUsers }: LikedPostListProps) => {
   // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
-  if (!posts || posts.length === 0) {
+  if (!likedPosts || likedPosts.length === 0) {
     return (
       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
         <p className='border-b-2 border-slate-200 text-base md:text-xl'>いいねした投稿がありません</p>
@@ -20,10 +20,23 @@ const LikedPostList = ({ posts, user }: LikedPostListProps) => {
   return (
     <div className='flex-1'>
       <ol>
-        {/* 1 オプショナルチェインニング */}
-        {posts?.map((post) => (
-          <LikedPostListItem key={post.id} post={post} user={user}></LikedPostListItem>
-        ))}
+        {likedPosts.map((likedPost) => {
+          // ユーザーを検索
+          const likedUser = likedUsers.find((likedUser) => likedUser.id === likedPost.userId);
+
+          // ユーザーが存在すれば投稿を表示
+          if (likedUser) {
+            return (
+              <LikedPostListItem key={likedPost.id} likedPost={likedPost} likedUser={likedUser}></LikedPostListItem>
+            );
+          } else {
+            return (
+              <div key={likedPost.id} className='mb-4 flex flex-1 flex-col items-center justify-around'>
+                <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿を表示できません</p>
+              </div>
+            );
+          }
+        })}
       </ol>
     </div>
   );
@@ -34,12 +47,12 @@ export default LikedPostList;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-nullと空の配列はJavaScriptでは異なるものとして扱われ、if (!posts)はpostsがnullまたはundefinedの場合にのみ真
+nullと空の配列はJavaScriptでは異なるものとして扱われ、if (!likedPosts)はlikedPostsがnullまたはundefinedの場合にのみ真
 となります。一方、空の配列はfalseにはなりません。
-if (!posts || posts.length === 0)という条件を追加し、空の配列の場合も真となるようにしています。
+if (!likedPosts || likedPosts.length === 0)という条件を追加し、空の配列の場合も真となるようにしています。
 ================================================================================================
 2
 この?.オプショナルチェインニングは、
-postsがundefinedまたはnullの場合には次の.mapを評価せず、直接undefinedを返します。
+likedPostsがundefinedまたはnullの場合には次の.mapを評価せず、直接undefinedを返します。
 それにより、期待されないエラーを防ぐことができます。
 */

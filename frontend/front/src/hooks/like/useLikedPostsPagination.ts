@@ -12,7 +12,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   const [likedPosts, setLikedPosts] = useState<Post[]>([]);
   // 指定したuserIdのlikedPost総数
   const [totalLikedPostsCount, setTotalLikedPostsCount] = useState(0);
-  const [LikedUsers, setLikedUsers] = useState<User[]>([]);
+  const [likedUsers, setLikedUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   // const {
@@ -39,6 +39,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
           const totalLikedCount: number = data.data.totalLikedCounts;
           setTotalLikedPostsCount(totalLikedCount);
           const likedUsers: User[] = data.data.likedUsers;
+          console.log(`likedUsers: ${JSON.stringify(likedUsers)}`);
           setLikedUsers(likedUsers);
         }
       } catch (err) {
@@ -58,7 +59,7 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
     setCurrentPage(selectedItem.selected);
   };
 
-  return { likedPosts, totalLikedPostsCount, LikedUsers, handlePageChange, currentPage };
+  return { likedPosts, totalLikedPostsCount, likedUsers, handlePageChange, currentPage };
 };
 
 /*

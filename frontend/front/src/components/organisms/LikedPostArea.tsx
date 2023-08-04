@@ -8,11 +8,11 @@ type LikedPostAreaProps = {
 };
 
 const LikedPostArea = ({ user }: LikedPostAreaProps) => {
-  const { likedPosts, totalLikedPostsCount, handlePageChange } = useLikedPostsPagination(10, user.id);
+  const { likedPosts, totalLikedPostsCount, likedUsers, handlePageChange } = useLikedPostsPagination(10, user.id);
 
   return (
     <div>
-      <LikedPostList user={user} posts={likedPosts}></LikedPostList>
+      <LikedPostList likedUsers={likedUsers} likedPosts={likedPosts}></LikedPostList>
       <Pagination totalCount={totalLikedPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
     </div>
   );

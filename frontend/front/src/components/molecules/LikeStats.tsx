@@ -19,6 +19,9 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
   // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
     // 1
+    console.log('ここがはっか');
+    // サインアウト時に発火するため、currentUserがundefinedならば、以下の処理をスキップ
+    if (!currentUser) return;
     if (currentUser && userId === currentUser.id) {
       // currentUserがundefinedでない場合のみ処理
       handleGetTotalLikesCountByCurrentUserId(userId);

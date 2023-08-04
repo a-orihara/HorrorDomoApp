@@ -8,7 +8,7 @@ class Api::V1::UsersController < ApplicationController
     :is_following,
     :all_likes,
     :total_likes_count,
-    :current_user_liked_posts_ids
+    :liked_posts_ids
   ]
   before_action :set_user, only: [:show]
 
@@ -154,7 +154,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
 
-  def current_user_liked_posts_ids
+  def liked_posts_ids
     puts "liked_posts_idsアクションが発火"
     user = current_api_v1_user
     # pluck: liked_posts関連付けに対してカラムidの値を抽出して配列として取得する。

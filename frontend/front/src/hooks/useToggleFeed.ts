@@ -1,14 +1,12 @@
+// frontend/front/src/hooks/useToggleFeed.ts
 import { useState } from 'react';
 
 export const useToggleFeed = () => {
-  const [showLikedPost, setShowLikedPost] = useState(false);
+  const [showLikedPostArea, setShowLikedPostArea] = useState(false);
 
   const toggleFeed = () => {
-    setShowLikedPost(!showLikedPost);
+    setShowLikedPostArea(!showLikedPostArea);
   };
 
-  return {
-    showLikedPost,
-    toggleFeed,
-  };
+  return { showLikedPostArea, toggleFeed };
 };

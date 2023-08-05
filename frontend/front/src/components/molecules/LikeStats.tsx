@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useLikeContext } from '../../contexts/LikeContext';
+import { useToggleFeed } from '../../hooks/useToggleFeed';
 
 type LikeStatsProps = {
   userId: number | undefined;
@@ -15,6 +16,7 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
     otherUserLikedPostsCount,
     handleGetTotalLikesCountByOtherUserId,
   } = useLikeContext();
+  const { toggleFeed } = useToggleFeed();
 
   // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
@@ -45,7 +47,7 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
   return (
     <div>
       <Link href={`/users/${userId}/following`}>
-        <a className='mr-4 text-xs hover:text-basic-pink md:text-base'>
+        <a className='mr-4 text-xs hover:text-basic-pink md:text-base' onClick={toggleFeed}>
           <span className='mr-2 underline'>{userLikedCount}</span>
           いいね
         </a>

@@ -23,10 +23,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
   // currentUserと指定userIdが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
-  // const { currentUserLikedPostsIds } = useLikeContext();
   console.log(`LikePostListItemのlikedPost.liked:${likedPost.liked}`);
-  // const isCurrentUserLiked = currentUserLikedPostsIds?.some((id) => id === likedPost.id);
-  // const isCurrentUserLiked = currentUserLikedPostsIds?.some((id) => id === likedPost.id) || false;
 
   return (
     <li key={likedPost.id} className='basic-border my-px'>
@@ -57,12 +54,12 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
           <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
-            {currentUser && currentUser.id !== likedPost.userId && (
+            {/* {currentUser && currentUser.id !== likedPost.userId && (
               // 2
-              // 指定userIdのlikedPostのidとliked（真偽値）
+              // 指定userのlikedPostのidと、currentUserのliked（真偽値）
               <LikeButtonIcon postId={likedPost.id} liked={likedPost.liked} />
-              // <LikeButtonIcon postId={likedPost.id} liked={isCurrentUserLiked} />
-            )}
+            )} */}
+            <LikeButtonIcon postId={likedPost.id} liked={likedPost.liked} />
             {currentUser?.id === likedPost.userId && (
               <a
                 className='hover:cursor-pointer'

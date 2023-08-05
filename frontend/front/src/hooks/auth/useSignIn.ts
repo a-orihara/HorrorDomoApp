@@ -5,7 +5,6 @@ import { signIn } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useFollowContext } from '../../contexts/FollowContext';
-import { useLikeContext } from '../../contexts/LikeContext';
 import { usePostContext } from '../../contexts/PostContext';
 import { SignInParams } from '../../types/user';
 
@@ -22,8 +21,8 @@ export const useSignIn = () => {
   const { handleGetCurrentUserPostList } = usePostContext();
   // サインインユーザーのfollowing数とfollowers数を管理
   const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
-  // サインインユーザーがいいねした投稿の集合と、その総数を管理
-  const { handleGetAllLikes } = useLikeContext();
+  // いらない？サインインユーザーがいいねした投稿の集合と、その総数を管理
+  // const { handleGetCurrentUserLikedPosts } = useLikeContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -49,7 +48,7 @@ export const useSignIn = () => {
         handleGetFollowingCountByUserId(res.data.data.id);
         handleGetFollowersCountByUserId(res.data.data.id);
         // サインインユーザーがいいねした投稿の集合と、その総数を取得しセット
-        handleGetAllLikes(res.data.data.id);
+        // handleGetCurrentUserLikedPosts(res.data.data.id);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

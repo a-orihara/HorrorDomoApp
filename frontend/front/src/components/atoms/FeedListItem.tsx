@@ -25,6 +25,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   // const userId = currentUser?.id;
   const { handleDeletePost } = useDeletePost();
   // console.log(`feedPost:の${feedPost.liked}`);
+  // console.log(`feedListItemのpost:${JSON.stringify(feedPost)}`);
 
   return (
     <li key={feedPost.id} className='my-px bg-slate-100'>
@@ -60,7 +61,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
             {/* {currentUser && <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />}
              */}
             {currentUser && currentUser.id !== feedPost.userId && (
-              <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} userId={currentUser.id} />
+              <LikeButtonIcon postId={feedPost.id} liked={feedPost.liked} />
             )}
             {currentUser?.id === feedPost.userId && (
               <a

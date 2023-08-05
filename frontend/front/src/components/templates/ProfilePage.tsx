@@ -10,6 +10,7 @@ import Pagination from '../molecules/Pagination';
 
 import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
+import LikedPostArea from '../organisms/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
 const ProfilePage = () => {
@@ -19,7 +20,7 @@ const ProfilePage = () => {
   const { id } = router.query;
   // 4
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
-  console.log(`ProfilePage.tsxのuserId: ${userId}`);
+  // console.log(`ProfilePage.tsxのuserId: ${userId}`);
   // 選択したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(userId);
   // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
@@ -53,10 +54,11 @@ const ProfilePage = () => {
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
-        {/* 6 */}
+        {/* 6 post:投稿、user:投稿者のuserで、指定idのUser */}
         <PostList posts={posts} user={user}></PostList>
         {/* 7 */}
         <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+        <LikedPostArea user={user}></LikedPostArea>
       </div>
     </div>
   );

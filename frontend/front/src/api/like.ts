@@ -39,9 +39,28 @@ export const isAlreadyLiked = (userId: number, postId: number) => {
   });
 };
 
-// currentUserがいいねした投稿の集合と、その総数を取得する
-export const getAllLikes = (userId: number) => {
+// 指定userIDがいいねした投稿の集合と、その総数を取得する
+export const getUserLikedPostsByUserId = (userId: number, page: number, itemsPerPage: number) => {
   return client.get(`/users/${userId}/all_likes`, {
+    params: {
+      // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います
+      page: page + 1,
+      // 1ページ当たりの表示件数
+      per_page: itemsPerPage,
+      // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
+      user_id: userId,
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
+// 指定userIDのいいね総数を取得する
+export const getTotalLikesCountByUserId = (userId: number) => {
+  return client.get(`/users/${userId}/total_likes_count`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
       client: Cookies.get('_client'),

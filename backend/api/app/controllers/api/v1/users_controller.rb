@@ -8,7 +8,6 @@ class Api::V1::UsersController < ApplicationController
     :is_following,
     :all_likes,
     :total_likes_count,
-    :liked_posts_ids
   ]
   before_action :set_user, only: [:show]
 
@@ -126,24 +125,22 @@ class Api::V1::UsersController < ApplicationController
     if user
       # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
-      # 指定ユーザーのいいねの真偽値情報を取得
+      # currrentUserのいいねの真偽値情報を取得（いいねするのはcurrrentUserのため）
       liked_posts_with_likes = liked_posts.map do |post|
-          # いいねしているかの真偽値をlikedに代入
-          # liked = user.already_liked?(post)
-          # 2
-          # post.as_json.merge(liked: liked)
+          # currrentUserがいいねしているかの真偽値をlikedに代入
           liked = current_api_v1_user.already_liked?(post)
+          # 2
           post.as_json.merge(liked: liked)
       end
-      # liked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
+      # 指定userのliked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
       liked_users = liked_posts.map { |post| post.user }.uniq
-      # いいねの総数を取得
+      # 指定userのいいねの総数を取得
       liked_users_with_avatar = liked_users.map do |user|
           avatar_url = generate_avatar_url(user)
           user.as_json.merge(avatar_url: avatar_url)
       end
       total_liked_counts = liked_posts.count
-      # 1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づくuserの集合を返す
+      # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づく集合を返す
       render json: {
         status: '200',
         liked_posts: liked_posts_with_likes,
@@ -153,15 +150,6 @@ class Api::V1::UsersController < ApplicationController
     else
       render json: { status: '404', message: 'ユーザーが見つかりません' }, status: :not_found
     end
-  end
-
-  # currentUserがいいねしたpostのpost_idを配列で返す
-  def liked_posts_ids
-    puts "liked_posts_idsアクションが発火"
-    user = current_api_v1_user
-    # pluck: liked_posts関連付けに対してカラムidの値を抽出して配列として取得する。
-    liked_posts_ids = user.liked_posts.pluck(:id)
-    render json: { status: '200', liked_posts_ids: liked_posts_ids }
   end
 
   private

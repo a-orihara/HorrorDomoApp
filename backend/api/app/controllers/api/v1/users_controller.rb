@@ -124,13 +124,15 @@ class Api::V1::UsersController < ApplicationController
     # 指定ユーザーIDでユーザーを検索
     user = User.find(params[:id])
     if user
-      # 8
+      # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
       # 指定ユーザーのいいねの真偽値情報を取得
       liked_posts_with_likes = liked_posts.map do |post|
           # いいねしているかの真偽値をlikedに代入
-          liked = user.already_liked?(post)
+          # liked = user.already_liked?(post)
           # 2
+          # post.as_json.merge(liked: liked)
+          liked = current_api_v1_user.already_liked?(post)
           post.as_json.merge(liked: liked)
       end
       # liked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
@@ -153,7 +155,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-
+  # currentUserがいいねしたpostのpost_idを配列で返す
   def liked_posts_ids
     puts "liked_posts_idsアクションが発火"
     user = current_api_v1_user

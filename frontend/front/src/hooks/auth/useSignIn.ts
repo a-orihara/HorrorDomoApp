@@ -49,6 +49,7 @@ export const useSignIn = () => {
         handleGetFollowersCountByUserId(res.data.data.id);
         // サインインユーザーがいいねした投稿の集合と、その総数を取得しセット
         // handleGetCurrentUserLikedPosts(res.data.data.id);
+        // handleGetCurrentUserLikedPostsIds(res.data.data.id);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

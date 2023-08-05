@@ -69,17 +69,6 @@ export const getTotalLikesCountByUserId = (userId: number) => {
   });
 };
 
-// 指定userIDのいいね総数を取得する
-export const getCurrentUserLikedPostsIds = (userId: number) => {
-  return client.get(`/users/${userId}/liked_posts_ids`, {
-    headers: {
-      'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
-    },
-  });
-};
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

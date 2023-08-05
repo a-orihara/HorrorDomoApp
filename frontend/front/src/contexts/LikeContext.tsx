@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { getCurrentUserLikedPostsIds, getTotalLikesCountByUserId, getUserLikedPostsByUserId } from '../api/like';
+import { getTotalLikesCountByUserId, getUserLikedPostsByUserId } from '../api/like';
 import { Like } from '../types/like';
 
 type LikeProviderProps = {
@@ -10,13 +10,11 @@ type LikeContextProps = {
   // 1
   currentUserLikedPosts: Like[] | undefined;
   currentUserLikedPostCount: number | undefined;
-  currentUserLikedPostsIds: number[] | undefined;
   otherUserLikedPosts: Like[] | undefined;
   otherUserLikedPostsCount: number | undefined;
   handleGetTotalLikesCountByCurrentUserId: (userId: number | undefined) => Promise<void>;
   handleGetTotalLikesCountByOtherUserId: (userId: number | undefined) => Promise<void>;
   handleGetCurrentUserLikedPosts: (userId: number | undefined, page: number, itemsPerPage: number) => Promise<void>;
-  handleGetCurrentUserLikedPostsIds: (userId: number | undefined) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
@@ -24,7 +22,6 @@ const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 export const LikeProvider = ({ children }: LikeProviderProps) => {
   const [currentUserLikedPosts, setCurrentUserLikedPosts] = useState<Like[]>([]);
   const [currentUserLikedPostCount, setCurrentUserLikedPostCount] = useState<number | undefined>(undefined);
-  const [currentUserLikedPostsIds, setCurrentUserLikedPostsIds] = useState<number[] | undefined>(undefined);
   const [otherUserLikedPosts, setOtherUserLikedPosts] = useState<Like[]>([]);
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
@@ -67,21 +64,6 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
     }
   }, []);
 
-  const handleGetCurrentUserLikedPostsIds = useCallback(async (userId: number | undefined) => {
-    if (!userId) return;
-    try {
-      // currentUserがいいねした投稿の集合と、その総数を取得する
-      const data = await getCurrentUserLikedPostsIds(userId);
-      if (data.status === 200) {
-        const likedPostsIds: number[] = data.data.likedPostsIds;
-        setCurrentUserLikedPostsIds(likedPostsIds);
-      }
-    } catch (err) {
-      // ◆エラー仮実装
-      alert('ユーザーが存在しません');
-    }
-  }, []);
-
   const handleGetTotalLikesCountByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -104,13 +86,11 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
       value={{
         currentUserLikedPosts,
         currentUserLikedPostCount,
-        currentUserLikedPostsIds,
         handleGetTotalLikesCountByCurrentUserId,
         otherUserLikedPosts,
         otherUserLikedPostsCount,
         handleGetTotalLikesCountByOtherUserId,
         handleGetCurrentUserLikedPosts,
-        handleGetCurrentUserLikedPostsIds,
       }}
     >
       {children}

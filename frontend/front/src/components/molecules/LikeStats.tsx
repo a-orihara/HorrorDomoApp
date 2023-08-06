@@ -1,14 +1,14 @@
-import Link from 'next/link';
 import { useEffect } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useLikeContext } from '../../contexts/LikeContext';
-import { useToggleFeed } from '../../hooks/useToggleFeed';
 
 type LikeStatsProps = {
   userId: number | undefined;
+  // FeedとLikedPostAreaの表示切替を行う関数。
+  toggleFeed: () => void;
 };
 
-export const LikeStats = ({ userId }: LikeStatsProps) => {
+export const LikeStats = ({ userId, toggleFeed }: LikeStatsProps) => {
   const { currentUser } = useAuthContext();
   const {
     currentUserLikedPostCount,
@@ -16,7 +16,6 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
     otherUserLikedPostsCount,
     handleGetTotalLikesCountByOtherUserId,
   } = useLikeContext();
-  const { toggleFeed } = useToggleFeed();
 
   // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
@@ -42,16 +41,20 @@ export const LikeStats = ({ userId }: LikeStatsProps) => {
   // 3
   const userLikedCount =
     currentUser && userId === currentUser.id ? currentUserLikedPostCount : otherUserLikedPostsCount;
-  console.log(`LikeStatsのuserId:${userId}`);
 
   return (
     <div>
-      <Link href={`/users/${userId}/following`}>
+      {/* <Link href={`/users/${userId}/following`}>
         <a className='mr-4 text-xs hover:text-basic-pink md:text-base' onClick={toggleFeed}>
           <span className='mr-2 underline'>{userLikedCount}</span>
           いいね
         </a>
-      </Link>
+      </Link> */}
+      {/* linkをクリックすると、FeedとLikedPostAreaの表示を切替る */}
+      <a className='mr-4 text-xs hover:text-basic-pink md:text-base' onClick={toggleFeed}>
+        <span className='mr-2 underline'>{userLikedCount}</span>
+        いいね
+      </a>
     </div>
   );
 };

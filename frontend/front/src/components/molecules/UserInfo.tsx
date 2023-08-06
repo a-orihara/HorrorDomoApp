@@ -5,9 +5,11 @@ import { LikeStats } from './LikeStats';
 type UserInfoProps = {
   user: User;
   postsCount: number | undefined;
+  // FeedとLikedPostAreaの表示切替を行う関数。
+  toggleFeed: () => void;
 };
 
-const UserInfo = ({ user, postsCount }: UserInfoProps) => {
+const UserInfo = ({ user, postsCount, toggleFeed }: UserInfoProps) => {
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   return (
     <div className='flex  flex-col rounded-xl border bg-red-200 shadow-md md:p-1'>
@@ -40,7 +42,8 @@ const UserInfo = ({ user, postsCount }: UserInfoProps) => {
 
       <div className='flex flex-row justify-evenly lg:mb-4 lg:mt-4'>
         <FollowStats userId={user.id}></FollowStats>
-        <LikeStats userId={user.id}></LikeStats>
+        {/* // toggleFeed:FeedとLikedPostAreaの表示切替を行う関数。 */}
+        <LikeStats userId={user.id} toggleFeed={toggleFeed}></LikeStats>
       </div>
 
       <section className='mb-2 flex flex-col bg-blue-200'>

@@ -19,7 +19,7 @@ const ProfilePage = () => {
   // 4
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // console.log(`ProfilePage.tsxのuserId: ${userId}`);
-  // 選択したidに紐付くuserとpostsを取得
+  // queryパラメータから指定したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(userId);
   const { currentUserPostsCount } = usePostContext();
   const { currentUser } = useAuthContext();
@@ -51,8 +51,11 @@ const ProfilePage = () => {
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
-        <PostArea user={user}></PostArea>
-        <LikedPostArea user={user}></LikedPostArea>
+        <div className='flex-1 bg-green-200 lg:w-full'>
+          {showLikedPostArea ? <LikedPostArea user={user}></LikedPostArea> : <PostArea user={user}></PostArea>}
+        </div>
+        {/* <PostArea user={user}></PostArea>
+        <LikedPostArea user={user}></LikedPostArea> */}
       </div>
     </div>
   );

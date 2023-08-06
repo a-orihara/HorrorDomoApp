@@ -5,6 +5,7 @@ import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
+import { useToggleFeed } from '../../hooks/useToggleFeed';
 import { FollowForm } from '../molecules/FollowForm';
 import Pagination from '../molecules/Pagination';
 
@@ -28,6 +29,8 @@ const ProfilePage = () => {
   const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, userId);
   const { currentUserPostsCount } = usePostContext();
   const { currentUser } = useAuthContext();
+  // FeedとLikedPostAreaの表示切替の状態変数と関数。
+  const { showLikedPostArea, toggleFeed } = useToggleFeed();
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
@@ -47,7 +50,7 @@ const ProfilePage = () => {
 
       <div className='lg:w-96'>
         {/* 5  if (!user)の通過により、 user: Userになる */}
-        <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
+        <UserInfo user={user} postsCount={currentUserPostsCount} toggleFeed={toggleFeed}></UserInfo>
       </div>
       <div className='flex-1 lg:w-full'>
         {/* 8 */}

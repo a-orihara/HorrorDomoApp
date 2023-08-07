@@ -7,7 +7,7 @@ class Api::V1::UsersController < ApplicationController
     :followers,
     :is_following,
     :all_likes,
-    :total_likes_count,
+    :total_likes_count
   ]
   before_action :set_user, only: [:show]
 
@@ -124,7 +124,7 @@ class Api::V1::UsersController < ApplicationController
     user = User.find(params[:id])
     if user
       # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
-      liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
+      liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)
       # currrentUserのいいねの真偽値情報を取得（いいねするのはcurrrentUserのため）
       liked_posts_with_likes = liked_posts.map do |post|
           # currrentUserがいいねしているかの真偽値をlikedに代入
@@ -133,11 +133,12 @@ class Api::V1::UsersController < ApplicationController
           post.as_json.merge(liked: liked)
       end
       # 指定userのliked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
-      liked_users = liked_posts.map { |post| post.user }.uniq
+      # ↓ 書換:liked_users = liked_posts.map { |post| post.user }.uniq
+      liked_users = liked_posts.map(&:user).uniq
       # 指定userのいいねの総数を取得
-      liked_users_with_avatar = liked_users.map do |user|
-          avatar_url = generate_avatar_url(user)
-          user.as_json.merge(avatar_url: avatar_url)
+      liked_users_with_avatar = liked_users.map do |liked_user|
+        avatar_url = generate_avatar_url(liked_user)
+        liked_user.as_json.merge(avatar_url: avatar_url)
       end
       total_liked_counts = liked_posts.count
       # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づく集合を返す
@@ -300,8 +301,8 @@ includesメソッドに渡す引数は、テーブル名ではなくアソシエ
 つまり、こう
 [
   # いいねオブジェクトの例
-  <Like id: 1, user_id: 1, post_id: 2, created_at: "2023-06-01 00:00:00", updated_at: "2023-06-01 00:00:00",
-    post: <Post id: 2, title: "Post title", content: "Post content", user_id: 3, created_at: "2023-06-01 00:00:00", updated_at: "2023-06-01 00:00:00">>,
+  <Like id: 1, user_id: 1, post_id: 2, created_at: "2023-...", updated_at: "2023-...",
+    post: <Post id: 2, title: "Post title", content: "Post content", user_id: 3, created_at: "20...", updated_at: "20...">>,
 ...
 ]
 したがって、次の行の `user_likes.map { |like| like.post }` で各 `Like` オブジェクトから `post` を取り出し
@@ -356,6 +357,9 @@ N+1問題は、まず1回のクエリで「親」データを取得し（これ�
 
 ================================================================================================
 8
+liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)
+* map(&:post) = map { |like| like.post }
+------------------------------------------------------------------------------------------------
 # n+1問題が発生するため、user.likes.allで取得しない。
 # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
 ------------------------------------------------------------------------------------------------
@@ -365,7 +369,7 @@ user_likes = user.likes.includes(:post)
 # includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
 liked_posts = user_likes.map { |like| like.post }.page(page).per(per_page)
 ------------------------------------------------------------------------------------------------
-当初のコードがうまくいかなかった理由
+当初のコードがkaminariでうまくいかなかった理由
 1. **メソッドチェーンの順序の問題**:
 - 最初のコードでは、`page`メソッドが配列に対して呼び出されています。
 - `user_likes.map { |like| like.post }` の結果は通常のRubyの配列であり、Kaminariのページネーションメソッド
@@ -378,4 +382,20 @@ liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| l
 切に動作します。
 - その後、ページネーションが適用されたリレーションに対して`map`メソッドを使用して、必要なポストを取得しています。
 以上のように、ページネーションメソッド`page`の挙動の問題ではなく、メソッドチェーンの順序による問題でした。
+------------------------------------------------------------------------------------------------
+. `user.likes.includes(:post).page(page).per(per_page)`についての説明:
+- `user.likes`: この部分で、指定された`user`がした"いいね"の一覧を取得します。ただし、ここで返されるのは"いいね
+"のデータです。
+- `.includes(:post)`: "いいね"が持つ投稿のデータを一緒にプリロードすることで、N+1問題を解消します。これにより
+、後続の処理で"いいね"に関連する投稿にアクセスする際に追加のデータベースクエリを発行することなくデータにアクセスでき
+るようになります。ただここまでではまだ実際の投稿データは取得していません。includes(:post)の処理をした、
+user.likesになります。
+- `.page(page).per(per_page)`: これにより、取得する"いいね"の一覧をページネーションの制限に従って絞り込むこと
+ができます。
+この時点で、取得されるのは"いいね"のデータの一覧です。しかし、次の処理では実際に"いいね"された投稿のデータが欲しい
+ため、`.map { |like| like.post }`という操作を行っています。
+- `.map { |like| like.post }`: これにより、各"いいね"のデータから関連する投稿(`post`)のデータのみを取り出し
+ます。結果として、`liked_posts`にはユーザーが"いいね"した投稿のデータのみの配列が格納されます。
+つまり、`user.likes`の段階では"いいね"のデータが返されるのですが、実際に必要なのは"いいね"した投稿自体のデータな
+ので、`.map { |like| like.post }`を使用して投稿のデータのみを抽出しています。
 =end

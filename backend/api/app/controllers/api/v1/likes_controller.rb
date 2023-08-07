@@ -5,11 +5,9 @@ class Api::V1::LikesController < ApplicationController
   before_action :set_like, only: [:destroy]
 
   # 1
-
   def index
-
-
   end
+
   def create
     puts "Likeのcreateアクションが発火"
     # 投稿に対していいねを作成する

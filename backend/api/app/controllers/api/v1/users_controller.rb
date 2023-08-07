@@ -140,7 +140,8 @@ class Api::V1::UsersController < ApplicationController
         avatar_url = generate_avatar_url(liked_user)
         liked_user.as_json.merge(avatar_url: avatar_url)
       end
-      total_liked_counts = liked_posts.count
+      # 1P当たりの数ではなく総数を代入
+      total_liked_counts = user.likes.count
       # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づく集合を返す
       render json: {
         status: '200',

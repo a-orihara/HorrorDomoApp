@@ -5,13 +5,8 @@ class Api::V1::LikesController < ApplicationController
   before_action :set_like, only: [:destroy]
 
   # 1
-
-  def index
-
-
-  end
   def create
-    puts "Likeのcreateアクションが発火"
+    logger.info "Likeのcreateアクションが発火"
     # 投稿に対していいねを作成する
     like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
@@ -22,7 +17,7 @@ class Api::V1::LikesController < ApplicationController
   end
 
   def destroy
-    puts "Likeのdestroyアクションが発火"
+    logger.info "Likeのdestroyアクションが発火"
     if @like.destroy
       render json: { status: 'SUCCESS', message: 'Unliked the post', data: @post }
     else

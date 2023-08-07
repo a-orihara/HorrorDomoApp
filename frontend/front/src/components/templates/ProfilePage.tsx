@@ -3,14 +3,12 @@ import { useEffect } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
-import { usePostsPagination } from '../../hooks/post/usePostsPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
+import { useToggleFeed } from '../../hooks/useToggleFeed';
 import { FollowForm } from '../molecules/FollowForm';
-import Pagination from '../molecules/Pagination';
-
-import PostList from '../molecules/PostList';
 import UserInfo from '../molecules/UserInfo';
 import LikedPostArea from '../organisms/LikedPostArea';
+import PostArea from '../organisms/PostArea';
 import Sidebar from '../organisms/Sidebar';
 // ================================================================================================
 const ProfilePage = () => {
@@ -21,13 +19,12 @@ const ProfilePage = () => {
   // 4
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // console.log(`ProfilePage.tsxのuserId: ${userId}`);
-  // 選択したidに紐付くuserとpostsを取得
+  // queryパラメータから指定したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(userId);
-  // const { posts, handleGetPostsByUserId } = useGetPostByUserId(id);
-  // この5は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
-  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, userId);
   const { currentUserPostsCount } = usePostContext();
   const { currentUser } = useAuthContext();
+  // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
+  const { showLikedPostArea, toggleFeed } = useToggleFeed();
   // ------------------------------------------------------------------------------------------------
   // 2
   useEffect(() => {
@@ -47,18 +44,23 @@ const ProfilePage = () => {
 
       <div className='lg:w-96'>
         {/* 5  if (!user)の通過により、 user: Userになる */}
-        <UserInfo user={user} postsCount={currentUserPostsCount}></UserInfo>
+        <UserInfo
+          user={user}
+          postsCount={currentUserPostsCount}
+          toggleFeed={toggleFeed}
+          showLikedPostArea={showLikedPostArea}
+        ></UserInfo>
       </div>
       <div className='flex-1 lg:w-full'>
         {/* 8 */}
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
-        {/* 6 post:投稿、user:投稿者のuserで、指定idのUser */}
-        <PostList posts={posts} user={user}></PostList>
-        {/* 7 */}
-        <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
-        <LikedPostArea user={user}></LikedPostArea>
+        <div className='flex-1 bg-green-200 lg:w-full'>
+          {showLikedPostArea ? <LikedPostArea user={user}></LikedPostArea> : <PostArea user={user}></PostArea>}
+        </div>
+        {/* <PostArea user={user}></PostArea>
+        <LikedPostArea user={user}></LikedPostArea> */}
       </div>
     </div>
   );
@@ -161,22 +163,6 @@ const id: string | string[] | undefinedは、idが文字列型、文字列の配
 5
 [user]は、useGetUserById(id)からのuser（指定したidのuser情報）
 [currentUserPostsCount]は、usePostContextからのcurrentUserPostsCount（カレントユーザーの投稿数）
-
-================================================================================================
-6
-postsは、usePostsPaginationからのposts（指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分
-のpost）
-userは、useGetUserById(id)からのuser（指定したidのuser情報）
-
-================================================================================================
-7
-totalPostsCountは、usePostsPaginationからのtotalPostsCount（指定したidのuserの投稿総数）
-handlePageChangeは、usePostsPaginationからのhandlePageChange（ページ切り替えで発火。ページネーションのペー
-ジ変更時の処理[カレントページのset。ページ切り替え]）
-------------------------------------------------------------------------------------------------
-ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
-それはカレントページが依存配列で、カレントページが変更されるたびに、handleGetPostListByUserIdが再実行されるため
-です。
 
 ================================================================================================
 8

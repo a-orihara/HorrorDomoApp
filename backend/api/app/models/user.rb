@@ -67,7 +67,8 @@ class User < ApplicationRecord
 
   # 18 ユーザーがその投稿をいいね済みかどうかを返す
   def already_liked?(post)
-    self.likes.exists?(post_id: post.id)
+    # ↓書換: self.likes.exists?(post_id: post.id)
+    likes.exists?(post_id: post.id)
   end
 
   # 15 Feed（自ユーザーとフォローユーザーの投稿データ）を返す。戻り値はpostの配列

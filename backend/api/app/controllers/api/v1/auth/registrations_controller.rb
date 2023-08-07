@@ -7,13 +7,13 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   # before_action :configure_account_update_params, only: [:update]
 
   def create
-    puts "createが発火:DeviseTokenAuth::RegistrationsController"
+    logger.info "createが発火:DeviseTokenAuth::RegistrationsController"
     super
   end
 
   # 6
   def update
-    puts "updateが発火:DeviseTokenAuth::RegistrationsController"
+    logger.info "updateが発火:DeviseTokenAuth::RegistrationsController"
     avatar_url = generate_avatar_url(@resource)
     @resource.assign_attributes(account_update_params)
     @avatar_url = avatar_url

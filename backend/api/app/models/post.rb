@@ -2,7 +2,7 @@
 class Post < ApplicationRecord
   # 2 postは一人のuserに属するので単数形で書く
   belongs_to :user
-  has_many :likes
+  has_many :likes, dependent: :destroy
   # 説明はUserモデルの16を参照
   has_many :liked_users, through: :likes, source: :user
   # 3 { self.order(created_at: :desc) }のselfが省略されている

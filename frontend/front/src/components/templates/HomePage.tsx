@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
+import { useToggleFeed } from '../../hooks/useToggleFeed';
 import CreatePostLink from '../atoms/CreatePostLink';
 import UserInfo from '../molecules/UserInfo';
-import Feed from '../organisms/Feed';
+import FeedArea from '../organisms/FeedArea';
 import LikedPostArea from '../organisms/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
 
@@ -13,10 +14,11 @@ const HomePage = () => {
   // showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
   // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
   const { showWelcomeMessage } = useFirstTimeLogin();
-  // console.log('HomePage.tsxのcurrentUser:', currentUser);
   const { currentUserPostsCount } = usePostContext();
+  // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
+  const { showLikedPostArea, toggleFeed } = useToggleFeed();
 
-  // console.log(`ホームページのカレントユーザー${JSON.stringify(currentUser)}`);
+  console.log(`ホームページのshowLikedPostArea:${showLikedPostArea}`);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -32,13 +34,24 @@ const HomePage = () => {
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!
               </h1>
             )}
-            <UserInfo user={currentUser} postsCount={currentUserPostsCount}></UserInfo>
+            {/* toggleFeed:FeedAreaとLikedPostAreaの表示切替の関数。 */}
+            <UserInfo
+              user={currentUser}
+              postsCount={currentUserPostsCount}
+              // FeedAreaとLikedPostAreaの表示切替の関数。
+              toggleFeed={toggleFeed}
+              // FeedAreaとLikedPostAreaの表示切替の状態変数。
+              showLikedPostArea={showLikedPostArea}
+            ></UserInfo>
             <CreatePostLink></CreatePostLink>
           </div>
 
           <div className='flex-1 bg-green-200 lg:w-full'>
-            <Feed user={currentUser}></Feed>
-            <LikedPostArea user={currentUser}></LikedPostArea>
+            {showLikedPostArea ? (
+              <LikedPostArea user={currentUser}></LikedPostArea>
+            ) : (
+              <FeedArea user={currentUser}></FeedArea>
+            )}
           </div>
         </div>
       ) : (

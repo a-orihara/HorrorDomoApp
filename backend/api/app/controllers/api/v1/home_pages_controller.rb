@@ -6,7 +6,6 @@ class Api::V1::HomePagesController < ApplicationController
       page = params[:page] || 1
       per_page = params[:per_page] || 10
       if params[:user_id]
-        user = User.find_by(id: params[:user_id])
         # feed_itemはpostインスタンスの集合
         feed_items = current_api_v1_user.feed.page(page).per(per_page)
         # feed_itemsにいいねしているかの真偽値を持たせる

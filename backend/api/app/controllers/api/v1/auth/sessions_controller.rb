@@ -1,7 +1,7 @@
 class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
 
   def destroy
-    puts "destroyが発火:DeviseTokenAuth::SessionsController"
+    logger.info "destroyが発火:DeviseTokenAuth::SessionsController"
     super
   end
 

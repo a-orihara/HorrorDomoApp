@@ -4,7 +4,7 @@ class Api::V1::Admin::UsersController < ApplicationController
 
   # 1
   def destroy
-    puts "destroyアクションが発火"
+    logger.info "destroyアクションが発火"
     @user.destroy
     # res.data.status = 'success' となる
     render json: { status: 'success', message: 'ユーザーが削除されました。' }

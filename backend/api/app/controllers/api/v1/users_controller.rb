@@ -14,7 +14,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users
   # 3 全てのユーザーをページネーション付きで取得するメソッド
   def index
-    puts "indexアクションが発火"
+    logger.info "indexアクションが発火"
     # ページ番号
     page = params[:page] || 1
     # 1ページあたりの表示件数
@@ -30,7 +30,7 @@ class Api::V1::UsersController < ApplicationController
 
   # 5
   def show
-    puts "showアクションが発火"
+    logger.info "showアクションが発火"
     # generate_avatar_urlの戻り値はavatarのURLかnil
     avatar_url = generate_avatar_url(@user)
     render json: @user.as_json.merge(avatar_url: avatar_url)
@@ -39,7 +39,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:id/following（memberメソッドでrouteは作成）
   # followingはmodels/user.rbで定義
   def following
-    puts "followingアクションが発火"
+    logger.info "followingアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
@@ -69,7 +69,7 @@ class Api::V1::UsersController < ApplicationController
   # GET /api/v1/users/:id/followers（memberメソッドでrouteは作成）
   # followersはmodels/user.rbで定義
   def followers
-    puts "followersアクションが発火"
+    logger.info "followersアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
@@ -105,7 +105,7 @@ class Api::V1::UsersController < ApplicationController
 
   # 7 ユーザーの総いいね数のみを取得する
   def total_likes_count
-    puts "total_likes_countアクションが発火"
+    logger.info "total_likes_countアクションが発火"
     user = User.find(params[:id])
     if user
       total_liked_counts = user.likes.count
@@ -117,7 +117,7 @@ class Api::V1::UsersController < ApplicationController
 
   # 6 ユーザーがいいねした投稿の1P当たりの集合と、総いいね数を返す
   def all_likes
-    puts "all_likesアクションが発火"
+    logger.info "all_likesアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     # 指定ユーザーIDでユーザーを検索

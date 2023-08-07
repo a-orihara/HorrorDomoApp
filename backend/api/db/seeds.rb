@@ -76,7 +76,7 @@ image_paths = %w[
   end
 end
 
-
+# 全てのユーザー
 allusers = User.all
 following = allusers[2..30]
 followers = allusers[4..31]
@@ -90,6 +90,23 @@ followers = allusers[4..31]
 following.each { |followed| user2.follow(followed) }
 # user2をフォロー
 followers.each { |follower| follower.follow(user2) }
+
+# 全てのユーザーをループ
+allusers.each do |user|
+  # すべての投稿から自分の投稿を除外（自分の投稿を除外した他のユーザーの投稿を取得）
+  other_user_posts = Post.where.not(user_id: user.id)
+
+  # 20回のループの中で、ランダムに投稿を選び、already_liked?メソッドを使ってその投稿を既にいいねしているか確認
+  20.times do
+    # 10回のループの中で、ランダムに投稿を選ぶ
+    post = other_user_posts.sample
+    # already_liked?メソッドを使ってその投稿を既にいいねしているか確認、すでにいいねしている場合はスキップ
+    next if user.already_liked?(post)
+    user.likes.create!(post_id: post.id)
+  end
+end
+
+
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

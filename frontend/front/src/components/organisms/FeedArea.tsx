@@ -3,12 +3,12 @@ import { User } from '../../types/user';
 import FeedList from '../molecules/FeedList';
 import Pagination from '../molecules/Pagination';
 
-type FeedProps = {
+type FeedAreaProps = {
   user: User;
 };
 
 // user:currentUser
-const Feed = ({ user }: FeedProps) => {
+const FeedArea = ({ user }: FeedAreaProps) => {
   // feedUsers:投稿ユーザーの集合、user.id（currentUser）を使って、currentUserのfeedUsersを取得
   const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
 
@@ -22,4 +22,4 @@ const Feed = ({ user }: FeedProps) => {
   );
 };
 
-export default Feed;
+export default FeedArea;

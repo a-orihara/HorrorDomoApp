@@ -6,9 +6,10 @@ type LikeStatsProps = {
   userId: number | undefined;
   // FeedとLikedPostAreaの表示切替を行う関数。
   toggleFeed: () => void;
+  showLikedPostArea: boolean;
 };
 
-export const LikeStats = ({ userId, toggleFeed }: LikeStatsProps) => {
+export const LikeStats = ({ userId, toggleFeed, showLikedPostArea }: LikeStatsProps) => {
   const { currentUser } = useAuthContext();
   const {
     currentUserLikedPostCount,
@@ -16,11 +17,10 @@ export const LikeStats = ({ userId, toggleFeed }: LikeStatsProps) => {
     otherUserLikedPostsCount,
     handleGetTotalLikesCountByOtherUserId,
   } = useLikeContext();
-
+  console.log(`LikeStatsのshowLikedPostAreaは、${showLikedPostArea}`);
   // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
     // 1
-    console.log('ここがはっか');
     // サインアウト時に発火するため、currentUserがundefinedならば、以下の処理をスキップ
     if (!currentUser) return;
     if (currentUser && userId === currentUser.id) {
@@ -37,6 +37,7 @@ export const LikeStats = ({ userId, toggleFeed }: LikeStatsProps) => {
     currentUser?.id,
     currentUser,
   ]);
+  const bgColor = showLikedPostArea ? 'bg-blue-500' : '';
 
   // 3
   const userLikedCount =
@@ -51,7 +52,8 @@ export const LikeStats = ({ userId, toggleFeed }: LikeStatsProps) => {
         </a>
       </Link> */}
       {/* linkをクリックすると、FeedとLikedPostAreaの表示を切替る */}
-      <a className='mr-4 text-xs hover:text-basic-pink md:text-base' onClick={toggleFeed}>
+      <a className={`mr-4 cursor-pointer text-xs hover:text-basic-pink md:text-base ${bgColor}`} onClick={toggleFeed}>
+        {/* <a className={`mr-4 cursor-pointer bg-blue-200 text-xs hover:text-basic-pink md:text-base`} onClick={toggleFeed}> */}
         <span className='mr-2 underline'>{userLikedCount}</span>
         いいね
       </a>

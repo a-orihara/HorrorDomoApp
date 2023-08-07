@@ -23,7 +23,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
   // currentUserと指定userIdが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
-  console.log(`LikePostListItemのlikedPost.liked:${likedPost.liked}`);
+  // console.log(`LikePostListItemのlikedPost.liked:${likedPost.liked}`);
 
   return (
     <li key={likedPost.id} className='basic-border my-px'>

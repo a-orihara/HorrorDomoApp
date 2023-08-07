@@ -5,7 +5,7 @@ import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import { useToggleFeed } from '../../hooks/useToggleFeed';
 import CreatePostLink from '../atoms/CreatePostLink';
 import UserInfo from '../molecules/UserInfo';
-import Feed from '../organisms/Feed';
+import FeedArea from '../organisms/FeedArea';
 import LikedPostArea from '../organisms/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
 
@@ -16,7 +16,7 @@ const HomePage = () => {
   const { showWelcomeMessage } = useFirstTimeLogin();
   // console.log('HomePage.tsxのcurrentUser:', currentUser);
   const { currentUserPostsCount } = usePostContext();
-  // FeedとLikedPostAreaの表示切替の状態変数と関数。
+  // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
 
   console.log(`ホームページのshowLikedPostArea:${showLikedPostArea}`);
@@ -35,13 +35,22 @@ const HomePage = () => {
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!
               </h1>
             )}
-            {/* toggleFeed:FeedとLikedPostAreaの表示切替の関数。 */}
-            <UserInfo user={currentUser} postsCount={currentUserPostsCount} toggleFeed={toggleFeed}></UserInfo>
+            {/* toggleFeed:FeedAreaとLikedPostAreaの表示切替の関数。 */}
+            <UserInfo
+              user={currentUser}
+              postsCount={currentUserPostsCount}
+              toggleFeed={toggleFeed}
+              showLikedPostArea={showLikedPostArea}
+            ></UserInfo>
             <CreatePostLink></CreatePostLink>
           </div>
 
           <div className='flex-1 bg-green-200 lg:w-full'>
-            {showLikedPostArea ? <LikedPostArea user={currentUser}></LikedPostArea> : <Feed user={currentUser}></Feed>}
+            {showLikedPostArea ? (
+              <LikedPostArea user={currentUser}></LikedPostArea>
+            ) : (
+              <FeedArea user={currentUser}></FeedArea>
+            )}
           </div>
         </div>
       ) : (

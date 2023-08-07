@@ -23,7 +23,7 @@ const ProfilePage = () => {
   const { user, handleGetUserById } = useGetUserById(userId);
   const { currentUserPostsCount } = usePostContext();
   const { currentUser } = useAuthContext();
-  // FeedとLikedPostAreaの表示切替の状態変数と関数。
+  // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
   // ------------------------------------------------------------------------------------------------
   // 2
@@ -44,7 +44,12 @@ const ProfilePage = () => {
 
       <div className='lg:w-96'>
         {/* 5  if (!user)の通過により、 user: Userになる */}
-        <UserInfo user={user} postsCount={currentUserPostsCount} toggleFeed={toggleFeed}></UserInfo>
+        <UserInfo
+          user={user}
+          postsCount={currentUserPostsCount}
+          toggleFeed={toggleFeed}
+          showLikedPostArea={showLikedPostArea}
+        ></UserInfo>
       </div>
       <div className='flex-1 lg:w-full'>
         {/* 8 */}

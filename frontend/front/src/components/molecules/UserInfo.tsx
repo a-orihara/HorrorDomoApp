@@ -12,7 +12,7 @@ type UserInfoProps = {
 
 const UserInfo = ({ user, postsCount, toggleFeed, showLikedPostArea }: UserInfoProps) => {
   // console.log(`UserInfoの${JSON.stringify(user)}`);
-  console.log(`UserInfoのshowLikedPostAreaは、${showLikedPostArea}`);
+  // console.log(`UserInfoのshowLikedPostAreaは、${showLikedPostArea}`);
   return (
     <div className='flex  flex-col rounded-xl border bg-red-200 shadow-md md:p-1'>
       <section>

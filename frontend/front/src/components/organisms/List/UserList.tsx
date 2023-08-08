@@ -1,5 +1,5 @@
-import { User } from '../../types/user';
-import UserListItem from './listItem/UserListItem';
+import { User } from '../../../types/user';
+import UserListItem from '../../molecules/listItem/UserListItem';
 
 type UserListProps = {
   users: User[];

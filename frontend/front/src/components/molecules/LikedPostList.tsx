@@ -1,6 +1,6 @@
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
-import LikedPostListItem from '../atoms/LikedPostListItem';
+import LikedPostListItem from './ListItem/LikedPostListItem';
 
 type LikedPostListProps = {
   likedPosts: Post[];

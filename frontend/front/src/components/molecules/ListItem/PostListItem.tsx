@@ -1,11 +1,11 @@
 // date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
 import Link from 'next/link';
-import { useAuthContext } from '../../contexts/AuthContext';
-import useFormattedTime from '../../hooks/helpers/useFormattedTime';
-import { useDeletePost } from '../../hooks/post/useDeletePost';
-import { Post } from '../../types/post';
-import { User } from '../../types/user';
-import { LikeButtonIcon } from './LikeButtonIcon';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import useFormattedTime from '../../../hooks/helpers/useFormattedTime';
+import { useDeletePost } from '../../../hooks/post/useDeletePost';
+import { Post } from '../../../types/post';
+import { User } from '../../../types/user';
+import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
 type PostListItemProps = {

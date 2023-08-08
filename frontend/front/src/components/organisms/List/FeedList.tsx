@@ -1,7 +1,7 @@
 // frontend/front/src/components/molecules/FeedList.tsx
-import { Post } from '../../types/post';
-import { User } from '../../types/user';
-import FeedListItem from '../atoms/FeedListItem';
+import { Post } from '../../../types/post';
+import { User } from '../../../types/user';
+import FeedListItem from '../../atoms/FeedListItem';
 
 type FeedListProps = {
   feedPosts: Post[];

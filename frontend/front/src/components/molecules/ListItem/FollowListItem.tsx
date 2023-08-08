@@ -6,6 +6,7 @@ type FollowListItemProps = {
   targetUser: FollowUser;
 };
 
+// 1
 export const FollowListItem = ({ targetUser }: FollowListItemProps) => {
   return (
     <div>
@@ -30,3 +31,9 @@ export const FollowListItem = ({ targetUser }: FollowListItemProps) => {
     </div>
   );
 };
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+FollowListItemは複数の部分から構成されており、atomsよりもmoleculesのカテゴリーに合致する
+*/

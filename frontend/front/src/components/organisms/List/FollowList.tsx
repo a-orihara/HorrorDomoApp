@@ -7,6 +7,7 @@ type FollowListProps = {
   noFollowMessage: string;
 };
 
+// 1
 export const FollowList = ({ followUsers, title, noFollowMessage }: FollowListProps) => {
   return (
     <div className='flex flex-1 flex-col bg-red-200'>
@@ -27,3 +28,19 @@ export const FollowList = ({ followUsers, title, noFollowMessage }: FollowListPr
     </div>
   );
 };
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+. PostListがorganismsでFollowListがmoleculesに配置するのが適切な理由
+PostListはPostListItemというmoleculesを複数回使う構造で、より複雑な構成を持っているためorganismsに相当します。
+FollowListはFollowListItemを複数回使う構造であるため、moleculesに相当する可能性があります。
+しかし、FollowList自体が複数の要素から構成され、より高い構造を持っている場合、organismsとしても考えることができ
+ます。
+
+. FollowListを/organisms/List/に配置するのは適切か、その理由
+適切です。
+根拠: FollowListの構造がPostListと類似しているため、同じディレクトリに配置する方が一貫性があり、理解しやすくなり
+ます。
+配置パス: frontend/front/src/components/organisms/List/FollowList.tsx
+*/

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { useLikeContext } from '../../contexts/LikeContext';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import { useLikeContext } from '../../../contexts/LikeContext';
 
 type LikeStatsProps = {
   userId: number | undefined;

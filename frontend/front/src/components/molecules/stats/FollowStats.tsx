@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useFollowContext } from '../../contexts/FollowContext';
+import { useFollowContext } from '../../../contexts/FollowContext';
 
 type FollowStatsProps = {
   userId: number | undefined;

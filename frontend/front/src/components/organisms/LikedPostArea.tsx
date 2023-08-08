@@ -1,7 +1,7 @@
 import { useLikedPostsPagination } from '../../hooks/like/useLikedPostsPagination';
 import { User } from '../../types/user';
-import LikedPostList from '../molecules/LikedPostList';
 import Pagination from '../molecules/Pagination';
+import LikedPostList from './List/LikedPostList';
 
 type LikedPostAreaProps = {
   user: User;

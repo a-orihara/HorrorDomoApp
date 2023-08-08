@@ -4,10 +4,10 @@ import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import { useToggleFeed } from '../../hooks/useToggleFeed';
 import CreatePostLink from '../atoms/CreatePostLink';
-import UserInfo from '../molecules/UserInfo';
 import FeedArea from '../organisms/FeedArea';
 import LikedPostArea from '../organisms/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
+import UserInfo from '../organisms/UserInfo';
 
 const HomePage = () => {
   const { isSignedIn, currentUser } = useAuthContext();

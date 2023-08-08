@@ -1,7 +1,7 @@
 // frontend/front/src/components/atoms/UserListItem.test.tsx
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import UserListItem from '../../../src/components/atoms/UserListItem';
+import UserListItem from '../../../src/components/molecules/ListItem/UserListItem';
 import { useAuthContext } from '../../../src/contexts/AuthContext';
 import { useDeleteUser } from '../../../src/hooks/user/useDeleteUser';
 // 1 この時点でAuthContext内の全ての関数をモック化

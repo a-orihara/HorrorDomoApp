@@ -4,8 +4,8 @@ import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import { useToggleFeed } from '../../hooks/useToggleFeed';
 import CreatePostLink from '../atoms/CreatePostLink';
-import FeedArea from '../organisms/FeedArea';
-import LikedPostArea from '../organisms/LikedPostArea';
+import FeedArea from '../organisms/area/FeedArea';
+import LikedPostArea from '../organisms/area/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
 import UserInfo from '../organisms/UserInfo';
 

@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useSignOut } from '../../hooks/auth/useSignOut';
-import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
+import AlertMessage from './AlertMessage';
 // ================================================================================================
 // 1
 const Navigation = () => {

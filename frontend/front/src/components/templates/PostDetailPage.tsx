@@ -1,11 +1,12 @@
 import { PostDetailArea } from '../organisms/PostDetailArea';
 
+1;
 export const PostDetailPage = () => {
   // const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   // const router = useRouter();
   // const { id } = router.query;
 
-  // // 1
+  // // 2
   // useEffect(() => {
   //   if (id) {
   //     handleGetPostDetailByPostId(Number(id));
@@ -18,6 +19,13 @@ export const PostDetailPage = () => {
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+PostDetailPageについて:
+配置場所: templates
+理由: PostDetailPageは画面の一部を構成するorganisms（ここではPostDetailArea）を含むテンプレートで、ページの
+構造を定義しています。ページのレイアウトを形成するため、templatesに配置するのが適切です。
+
+================================================================================================
+2
 handleGetPostDetailByPostId(Number(id));
 Number(id) は、変数 id を数値に変換するJavaScriptの組み込み関数。渡された id を数値に変換。
 もし id の値が数値の文字列や数値そのものであれば、その値が数値に変換されます。

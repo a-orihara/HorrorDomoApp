@@ -1,4 +1,4 @@
-import { PostDetailArea } from '../molecules/PostDetailArea';
+import { PostDetailArea } from '../organisms/PostDetailArea';
 
 export const PostDetailPage = () => {
   // const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();

@@ -10,6 +10,7 @@ type PaginationProps = {
   handlePageChange: (data: { selected: number }) => void;
 };
 
+// 3
 const Pagination = ({ totalCount, itemsPerPage, handlePageChange }: PaginationProps) => {
   return (
     // 2
@@ -81,4 +82,10 @@ containerClassName:
 activeClassName:
 現在のページに付与されるクラス名を表す文字列。CSSでこのクラス名を指定することで、現在のページのスタイリングを行えま
 す。
+
+================================================================================================
+3
+Pagination.tsx: moleculesの理由
+Paginationは、ReactPaginateコンポーネントなどから構成されており、特定の機能を果たす一つの単位として機能します。
+複数のatomsを組み合わせた構造であるため、moleculesに分類するのが適切です。
 */

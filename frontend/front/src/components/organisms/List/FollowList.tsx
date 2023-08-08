@@ -1,5 +1,5 @@
 import { FollowUser } from '../../../types/follow';
-import { FollowListItem } from '../../molecules/ListItem/FollowListItem';
+import { FollowListItem } from '../../molecules/listItem/FollowListItem';
 
 type FollowListProps = {
   followUsers: FollowUser[];

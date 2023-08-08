@@ -1,5 +1,5 @@
 import { User } from '../../types/user';
-import UserListItem from './ListItem/UserListItem';
+import UserListItem from './listItem/UserListItem';
 
 type UserListProps = {
   users: User[];

@@ -1,6 +1,6 @@
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
-import PostListItem from '../../molecules/ListItem/PostListItem';
+import PostListItem from '../../molecules/listItem/PostListItem';
 
 type PostListProps = {
   posts: Post[] | null;

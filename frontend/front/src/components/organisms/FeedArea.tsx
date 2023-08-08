@@ -1,7 +1,7 @@
 import { useFeedPagination } from '../../hooks/user/useFeedPagination';
 import { User } from '../../types/user';
 import Pagination from '../molecules/Pagination';
-import FeedList from './List/FeedList';
+import FeedList from './list/FeedList';
 
 type FeedAreaProps = {
   user: User;

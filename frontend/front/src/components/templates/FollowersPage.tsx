@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useFollowersPagination } from '../../hooks/follow/useFollowersPagination';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import Pagination from '../molecules/Pagination';
-import { FollowList } from '../organisms/List/FollowList';
+import { FollowList } from '../organisms/list/FollowList';
 
 const FollowersPage = () => {
   const router = useRouter();

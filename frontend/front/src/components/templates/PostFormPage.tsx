@@ -1,4 +1,4 @@
-import PostForm from '../molecules/PostForm';
+import PostForm from '../molecules/form/PostForm';
 
 export const PostFormPage = () => {
   return <PostForm></PostForm>;

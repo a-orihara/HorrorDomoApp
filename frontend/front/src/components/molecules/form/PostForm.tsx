@@ -1,9 +1,9 @@
 import React from 'react';
-import { useCreatePost } from '../../hooks/post/useCreatePost';
-import Button from '../atoms/Button';
-import Input from '../atoms/Input';
-import Label from '../atoms/Label';
-import TextArea from '../atoms/TextArea';
+import { useCreatePost } from '../../../hooks/post/useCreatePost';
+import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
+import Label from '../../atoms/Label';
+import TextArea from '../../atoms/TextArea';
 
 const PostForm: React.FC = () => {
   const { content, setContent, title, setTitle, handleCreatePost } = useCreatePost();

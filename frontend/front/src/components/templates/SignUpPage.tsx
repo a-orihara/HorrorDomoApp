@@ -1,4 +1,4 @@
-import SignUpForm from '../molecules/SignUpForm';
+import SignUpForm from '../molecules/form/SignUpForm';
 
 const SignUpPage = () => {
   return <SignUpForm></SignUpForm>;

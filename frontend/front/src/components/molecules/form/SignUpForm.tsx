@@ -1,8 +1,8 @@
 import React from 'react';
-import useSignUp from '../../hooks/auth/useSignUp';
-import Button from '../atoms/Button';
-import Input from '../atoms/Input';
-import Label from '../atoms/Label';
+import useSignUp from '../../../hooks/auth/useSignUp';
+import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
+import Label from '../../atoms/Label';
 
 // ================================================================================================
 const SignUpForm = () => {

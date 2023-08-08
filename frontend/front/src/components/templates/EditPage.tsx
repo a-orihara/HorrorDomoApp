@@ -1,4 +1,4 @@
-import UserEditForm from '../molecules/UserEditForm';
+import UserEditForm from '../molecules/form/UserEditForm';
 
 const EditPage = () => {
   return <UserEditForm></UserEditForm>;

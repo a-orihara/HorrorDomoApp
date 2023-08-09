@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+// 1
 const CreatePostLink = () => {
   return (
     <section>
@@ -13,3 +14,13 @@ const CreatePostLink = () => {
 };
 
 export default CreatePostLink;
+
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+1
+`CreatePostLink.tsx`についての配置の適切性と理由。
+- 配置場所: `atoms`
+- 理由: `CreatePostLink`コンポーネントは、リンクを表現する非常にシンプルな構造を持っています。これは基本的な要素
+であり、他のコンポーネントの構築ブロックとして使うことができます。ロジックや複数の部品を組み合わせたものではないため、
+atomic designの最も小さな単位である`atoms`に配置するのが適切です。
+*/

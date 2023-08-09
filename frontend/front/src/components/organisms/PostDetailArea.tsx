@@ -6,7 +6,7 @@ import useGetUserById from '../../hooks/user/useGetUserById';
 
 // 1
 export const PostDetailArea = () => {
-  // 選択された投稿の詳細と選択した投稿を取得する関数
+  // id投稿を取得する関数とそのid投稿の詳細
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;

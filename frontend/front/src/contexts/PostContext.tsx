@@ -25,7 +25,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
   // 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
-  // 選択された投稿の詳細
+  // id選択の投稿の詳細
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
 
   const router = useRouter();

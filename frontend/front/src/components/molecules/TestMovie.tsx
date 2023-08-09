@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { tmdbClient } from '../../api/client';
 
 type Res = {
   title: string;
@@ -11,10 +11,12 @@ export const TestMovie = () => {
   const [movieInfo, setMovieInfo] = useState<Res | null>(null);
 
   const handleButtonClick = async () => {
-    const movieTitle = 'ふみょーさ';
+    const movieTitle = '83564308256f1f54d8e8ee725927afff';
     const apiKey = '任意';
-    const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
-    const response = await axios.get(url);
+    // const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
+    // const response = await axios.get(url);
+    const url = `/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`; // baseURLを使用
+    const response = await tmdbClient.get(url); // tmdbClientを使用
     if (response.data.results[0]) {
       setMovieInfo(response.data.results[0]);
     }

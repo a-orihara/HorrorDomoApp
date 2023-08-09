@@ -1,7 +1,8 @@
 // import { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { SignInParams, SignUpParams } from '../types/user';
-import client from './client';
+import { client } from './client';
+
 // 1
 export const signUp = (params: SignUpParams) => {
   return client.post('/auth', params);

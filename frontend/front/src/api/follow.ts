@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import client from './client';
+import { client } from './client';
 
 // ユーザーのフォローユーザーの総数を取得するAPI
 export const getFollowingCountByUserId = (userId: number | undefined) => {

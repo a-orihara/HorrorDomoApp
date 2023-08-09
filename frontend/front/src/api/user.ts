@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import client from './client';
+import { client } from './client';
 
 // 2 ユーザー情報を更新
 export const updateUser = (formData: any) => {

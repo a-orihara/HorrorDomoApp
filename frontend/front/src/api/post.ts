@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { CreatePostParams } from '../types/post';
-import client from './client';
+import { client } from './client';
 
 // 2
 export const createPost = (params: CreatePostParams) => {

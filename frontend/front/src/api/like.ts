@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import client from './client';
+import { client } from './client';
 
 // 1
 export const createLike = (postId: number) => {

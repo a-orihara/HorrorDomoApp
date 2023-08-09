@@ -4,6 +4,7 @@ import { usePostContext } from '../../contexts/PostContext';
 import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import useGetUserById from '../../hooks/user/useGetUserById';
 
+// 1
 export const PostDetailArea = () => {
   // 選択された投稿の詳細と選択した投稿を取得する関数
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
@@ -16,7 +17,7 @@ export const PostDetailArea = () => {
 
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
 
-  // 1
+  // 2
   useEffect(() => {
     if (id) {
       // 選択した投稿を取得する関数
@@ -59,6 +60,13 @@ export const PostDetailArea = () => {
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+. **PostDetailArea.tsx**: `organismsの理由`
+-  PostDetailAreaは複数の要素（ユーザーの画像、名前、投稿のタイトル、内容など）を組み合わせて構成されており、画
+面の一部を構成するため、organismsに配置するのが適切です。moleculesよりも複雑な単位であるため、organismsが適切
+と考えられます。
+
+================================================================================================
+2
 handleGetPostDetailByPostId(Number(id));
 Number(id) は、変数 id を数値に変換するJavaScriptの組み込み関数。渡された id を数値に変換。
 もし id の値が数値の文字列や数値そのものであれば、その値が数値に変換されます。

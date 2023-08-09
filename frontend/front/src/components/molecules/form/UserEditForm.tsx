@@ -1,9 +1,9 @@
 import React from 'react';
-import { useUpdateUser } from '../../hooks/user/useUpdateUser';
-import Button from '../atoms/Button';
-import Input from '../atoms/Input';
-import Label from '../atoms/Label';
-import TextArea from '../atoms/TextArea';
+import { useUpdateUser } from '../../../hooks/user/useUpdateUser';
+import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
+import Label from '../../atoms/Label';
+import TextArea from '../../atoms/TextArea';
 
 // ================================================================================================
 const UserEditForm = () => {

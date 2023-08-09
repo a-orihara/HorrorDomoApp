@@ -1,6 +1,6 @@
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/molecules/Pagination';
-import UserList from '../../components/molecules/UserList';
+import UserList from '../../components/organisms/list/UserList';
 import { useUsersPagination } from '../../hooks/user/useUsersPagination';
 
 const Index = () => {

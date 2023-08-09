@@ -1,7 +1,7 @@
 // import Image from 'next/image';
 import { User } from '../../types/user';
-import FollowStats from '../molecules/FollowStats';
-import { LikeStats } from './LikeStats';
+import FollowStats from '../molecules/stats/FollowStats';
+import { LikeStats } from '../molecules/stats/LikeStats';
 type UserInfoProps = {
   user: User;
   postsCount: number | undefined;

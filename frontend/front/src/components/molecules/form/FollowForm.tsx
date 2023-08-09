@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { isFollowing } from '../../api/follow';
-import { useFollowContext } from '../../contexts/FollowContext';
-import { useCreateFollow } from '../../hooks/follow/useCreateFollow';
-import { useDeleteFollow } from '../../hooks/follow/useDeleteFollow';
-import Button from '../atoms/Button';
+import { isFollowing } from '../../../api/follow';
+import { useFollowContext } from '../../../contexts/FollowContext';
+import { useCreateFollow } from '../../../hooks/follow/useCreateFollow';
+import { useDeleteFollow } from '../../../hooks/follow/useDeleteFollow';
+import Button from '../../atoms/Button';
 
 type FollowFormProps = {
   userId: number;

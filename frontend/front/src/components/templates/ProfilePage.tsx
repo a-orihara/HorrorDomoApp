@@ -5,11 +5,11 @@ import { usePostContext } from '../../contexts/PostContext';
 // import { usePostContext } from '../../contexts/PostContext';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { useToggleFeed } from '../../hooks/useToggleFeed';
-import { FollowForm } from '../molecules/FollowForm';
-import UserInfo from '../molecules/UserInfo';
-import LikedPostArea from '../organisms/LikedPostArea';
-import PostArea from '../organisms/PostArea';
+import { FollowForm } from '../molecules/form/FollowForm';
+import LikedPostArea from '../organisms/area/LikedPostArea';
+import PostArea from '../organisms/area/PostArea';
 import Sidebar from '../organisms/Sidebar';
+import UserInfo from '../organisms/UserInfo';
 // ================================================================================================
 const ProfilePage = () => {
   // const { posts } = usePostContext();

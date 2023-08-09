@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useSignOut } from '../../hooks/auth/useSignOut';
-import AlertMessage from '../atoms/AlertMessage';
 import Button from '../atoms/Button';
+import AlertMessage from './AlertMessage';
 // ================================================================================================
+// 1
 const Navigation = () => {
   // AuthContextから値を取得。Linkコンポーネントの表示制御に使用。
   const { loading, isSignedIn } = useAuthContext();
@@ -14,7 +15,7 @@ const Navigation = () => {
   // ================================================================================================
   return (
     <nav className=' flex h-16 w-1/2 items-center justify-around  text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
-      {/* 1 */}
+      {/* 2 */}
       <ul className='flex flex-1 flex-row items-center justify-around '>
         <li>
           <Link href={'/'}>
@@ -59,6 +60,13 @@ export default Navigation;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+Navigation.tsxについて:
+配置場所: molecules
+Navigation.tsxはLinkやButtonなどの複数の要素を組み合わせたコンポーネントであるため、moleculesに配置するのが適
+切です。moleculesは複数のatoms（単一の要素）を組み合わせた単位です。
+
+================================================================================================
+2
 ulタグの理由
 ul タグは、順序を持たないリスト（unordered list）を表し、li タグは、リストの各項目（list item）を表します。
 つまり、ul タグはリスト全体を囲み、li タグは各項目を表すのに使われます。

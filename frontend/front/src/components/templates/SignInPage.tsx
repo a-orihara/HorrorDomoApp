@@ -1,5 +1,4 @@
-import React from 'react';
-import SignInForm from '../molecules/SignInForm';
+import SignInForm from '../molecules/form/SignInForm';
 
 const SignInPage = () => {
   return <SignInForm></SignInForm>;

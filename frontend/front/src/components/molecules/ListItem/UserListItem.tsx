@@ -1,8 +1,8 @@
 // frontend/front/src/components/UserListItem.tsx
 import Link from 'next/link';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { useDeleteUser } from '../../hooks/user/useDeleteUser';
-import { User } from '../../types/user';
+import { useAuthContext } from '../../../contexts/AuthContext';
+import { useDeleteUser } from '../../../hooks/user/useDeleteUser';
+import { User } from '../../../types/user';
 // 複雑？
 
 // ================================================================================================

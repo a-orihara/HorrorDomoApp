@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { tmdbClient } from '../../api/client';
+import { getTmbdInfo } from '../../api/tmdbService';
 
 type Res = {
   title: string;
@@ -11,18 +11,22 @@ export const TestMovie = () => {
   const [movieInfo, setMovieInfo] = useState<Res | null>(null);
 
   const handleButtonClick = async () => {
+    // 'https://api.themoviedb.org/3',
     const movieTitle = '用心棒';
-    const apiKey = '任意';
-    // const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
-    // const response = await axios.get(url);
-    const url = `/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`; // baseURLを使用
-    const response = await tmdbClient.get(url); // tmdbClientを使用
-    if (response.data.results[0]) {
-      setMovieInfo(response.data.results[0]);
+    const apiKey = 'd3db38eb6731f79c1c41db31c536b578';
+
+    // 正しい
+    // const url = `https://api.themoviedb.org/3//search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
+    // // const res = await tmdbClient.get(url);
+    // const res = await axios.get(url);
+
+    const url = `/movies?title=${movieTitle}`;
+    const res = await getTmbdInfo(movieTitle);
+
+    if (res.data.data.results[0]) {
+      setMovieInfo(res.data.data.results[0]);
     }
   };
-
-  console.log(`mo:${JSON.stringify(movieInfo)}`);
 
   return (
     <div>

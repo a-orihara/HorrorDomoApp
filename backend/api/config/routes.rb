@@ -42,9 +42,9 @@ Rails.application.routes.draw do
 
       # api/v1/relationships
       resources :relationships, only: [:create, :destroy]
+
+      # api/v1/movies
       resources :movies, only: [:index]
-
-
     end
   end
 end

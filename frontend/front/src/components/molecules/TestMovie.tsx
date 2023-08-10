@@ -12,7 +12,7 @@ export const TestMovie = () => {
 
   const handleButtonClick = async () => {
     const movieTitle = '用心棒';
-    const apiKey = '83564308256f1f54d8e8ee725927afff';
+    const apiKey = '任意';
     // const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
     // const response = await axios.get(url);
     const url = `/search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`; // baseURLを使用

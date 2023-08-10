@@ -1,11 +1,6 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      get 'movies/index'
-    end
-  end
-  namespace :api do
-    namespace :v1 do
       # 1 api/v1/auth
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations',
@@ -47,6 +42,9 @@ Rails.application.routes.draw do
 
       # api/v1/relationships
       resources :relationships, only: [:create, :destroy]
+      resources :movies, only: [:index]
+
+
     end
   end
 end

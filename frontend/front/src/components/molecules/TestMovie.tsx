@@ -13,14 +13,12 @@ export const TestMovie = () => {
   const handleButtonClick = async () => {
     // 'https://api.themoviedb.org/3',
     const movieTitle = '用心棒';
-    const apiKey = 'd3db38eb6731f79c1c41db31c536b578';
 
     // 正しい
     // const url = `https://api.themoviedb.org/3//search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;
     // // const res = await tmdbClient.get(url);
     // const res = await axios.get(url);
 
-    const url = `/movies?title=${movieTitle}`;
     const res = await getTmbdInfo(movieTitle);
 
     if (res.data.data.results[0]) {

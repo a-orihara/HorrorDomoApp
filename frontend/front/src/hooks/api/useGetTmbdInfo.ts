@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { getMovieInfo } from '../../api/movieApi';
 
-type TmbdRes = {
+type MovieInfo = {
   title: string;
   overview: string;
   posterPath: string;
 };
 
-export const useGetTmbdInfo = () => {
-  const [movieInfo, setMovieInfo] = useState<TmbdRes>();
+export const useGetMovieInfo = () => {
+  const [movieInfo, setMovieInfo] = useState<MovieInfo>();
 
-  const handleGetTmbdInfo = async (movieTitle: string) => {
+  const handleGetMovieInfo = async (movieTitle: string) => {
     try {
       const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
@@ -23,6 +23,6 @@ export const useGetTmbdInfo = () => {
 
   return {
     movieInfo,
-    handleGetTmbdInfo,
+    handleGetMovieInfo,
   };
 };

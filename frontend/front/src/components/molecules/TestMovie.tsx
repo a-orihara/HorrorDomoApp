@@ -5,7 +5,7 @@ export const TestMovie = () => {
 
   const handleButtonClick = async () => {
     // 'https://api.themoviedb.org/3',
-    const movieTitle = 'ターもね';
+    const movieTitle = 'エイリアン';
     handleGetMovieInfo(movieTitle);
     // 正しい
     // const url = `https://api.themoviedb.org/3//search/movie?api_key=${apiKey}&query=${movieTitle}&language=ja&region=JP`;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getTmbdInfo } from '../../api/tmdbService';
+import { getMovieInfo } from '../../api/movieApi';
 
 type Res = {
   title: string;
@@ -19,7 +19,7 @@ export const TestMovie = () => {
     // // const res = await tmdbClient.get(url);
     // const res = await axios.get(url);
 
-    const res = await getTmbdInfo(movieTitle);
+    const res = await getMovieInfo(movieTitle);
 
     if (res.data.data.results[0]) {
       setMovieInfo(res.data.data.results[0]);

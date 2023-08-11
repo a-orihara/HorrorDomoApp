@@ -16,7 +16,6 @@ class Api::V1::MoviesController < ApplicationController
   end
 end
 
-
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

@@ -1,20 +1,18 @@
 import { useState } from 'react';
-import { getTmbdInfo } from '../../api/tmdbService';
+import { getMovieInfo } from '../../api/movieApi';
 
-type TmbdRes =
-  | {
-      title: string;
-      overview: string;
-      posterPath: string;
-    }
-  | string;
+type TmbdRes = {
+  title: string;
+  overview: string;
+  posterPath: string;
+};
 
 export const useGetTmbdInfo = () => {
   const [movieInfo, setMovieInfo] = useState<TmbdRes>();
 
   const handleGetTmbdInfo = async (movieTitle: string) => {
     try {
-      const res = await getTmbdInfo(movieTitle);
+      const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
         setMovieInfo(res.data.data);
       }

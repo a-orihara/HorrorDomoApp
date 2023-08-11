@@ -9,10 +9,10 @@ class Api::V1::MoviesController < ApplicationController
     url = "https://api.themoviedb.org/3/search/movie?api_key=#{ENV['TMDB_API']}&language=ja&query=" + URI.encode_www_form_component(title)
     # 2
     logger.info("urlはここ: #{url}")
-    movies = JSON.parse(Net::HTTP.get(URI.parse(url)))
+    movie_info = JSON.parse(Net::HTTP.get(URI.parse(url)))
     # 3
-    logger.info("moviesはここ: #{movies}")
-    render json: { data: movies }
+    logger.info("moviesはここ: #{movie_info}")
+    render json: { data: movie_info }
   end
 end
 

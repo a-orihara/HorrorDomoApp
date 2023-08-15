@@ -2,6 +2,7 @@
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import FeedListItem from '../../molecules/listItem/FeedListItem';
+// import FeedListItem from '../../molecules/ListItem/FeedListItem';
 
 type FeedListProps = {
   feedPosts: Post[];

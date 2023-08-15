@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { getMovieInfo } from '../../api/movieApi';
 
 type MovieInfo = {
@@ -15,28 +15,32 @@ export const useGetMovieInfo = () => {
   const [isMovieInfoFound, setIsMovieInfoFound] = useState<boolean>(true);
 
   // TMDBから映画情報を取得する関数
-  const handleGetMovieInfo = async (movieTitle: string) => {
+  const handleGetMovieInfo = useCallback(async (movieTitle: string) => {
     try {
       // TMDBから映画情報を取得
+      console.log('handleGetMovieInfoが発火');
       const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
         // movieTitleから映画情報が見つからなかった
+        console.log('getMovieInfoのres200');
+        // console.log(`res:${JSON.stringify(res.data.data)}`);
         if (res.data.data.results.length === 0) {
+          console.log('setIsMovieInfoFound(false)');
           setIsMovieInfoFound(false);
         } else {
           setMovieInfo(res.data.data.results[0]);
+          console.log('setIsMovieInfoFound(true)');
           setIsMovieInfoFound(true);
         }
       }
     } catch (err: any) {
       alert('エラーが発生しました');
     }
-  };
+  }, []);
 
   return {
     movieInfo,
     handleGetMovieInfo,
-    isMovieInfoFound,
   };
 };
 

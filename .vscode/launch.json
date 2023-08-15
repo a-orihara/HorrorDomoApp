@@ -1,5 +1,8 @@
+// 1
 {
+  // "configurations": デバッグの設定情報を配列として記述します。
   "configurations": [
+    // jestのデバックの設定
     {
       "type": "node",
       "name": "vscode-jest-tests.v2",
@@ -18,6 +21,49 @@
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
       "runtimeExecutable": "yarn"
+    },
+    // next.jsのserver-sideのdebug設定
+    {
+      "name": "Next.js: debug server-side",
+      // デバッグ対象のタイプをNode.jsのターミナルモードに設定
+      "type": "node-terminal",
+      // デバッグのリクエストタイプを"launch"に設定
+      "request": "launch",
+      // デバッグ時に実行されるコマンドを指定
+      "command": "npm run dev"
+    },
+    // next.jsのclient-sideのdebug設定
+    {
+      "name": "Next.js: debug client-side",
+      // デバッグ対象のタイプをGoogle Chromeに設定
+      "type": "chrome",
+      "request": "launch",
+      // デバッグ対象のURLを指定
+      "url": "http://localhost:3001"
+    },
+    // next.jsのserver-side,client-side両方のdebug設定
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      // サーバーの起動を待ち、準備ができたらアクションを実行する設定
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
     }
   ]
 }
+/*
+@          @@          @@          @@          @@          @@          @@          @@          @
+.launch.json
+デバッグ設定ファイルで、どのようにデバッグセッションを開始するかを定義します。ここには実行するコマンドや引数などが設
+定されます。主にデバッガの挙動を制御します。
+------------------------------------------------------------------------------------------------
+.vscode/launch.jsonと.vscode/tasks.jsonの役割の違い:
+.vscode/launch.json: デバッグを開始する際の具体的な動作を定義し、デバッガとプログラムの連携を担当します。
+.vscode/tasks.json: 一連のタスクを自動化し、ビルドプロセスやテストの実行など、開発の流れをスムーズにする役割を果
+たします。
+*/

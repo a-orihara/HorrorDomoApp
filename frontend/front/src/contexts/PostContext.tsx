@@ -52,6 +52,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
+      console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
       try {
         // 指定したuserIdのpostの詳細を取得する関数
         const data = await getPostDetailByUserId(postId);

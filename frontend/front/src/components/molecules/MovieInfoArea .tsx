@@ -9,6 +9,7 @@ type MovieInfo = {
 export const MovieInfoArea = ({ movieInfo }: { movieInfo: MovieInfo | undefined }) => {
   console.log(`MovieInfoAreaに渡って来たmovieInfo:${movieInfo?.title}`);
   return (
+    // movieInfoがあれば映画情報を表示、なければ映画情報が見つかりませんでしたと表示
     <div>
       {movieInfo ? (
         <div className='flex flex-col items-center'>

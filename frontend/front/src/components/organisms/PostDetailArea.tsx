@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePostContext } from '../../contexts/PostContext';
 import { useGetMovieInfo } from '../../hooks/api/useGetMovieInfo';
 import useFormattedTime from '../../hooks/helpers/useFormattedTime';
@@ -7,10 +7,10 @@ import useGetUserById from '../../hooks/user/useGetUserById';
 import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 // 1
 export const PostDetailArea = () => {
-  // 指定postとそれを取得する関数を取得
-  const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   const router = useRouter();
   const { id } = router.query;
+  // 指定postとそれを取得する関数を取得
+  const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   // 指定userとそれを取得する関数を取得
   const { user, handleGetUserById } = useGetUserById(
     // 指定postのuserIdが存在すればその数値(number)が、存在しない場合はundefinedが引数として渡される
@@ -18,72 +18,33 @@ export const PostDetailArea = () => {
   );
   // 指定post.titleから映画情報を取得する関数とその映画情報を取得
   const { movieInfo, handleGetMovieInfo } = useGetMovieInfo();
+  // 非同期処理の順序を制御する為の、指定postが取得済みかを表す真偽値の状態変数
+  const [postFetched, setPostFetched] = useState(false);
   // post作成日時を取得
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
+  console.log(`今のpostFetchedは:${postFetched}`);
 
   // 2
-  // useEffect(() => {
-  //   // クエリidがあれば=クエリidを取得出来たら
-  //   if (id) {
-  //     // クエリid指定のpostを取得する関数で指定postを取得
-  //     handleGetPostDetailByPostId(Number(id));
-  //     console.log(`1.title::${postDetailByPostId?.title}`);
-  //     // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
-  //     handleGetUserById();
-  //   }
-  // }, [id, handleGetPostDetailByPostId, handleGetUserById]);
-
-  // useEffect(() => {
-  //   // 指定postがあれば
-  //   if (postDetailByPostId) {
-  //     // 指定postのtitleから映画情報を取得する関数
-  //     handleGetMovieInfo(postDetailByPostId.title);
-  //     console.log(`2.title::${postDetailByPostId.title}`);
-  //   }
-  // }, [postDetailByPostId, handleGetMovieInfo]);
-
-  // 新
   useEffect(() => {
-    const fetchData = async () => {
-      if (id) {
-        // クエリid指定のpostを取得する関数で指定postを取得
-        console.log(`idは${id}`);
-        await handleGetPostDetailByPostId(Number(id));
+    // クエリidがあれば=クエリidを取得出来たら
+    if (id) {
+      // クエリid指定のpostを取得する関数で指定postを取得
+      handleGetPostDetailByPostId(Number(id));
+      console.log(`1.title::${postDetailByPostId?.title}`);
+      // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
+      handleGetUserById();
+      setPostFetched(true);
+    }
+  }, [id, handleGetPostDetailByPostId, handleGetUserById]);
 
-        console.log(`1.postDetailByPostIdは${JSON.stringify(postDetailByPostId)}`);
-        console.log(`1.title::${postDetailByPostId?.title}`);
-        // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
-        handleGetUserById();
-        // 指定postがあれば
-        if (postDetailByPostId) {
-          // 指定postのtitleから映画情報を取得する関数
-          handleGetMovieInfo(postDetailByPostId.title);
-
-          console.log(`2.title::${postDetailByPostId.title}`);
-        }
-      }
-    };
-    fetchData();
-  }, [id, handleGetPostDetailByPostId, handleGetUserById, handleGetMovieInfo]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (id) {
-  //       await handleGetPostDetailByPostId(Number(id));
-  //       console.log(`1.title::${postDetailByPostId?.title}`);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [id, handleGetPostDetailByPostId]);
-
-  // useEffect(() => {
-  //   if (postDetailByPostId) {
-  //     handleGetUserById();
-  //     handleGetMovieInfo(postDetailByPostId.title);
-  //     console.log(`2.title::${postDetailByPostId.title}`);
-  //   }
-  // }, [postDetailByPostId, handleGetUserById, handleGetMovieInfo]);
+  useEffect(() => {
+    // 指定postがあれば
+    if (postFetched && postDetailByPostId) {
+      // 指定postのtitleから映画情報を取得する関数
+      handleGetMovieInfo(postDetailByPostId.title);
+      console.log(`2.title::${postDetailByPostId.title}`);
+    }
+  }, [postDetailByPostId, handleGetMovieInfo]);
 
   return (
     <div className='flex flex-1 flex-col bg-green-200'>

@@ -22,7 +22,6 @@ export const useGetMovieInfo = () => {
       const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
         // movieTitleから映画情報が見つからなかった
-        console.log('getMovieInfoのres200');
         // console.log(`res:${JSON.stringify(res.data.data)}`);
         if (res.data.data.results.length === 0) {
           console.log('setIsMovieInfoFound(false)');
@@ -34,7 +33,7 @@ export const useGetMovieInfo = () => {
         }
       }
     } catch (err: any) {
-      alert('エラーが発生しました');
+      alert('エラーが発生しまぷぷした');
     }
   }, []);
 

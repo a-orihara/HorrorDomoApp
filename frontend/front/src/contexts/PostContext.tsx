@@ -55,10 +55,10 @@ export const PostProvider = ({ children }: PostProviderProps) => {
       console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
       try {
         // 指定したuserIdのpostの詳細を取得する関数
-        const data = await getPostDetailByUserId(postId);
-        if (data.data.status == 200) {
-          setPostDetailByPostId(data.data.data);
-        } else if (data.data.status == 404) {
+        const res = await getPostDetailByUserId(postId);
+        if (res.data.status == 200) {
+          setPostDetailByPostId(res.data.data);
+        } else if (res.data.status == 404) {
           alert('投稿を表示できません');
           setTimeout(() => {
             router.push(`/`);

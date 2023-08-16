@@ -18,7 +18,7 @@ export const useGetMovieInfo = () => {
   const handleGetMovieInfo = useCallback(async (movieTitle: string) => {
     try {
       // TMDBから映画情報を取得
-      console.log('handleGetMovieInfoが発火');
+      console.log('◆handleGetMovieInfo発火するな◆');
       const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
         // movieTitleから映画情報が見つからなかった

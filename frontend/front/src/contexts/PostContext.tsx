@@ -52,12 +52,14 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
-      console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
+      // console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
+      // console.log('◆postConrextのhandleGetPostDetailByPostId発火');
       try {
         // 指定したuserIdのpostの詳細を取得する関数
         const res = await getPostDetailByUserId(postId);
         if (res.data.status == 200) {
           setPostDetailByPostId(res.data.data);
+          // console.log('◆postConrextのsetPostDetailByPostId(res.data.data);したよ');
         } else if (res.data.status == 404) {
           alert('投稿を表示できません');
           setTimeout(() => {

@@ -5,6 +5,7 @@ import { useGetMovieInfo } from '../../hooks/api/useGetMovieInfo';
 import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { MovieInfoArea } from '../molecules/MovieInfoArea ';
+
 // 1
 export const PostDetailArea = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ export const PostDetailArea = () => {
     if (id) {
       // クエリid指定のpostを取得する関数で指定postを取得
       handleGetPostDetailByPostId(Number(id));
-      console.log(`1.title::${postDetailByPostId?.title}`);
+      // console.log(`1.title::${postDetailByPostId?.title}`);
       // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
       handleGetUserById();
       setPostFetched(true);
@@ -42,9 +43,9 @@ export const PostDetailArea = () => {
     if (postFetched && postDetailByPostId) {
       // 指定postのtitleから映画情報を取得する関数
       handleGetMovieInfo(postDetailByPostId.title);
-      console.log(`2.title::${postDetailByPostId.title}`);
+      // console.log(`2.title::${postDetailByPostId.title}`);
     }
-  }, [postDetailByPostId, handleGetMovieInfo]);
+  }, [postDetailByPostId, handleGetMovieInfo, postFetched]);
 
   return (
     <div className='flex flex-1 flex-col bg-green-200'>

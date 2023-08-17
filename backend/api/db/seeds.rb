@@ -33,10 +33,17 @@ user3 = User.create!(
 
 users = [user1, user2]
 
+titles = [
+  "オーメン", "ハロウィン", "エルム街の悪夢", "バタリアン", "ゾンビ", "ジョーズ",
+  "ミスト", "サスペリア", "エイリアン", "スクリーム1", "悪魔のいけにえ", "死霊のはらわた1",
+  "死霊館", "it", "ロボコップ", "ジョーカー", "ポルターガイスト", "エクソシスト1", "もののけ姫",
+  "マッドマックス", "シャイニング", "プレデター1", "リング"
+]
+
 users.each do |user|
   25.times do
     content = Faker::Lorem.sentence(word_count: 20)
-    title = Faker::Lorem.sentence(word_count: 3)
+    title = titles.sample # タイトルの配列からランダムに選ぶ
     # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
@@ -70,7 +77,7 @@ image_paths = %w[
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
   20.times do
     content = Faker::Lorem.sentence(word_count: 20)
-    title = Faker::Lorem.sentence(word_count: 3)
+    title = titles.sample # タイトルの配列からランダムに選ぶ
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
   end

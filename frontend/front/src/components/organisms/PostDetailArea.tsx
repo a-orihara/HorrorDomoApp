@@ -27,6 +27,7 @@ export const PostDetailArea = () => {
 
   // 2
   useEffect(() => {
+    // useLayoutEffect(() => {
     // クエリidがあれば=クエリidを取得出来たら
     if (id) {
       // クエリid指定のpostを取得する関数で指定postを取得
@@ -40,6 +41,7 @@ export const PostDetailArea = () => {
 
   useEffect(() => {
     // 指定postがあれば
+    // useLayoutEffect(() => {
     if (postFetched && postDetailByPostId) {
       // 指定postのtitleから映画情報を取得する関数
       handleGetMovieInfo(postDetailByPostId.title);

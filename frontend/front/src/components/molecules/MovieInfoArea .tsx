@@ -5,11 +5,12 @@ type MovieInfo = {
 };
 
 export const MovieInfoArea = ({ movieInfo }: { movieInfo: MovieInfo | undefined }) => {
-  console.log(`MovieInfoAreaに渡って来たmovieInfo:${movieInfo?.title}`);
+  // console.log(`MovieInfoAreaに渡って来たmovieInfo:${movieInfo?.title}`);
+  console.log('%cMovieInfoAreaが呼ばれた', 'color: blue;');
   return (
     // movieInfoがあれば映画情報を表示、なければ映画情報が見つかりませんでしたと表示
     <div>
-      {movieInfo ? (
+      {movieInfo !== undefined ? (
         <div className='flex flex-col items-center'>
           <h2 className='flex items-center justify-center text-xl'>{movieInfo.title}</h2>
           <img
@@ -20,8 +21,10 @@ export const MovieInfoArea = ({ movieInfo }: { movieInfo: MovieInfo | undefined 
           <p>OverView:</p>
           <p>{movieInfo.overview}</p>
         </div>
+      ) : movieInfo === null ? (
+        <p>タイトルから映画情報が見つかりませんでした</p>
       ) : (
-        <p>映画情報が見つかりませんでした</p>
+        <p>loading...</p>
       )}
     </div>
   );

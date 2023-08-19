@@ -7,10 +7,15 @@ import useGetUserById from '../../hooks/user/useGetUserById';
 import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 
 // 1
+// idがあるかどうか
+// idがあれば、指定postと指定userを取得
+// 第一useEffectが呼ばれ、指定postがあれば指定映画を取得
+
 export const PostDetailArea = () => {
   const router = useRouter();
   const { id } = router.query;
   // 指定postとそれを取得する関数を取得
+  console.log(`現在のid:${id}`);
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   // 指定userとそれを取得する関数を取得
   const { user, handleGetUserById } = useGetUserById(
@@ -24,12 +29,14 @@ export const PostDetailArea = () => {
   // post作成日時を取得
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
   console.log(`今のpostFetchedは:${postFetched}`);
+  console.log(`%c postDetailByPostIdが呼ばれた:${JSON.stringify(postDetailByPostId)}`, 'color: red');
 
   // 2
   useEffect(() => {
-    // useLayoutEffect(() => {
     // クエリidがあれば=クエリidを取得出来たら
+    console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: yellow');
     if (id) {
+      console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: green');
       // クエリid指定のpostを取得する関数で指定postを取得
       handleGetPostDetailByPostId(Number(id));
       // console.log(`1.title::${postDetailByPostId?.title}`);
@@ -41,7 +48,6 @@ export const PostDetailArea = () => {
 
   useEffect(() => {
     // 指定postがあれば
-    // useLayoutEffect(() => {
     if (postFetched && postDetailByPostId) {
       // 指定postのtitleから映画情報を取得する関数
       handleGetMovieInfo(postDetailByPostId.title);

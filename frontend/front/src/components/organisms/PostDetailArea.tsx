@@ -71,7 +71,7 @@ export const PostDetailArea = () => {
                 <p className='flex items-center justify-center'>{user?.name}</p>
               </div>
               {/* 指定postのtitle */}
-              <h2 className='flex h-16 w-1/3 items-center justify-center  bg-blue-200 text-center text-xl md:text-3xl'>
+              <h2 className='flex h-12 w-1/3 items-center justify-center  bg-blue-200 text-center text-xl md:text-3xl'>
                 {postDetailByPostId.title}
               </h2>
               {/* 指定postのcontent, whitespace-normal:文章折り返し */}

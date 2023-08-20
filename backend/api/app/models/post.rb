@@ -9,7 +9,7 @@ class Post < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
   # belongs_to :userで自動的にuser_idが設定され、マイグレーションでnilチェックしているが、明示的に記載
   validates :user_id, presence: true
-  validates :content, presence: true, length: { maximum: 140 }
+  validates :content, presence: true, length: { maximum: 200 }
   validates :title, presence: true, length: { maximum: 20 }
 end
 

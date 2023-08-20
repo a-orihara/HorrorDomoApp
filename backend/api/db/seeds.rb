@@ -5,6 +5,17 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+require 'yaml'
+
+profiles_path = Rails.root.join('db/seeds/profiles.yml')
+titles_path = Rails.root.join('db/seeds/titles.yml')
+contents_path = Rails.root.join('db/seeds/contents.yml')
+
+profiles = YAML.load_file(profiles_path)['profiles']
+titles = YAML.load_file(titles_path)['titles']
+contents = YAML.load_file(contents_path)['contents']
+
 user1 = User.create!(
   name: 'momo',
   email: 'momo@momo.com',
@@ -12,7 +23,8 @@ user1 = User.create!(
   password_confirmation: 'momomo',
   admin: true,
   # 1
-  profile: Faker::Lorem.sentence(word_count: 20),
+  # profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 user2 = User.create!(
@@ -20,7 +32,7 @@ user2 = User.create!(
   email: 'koko@koko.com',
   password: 'kokoko',
   password_confirmation: 'kokoko',
-  profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 user3 = User.create!(
@@ -28,7 +40,7 @@ user3 = User.create!(
   email: 'soso@soso.com',
   password: 'sososo',
   password_confirmation: 'sososo',
-  profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 users = [user1, user2]
@@ -42,7 +54,7 @@ titles = [
 
 users.each do |user|
   25.times do
-    content = Faker::Lorem.sentence(word_count: 20)
+    content = contents.sample
     title = titles.sample # タイトルの配列からランダムに選ぶ
     # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
@@ -65,7 +77,7 @@ image_paths = %w[
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
-  profile = Faker::Lorem.sentence(word_count: 20)
+  profile = profiles.sample,
   user = User.create!(name:  name,
                 email: email,
                 password:              password,
@@ -76,7 +88,7 @@ image_paths = %w[
   # 4 その画像をユーザーのavatarに添付
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
   20.times do
-    content = Faker::Lorem.sentence(word_count: 20)
+    content = contents.sample
     title = titles.sample # タイトルの配列からランダムに選ぶ
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)

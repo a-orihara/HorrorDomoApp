@@ -100,14 +100,14 @@ end
 
 # 全てのユーザー
 allusers = User.all
-following = allusers[2..30]
-followers = allusers[4..31]
+following = allusers[2..20]
+followers = allusers[10..31]
 # user1がフォロー
 following.each { |followed| user1.follow(followed) }
 # user1をフォロー
 followers.each { |follower| follower.follow(user1) }
 following = allusers[30..51]
-followers = allusers[4..31]
+followers = allusers[4..21]
 # user2がフォロー
 following.each { |followed| user2.follow(followed) }
 # user2をフォロー
@@ -117,7 +117,7 @@ followers.each { |follower| follower.follow(user2) }
 # allusers = User.all
 allusers.each do |user|
   # 自分を除いたユーザーからランダムに20〜30人を選ぶ
-  random_following = allusers.where.not(id: user.id).sample(rand(20..30))
+  random_following = allusers.where.not(id: user.id).sample(rand(10..20))
   # それらのユーザーをフォロー
   random_following.each do |followed|
     # すでにフォローしている場合はスキップ

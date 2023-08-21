@@ -56,29 +56,29 @@ export const PostDetailArea = () => {
   }, [postDetailByPostId, handleGetMovieInfo, postFetched]);
 
   return (
-    <div className='flex flex-1 flex-col bg-green-200'>
+    <div className='flex flex-1 flex-col '>
       {postFetched ? (
         postDetailByPostId ? (
           <div>
-            <div className=' mt-4 flex flex-1 flex-col items-center  bg-red-200'>
+            <div className='mt-4 flex flex-1 flex-col items-center'>
               {/* 指定postのuserIdから取得した指定userのavatarとname */}
-              <div className='mb-8 flex w-1/3 justify-around'>
+              <div className='mb-4 flex min-w-min justify-around sm:w-1/3'>
                 <img
                   src={user?.avatarUrl || '/no_image_square.jpg'}
                   alt='user avatar'
                   className=' mt-2 h-16 w-16 rounded-full '
                 />
-                <p className='flex items-center justify-center'>{user?.name}</p>
+                <p className='flex  items-center justify-center text-base sm:text-xl'>{user?.name}</p>
               </div>
               {/* 指定postのtitle */}
-              <h2 className='mb-4 flex h-12 min-w-min items-center justify-center  rounded-md bg-blue-200 px-2 text-center text-lg md:text-2xl'>
+              <h2 className='mb-4 flex h-12 min-w-min items-center justify-center rounded-md bg-basic-beige px-2 text-center text-lg tracking-wide md:text-2xl'>
                 {postDetailByPostId.title}
               </h2>
               {/* 指定postのcontent, whitespace-normal:文章折り返し */}
-              <div className='mb-2 min-h-min w-2/3 min-w-min border-2 border-solid border-gray-500 bg-blue-200 px-2 text-base sm:w-1/2 md:text-lg'>
+              <div className='mb-2 min-h-min w-full min-w-min border-2 border-solid border-gray-500 bg-basic-beige px-2 py-4 text-base tracking-wide sm:w-2/3 md:w-2/3 md:text-xl'>
                 {postDetailByPostId.content}
               </div>
-              <p className='mb-8 mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
+              <p className='mb-8 mr-5 text-sm sm:text-lg'>作成日時:{postCreatedTime}</p>
             </div>
             {/* 指定postのtitleから取得した映画情報 */}
             <MovieInfoArea movieInfo={movieInfo}></MovieInfoArea>

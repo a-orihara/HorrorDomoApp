@@ -60,9 +60,9 @@ export const PostDetailArea = () => {
       {postFetched ? (
         postDetailByPostId ? (
           <div>
-            <div className=' mt-8 flex flex-1 flex-col items-center  bg-red-200'>
+            <div className=' mt-4 flex flex-1 flex-col items-center  bg-red-200'>
               {/* 指定postのuserIdから取得した指定userのavatarとname */}
-              <div className='flex w-1/3 justify-around'>
+              <div className='mb-8 flex w-1/3 justify-around'>
                 <img
                   src={user?.avatarUrl || '/no_image_square.jpg'}
                   alt='user avatar'
@@ -71,14 +71,14 @@ export const PostDetailArea = () => {
                 <p className='flex items-center justify-center'>{user?.name}</p>
               </div>
               {/* 指定postのtitle */}
-              <h2 className='flex h-12 w-1/3 items-center justify-center  bg-blue-200 text-center text-xl md:text-3xl'>
+              <h2 className='mb-4 flex h-12 min-w-min items-center justify-center  rounded-md bg-blue-200 px-2 text-center text-lg md:text-2xl'>
                 {postDetailByPostId.title}
               </h2>
               {/* 指定postのcontent, whitespace-normal:文章折り返し */}
-              <p className='mt-8 h-32 w-1/2 break-words border-2 border-solid border-gray-500 bg-blue-200'>
+              <div className='mb-2 min-h-min w-2/3 min-w-min border-2 border-solid border-gray-500 bg-blue-200 px-2 text-base sm:w-1/2 md:text-lg'>
                 {postDetailByPostId.content}
-              </p>
-              <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
+              </div>
+              <p className='mb-8 mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
             </div>
             {/* 指定postのtitleから取得した映画情報 */}
             <MovieInfoArea movieInfo={movieInfo}></MovieInfoArea>

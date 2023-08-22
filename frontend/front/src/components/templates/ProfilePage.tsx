@@ -56,7 +56,7 @@ const ProfilePage = () => {
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
-        <div className='flex-1 bg-green-200 lg:w-full'>
+        <div className='flex-1 lg:w-full'>
           {showLikedPostArea ? <LikedPostArea user={user}></LikedPostArea> : <PostArea user={user}></PostArea>}
         </div>
         {/* <PostArea user={user}></PostArea>

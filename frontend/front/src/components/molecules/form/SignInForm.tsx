@@ -10,16 +10,11 @@ const SignInForm = () => {
 
   // ================================================================================================
   return (
-    <div className='flex flex-1 flex-col bg-red-200'>
-      <h1 className='mt-20 flex h-20 items-center justify-center bg-white pt-4 text-2xl font-semibold md:text-4xl'>
-        Sign In
-      </h1>
-      <form className='mt-12 flex flex-1 flex-col bg-amber-100 md:mt-20'>
+    <div className='flex flex-1 flex-col'>
+      <h1 className='mt-20 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign In</h1>
+      <form className='mt-12 flex flex-1 flex-col md:mt-16'>
         <div>
-          <Label
-            className='m-auto w-4/5 bg-red-100 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5'
-            htmlFor='email'
-          >
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
             Email:
           </Label>
           <br />
@@ -35,10 +30,7 @@ const SignInForm = () => {
           ></Input>
         </div>
         <div className='md:mt-12 lg:mt-0'>
-          <Label
-            className='m-auto w-4/5 bg-red-100 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5'
-            htmlFor='password'
-          >
+          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='password'>
             Password:
           </Label>
           <br />

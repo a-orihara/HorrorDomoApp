@@ -45,6 +45,8 @@ group :development, :test do
   gem 'faker'
   # pry-railsをインストールすると、pryも一緒にインストールされます。
   gem 'pry-rails'
+  # [Can't escape from eval with next]エラーの解消
+  gem 'pry-nav'
 end
 
 group :development do

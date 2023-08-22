@@ -1,44 +1,39 @@
-# backend/api/spec/requests/api/v1/likes_spec.rb
 require 'rails_helper'
 
-RSpec.describe 'Api::V1::Likes', type: :request do
-  describe 'いいね機能' do
-    let(:user) { create(:user) }
-    let(:post) { create(:post) }
+RSpec.describe "Api::V1::Likes", type: :request do
+  let(:user) { create(:user) }
+  let(:post) { create(:post) }
+  let(:like) { create(:like, user: user, post: post) }
+  let(:headers) { request_login_user(user) }
 
+  # POST api/v1/posts/:post_id/likes #create
+  describe "POST /create" do
+    it '投稿に対していいねを作成できること' do
+      # post "/api/v1/posts/#{post.id}/likes", params: {}, headers: headers # ここでparams引数を追加
+      post api_v1_post_likes_path(post_id: post.id), params: { post_id: post.id }, headers: headers # ここでparams引数を追加
+      expect(response).to have_http_status(200)
+      json = response.parsed_body
+      expect(json["status"]).to eq '201'
+      expect(user.already_liked?(post)).to be_truthy
+    end
+  end
+
+  # DELETE api/v1/posts/:post_id/likes/destroy #destroy
+  describe "DELETE /destroy" do
     before do
-      sign_in user # TestMacrosによるサインイン
+      user.likes.create!(post_id: post.id)
     end
 
-    describe 'いいね作成' do
-      context '有効なパラメータの場合' do
-        it 'いいねが作成される' do
-          expect do
-            post api_v1_post_likes_path(post_id: post.id)
-          end.to change(Like, :count).by(1)
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context '無効なパラメータの場合' do
-        it 'いいねが作成されない' do
-          expect do
-            post api_v1_post_likes_path(post_id: nil)
-          end.to change(Like, :count).by(0)
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
-      end
-    end
-
-    describe 'いいね削除' do
-      let!(:like) { create(:like, user: user, post: post) }
-
-      it 'いいねが削除される' do
-        expect do
-          delete destroy_api_v1_post_likes_path(post_id: post.id)
-        end.to change(Like, :count).by(-1)
-        expect(response).to have_http_status(:ok)
-      end
+    it '投稿のいいねを解除できること' do
+      delete api_v1_post_likes_path(post_id: post.id), headers: headers
+      expect(response).to have_http_status(200)
+      json = response.parsed_body
+      expect(json["status"]).to eq 'SUCCESS'
+      expect(user.already_liked?(post)).to be_falsy
     end
   end
 end
+
+      # post api_v1_post_likes_path(post_id: post.id), headers: headers
+      # post api_v1_post_likes_path(post_id: post.id), params: {}, headers: headers
+      # post api_v1_post_likes_path(post_id: post.id), params: { post_id: post.id }, headers: headers

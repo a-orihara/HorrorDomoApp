@@ -11,7 +11,6 @@ class Api::V1::MoviesController < ApplicationController
     logger.info("urlはここ: #{url}")
     movie_info = JSON.parse(Net::HTTP.get(URI.parse(url)))
     # 3
-    logger.info("moviesはここ: #{movie_info['results'].map { |movie| movie['title'] }}") # "title"の部分のみ出力
     render json: { data: movie_info }
   end
 end

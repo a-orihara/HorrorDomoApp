@@ -26,7 +26,7 @@ const PostForm: React.FC = () => {
             name='title'
             value={title}
             // currentUser(変数): User | undefinedで、undefinedの可能性があるので、currentUser?とする
-            placeholder='タイトルを入力してください'
+            placeholder='映画のタイトルを入力してください'
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setTitle(e.target.value);
             }}
@@ -37,11 +37,11 @@ const PostForm: React.FC = () => {
             Content:
           </Label>
           <TextArea
-            className='m-auto w-4/5 flex-1 md:w-3/5 lg:w-2/5'
+            className='m-auto w-4/5 flex-1 text-2xl md:w-3/5 lg:w-2/5'
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder='何を思っている？'
-            maxLength={140}
+            placeholder='映画の怖かったシーンは何だった？'
+            maxLength={200}
           />
         </div>
         <div>

@@ -20,8 +20,8 @@ RSpec.describe Post, type: :model do
     expect(post).not_to be_valid
   end
 
-  it '141文字以上なら無効であること' do
-    post.content = 'a' * 141
+  it '201文字以上なら無効であること' do
+    post.content = 'a' * 201
     expect(post).not_to be_valid
   end
 

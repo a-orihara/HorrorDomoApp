@@ -29,7 +29,7 @@ class Api::V1::HomePagesController < ApplicationController
         # 返り値:feed（1.feedPostの集合, 2.feedPost総数, 3.feedのuserIdに紐づくfeeduserの集合）
         render json: {
           status: '200',
-          # いいねしているかの真偽値を持たせたfeed_
+          # いいねしているかの真偽値を持たせたfeed
           data: feed_items_with_likes,
           # feed_total_countはpaginationに必要
           feed_total_count: feed_total_count,

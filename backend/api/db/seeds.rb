@@ -73,7 +73,7 @@ image_paths = %w[
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
-  profile = profiles.sample,
+  profile = profiles.sample
   user = User.create!(name:  name,
                 email: email,
                 password:              password,

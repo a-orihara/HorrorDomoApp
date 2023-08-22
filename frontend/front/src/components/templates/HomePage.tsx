@@ -23,7 +23,7 @@ const HomePage = () => {
   return (
     <div className='flex flex-1 flex-col'>
       {isSignedIn && currentUser ? (
-        <div className='flex h-full flex-col bg-blue-200 lg:flex-row'>
+        <div className='flex h-full flex-col lg:flex-row'>
           <div className='h-12 w-full lg:h-full lg:w-48'>
             <Sidebar></Sidebar>
           </div>

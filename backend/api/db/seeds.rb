@@ -5,6 +5,20 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+# 4
+require 'yaml'
+
+# 5
+profiles_path = Rails.root.join('db/seeds/profiles.yml')
+titles_path = Rails.root.join('db/seeds/titles.yml')
+contents_path = Rails.root.join('db/seeds/contents.yml')
+
+# 6
+profiles = YAML.load_file(profiles_path)['profiles']
+titles = YAML.load_file(titles_path)['titles']
+contents = YAML.load_file(contents_path)['contents']
+
 user1 = User.create!(
   name: 'momo',
   email: 'momo@momo.com',
@@ -12,7 +26,8 @@ user1 = User.create!(
   password_confirmation: 'momomo',
   admin: true,
   # 1
-  profile: Faker::Lorem.sentence(word_count: 20),
+  # profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 user2 = User.create!(
@@ -20,7 +35,7 @@ user2 = User.create!(
   email: 'koko@koko.com',
   password: 'kokoko',
   password_confirmation: 'kokoko',
-  profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 user3 = User.create!(
@@ -28,15 +43,22 @@ user3 = User.create!(
   email: 'soso@soso.com',
   password: 'sososo',
   password_confirmation: 'sososo',
-  profile: Faker::Lorem.sentence(word_count: 20),
+  profile: profiles.sample,
 )
 
 users = [user1, user2]
 
+titles = [
+  "オーメン", "ハロウィン", "エルム街の悪夢", "バタリアン", "ゾンビ", "ジョーズ",
+  "ミスト", "サスペリア", "エイリアン", "スクリーム1", "悪魔のいけにえ", "死霊のはらわた1",
+  "死霊館", "it", "ロボコップ", "ジョーカー", "ポルターガイスト", "エクソシスト1", "もののけ姫",
+  "マッドマックス", "シャイニング", "プレデター1", "リング"
+]
+
 users.each do |user|
   25.times do
-    content = Faker::Lorem.sentence(word_count: 20)
-    title = Faker::Lorem.sentence(word_count: 3)
+    content = contents.sample
+    title = titles.sample # タイトルの配列からランダムに選ぶ
     # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
@@ -58,7 +80,7 @@ image_paths = %w[
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
-  profile = Faker::Lorem.sentence(word_count: 20)
+  profile = profiles.sample,
   user = User.create!(name:  name,
                 email: email,
                 password:              password,
@@ -69,8 +91,8 @@ image_paths = %w[
   # 4 その画像をユーザーのavatarに添付
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
   20.times do
-    content = Faker::Lorem.sentence(word_count: 20)
-    title = Faker::Lorem.sentence(word_count: 3)
+    content = contents.sample
+    title = titles.sample # タイトルの配列からランダムに選ぶ
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
   end
@@ -78,24 +100,36 @@ end
 
 # 全てのユーザー
 allusers = User.all
-following = allusers[2..30]
-followers = allusers[4..31]
+following = allusers[2..20]
+followers = allusers[10..31]
 # user1がフォロー
 following.each { |followed| user1.follow(followed) }
 # user1をフォロー
 followers.each { |follower| follower.follow(user1) }
 following = allusers[30..51]
-followers = allusers[4..31]
+followers = allusers[4..21]
 # user2がフォロー
 following.each { |followed| user2.follow(followed) }
 # user2をフォロー
 followers.each { |follower| follower.follow(user2) }
 
+# 全てのユーザー
+# allusers = User.all
+allusers.each do |user|
+  # 自分を除いたユーザーからランダムに20〜30人を選ぶ
+  random_following = allusers.where.not(id: user.id).sample(rand(10..20))
+  # それらのユーザーをフォロー
+  random_following.each do |followed|
+    # すでにフォローしている場合はスキップ
+    next if user.following?(followed)
+    user.follow(followed)
+  end
+end
+
 # 全てのユーザーをループ
 allusers.each do |user|
   # すべての投稿から自分の投稿を除外（自分の投稿を除外した他のユーザーの投稿を取得）
   other_user_posts = Post.where.not(user_id: user.id)
-
   # 20回のループの中で、ランダムに投稿を選び、already_liked?メソッドを使ってその投稿を既にいいねしているか確認
   20.times do
     # 10回のループの中で、ランダムに投稿を選ぶ
@@ -180,4 +214,30 @@ Rubyのメソッド。`Pathname`クラスや`File`クラス、`Dir`クラスな�
 `Rails.root.join("app/assets/images/man1.png")`の戻り値は、
 `"/backend/api/app/assets/images/man1.png"`という文字列になります。
 
+================================================================================================
+4
+require 'yaml
+Rubyの標準ライブラリのYAMLパーサーをロードします。このコードでYAMLファイルの読み込みが可能になります。
+'yaml'はライブラリ名であり、YAML形式のファイルを扱うためのメソッドが提供される。ファイルの拡張子が'.yml'であっ
+ても、ライブラリ自体の名前は'yaml'であるため、このように記述します。
+
+================================================================================================
+5
+Rails.root.join
+Railsプロジェクトのルートディレクトリへのパスに対して、引数で指定したパスを結合します。絶対パスを指定するための便利
+なメソッドです。
+backend/api/に置き換わる
+
+================================================================================================
+6
+. `YAML.load_file`
+- メソッド: `YAML.load_file`メソッドはYAML形式のファイルを読み込むためのメソッド。
+- 戻り値: 読み込んだYAMLファイルの内容をRubyオブジェクトとして返す。
+- 引数: 読み込むYAMLファイルのパスを文字列またはPathnameオブジェクトで指定。
+
+. `(profiles_path)['profiles']`の意味
+- `profiles_path`: この変数はYAMLファイルのパスを保持している。
+- `['profiles']`: YAMLファイル内の`profiles`キーに対応する値を取り出すための記法。
+- 指しているもの: `profiles`キーの値（YAMLファイル内における）を取得している。YAMLファイルの構造に応じた値が取
+り出される。ハッシュのキーから値を取り出しているため、profilesはハッシュとなります。
 =end

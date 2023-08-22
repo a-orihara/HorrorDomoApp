@@ -15,7 +15,16 @@ const client: AxiosInstance = applyCaseMiddleware(
   options
 );
 
-export default client;
+// TMDB用のインスタンスを追加
+const tmdbClient: AxiosInstance = applyCaseMiddleware(
+  axios.create({
+    baseURL: 'https://api.themoviedb.org/3',
+    timeout: 5000,
+  }),
+  options
+);
+
+export { client, tmdbClient };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

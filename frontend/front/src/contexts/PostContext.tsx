@@ -25,7 +25,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
   // 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
-  // 選択された投稿の詳細
+  // id選択の投稿の詳細
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
 
   const router = useRouter();
@@ -52,12 +52,15 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
+      // console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
+      // console.log('◆postConrextのhandleGetPostDetailByPostId発火');
       try {
         // 指定したuserIdのpostの詳細を取得する関数
-        const data = await getPostDetailByUserId(postId);
-        if (data.data.status == 200) {
-          setPostDetailByPostId(data.data.data);
-        } else if (data.data.status == 404) {
+        const res = await getPostDetailByUserId(postId);
+        if (res.data.status == 200) {
+          setPostDetailByPostId(res.data.data);
+          // console.log('◆postConrextのsetPostDetailByPostId(res.data.data);したよ');
+        } else if (res.data.status == 404) {
           alert('投稿を表示できません');
           setTimeout(() => {
             router.push(`/`);

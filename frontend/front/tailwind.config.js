@@ -14,6 +14,7 @@ module.exports = {
         'basic-green': '#008000',
         // 'basic-purple': '#CC00CC',
         'basic-purple': '#6d4daa',
+        'basic-beige': '#FBEED6',
         'hover-yellow': '#FFF33F',
         'hover-pink': '#FC1919',
         'hover-orange': '#fef08a',

@@ -14,9 +14,9 @@ const UserInfo = ({ user, postsCount, toggleFeed, showLikedPostArea }: UserInfoP
   // console.log(`UserInfoの${JSON.stringify(user)}`);
   // console.log(`UserInfoのshowLikedPostAreaは、${showLikedPostArea}`);
   return (
-    <div className='flex  flex-col rounded-xl border bg-basic-yellow shadow-md md:p-1'>
+    <div className='flex  flex-col rounded-xl border border-black bg-basic-yellow shadow-md md:p-1'>
       <section className='rounded-full bg-basic-beige'>
-        <h1 className='mb-2 mt-2 rounded-md text-center text-sm  tracking-wide text-basic-green  md:text-2xl lg:mb-6 lg:mt-4 lg:tracking-widest'>
+        <h1 className='mb-2 mt-2 rounded-md text-center text-sm  font-semibold tracking-wide text-basic-green md:text-2xl lg:mb-6 lg:mt-4 lg:tracking-widest'>
           User Info
         </h1>
       </section>
@@ -33,7 +33,7 @@ const UserInfo = ({ user, postsCount, toggleFeed, showLikedPostArea }: UserInfoP
         />
         {/* 2 */}
         <section className='flex flex-col'>
-          <h1 className='flex items-center justify-center break-all  text-xs text-basic-green md:text-lg lg:text-base lg:tracking-wide'>
+          <h1 className='flex items-center justify-center break-all  text-xs font-semibold text-basic-green md:text-lg lg:text-base lg:tracking-wide'>
             Name:
           </h1>
           <p className='mb-2  ml-2 flex flex-1 items-center justify-center break-all text-sm md:text-xl lg:text-lg lg:tracking-wide'>
@@ -49,14 +49,14 @@ const UserInfo = ({ user, postsCount, toggleFeed, showLikedPostArea }: UserInfoP
       </div>
 
       <section className='mb-2 flex flex-col rounded-md bg-basic-beige px-2'>
-        <h1 className='mb-2 flex items-center justify-center break-all text-xs text-basic-green md:text-lg lg:text-base lg:tracking-wide'>
+        <h1 className='mb-2 flex items-center justify-center break-all text-xs font-semibold text-basic-green md:text-lg lg:text-base lg:tracking-wide'>
           Profile:
         </h1>
         <p className='mb-4 break-all text-xs md:text-lg lg:mb-4'>{user.profile || 'profileは設定されていません。'}</p>
       </section>
 
       <section>
-        <h2 className='mb-2 text-center text-xs text-basic-green md:text-base'>総投稿数: {postsCount || 0}</h2>
+        <h2 className='mb-2 text-center text-xs  text-basic-green md:text-base'>総投稿数: {postsCount || 0}</h2>
       </section>
     </div>
   );

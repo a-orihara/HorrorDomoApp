@@ -46,7 +46,7 @@ const HomePage = () => {
             <CreatePostLink></CreatePostLink>
           </div>
 
-          <div className='flex-1 bg-green-200 lg:w-full'>
+          <div className='flex-1 lg:w-full'>
             {showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (

@@ -25,7 +25,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   // console.log(`PostListItemのpost:${JSON.stringify(post)}`);
 
   return (
-    <li key={post.id} className='basic-border my-px'>
+    <li key={post.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex'>
         <div className='mx-4'>
           <Link href={`/users/${user.id}`}>

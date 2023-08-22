@@ -37,7 +37,7 @@ export const LikeStats = ({ userId, toggleFeed, showLikedPostArea }: LikeStatsPr
     currentUser?.id,
     currentUser,
   ]);
-  const bgColor = showLikedPostArea ? 'bg-blue-500' : '';
+  const linkClickedStyle = showLikedPostArea ? 'bg-basic-pink text-white rounded-lg hover:text-black' : '';
 
   // 3
   const userLikedCount =
@@ -52,7 +52,10 @@ export const LikeStats = ({ userId, toggleFeed, showLikedPostArea }: LikeStatsPr
         </a>
       </Link> */}
       {/* linkをクリックすると、FeedとLikedPostAreaの表示を切替る */}
-      <a className={`mr-4 cursor-pointer text-xs hover:text-basic-pink md:text-base ${bgColor}`} onClick={toggleFeed}>
+      <a
+        className={`mr-4 cursor-pointer text-xs hover:text-basic-pink md:text-base ${linkClickedStyle}`}
+        onClick={toggleFeed}
+      >
         {/* <a className={`mr-4 cursor-pointer bg-blue-200 text-xs hover:text-basic-pink md:text-base`} onClick={toggleFeed}> */}
         <span className='mr-2 underline'>{userLikedCount}</span>
         いいね

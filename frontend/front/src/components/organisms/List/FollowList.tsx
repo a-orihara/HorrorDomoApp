@@ -10,8 +10,8 @@ type FollowListProps = {
 // 1
 export const FollowList = ({ followUsers, title, noFollowMessage }: FollowListProps) => {
   return (
-    <div className='flex flex-1 flex-col bg-red-200'>
-      <h1 className='mx-auto mb-2 mt-2 flex h-8 items-center justify-center text-2xl font-semibold  md:h-12 md:text-4xl'>
+    <div className='flex flex-1 flex-col'>
+      <h1 className='mx-auto mb-4 mt-2 flex h-8 items-center justify-center text-2xl font-semibold sm:mb-8  md:h-12 md:text-4xl'>
         {title}
       </h1>
       {!followUsers || followUsers.length === 0 ? (

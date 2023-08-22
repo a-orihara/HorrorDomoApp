@@ -48,13 +48,6 @@ user3 = User.create!(
 
 users = [user1, user2]
 
-titles = [
-  "オーメン", "ハロウィン", "エルム街の悪夢", "バタリアン", "ゾンビ", "ジョーズ",
-  "ミスト", "サスペリア", "エイリアン", "スクリーム1", "悪魔のいけにえ", "死霊のはらわた1",
-  "死霊館", "it", "ロボコップ", "ジョーカー", "ポルターガイスト", "エクソシスト1", "もののけ姫",
-  "マッドマックス", "シャイニング", "プレデター1", "リング"
-]
-
 users.each do |user|
   25.times do
     content = contents.sample
@@ -80,7 +73,7 @@ image_paths = %w[
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
-  profile = profiles.sample,
+  profile = profiles.sample
   user = User.create!(name:  name,
                 email: email,
                 password:              password,

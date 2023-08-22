@@ -28,7 +28,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   // console.log(`feedListItemのpost:${JSON.stringify(feedPost)}`);
 
   return (
-    <li key={feedPost.id} className='my-px bg-slate-100'>
+    <li key={feedPost.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex flex-row'>
         <div className='mx-4'>
           <Link href={`/users/${feedUser.id}`}>

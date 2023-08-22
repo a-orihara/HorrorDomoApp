@@ -26,7 +26,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
   // console.log(`LikePostListItemのlikedPost.liked:${likedPost.liked}`);
 
   return (
-    <li key={likedPost.id} className='basic-border my-px'>
+    <li key={likedPost.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex'>
         <div className='mx-4'>
           <Link href={`/users/${likedUser.id}`}>

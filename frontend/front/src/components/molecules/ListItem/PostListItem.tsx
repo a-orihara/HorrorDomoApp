@@ -1,12 +1,11 @@
 // date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
 import Link from 'next/link';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import useFormattedTime from '../../../hooks/helpers/useFormattedTime';
 import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
-import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
 import UserAvatar from '../../atoms/UserAvatar';
+import ListItemContent from './ListItemContent';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
 type PostListItemProps = {
@@ -16,29 +15,14 @@ type PostListItemProps = {
 
 // 1 関数コンポーネントの引数は基本的にオブジェクト型。
 const PostListItem = ({ post, user }: PostListItemProps) => {
-  // postの作成日時を形成するカスタムフック
-  const postCreatedTime = useFormattedTime(post.createdAt);
-  // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
-  const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
-  // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
+  // currentUserと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
+  // 投稿を削除する関数
   const { handleDeletePost } = useDeletePost();
-  // console.log(`PostListItemのpost:${JSON.stringify(post)}`);
 
   return (
     <li key={post.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex'>
-        {/* <div className='mx-4'>
-          <Link href={`/users/${user.id}`}>
-            <a>
-              <img
-                src={user.avatarUrl || '/no_image_square.jpg'}
-                alt='user avatar'
-                className='mt-2 h-8 w-8 rounded-full md:h-16 md:w-16'
-              />
-            </a>
-          </Link>
-        </div> */}
         <UserAvatar avatarUrl={user.avatarUrl} userId={user.id}></UserAvatar>
         <div>
           <p>
@@ -52,7 +36,8 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               {post.title}
             </a>
           </Link>
-          <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
+          <ListItemContent post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
+          {/* <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
           <div className='flex'>
             <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
             {currentUser && currentUser.id !== post.userId && (
@@ -71,8 +56,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               >
                 <h1 className='text-center text-sm text-basic-green hover:text-basic-pink lg:text-base'>delete</h1>
               </a>
-            )}
-          </div>
+            )} */}
         </div>
       </div>
     </li>

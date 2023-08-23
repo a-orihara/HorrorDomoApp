@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'pp'
+# require 'pp'
 
 RSpec.describe 'Api::V1::HomePages', type: :request do
   let(:user) { create(:user) }
@@ -26,7 +26,7 @@ RSpec.describe 'Api::V1::HomePages', type: :request do
 
       it '正しいフィード情報を返すこと' do
         # レスポンスのJSON形式を8種に変換し、 json 変数に格納
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         # puts ":#{json['data']}"
         # json 変数内のデータの中に 'data' フィールドが存在することを確認
         # .to be_present は、データが存在することを確認するマッチャ
@@ -45,7 +45,7 @@ RSpec.describe 'Api::V1::HomePages', type: :request do
       end
 
       it 'エラーメッセージを返すこと' do
-        json = JSON.parse(response.body)
+        json = response.parsed_body
         expect(json['message']).to eq('ユーザーを取得出来ません')
       end
     end

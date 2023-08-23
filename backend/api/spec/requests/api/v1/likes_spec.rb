@@ -34,7 +34,3 @@ RSpec.describe "Api::V1::Likes", type: :request do
     end
   end
 end
-
-      # post api_v1_post_likes_path(post_id: post.id), headers: headers
-      # post api_v1_post_likes_path(post_id: post.id), params: {}, headers: headers
-      # post api_v1_post_likes_path(post_id: post.id), params: { post_id: post.id }, headers: headers

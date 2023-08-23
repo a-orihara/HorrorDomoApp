@@ -130,6 +130,7 @@ RSpec.describe User, type: :model do
     it 'いいねしている場合はtrueを返すこと' do
       create(:like, user: user, post: post)
       expect(user.already_liked?(post)).to be_truthy
+    end
   end
 
   describe 'Feedの取得（feedのテスト）' do
@@ -151,7 +152,6 @@ RSpec.describe User, type: :model do
       expect(user.feed).not_to include(unfollowed_post)
     end
   end
-end
 end
 
 =begin

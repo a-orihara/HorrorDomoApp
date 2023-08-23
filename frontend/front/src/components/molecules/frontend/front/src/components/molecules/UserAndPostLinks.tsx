@@ -8,10 +8,10 @@ type UserAndPostLinksProps = {
 };
 
 const UserAndPostLinks = ({ user, post }: UserAndPostLinksProps) => (
-  <>
+  <div>
     <p>
       <Link href={`/users/${user.id}`}>
-        <a className='text-xs lg:text-base lg:tracking-wider'>{user.name}</a>
+        <a className='text-xs hover:text-basic-pink lg:text-base lg:tracking-wider'>{user.name}</a>
       </Link>
     </p>
     <Link href={`/post/${post.id}`}>
@@ -19,7 +19,7 @@ const UserAndPostLinks = ({ user, post }: UserAndPostLinksProps) => (
         {post.title}
       </a>
     </Link>
-  </>
+  </div>
 );
 
 export default UserAndPostLinks;

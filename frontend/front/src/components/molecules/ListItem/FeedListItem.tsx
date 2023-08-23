@@ -32,7 +32,6 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
     <li key={feedPost.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex flex-row'>
         <UserAvatar avatarUrl={feedUser.avatarUrl} userId={feedUser.id}></UserAvatar>
-
         <div>
           <p>
             <Link href={`/users/${feedUser.id}`}>

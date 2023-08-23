@@ -37,26 +37,6 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
             </a>
           </Link>
           <ListItemContent post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
-          {/* <p className='text-left text-sm  md:text-xl'>{truncateContent}</p>
-          <div className='flex'>
-            <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
-            {currentUser && currentUser.id !== post.userId && (
-              // 2
-              // <LikeButtonIcon postId={post.id} liked={post.liked} userId={user.id} />
-              <LikeButtonIcon postId={post.id} liked={post.liked} />
-            )}
-            {currentUser?.id === post.userId && (
-              <a
-                className='hover:cursor-pointer'
-                onClick={() => {
-                  if (window.confirm('投稿を削除しますか？')) {
-                    handleDeletePost(post.id);
-                  }
-                }}
-              >
-                <h1 className='text-center text-sm text-basic-green hover:text-basic-pink lg:text-base'>delete</h1>
-              </a>
-            )} */}
         </div>
       </div>
     </li>

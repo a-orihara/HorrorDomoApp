@@ -6,6 +6,7 @@ import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
+import UserAvatar from '../../atoms/UserAvatar';
 
 // LikedPostListItemPropsはkey名がpostで値にLikedPost型を持つオブジェクト型;
 type LikedPostListItemProps = {
@@ -28,17 +29,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
   return (
     <li key={likedPost.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex'>
-        <div className='mx-4'>
-          <Link href={`/users/${likedUser.id}`}>
-            <a>
-              <img
-                src={likedUser.avatarUrl || '/no_image_square.jpg'}
-                alt='user avatar'
-                className='mt-2 h-8 w-8 rounded-full md:h-16 md:w-16'
-              />
-            </a>
-          </Link>
-        </div>
+        <UserAvatar avatarUrl={likedUser.avatarUrl} userId={likedUser.id}></UserAvatar>
         <div>
           <p>
             <Link href={`/users/${likedUser.id}`}>

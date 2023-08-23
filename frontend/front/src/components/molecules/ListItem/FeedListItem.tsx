@@ -1,11 +1,11 @@
 // date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
-import Link from 'next/link';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import useFormattedTime from '../../../hooks/helpers/useFormattedTime';
 import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
+import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
 import ListItemContent from './ListItemContent';
 
 // FeedListItemPropsはkey名がfeedPostで値にPost型を持つオブジェクト型;
@@ -33,17 +33,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
       <div className='flex flex-row'>
         <UserAvatar avatarUrl={feedUser.avatarUrl} userId={feedUser.id}></UserAvatar>
         <div>
-          <p>
-            <Link href={`/users/${feedUser.id}`}>
-              <a className='text-xs lg:text-base lg:tracking-wider'>{feedUser.name}</a>
-            </Link>
-          </p>
-          {/* <p className='text-sm md:text-xl'>タイトル:{feedPost.title}</p> */}
-          <Link href={`/post/${feedPost.id}`}>
-            <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
-              {feedPost.title}
-            </a>
-          </Link>
+          <UserAndPostLinks user={feedUser} post={feedPost}></UserAndPostLinks>
           {/* 2 */}
           <ListItemContent // ListItemContentコンポーネントを使用
             post={feedPost}

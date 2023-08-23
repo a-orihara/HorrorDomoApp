@@ -28,8 +28,13 @@ RSpec.describe User, type: :model do
       expect(user).to validate_length_of(:email).is_at_most(255)
     end
 
+    it 'メールアドレスが正しい形式であること' do
+      expect(user).to allow_value('user@example.com').for(:email)
+      expect(user).not_to allow_value('user@example').for(:email)
+    end
+
     it '160文字以内のプロフィールは有効' do
-    expect(user).to validate_length_of(:profile).is_at_most(160)
+      expect(user).to validate_length_of(:profile).is_at_most(160)
     end
   end
 
@@ -113,6 +118,40 @@ RSpec.describe User, type: :model do
       expect(user.following?(other_user)).to be_falsey
     end
   end
+
+  describe 'いいねの確認（already_liked?のテスト）' do
+    let(:user) { create(:user) }
+    let(:post) { create(:post) }
+
+    it 'いいねしていない場合はfalseを返すこと' do
+      expect(user.already_liked?(post)).to be_falsey
+    end
+
+    it 'いいねしている場合はtrueを返すこと' do
+      create(:like, user: user, post: post)
+      expect(user.already_liked?(post)).to be_truthy
+  end
+
+  describe 'Feedの取得（feedのテスト）' do
+    let(:user) { create(:user) }
+    let(:followed_user) { create(:user) }
+    let(:unfollowed_user) { create(:user) }
+    let!(:followed_post) { create(:post, user: followed_user) }
+    let!(:unfollowed_post) { create(:post, user: unfollowed_user) }
+
+    before do
+      user.follow(followed_user)
+    end
+
+    it 'フォローしているユーザーの投稿を含むこと' do
+      expect(user.feed).to include(followed_post)
+    end
+
+    it 'フォローしていないユーザーの投稿を含まないこと' do
+      expect(user.feed).not_to include(unfollowed_post)
+    end
+  end
+end
 end
 
 =begin

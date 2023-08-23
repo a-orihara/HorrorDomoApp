@@ -1,10 +1,10 @@
 // date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
-import Link from 'next/link';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
+import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
 import ListItemContent from './ListItemContent';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
@@ -25,17 +25,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
       <div className='flex'>
         <UserAvatar avatarUrl={user.avatarUrl} userId={user.id}></UserAvatar>
         <div>
-          <p>
-            <Link href={`/users/${user.id}`}>
-              <a className='text-xs lg:text-base lg:tracking-wider'>{user.name}</a>
-            </Link>
-          </p>
-          {/* <p className='text-sm md:text-xl'>タイトル:{post.title}</p> */}
-          <Link href={`/post/${post.id}`}>
-            <a className='text-sm text-black  text-opacity-50 hover:cursor-pointer hover:text-basic-pink md:text-xl'>
-              {post.title}
-            </a>
-          </Link>
+          <UserAndPostLinks user={user} post={post}></UserAndPostLinks>
           <ListItemContent post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
         </div>
       </div>

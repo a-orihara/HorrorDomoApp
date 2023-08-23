@@ -6,6 +6,7 @@ import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
+import UserAvatar from '../../atoms/UserAvatar';
 
 // FeedListItemPropsはkey名がfeedPostで値にPost型を持つオブジェクト型;
 type FeedListItemProps = {
@@ -30,17 +31,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   return (
     <li key={feedPost.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex flex-row'>
-        <div className='mx-4'>
-          <Link href={`/users/${feedUser.id}`}>
-            <a>
-              <img
-                src={feedUser.avatarUrl || '/no_image_square.jpg'}
-                alt='user avatar'
-                className='mt-2 h-8 w-8 rounded-full md:h-16 md:w-16'
-              />
-            </a>
-          </Link>
-        </div>
+        <UserAvatar avatarUrl={feedUser.avatarUrl} userId={feedUser.id}></UserAvatar>
 
         <div>
           <p>

@@ -18,7 +18,7 @@ RSpec.describe "Api::V1::Movies", type: :request do
 
       it '映画情報を返すこと' do
         json = JSON.parse(response.body)
-        puts "ここjson:#{json['data']}"
+        # puts "ここjson:#{json['data']}"
         expect(json['data']).to be_present
       end
     end

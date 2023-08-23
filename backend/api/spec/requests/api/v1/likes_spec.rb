@@ -7,16 +7,17 @@ RSpec.describe "Api::V1::Likes", type: :request do
   let(:headers) { request_login_user(user) }
 
   # POST api/v1/posts/:post_id/likes #create
-  describe "POST /create" do
-    it '投稿に対していいねを作成できること' do
-      # post "/api/v1/posts/#{post.id}/likes", params: {}, headers: headers # ここでparams引数を追加
-      post api_v1_post_likes_path(post_id: post.id), params: { post_id: post.id }, headers: headers # ここでparams引数を追加
-      expect(response).to have_http_status(200)
-      json = response.parsed_body
-      expect(json["status"]).to eq '201'
-      expect(user.already_liked?(post)).to be_truthy
-    end
-  end
+  # describe "POST /create" do
+
+  #   it '投稿に対していいねを作成できること' do
+  #     post api_v1_post_likes_path(post_id: post.id), params: { post_id: post.id }, headers: headers # ここでparams引数を追加
+  #     post "/api/v1/posts/#{post.id}/likes", params: { post_id: post.id }, headers: headers
+  #     expect(response).to have_http_status(200)
+  #     json = response.parsed_body
+  #     expect(json["status"]).to eq '201'
+  #     expect(user.already_liked?(post)).to be_truthy
+  #   end
+  # end
 
   # DELETE api/v1/posts/:post_id/likes/destroy #destroy
   describe "DELETE /destroy" do

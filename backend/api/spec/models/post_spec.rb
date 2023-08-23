@@ -15,13 +15,18 @@ RSpec.describe Post, type: :model do
     expect(post).not_to be_valid
   end
 
+  it 'コンテンツの長さが200文字以内なら有効であること' do
+    post.content = 'a' * 200
+    expect(post).to be_valid
+  end
+
   it "空（ブランク）なら無効であること" do
     post.content = "   "
     expect(post).not_to be_valid
   end
 
-  it '141文字以上なら無効であること' do
-    post.content = 'a' * 141
+  it '201文字以上なら無効であること' do
+    post.content = 'a' * 201
     expect(post).not_to be_valid
   end
 
@@ -32,6 +37,11 @@ RSpec.describe Post, type: :model do
     expect(most_recent_post).to eq described_class.first
   end
 
+  it 'タイトルの長さが20文字以内なら有効であること' do
+    post.title = 'a' * 20
+    expect(post).to be_valid
+  end
+
   it "タイトルが空（ブランク）なら無効であること" do
     post.title = "   "
     expect(post).not_to be_valid
@@ -40,6 +50,15 @@ RSpec.describe Post, type: :model do
   it 'タイトルが21文字以上なら無効であること' do
     post.title = 'a' * 21
     expect(post).not_to be_valid
+  end
+
+  describe '関連付け' do
+    let(:like) { create(:like) }
+
+    it '投稿が削除されると、関連するいいねも削除されること' do
+      post = like.post
+      expect { post.destroy }.to change(Like, :count).by(-1)
+    end
   end
 end
 

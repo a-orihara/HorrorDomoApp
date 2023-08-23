@@ -4,11 +4,11 @@ class Api::V1::MoviesController < ApplicationController
 
   def index
     title = params[:title]
-    logger.info("titleはここ: #{title}")
+    # logger.info("titleはここ: #{title}")
     # 1 titleをエンコードする
     url = "https://api.themoviedb.org/3/search/movie?api_key=#{ENV.fetch('TMDB_API')}&language=ja&query=" + URI.encode_www_form_component(title)
     # 2
-    logger.info("urlはここ: #{url}")
+    # logger.info("urlはここ: #{url}")
     movie_info = JSON.parse(Net::HTTP.get(URI.parse(url)))
     # 3
     render json: { data: movie_info }

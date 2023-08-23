@@ -106,7 +106,8 @@ class Api::V1::UsersController < ApplicationController
   # 7 ユーザーの総いいね数のみを取得する
   def total_likes_count
     logger.info "total_likes_countアクションが発火"
-    user = User.find(params[:id])
+    # user = User.find(params[:id])
+    user = User.find_by(id: params[:id])
     if user
       total_liked_counts = user.likes.count
       render json: { status: '200', total_liked_counts: total_liked_counts }
@@ -121,7 +122,8 @@ class Api::V1::UsersController < ApplicationController
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     # 指定ユーザーIDでユーザーを検索
-    user = User.find(params[:id])
+    # user = User.find(params[:id])
+    user = User.find_by(id: params[:id])
     if user
       # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)

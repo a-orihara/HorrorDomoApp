@@ -132,6 +132,58 @@ RSpec.describe "Api::V1::Users", type: :request do
       expect(json['is_following']).to be true
     end
   end
+
+  # total_likes_countアクションのテスト
+  describe 'GET /api/v1/users/:id/total_likes_count' do
+    let(:user) { create(:user) }
+    let(:auth_headers) { user.create_new_auth_token }
+
+    context '存在するユーザーのIDを指定した場合' do
+      before do
+        get "/api/v1/users/#{user.id}/total_likes_count", headers: auth_headers
+      end
+
+      it '200 OKを返すこと' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context '存在しないユーザーのIDを指定した場合' do
+      before do
+        get "/api/v1/users/0/total_likes_count", headers: auth_headers # 認証情報を追加
+      end
+
+      it '404 Not Foundを返すこと' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
+  # all_likesアクションのテスト
+  describe 'GET /api/v1/users/:id/all_likes' do
+    let(:user) { create(:user) }
+    let(:auth_headers) { user.create_new_auth_token }
+
+    context '存在するユーザーのIDを指定した場合' do
+      before do
+        get "/api/v1/users/#{user.id}/all_likes", headers: auth_headers
+      end
+
+      it '200 OKを返すこと' do
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context '存在しないユーザーのIDを指定した場合' do
+      before do
+        get "/api/v1/users/0/all_likes", headers: auth_headers # 認証情報を追加
+      end
+
+      it '404 Not Foundを返すこと' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
 
 =begin

@@ -146,6 +146,10 @@ RSpec/NestedGroups:
 RSpec/PredicateMatcher:
   Enabled: false
 
+# テストグループ内で多くのメモ化されたヘルパー（letやsubject）が使われていることを指摘（デフォルトの閾値は5）
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 # ハッシュリテラルの書式に関するスタイルをチェックする
 # 紛らわしいので一旦オフにする
 Style/HashSyntax:

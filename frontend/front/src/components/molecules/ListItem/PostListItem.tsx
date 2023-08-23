@@ -6,6 +6,7 @@ import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
+import UserAvatar from '../../atoms/UserAvatar';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
 type PostListItemProps = {
@@ -27,7 +28,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
   return (
     <li key={post.id} className='my-px rounded-md bg-basic-beige'>
       <div className='flex'>
-        <div className='mx-4'>
+        {/* <div className='mx-4'>
           <Link href={`/users/${user.id}`}>
             <a>
               <img
@@ -37,7 +38,8 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
               />
             </a>
           </Link>
-        </div>
+        </div> */}
+        <UserAvatar avatarUrl={user.avatarUrl} userId={user.id}></UserAvatar>
         <div>
           <p>
             <Link href={`/users/${user.id}`}>

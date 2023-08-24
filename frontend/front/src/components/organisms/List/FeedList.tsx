@@ -1,42 +1,52 @@
-// frontend/front/src/components/molecules/FeedList.tsx
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import FeedListItem from '../../molecules/listItem/FeedListItem';
-// import FeedListItem from '../../molecules/ListItem/FeedListItem';
+import CommonPostList from './CommonPostList';
 
 type FeedListProps = {
   feedPosts: Post[];
   feedUsers: User[];
 };
-const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
-  // 1
-  if (!feedPosts || feedPosts.length === 0) {
-    return (
-      <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
-        <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿がありません</p>
-      </div>
-    );
-  }
+// const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
+//   // 1
+//   if (!feedPosts || feedPosts.length === 0) {
+//     return (
+//       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
+//         <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿がありません</p>
+//       </div>
+//     );
+//   }
 
+//   return (
+//     <div className='flex-1'>
+//       <ol>
+//         {feedPosts?.map((feedPost) => {
+//           // 2
+//           const feedUser = feedUsers.find((feedUser) => feedUser.id === feedPost.userId);
+//           // 3
+//           if (feedUser) {
+//             return <FeedListItem key={feedPost.id} feedPost={feedPost} feedUser={feedUser}></FeedListItem>;
+//           } else {
+//             return (
+//               <div key={feedPost.id} className='mb-4 flex flex-1 flex-col items-center justify-around'>
+//                 <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿を表示できません</p>
+//               </div>
+//             );
+//           }
+//         })}
+//       </ol>
+//     </div>
+//   );
+// };
+
+const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
   return (
-    <div className='flex-1'>
-      <ol>
-        {feedPosts?.map((feedPost) => {
-          // 2
-          const feedUser = feedUsers.find((feedUser) => feedUser.id === feedPost.userId);
-          // 3
-          if (feedUser) {
-            return <FeedListItem key={feedPost.id} feedPost={feedPost} feedUser={feedUser}></FeedListItem>;
-          } else {
-            return (
-              <div key={feedPost.id} className='mb-4 flex flex-1 flex-col items-center justify-around'>
-                <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿を表示できません</p>
-              </div>
-            );
-          }
-        })}
-      </ol>
-    </div>
+    <CommonPostList
+      posts={feedPosts}
+      users={feedUsers}
+      ListItemComponent={FeedListItem}
+      noPostsMessage='投稿がありません'
+    />
   );
 };
 

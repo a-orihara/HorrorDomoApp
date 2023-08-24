@@ -19,7 +19,7 @@ const PostList = ({ posts, user }: PostListProps) => {
     <div className='flex-1'>
       <ol>
         {/* 1 オプショナルチェインニング */}
-        {posts?.map((post) => (
+        {posts.map((post) => (
           <PostListItem key={post.id} post={post} user={user}></PostListItem>
         ))}
       </ol>

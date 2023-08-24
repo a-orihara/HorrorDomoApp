@@ -10,7 +10,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   const [feedPosts, setFeedPosts] = useState<Post[]>([]);
   // 指定したuserIdのユーザーの投稿数
   const [totalFeedPostsCount, setTotalFeedPostsCount] = useState(0);
-
+  // 指定idユーザーのfeedのusers
   const [feedUsers, setFeedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();

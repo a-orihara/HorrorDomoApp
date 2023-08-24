@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { getCurrentUserPostList, getPostDetailByUserId } from '../api/post';
+import { getCurrentUserPostsCount, getPostDetailByUserId } from '../api/post';
 import { Post } from '../types/post';
 
 type PostProviderProps = {
@@ -11,7 +11,7 @@ type PostProviderProps = {
 type PostContextProps = {
   currentUserPostsCount: number | undefined;
   postDetailByPostId: Post | undefined;
-  handleGetCurrentUserPostList: () => void;
+  handleGetCurrentUserPostsCount: () => void;
   handleGetPostDetailByPostId: (userId: number) => void;
 };
 
@@ -20,7 +20,7 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
-  // 現在のユーザーの投稿総数
+  // 4 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
   // id選択の投稿の詳細
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
@@ -29,10 +29,10 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
   // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
-  const handleGetCurrentUserPostList = async () => {
+  const handleGetCurrentUserPostsCount = async () => {
     try {
       // サインイン中ユーザーのPost一覧を取得する関数
-      const data = await getCurrentUserPostList();
+      const data = await getCurrentUserPostsCount();
       if (data.data.status == 200) {
         setCurrentUserPostsCount(data.data.totalPosts);
       }
@@ -71,7 +71,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
 
   // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {
-    handleGetCurrentUserPostList();
+    handleGetCurrentUserPostsCount();
   }, []);
 
   // 3
@@ -80,7 +80,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
       value={{
         currentUserPostsCount,
         postDetailByPostId,
-        handleGetCurrentUserPostList,
+        handleGetCurrentUserPostsCount,
         handleGetPostDetailByPostId,
       }}
     >
@@ -135,4 +135,10 @@ const PostContext = createContext<PostContextProps[]>([]);
 valueプロパティを通じてデータを提供します。
 createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを
 持っています。
+
+================================================================================================
+4
+currentUserPosts(currentUserの投稿一覧)を用意していないが、currentUserの投稿一覧は、ページネーション用の投
+稿一覧としてuseFeedPaginationで取得している為、使っていない。
+
 */

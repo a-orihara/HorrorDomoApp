@@ -39,27 +39,22 @@ export const PostProvider = ({ children }: PostProviderProps) => {
       if (data.data.status == 200) {
         setCurrentUserPosts(data.data.data);
         setCurrentUserPostsCount(data.data.totalPosts);
-        console.log('handleGetPostListでpostがセット');
       }
     } catch (err) {
-      console.log('handleGetCurrentUserPostListのエラー');
       console.error(err);
     }
   };
 
-  // 指定したuserIdのpostの詳細を取得する関数 #show
+  // 指定Idのpostの詳細を取得する関数 #show
   // PostDetailのuseEffectの依存配列に含まれる為、メモ化する
   // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
-      // console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
-      // console.log('◆postConrextのhandleGetPostDetailByPostId発火');
       try {
-        // 指定したuserIdのpostの詳細を取得する関数
+        // 指定Idののpostの詳細を取得する関数
         const res = await getPostDetailByUserId(postId);
         if (res.data.status == 200) {
           setPostDetailByPostId(res.data.data);
-          // console.log('◆postConrextのsetPostDetailByPostId(res.data.data);したよ');
         } else if (res.data.status == 404) {
           alert('投稿を表示できません');
           setTimeout(() => {
@@ -69,7 +64,6 @@ export const PostProvider = ({ children }: PostProviderProps) => {
           console.log('handleGetPostDetailByPostId:ノーポスト');
         }
       } catch (err: any) {
-        // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
         alert('投稿を表示できません');
         setTimeout(() => {
           router.push(`/`);
@@ -84,9 +78,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
     handleGetCurrentUserPostList();
   }, []);
 
-  // .ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
-  // valueプロパティを通じてデータを提供します。
-  // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
+  // 3
   return (
     <PostContext.Provider
       value={{
@@ -141,4 +133,11 @@ createContext関数は引数としてデフォルト値を受け取ります。�
 このデフォルト値として指定できるのは任意の型ですが、Reactのコンテキストは主に複数の値を渡す目的で使われるため、オブ
 ジェクト型が一般的に使用されます。
 const PostContext = createContext<PostContextProps[]>([]);
+
+================================================================================================
+3
+.ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
+valueプロパティを通じてデータを提供します。
+createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを
+持っています。
 */

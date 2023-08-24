@@ -13,21 +13,19 @@ class Api::V1::PostsController < ApplicationController
       # 6
       user = User.find_by(id: params[:user_id])
       if user
-        # @posts = user.posts
         # 指定したページの1ページ当たりの表示件数分のpostを取得
-        @posts = user.posts.page(page).per(per_page)
+        posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
       else
         return render json: { status: '404', message: 'User not found' }, status: :not_found
       end
     else
       # 4
-      # @posts = current_api_v1_user.posts
-      @posts = current_api_v1_user.posts.page(page).per(per_page)
+      posts = current_api_v1_user.posts.page(page).per(per_page)
       total_posts = current_api_v1_user.posts.count
     end
     # @postsにいいねしているかの真偽値を持たせる
-    posts_with_likes = @posts.map do |post|
+    posts_with_likes = posts.map do |post|
       liked = current_api_v1_user.already_liked?(post)
       post.as_json.merge(liked: liked)
     end
@@ -103,6 +101,9 @@ Devise Token Authによって提供されるメソッドで、APIリクエスト
 
 ================================================================================================
 2
+送信apiからparams[:user_id]があれば、そのid指定userのページネーション用の投稿一覧（いいねの真偽値付き）を取得。
+なければcurrentUserのページネーション用の投稿一覧（いいねの真偽値付き）を取得。
+------------------------------------------------------------------------------------------------
 /posts?user_id=${userId}で、rails側のpostコントローラーのindexアクション内の、if params[:user_id]が反応
 する仕組みは、HTTPリクエストが送られるときに、URLに含まれるクエリパラメータがRailsのparamsハッシュに自動的に追加
 されるためです。

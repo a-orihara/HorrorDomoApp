@@ -20,12 +20,16 @@ type LikeContextProps = {
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 
 export const LikeProvider = ({ children }: LikeProviderProps) => {
+  // currentUserのLikedPostsの集合
   const [currentUserLikedPosts, setCurrentUserLikedPosts] = useState<Like[]>([]);
+  // currentUserのLikedPostsの総数
   const [currentUserLikedPostCount, setCurrentUserLikedPostCount] = useState<number | undefined>(undefined);
+  // otherUserのLikedPostsの集合
   const [otherUserLikedPosts, setOtherUserLikedPosts] = useState<Like[]>([]);
+  // otherUserのLikedPostsの総数
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
-  // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
+  // currentUserのLikedPostsの集合とその総数を取得し、状態変数にセットする関数
   const handleGetCurrentUserLikedPosts = useCallback(
     async (userId: number | undefined, page: number, itemsPerPage: number) => {
       if (!userId) return;
@@ -39,14 +43,13 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
           setCurrentUserLikedPostCount(totalLikedCount);
         }
       } catch (err) {
-        // ◆エラー仮実装
         alert('ユーザーが存在しません');
       }
     },
     []
   );
 
-  // currentUserのいいね総数を取得し、CurrentUserLikedPostCountのstateに格納する
+  // currentUserのLikedPostsの総数を取得し、状態変数にセットする関数
   const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -64,6 +67,7 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
     }
   }, []);
 
+  // otherUserのLikedPostsの総数を取得し、状態変数にセットする関数
   const handleGetTotalLikesCountByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -76,7 +80,6 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
         setOtherUserLikedPostsCount(totalLikedCount);
       }
     } catch (err) {
-      // ◆エラー仮実装
       alert('ユーザーが存在しません');
     }
   }, []);

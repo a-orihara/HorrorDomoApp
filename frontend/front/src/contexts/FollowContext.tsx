@@ -16,10 +16,12 @@ type FollowContextProps = {
 const FollowContext = createContext<FollowContextProps | undefined>(undefined);
 
 export const FollowProvider = ({ children }: FollowProviderProps) => {
+  // フォローしているuserの総数
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
+  // フォローされているuserの総数
   const [followersCount, setFollowersCount] = useState<number | undefined>(undefined);
 
-  // 1
+  // 1 フォローしているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowingCountByUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -34,6 +36,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
     }
   }, []);
 
+  // フォローされているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowersCountByUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {

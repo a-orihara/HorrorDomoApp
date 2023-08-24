@@ -28,8 +28,8 @@ export const PostDetailArea = () => {
   const [postFetched, setPostFetched] = useState(false);
   // post作成日時を取得
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
-  console.log(`今のpostFetchedは:${postFetched}`);
-  console.log(`%c postDetailByPostIdが呼ばれた:${JSON.stringify(postDetailByPostId)}`, 'color: red');
+  // console.log(`今のpostFetchedは:${postFetched}`);
+  // console.log(`%c postDetailByPostIdが呼ばれた:${JSON.stringify(postDetailByPostId)}`, 'color: red');
 
   // 2
   useEffect(() => {

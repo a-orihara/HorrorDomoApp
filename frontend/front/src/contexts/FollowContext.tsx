@@ -31,7 +31,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
         setFollowingCount(count);
       }
     } catch (err) {
-      // ◆エラー仮実装
+      console.error(err);
       alert('ユーザーが存在しません');
     }
   }, []);
@@ -43,11 +43,11 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       const data = await getFollowersCountByUserId(userId);
       if (data.status == 200) {
         const count: number = data.data.followersCount;
-        console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
+        // console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
         setFollowersCount(count);
       }
-    } catch (error) {
-      // ◆エラー仮実装
+    } catch (err) {
+      console.error(err);
       alert('ユーザーが存在しません');
     }
   }, []);

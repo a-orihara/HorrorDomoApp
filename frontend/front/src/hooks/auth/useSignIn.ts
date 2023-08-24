@@ -18,7 +18,7 @@ export const useSignIn = () => {
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // サインインユーザーの投稿一覧を管理
-  const { handleGetCurrentUserPostList } = usePostContext();
+  const { handleGetCurrentUserPostsCount } = usePostContext();
   // サインインユーザーのfollowing数とfollowers数を管理
   const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
   // いらない？サインインユーザーがいいねした投稿の集合と、その総数を管理
@@ -43,7 +43,7 @@ export const useSignIn = () => {
         Cookies.set('_uid', res.headers['uid']);
         // 1
         handleGetCurrentUser();
-        handleGetCurrentUserPostList();
+        handleGetCurrentUserPostsCount();
         // ここで設定するとHomePageでfollowing数が表示される
         handleGetFollowingCountByUserId(res.data.data.id);
         handleGetFollowersCountByUserId(res.data.data.id);

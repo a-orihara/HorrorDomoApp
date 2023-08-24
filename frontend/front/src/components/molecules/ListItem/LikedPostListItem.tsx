@@ -5,7 +5,7 @@ import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
 import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
-import ListItemContent from './ListItemContent';
+import CommonListItem from './CommonListItem';
 
 // LikedPostListItemPropsはkey名がpostで値にLikedPost型を持つオブジェクト型;
 type LikedPostListItemProps = {
@@ -26,7 +26,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
         <UserAvatar avatarUrl={likedUser.avatarUrl} userId={likedUser.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={likedUser} post={likedPost}></UserAndPostLinks>
-          <ListItemContent
+          <CommonListItem
             post={likedPost}
             user={likedUser}
             currentUser={currentUser}

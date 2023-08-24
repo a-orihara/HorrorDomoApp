@@ -3,14 +3,14 @@ import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
 
-type ListItemContentProps = {
+type CommonListItemProps = {
   post: Post;
   user: User;
   currentUser?: User;
   handleDeletePost: (postId: number) => void;
 };
 
-const ListItemContent = ({ post, user, currentUser, handleDeletePost }: ListItemContentProps) => {
+const CommonListItem = ({ post, user, currentUser, handleDeletePost }: CommonListItemProps) => {
   // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);
   // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
@@ -42,7 +42,7 @@ const ListItemContent = ({ post, user, currentUser, handleDeletePost }: ListItem
   );
 };
 
-export default ListItemContent;
+export default CommonListItem;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -51,7 +51,7 @@ currentUserが定義されている場合にのみLikeButtonIconコンポーネ�
 よって、LikeButtonIconコンポーネントに渡されるuserIdは常にnumber型となり、undefinedは渡されません。
 ------------------------------------------------------------------------------------------------
 . 一般的には `undefined` を可能な限り早く処理することでエラーの可能性を最小限に抑えることが推奨されています。した
-がって、この場合、`ListItemContent` コンポーネントで `currentUser` が `undefined` かどうかを確認し、
+がって、この場合、`CommonListItem` コンポーネントで `currentUser` が `undefined` かどうかを確認し、
 `LikeButtonIcon` コンポーネントには `undefined` を渡さないようにするのが一般的に良いとされています。
 . この修正により、currentUserが定義されていない場合には、LikeButtonIcon自体がレンダリングされません。よって、
 LikeButtonIconにundefinedが渡されることはありません。

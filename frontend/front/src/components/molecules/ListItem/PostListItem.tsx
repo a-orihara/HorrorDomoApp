@@ -5,7 +5,7 @@ import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
 import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
-import ListItemContent from './ListItemContent';
+import CommonListItem from './CommonListItem';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;
 type PostListItemProps = {
@@ -26,7 +26,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <UserAvatar avatarUrl={user.avatarUrl} userId={user.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={user} post={post}></UserAndPostLinks>
-          <ListItemContent post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
+          <CommonListItem post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
         </div>
       </div>
     </li>

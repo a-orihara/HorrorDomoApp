@@ -6,7 +6,7 @@ import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
 import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
-import ListItemContent from './ListItemContent';
+import CommonListItem from './CommonListItem';
 
 // FeedListItemPropsはkey名がfeedPostで値にPost型を持つオブジェクト型;
 type FeedListItemProps = {
@@ -35,7 +35,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
         <div>
           <UserAndPostLinks user={feedUser} post={feedPost}></UserAndPostLinks>
           {/* 2 */}
-          <ListItemContent // ListItemContentコンポーネントを使用
+          <CommonListItem // CommonListItemコンポーネントを使用
             post={feedPost}
             user={feedUser}
             currentUser={currentUser}

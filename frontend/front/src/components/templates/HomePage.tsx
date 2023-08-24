@@ -13,12 +13,10 @@ const HomePage = () => {
   const { isSignedIn, currentUser } = useAuthContext();
   // 2
   const { showWelcomeMessage } = useFirstTimeLogin();
-  const { currentUserPostsCount, currentUserPosts } = usePostContext();
+  const { currentUserPostsCount } = usePostContext();
   // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
   console.log(`%cHomePage.tsxのcurrentUserPostsCount: ${currentUserPostsCount}`, 'color: blue');
-
-  console.log(`%cHomePage.tsxのcurrentUser: ${JSON.stringify(currentUserPosts)}`, 'color: red');
 
   return (
     <div className='flex flex-1 flex-col'>

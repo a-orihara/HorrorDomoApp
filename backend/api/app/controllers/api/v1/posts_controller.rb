@@ -16,21 +16,19 @@ class Api::V1::PostsController < ApplicationController
         # 指定したページの1ページ当たりの表示件数分のpostを取得
         posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
+        posts_with_likes = posts.map do |post|
+          liked = current_api_v1_user.already_liked?(post)
+          post.as_json.merge(liked: liked)
+        end
+        render json: { status: '200', data: posts_with_likes, total_posts: total_posts }, status: :ok
       else
         return render json: { status: '404', message: 'User not found' }, status: :not_found
       end
     else
       # 4
-      posts = current_api_v1_user.posts.page(page).per(per_page)
       total_posts = current_api_v1_user.posts.count
+      render json: { status: '200', total_posts: total_posts }, status: :ok
     end
-    # @postsにいいねしているかの真偽値を持たせる
-    posts_with_likes = posts.map do |post|
-      liked = current_api_v1_user.already_liked?(post)
-      post.as_json.merge(liked: liked)
-    end
-    # 5
-    render json: { status: '200', data: posts_with_likes, total_posts: total_posts }, status: :ok
   end
 
   # 11

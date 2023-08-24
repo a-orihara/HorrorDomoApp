@@ -9,7 +9,6 @@ type PostProviderProps = {
 
 // 1
 type PostContextProps = {
-  currentUserPosts: Post[] | undefined;
   currentUserPostsCount: number | undefined;
   postDetailByPostId: Post | undefined;
   handleGetCurrentUserPostList: () => void;
@@ -21,8 +20,6 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
-  // 現在のユーザーの投稿一覧
-  const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
   // 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
   // id選択の投稿の詳細
@@ -37,7 +34,6 @@ export const PostProvider = ({ children }: PostProviderProps) => {
       // サインイン中ユーザーのPost一覧を取得する関数
       const data = await getCurrentUserPostList();
       if (data.data.status == 200) {
-        setCurrentUserPosts(data.data.data);
         setCurrentUserPostsCount(data.data.totalPosts);
       }
     } catch (err) {
@@ -82,7 +78,6 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   return (
     <PostContext.Provider
       value={{
-        currentUserPosts,
         currentUserPostsCount,
         postDetailByPostId,
         handleGetCurrentUserPostList,

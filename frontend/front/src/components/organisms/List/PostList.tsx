@@ -7,6 +7,7 @@ type PostListProps = {
   user: User;
 };
 
+// 特定のuserの集合を扱わないので、CommonPostListで共通化できない
 const PostList = ({ posts, user }: PostListProps) => {
   if (!posts || posts.length === 0) {
     return (

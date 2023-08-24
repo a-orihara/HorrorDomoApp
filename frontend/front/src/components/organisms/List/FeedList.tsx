@@ -34,7 +34,6 @@ const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
               </div>
             );
           }
-          // return <FeedListItem key={feedPost.id} post={feedPost} user={user}></FeedListItem>;
         })}
       </ol>
     </div>

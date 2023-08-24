@@ -8,13 +8,7 @@ type PostListProps = {
 };
 
 const PostList = ({ posts, user }: PostListProps) => {
-  // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
-  if (posts === null) {
-    // postsがnullならローディング表示
-    return <div>Loading...</div>;
-  }
-  // if (!posts || posts.length === 0) {
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
     return (
       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
         <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿がありません</p>

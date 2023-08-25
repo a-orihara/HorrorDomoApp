@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react';
 import { getMovieInfo } from '../../api/movieApi';
+import { MovieInfo } from '../../types/movieInfo';
 
-type MovieInfo = {
-  title: string;
-  overview: string;
-  posterPath: string;
-};
+// type MovieInfo = {
+//   title: string;
+//   overview: string;
+//   posterPath: string;
+// };
 
 // TMDBから映画情報を取得するカスタムフック
 export const useGetMovieInfo = () => {
@@ -39,6 +40,7 @@ export const useGetMovieInfo = () => {
 
   return {
     movieInfo,
+    isMovieInfoFound,
     handleGetMovieInfo,
   };
 };

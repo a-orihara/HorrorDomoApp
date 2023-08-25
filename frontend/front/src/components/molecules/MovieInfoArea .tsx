@@ -1,12 +1,15 @@
-type MovieInfo = {
-  title: string;
-  overview: string;
-  posterPath: string;
-};
+// type MovieInfo = {
+//   title: string;
+//   overview: string;
+//   posterPath: string;
+//   isMovieInfoFound: boolean;
+// };
+
+import { MovieInfo } from '../../types/movieInfo';
 
 export const MovieInfoArea = ({ movieInfo }: { movieInfo: MovieInfo | undefined }) => {
   // console.log(`MovieInfoAreaに渡って来たmovieInfo:${movieInfo?.title}`);
-  console.log('%cMovieInfoAreaが呼ばれた', 'color: blue;');
+  // console.log('%cMovieInfoAreaが呼ばれた', 'color: blue;');
   return (
     // movieInfoがあれば映画情報を表示、なければ映画情報が見つかりませんでしたと表示
     <div>

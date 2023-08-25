@@ -12,12 +12,13 @@ type LikeStatsProps = {
 export const LikeStats = ({ userId, toggleFeed, showLikedPostArea }: LikeStatsProps) => {
   const { currentUser } = useAuthContext();
   const {
+    // currentUserのLikedPostsの総数
     currentUserLikedPostCount,
     handleGetTotalLikesCountByCurrentUserId,
+    // otherUserのLikedPostsの総数
     otherUserLikedPostsCount,
     handleGetTotalLikesCountByOtherUserId,
   } = useLikeContext();
-  console.log(`LikeStatsのshowLikedPostAreaは、${showLikedPostArea}`);
   // currentUserまたはotherUserのいいね総数を取得、更新する
   useEffect(() => {
     // 1

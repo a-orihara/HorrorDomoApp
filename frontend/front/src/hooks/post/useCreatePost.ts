@@ -8,7 +8,7 @@ import { CreatePostParams } from '../../types/post';
 export const useCreatePost = () => {
   const [content, setContent] = useState('');
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  const { handleGetCurrentUserPostList } = usePostContext();
+  const { handleGetCurrentUserPostsCount } = usePostContext();
   const [title, setTitle] = useState('');
   const router = useRouter();
 
@@ -22,8 +22,8 @@ export const useCreatePost = () => {
       const res = await createPost(params);
       // リソースが新規作成された場合にはHTTPステータスコード'201'を使用するのが一般的。
       if (res.status === 201) {
-        // 作成更新後のpostの投稿一覧を取得。
-        handleGetCurrentUserPostList();
+        // 作成更新後のpostの投稿総数を取得。
+        handleGetCurrentUserPostsCount();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

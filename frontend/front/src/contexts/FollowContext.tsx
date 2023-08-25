@@ -16,10 +16,12 @@ type FollowContextProps = {
 const FollowContext = createContext<FollowContextProps | undefined>(undefined);
 
 export const FollowProvider = ({ children }: FollowProviderProps) => {
+  // フォローしているuserの総数
   const [followingCount, setFollowingCount] = useState<number | undefined>(undefined);
+  // フォローされているuserの総数
   const [followersCount, setFollowersCount] = useState<number | undefined>(undefined);
 
-  // 1
+  // 1 フォローしているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowingCountByUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -29,22 +31,23 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
         setFollowingCount(count);
       }
     } catch (err) {
-      // ◆エラー仮実装
+      console.error(err);
       alert('ユーザーが存在しません');
     }
   }, []);
 
+  // フォローされているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowersCountByUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       const data = await getFollowersCountByUserId(userId);
       if (data.status == 200) {
         const count: number = data.data.followersCount;
-        console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
+        // console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
         setFollowersCount(count);
       }
-    } catch (error) {
-      // ◆エラー仮実装
+    } catch (err) {
+      console.error(err);
       alert('ユーザーが存在しません');
     }
   }, []);

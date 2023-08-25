@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { getCurrentUserPostList, getPostDetailByUserId } from '../api/post';
+import { getCurrentUserPostsCount, getPostDetailByUserId } from '../api/post';
 import { Post } from '../types/post';
 
 type PostProviderProps = {
@@ -9,10 +9,9 @@ type PostProviderProps = {
 
 // 1
 type PostContextProps = {
-  currentUserPosts: Post[] | undefined;
   currentUserPostsCount: number | undefined;
   postDetailByPostId: Post | undefined;
-  handleGetCurrentUserPostList: () => void;
+  handleGetCurrentUserPostsCount: () => void;
   handleGetPostDetailByPostId: (userId: number) => void;
 };
 
@@ -21,45 +20,33 @@ const PostContext = createContext<PostContextProps | undefined>(undefined);
 
 // 全ての子コンポーネントでPostを使えるようにするProviderコンポーネント
 export const PostProvider = ({ children }: PostProviderProps) => {
-  // 現在のユーザーの投稿一覧
-  const [currentUserPosts, setCurrentUserPosts] = useState<Post[]>([]);
-  // 現在のユーザーの投稿総数
+  // 4 現在のユーザーの投稿総数
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
   // id選択の投稿の詳細
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
-
   const router = useRouter();
-  // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
-  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
-  const handleGetCurrentUserPostList = async () => {
+  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #postのindex
+  const handleGetCurrentUserPostsCount = async () => {
     try {
       // サインイン中ユーザーのPost一覧を取得する関数
-      const data = await getCurrentUserPostList();
+      const data = await getCurrentUserPostsCount();
       if (data.data.status == 200) {
-        setCurrentUserPosts(data.data.data);
         setCurrentUserPostsCount(data.data.totalPosts);
-        console.log('handleGetPostListでpostがセット');
       }
     } catch (err) {
-      console.log('handleGetCurrentUserPostListのエラー');
       console.error(err);
     }
   };
 
-  // 指定したuserIdのpostの詳細を取得する関数 #show
-  // PostDetailのuseEffectの依存配列に含まれる為、メモ化する
-  // Alertモーダルがうまく表示されず、一旦alertで処理。
+  // 指定Idのpostの詳細を取得する関数 #show
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
-      // console.log(`handleGetPostDetailByPostIdで受け取ったpostId:${postId}`);
-      // console.log('◆postConrextのhandleGetPostDetailByPostId発火');
       try {
-        // 指定したuserIdのpostの詳細を取得する関数
+        // 指定Idののpostの詳細を取得する関数
         const res = await getPostDetailByUserId(postId);
         if (res.data.status == 200) {
           setPostDetailByPostId(res.data.data);
-          // console.log('◆postConrextのsetPostDetailByPostId(res.data.data);したよ');
         } else if (res.data.status == 404) {
           alert('投稿を表示できません');
           setTimeout(() => {
@@ -69,7 +56,6 @@ export const PostProvider = ({ children }: PostProviderProps) => {
           console.log('handleGetPostDetailByPostId:ノーポスト');
         }
       } catch (err: any) {
-        // errオブジェクトのresponseオブジェクトのdataオブジェクトが、{"status":"404","message":"投稿が見つかりません"}
         alert('投稿を表示できません');
         setTimeout(() => {
           router.push(`/`);
@@ -81,19 +67,16 @@ export const PostProvider = ({ children }: PostProviderProps) => {
 
   // ある操作を一度だけ実行し、その後再実行しない場合（例：APIからのデータの初回取得）、依存配列は空にします。
   useEffect(() => {
-    handleGetCurrentUserPostList();
+    handleGetCurrentUserPostsCount();
   }, []);
 
-  // .ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
-  // valueプロパティを通じてデータを提供します。
-  // createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを持っています。
+  // 3
   return (
     <PostContext.Provider
       value={{
-        currentUserPosts,
         currentUserPostsCount,
         postDetailByPostId,
-        handleGetCurrentUserPostList,
+        handleGetCurrentUserPostsCount,
         handleGetPostDetailByPostId,
       }}
     >
@@ -131,6 +114,7 @@ Contextから関数を取得する実装はReactにおいて一般的に見ら�
 
 以上の理由から、Contextから関数を取得する実装は一般的によく見られ、Reactの状態管理における効率的な手法となってい
 ます。
+
 ================================================================================================
 2
 createContextで新しいContextオブジェクトを作成（関数コンポーネントではない）。
@@ -141,4 +125,17 @@ createContext関数は引数としてデフォルト値を受け取ります。�
 このデフォルト値として指定できるのは任意の型ですが、Reactのコンテキストは主に複数の値を渡す目的で使われるため、オブ
 ジェクト型が一般的に使用されます。
 const PostContext = createContext<PostContextProps[]>([]);
+
+================================================================================================
+3
+.ProviderはContextオブジェクトの一部であり、Contextオブジェクトを使用するコンポーネントに値を渡すために使用。
+valueプロパティを通じてデータを提供します。
+createContextによって生成されたContextオブジェクトは、.Providerと.Consumerという2つのReactコンポーネントを
+持っています。
+
+================================================================================================
+4
+currentUserPosts(currentUserの投稿一覧)を用意していないが、currentUserの投稿一覧は、ページネーション用の投
+稿一覧としてuseFeedPaginationで取得している為、使っていない。
+
 */

@@ -12,12 +12,12 @@ const FollowingPage = () => {
   // 2 userIdはnumberかundefined型
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // ルーターパラメーターのidに対応するユーザー情報を取得
-  console.log(`FollowingPage.tsxのuserId: ${userId}`);
+  // console.log(`FollowingPage.tsxのuserId: ${userId}`);
   const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
   const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
   // console.log(`FollowingPageの:${totalFollowingCount}`);
-  console.log(`FollowingPageのfollowing:${JSON.stringify(following)}`);
+  // console.log(`FollowingPageのfollowing:${JSON.stringify(following)}`);
 
   useEffect(() => {
     handleGetUserById();

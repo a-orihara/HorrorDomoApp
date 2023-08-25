@@ -18,7 +18,6 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
   // 引数pageは、ページネーションで選択したページ。
   const handleGetPostListByUserId = useCallback(
     async (page: number) => {
-      // console.log('handleGetPostListByUserIdが発火');
       try {
         // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
         // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。

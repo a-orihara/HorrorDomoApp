@@ -3,18 +3,18 @@ import { useRouter } from 'next/router';
 import { signOut } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
-// ================================================================================================
+
 // サインアウト処理。処理後は、トップページに遷移する。
 export const useSignOut = () => {
   const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // ------------------------------------------------------------------------------------------------
+
   const handleSignOut = async () => {
     try {
       const res = await signOut();
       if (res.data.success === true) {
-        console.log(`signOutのres.data:${JSON.stringify(res.data)}`);
+        // console.log(`signOutのres.data:${JSON.stringify(res.data)}`);
         // サインアウト時には各Cookieを削除
         Cookies.remove('access-token');
         Cookies.remove('client');

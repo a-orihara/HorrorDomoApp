@@ -1,18 +1,21 @@
 import { useRouter } from 'next/router';
 import { deletePost } from '../../api/post';
 import { useAlertContext } from '../../contexts/AlertContext';
+import { usePostContext } from '../../contexts/PostContext';
 
 export const useDeletePost = () => {
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
+  const { handleGetCurrentUserPostsCount } = usePostContext();
   const router = useRouter();
 
   const handleDeletePost = async (postId: number) => {
     try {
       const res = await deletePost(postId);
-      console.log(`deletePostのres.data${JSON.stringify(res.data)}`);
+      // console.log(`deletePostのres.data${JSON.stringify(res.data)}`);
       // 文字列でないとundefinedになる
       if (res.data.status === '200') {
-        // レスポンスが成功した場合の処理
+        // 作成更新後のpostの投稿総数を取得。
+        handleGetCurrentUserPostsCount();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

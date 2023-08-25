@@ -6,7 +6,6 @@ import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 
-// 1
 // idがあるかどうか
 // idがあれば、指定postと指定userを取得
 // 第一useEffectが呼ばれ、指定postがあれば指定映画を取得
@@ -14,10 +13,9 @@ import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 export const PostDetailArea = () => {
   const router = useRouter();
   const { id } = router.query;
-  // 指定postとそれを取得する関数を取得
-  console.log(`現在のid:${id}`);
+  // 指定post詳細とそれを取得する関数を取得
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
-  // 指定userとそれを取得する関数を取得
+  // 指定user詳細とそれを取得する関数を取得
   const { user, handleGetUserById } = useGetUserById(
     // 指定postのuserIdが存在すればその数値(number)が、存在しない場合はundefinedが引数として渡される
     postDetailByPostId?.userId !== undefined ? Number(postDetailByPostId.userId) : undefined
@@ -28,28 +26,27 @@ export const PostDetailArea = () => {
   const [postFetched, setPostFetched] = useState(false);
   // post作成日時を取得
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
-  console.log(`今のpostFetchedは:${postFetched}`);
-  console.log(`%c postDetailByPostIdが呼ばれた:${JSON.stringify(postDetailByPostId)}`, 'color: red');
 
   // 2
   useEffect(() => {
-    // クエリidがあれば=クエリidを取得出来たら
-    console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: yellow');
+    // console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: yellow');
+    // クエリidを取得出来たら指定post詳細を取得開始
     if (id) {
-      console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: green');
+      // console.log(`%c postDetailByPostIdのuseEffectが呼ばれた`, 'color: green');
       // クエリid指定のpostを取得する関数で指定postを取得
       handleGetPostDetailByPostId(Number(id));
       // console.log(`1.title::${postDetailByPostId?.title}`);
-      // 選択した投稿（postのuserId）に紐付くユーザーを取得する関数
+      // クエリid指定のpostのuserIdに紐付くuserを取得する
       handleGetUserById();
+      // クエリid指定のpostとそのuserIdに紐付くuserを取得が完了したら、postFetchedをtrueにする
       setPostFetched(true);
     }
   }, [id, handleGetPostDetailByPostId, handleGetUserById]);
 
   useEffect(() => {
-    // 指定postがあれば
+    // postFetchedがtrueで、クエリid指定postがあれば
     if (postFetched && postDetailByPostId) {
-      // 指定postのtitleから映画情報を取得する関数
+      // 指定postのtitleから映画情報を取得する
       handleGetMovieInfo(postDetailByPostId.title);
       // console.log(`2.title::${postDetailByPostId.title}`);
     }

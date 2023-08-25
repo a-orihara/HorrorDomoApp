@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useState } from 'react';
-import { getTotalLikesCountByUserId, getUserLikedPostsByUserId } from '../api/like';
-import { Like } from '../types/like';
+import { getTotalLikesCountByUserId } from '../api/like';
 
 type LikeProviderProps = {
   children: React.ReactNode;
@@ -8,53 +7,27 @@ type LikeProviderProps = {
 
 type LikeContextProps = {
   // 1
-  currentUserLikedPosts: Like[] | undefined;
   currentUserLikedPostCount: number | undefined;
-  otherUserLikedPosts: Like[] | undefined;
   otherUserLikedPostsCount: number | undefined;
   handleGetTotalLikesCountByCurrentUserId: (userId: number | undefined) => Promise<void>;
   handleGetTotalLikesCountByOtherUserId: (userId: number | undefined) => Promise<void>;
-  handleGetCurrentUserLikedPosts: (userId: number | undefined, page: number, itemsPerPage: number) => Promise<void>;
 };
 
 const LikeContext = createContext<LikeContextProps | undefined>(undefined);
 
 export const LikeProvider = ({ children }: LikeProviderProps) => {
-  const [currentUserLikedPosts, setCurrentUserLikedPosts] = useState<Like[]>([]);
+  // currentUserのLikedPostsの総数（currentUserのLikedPostsの集合はuseFeedPaginationで取得）
   const [currentUserLikedPostCount, setCurrentUserLikedPostCount] = useState<number | undefined>(undefined);
-  const [otherUserLikedPosts, setOtherUserLikedPosts] = useState<Like[]>([]);
+  // otherUserのLikedPostsの総数（otherUserのLikedPostsの集合は、otherUserにはFeedがないので不要）
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
-  // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
-  const handleGetCurrentUserLikedPosts = useCallback(
-    async (userId: number | undefined, page: number, itemsPerPage: number) => {
-      if (!userId) return;
-      try {
-        // currentUserがいいねした投稿の集合と、その総数を取得する
-        const data = await getUserLikedPostsByUserId(userId, page, itemsPerPage);
-        if (data.status === 200) {
-          const likes: Like[] = data.data.likedPosts;
-          setCurrentUserLikedPosts(likes);
-          const totalLikedCount: number = data.data.totalLikedCounts;
-          setCurrentUserLikedPostCount(totalLikedCount);
-        }
-      } catch (err) {
-        // ◆エラー仮実装
-        alert('ユーザーが存在しません');
-      }
-    },
-    []
-  );
-
-  // currentUserのいいね総数を取得し、CurrentUserLikedPostCountのstateに格納する
+  // currentUserのLikedPostsの総数を取得し、状態変数にセットする関数
   const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // currentUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
-        // const likes: Like[] = data.data.likedPosts;
-        // setCurrentUserLikedPosts(likes);
         const totalLikedCount: number = data.data.totalLikedCounts;
         setCurrentUserLikedPostCount(totalLikedCount);
       }
@@ -64,19 +37,17 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
     }
   }, []);
 
+  // otherUserのLikedPostsの総数を取得し、状態変数にセットする関数
   const handleGetTotalLikesCountByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
       // otherUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
-        // const likes: Like[] = data.data.likedPosts;
-        // setOtherUserLikedPosts(likes);
         const totalLikedCount: number = data.data.totalLikedCounts;
         setOtherUserLikedPostsCount(totalLikedCount);
       }
     } catch (err) {
-      // ◆エラー仮実装
       alert('ユーザーが存在しません');
     }
   }, []);
@@ -84,13 +55,10 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   return (
     <LikeContext.Provider
       value={{
-        currentUserLikedPosts,
         currentUserLikedPostCount,
         handleGetTotalLikesCountByCurrentUserId,
-        otherUserLikedPosts,
         otherUserLikedPostsCount,
         handleGetTotalLikesCountByOtherUserId,
-        handleGetCurrentUserLikedPosts,
       }}
     >
       {children}

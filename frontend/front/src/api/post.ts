@@ -29,8 +29,8 @@ export const deletePost = (postId: number) => {
   });
 };
 
-// サインイン中のユーザーの投稿一覧を取得する
-export const getCurrentUserPostList = () => {
+// CurrentUserの投稿総数を取得する
+export const getCurrentUserPostsCount = () => {
   return client.get('/posts', {
     headers: {
       'access-token': Cookies.get('_access_token'),

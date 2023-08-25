@@ -7,8 +7,8 @@ type PostListProps = {
   user: User;
 };
 
+// 特定のuserの集合を扱わないので、CommonPostListで共通化できない
 const PostList = ({ posts, user }: PostListProps) => {
-  // postがnullまたは空の配列の場合は、投稿がないというメッセージを表示
   if (!posts || posts.length === 0) {
     return (
       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
@@ -20,7 +20,7 @@ const PostList = ({ posts, user }: PostListProps) => {
     <div className='flex-1'>
       <ol>
         {/* 1 オプショナルチェインニング */}
-        {posts?.map((post) => (
+        {posts.map((post) => (
           <PostListItem key={post.id} post={post} user={user}></PostListItem>
         ))}
       </ol>

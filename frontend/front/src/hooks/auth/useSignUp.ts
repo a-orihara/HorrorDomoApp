@@ -36,10 +36,12 @@ const useSignUp = () => {
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
         setIsSignedIn(true);
+        // サインインユーザーでcurrentUserを取得してセット
         setCurrentUser(res.data.data);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
+        // first-loginをtrueにすることで、初回ログイン時にwelcome-messageを表示する。
         localStorage.setItem('firstTimeLogin', 'true');
         setTimeout(() => {
           router.push('/');

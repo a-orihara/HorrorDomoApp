@@ -20,7 +20,7 @@ const PostForm: React.FC = () => {
             Title:
           </Label>
           <Input
-            className='m-auto mb-2 mt-1 w-4/5  md:w-3/5 lg:w-2/5'
+            className='m-auto mb-2 mt-1 w-4/5  text-xl md:w-3/5 lg:w-2/5'
             id='title'
             type='text'
             name='title'
@@ -37,7 +37,7 @@ const PostForm: React.FC = () => {
             Content:
           </Label>
           <TextArea
-            className='m-auto w-4/5 flex-1 text-2xl md:w-3/5 lg:w-2/5'
+            className='m-auto w-4/5 flex-1 text-xl sm:text-2xl md:w-3/5 lg:w-2/5'
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder='映画の怖かったシーンは何だった？'

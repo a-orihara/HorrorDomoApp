@@ -11,14 +11,11 @@ import UserInfo from '../organisms/UserInfo';
 
 const HomePage = () => {
   const { isSignedIn, currentUser } = useAuthContext();
-  // showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
-  // useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
+  // 2
   const { showWelcomeMessage } = useFirstTimeLogin();
   const { currentUserPostsCount } = usePostContext();
   // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
-
-  console.log(`ホームページのshowLikedPostArea:${showLikedPostArea}`);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -27,7 +24,6 @@ const HomePage = () => {
           <div className='h-12 w-full lg:h-full lg:w-48'>
             <Sidebar></Sidebar>
           </div>
-
           <div className=' lg:w-96'>
             {showWelcomeMessage && (
               <h1 className='bg-basic-pink text-2xl text-white'>
@@ -79,7 +75,7 @@ export default HomePage;
 `currentUser`は`User | undefined`型として定義されており、そのため`currentUser.id`を参照する際に
 `currentUser`が`undefined`かもしれないという可能性をTypeScriptは考慮します。その結果、'currentUser'は
 'undefined'の可能性がありますという警告が発生します。
-
+------------------------------------------------------------------------------------------------
 2. `const userId = currentUser ? currentUser.id : undefined;`について何も警告が出ない理由:
 `currentUser ? currentUser.id : undefined`の構文は、`currentUser`が`undefined`の場合は、
 `userId`に`undefined`を割り当て、`undefined`ではない場合は`currentUser.id`を`userId`に割り当てます。この
@@ -89,4 +85,10 @@ export default HomePage;
 currentUserがundefinedであるかどうかに関わらず、userIdの値は必ず何かしら設定されます（currentUserが存在すれ
 ばcurrentUser.id、そうでなければundefined）。そのため、'userId' はすべての実行パスで「エラーが発生せずに値が定
 義される」ことが保証されているのです。
+
+================================================================================================
+2
+showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
+useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
+
 */

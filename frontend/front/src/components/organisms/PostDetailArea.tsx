@@ -13,7 +13,6 @@ import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 export const PostDetailArea = () => {
   const router = useRouter();
   const { id } = router.query;
-  // console.log(`現在のid:${id}`);
   // 指定post詳細とそれを取得する関数を取得
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   // 指定user詳細とそれを取得する関数を取得
@@ -22,13 +21,11 @@ export const PostDetailArea = () => {
     postDetailByPostId?.userId !== undefined ? Number(postDetailByPostId.userId) : undefined
   );
   // 指定post.titleから映画情報を取得する関数とその映画情報を取得
-  const { movieInfo, isMovieInfoFound, handleGetMovieInfo } = useGetMovieInfo();
+  const { movieInfo, handleGetMovieInfo } = useGetMovieInfo();
   // 非同期処理の順序を制御する為の、指定postが取得済みかを表す真偽値の状態変数
   const [postFetched, setPostFetched] = useState(false);
   // post作成日時を取得
   const postCreatedTime = useFormattedTime(postDetailByPostId?.createdAt);
-  // console.log(`今のpostFetchedは:${postFetched}`);
-  // console.log(`%c postDetailByPostIdが呼ばれた:${JSON.stringify(postDetailByPostId)}`, 'color: red');
 
   // 2
   useEffect(() => {
@@ -81,7 +78,7 @@ export const PostDetailArea = () => {
               <p className='mb-8 mr-5 text-sm sm:text-lg'>作成日時:{postCreatedTime}</p>
             </div>
             {/* 指定postのtitleから取得した映画情報 */}
-            <MovieInfoArea movieInfo={movieInfo} isMovieInfoFound={isMovieInfoFound}></MovieInfoArea>
+            <MovieInfoArea movieInfo={movieInfo}></MovieInfoArea>
           </div>
         ) : (
           <p className='text-center'>投稿が見つかりませんでした。</p>

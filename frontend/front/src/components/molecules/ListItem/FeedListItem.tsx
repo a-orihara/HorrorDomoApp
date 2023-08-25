@@ -1,6 +1,5 @@
 // date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
 import { useAuthContext } from '../../../contexts/AuthContext';
-import useFormattedTime from '../../../hooks/helpers/useFormattedTime';
 import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
@@ -16,10 +15,6 @@ type FeedListItemProps = {
 
 // 1 関数コンポーネントの引数は基本的にオブジェクト型。
 const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
-  // feedPostの作成日時を形成するカスタムフック
-  const feedPostCreatedTime = useFormattedTime(feedPost.createdAt);
-  // feedPostの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
-  const truncateContent = feedPost.content.length > 30 ? `${feedPost.content.substring(0, 30)}...` : feedPost.content;
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
   // // 現在のユーザーが未定義かどうかを確認

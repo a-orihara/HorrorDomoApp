@@ -24,11 +24,9 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [currentUserPostsCount, setCurrentUserPostsCount] = useState<number | undefined>(undefined);
   // id選択の投稿の詳細
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
-
   const router = useRouter();
-  // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
 
-  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #index
+  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #postのindex
   const handleGetCurrentUserPostsCount = async () => {
     try {
       // サインイン中ユーザーのPost一覧を取得する関数
@@ -42,8 +40,6 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   };
 
   // 指定Idのpostの詳細を取得する関数 #show
-  // PostDetailのuseEffectの依存配列に含まれる為、メモ化する
-  // Alertモーダルがうまく表示されず、一旦alertで処理。
   const handleGetPostDetailByPostId = useCallback(
     async (postId: number) => {
       try {
@@ -118,6 +114,7 @@ Contextから関数を取得する実装はReactにおいて一般的に見ら�
 
 以上の理由から、Contextから関数を取得する実装は一般的によく見られ、Reactの状態管理における効率的な手法となってい
 ます。
+
 ================================================================================================
 2
 createContextで新しいContextオブジェクトを作成（関数コンポーネントではない）。

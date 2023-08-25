@@ -10,7 +10,6 @@ export const useToggleLike = (postId: number, liked: boolean) => {
   // いいね済みかの真偽値。初期値は指定userIdのlikedPostのliked
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const { currentUser } = useAuthContext();
-  // const { currentUserLikedPosts } = useLikeContext();
   // いいねがトグルされたらいいね総数を更新する関数を取得。いいねするのはcurrentUserのみ
   const { handleGetTotalLikesCountByCurrentUserId } = useLikeContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();

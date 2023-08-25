@@ -13,8 +13,6 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // const { followingCount, following, followingPagination, handleGetUserFollowingByUserId } =
-  //   useGetUserFollowingByUserId(userId);
   // console.log(`OK:useFollowingPaginationの${userId}`);
 
   const handleGetFollowingByUserId = useCallback(

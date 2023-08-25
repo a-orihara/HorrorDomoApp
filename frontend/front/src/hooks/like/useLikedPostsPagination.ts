@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { getUserLikedPostsByUserId } from '../../api/like';
-// import { useAlertContext } from '../../contexts/AlertContext';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
-// import { useLikeContext } from '../../contexts/LikeContext';
 
 // 指定userIDのlikedPost一覧、likedPost総数、現在のページ番号を返す
 export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) => {
@@ -15,7 +13,6 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
   const [likedUsers, setLikedUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
-  // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
 
   // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
   const handleGetUserLikedPostsByUserId = useCallback(
@@ -34,7 +31,6 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
           setLikedUsers(likedUsers);
         }
       } catch (err) {
-        // ◆エラー仮実装
         alert('ユーザーが存在しません');
       }
     },

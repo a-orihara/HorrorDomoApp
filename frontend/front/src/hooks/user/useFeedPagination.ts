@@ -41,9 +41,6 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
   );
 
-  // useEffect(() => {
-  //   handleGetUserFeed(currentPage);
-  // }, [currentPage, handleGetUserFeed]);
   useEffect(() => {
     if (userId) {
       handleGetUserFeed(currentPage);

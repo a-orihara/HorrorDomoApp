@@ -12,17 +12,14 @@ import { SignInParams } from '../../types/user';
 export const useSignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // setIsSignedIn:ログイン状態を管理、setCurrentUser:ログインユーザーの情報を管理
-  // const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
+  // currentUserを取得する関数
   const { handleGetCurrentUser } = useAuthContext();
   // setAlertMessage:アラートのメッセージを管理、setAlertOpen:アラートの表示状態を管理、setAlertSeverity:アラートの種類を管理
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  // サインインユーザーの投稿一覧を管理
+  // currentUserの投稿総数を取得する関数
   const { handleGetCurrentUserPostsCount } = usePostContext();
-  // サインインユーザーのfollowing数とfollowers数を管理
+  // currentUserのfollowing数とfollowers数を取得する関数
   const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
-  // いらない？サインインユーザーがいいねした投稿の集合と、その総数を管理
-  // const { handleGetCurrentUserLikedPosts } = useLikeContext();
   const router = useRouter();
 
   // ------------------------------------------------------------------------------------------------
@@ -35,20 +32,18 @@ export const useSignIn = () => {
     };
     try {
       const res = await signIn(params);
-      console.log(`サインインのres${JSON.stringify(res.data)}`);
+      // console.log(`サインインのres${JSON.stringify(res.data)}`);
       if (res.status === 200) {
         // ログインに成功したら、Cookieにアクセストークン、クライアント、uidを保存
         Cookies.set('_access_token', res.headers['access-token']);
         Cookies.set('_client', res.headers['client']);
         Cookies.set('_uid', res.headers['uid']);
-        // 1
+        // 1 サインインユーザーでcurrentUserを取得してセット
         handleGetCurrentUser();
         handleGetCurrentUserPostsCount();
         // ここで設定するとHomePageでfollowing数が表示される
         handleGetFollowingCountByUserId(res.data.data.id);
         handleGetFollowersCountByUserId(res.data.data.id);
-        // サインインユーザーがいいねした投稿の集合と、その総数を取得しセット
-        // handleGetCurrentUserLikedPosts(res.data.data.id);
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -57,7 +52,6 @@ export const useSignIn = () => {
         }, 1000);
       } else {
         setAlertSeverity('error');
-        // setAlertMessage(`${res.data.errors.fullMessages}`);
         setAlertMessage(`${res.data.errors[0]}`);
         setAlertOpen(true);
       }

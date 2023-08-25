@@ -1,14 +1,7 @@
-// type MovieInfo = {
-//   title: string;
-//   overview: string;
-//   posterPath: string;
-
 import { MovieInfo } from '../../types/movieInfo';
 
-// };
 type MovieInfoAreaProps = {
   movieInfo: MovieInfo | undefined;
-  // isMovieInfoFound: boolean;
 };
 
 export const MovieInfoArea = ({ movieInfo }: MovieInfoAreaProps) => {

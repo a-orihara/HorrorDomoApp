@@ -38,20 +38,13 @@ user2 = User.create!(
   profile: profiles.sample,
 )
 
-user3 = User.create!(
-  name: 'soso',
-  email: 'soso@soso.com',
-  password: 'sososo',
-  password_confirmation: 'sososo',
-  profile: profiles.sample,
-)
+model_users = [user1, user2]
 
-users = [user1, user2]
-
-users.each do |user|
-  25.times do
+model_users.each do |user|
+  20.times do
     content = contents.sample
-    title = titles.sample # タイトルの配列からランダムに選ぶ
+    # タイトルの配列からランダムに選ぶ
+    title = titles.sample
     # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
@@ -69,7 +62,7 @@ image_paths = %w[
 ]
 
 # 追加のユーザーをまとめて生成する
-77.times do |n|
+50.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
@@ -93,46 +86,27 @@ end
 
 # 全てのユーザー
 allusers = User.all
-following = allusers[2..20]
-followers = allusers[10..31]
-# user1がフォロー
-following.each { |followed| user1.follow(followed) }
-# user1をフォロー
-followers.each { |follower| follower.follow(user1) }
-following = allusers[30..51]
-followers = allusers[4..21]
-# user2がフォロー
-following.each { |followed| user2.follow(followed) }
-# user2をフォロー
-followers.each { |follower| follower.follow(user2) }
 
-# 全てのユーザー
-# allusers = User.all
 allusers.each do |user|
   # 自分を除いたユーザーからランダムに20〜30人を選ぶ
-  random_following = allusers.where.not(id: user.id).sample(rand(10..20))
+  random_following = allusers.where.not(id: user.id).sample(rand(10..15))
   # それらのユーザーをフォロー
   random_following.each do |followed|
     # すでにフォローしている場合はスキップ
     next if user.following?(followed)
     user.follow(followed)
   end
-end
-
-# 全てのユーザーをループ
-allusers.each do |user|
   # すべての投稿から自分の投稿を除外（自分の投稿を除外した他のユーザーの投稿を取得）
   other_user_posts = Post.where.not(user_id: user.id)
   # 20回のループの中で、ランダムに投稿を選び、already_liked?メソッドを使ってその投稿を既にいいねしているか確認
   20.times do
-    # 10回のループの中で、ランダムに投稿を選ぶ
+    # ランダムに投稿を選ぶ
     post = other_user_posts.sample
     # already_liked?メソッドを使ってその投稿を既にいいねしているか確認、すでにいいねしている場合はスキップ
     next if user.already_liked?(post)
     user.likes.create!(post_id: post.id)
   end
 end
-
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @

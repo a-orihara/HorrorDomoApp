@@ -3,3 +3,21 @@ FROM node:16-alpine
 # front-appを作成し、作業ディレクトリに指定。
 WORKDIR /usr/src/front
 ENV NEXT_TELEMETRY_DISABLED 1
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 1. `FROM node:16-alpine`の意味と意図
+# - 意味: Node.js v16がプリインストールされたAlpine Linuxベースのイメージを使用。
+# - 意図: 軽量で高速な環境を提供する。
+
+# 2. `WORKDIR /usr/src/front`の意味と意図
+# - 意味: コンテナ内での作業ディレクトリを`/usr/src/front`に設定。
+# - 意図: アプリケーションのコードや依存関係をこのディレクトリに配置するため。
+
+# 3. `ENV NEXT_TELEMETRY_DISABLED 1`の意味と意図
+# - 意味: 環境変数`NEXT_TELEMETRY_DISABLED`を`1`に設定。
+# - 意図: Next.jsのテレメトリ（使用状況データの送信）を無効にする。
+
+# 4. 各行の設定の必要性
+# - `FROM node:16-alpine`: 必要なNode.jsのバージョンと軽量なOSを指定。
+# - `WORKDIR /usr/src/front`: ソースコードや依存関係の配置場所を明示的に指定。
+# - `ENV NEXT_TELEMETRY_DISABLED 1`: プライバシーを保護または無駄なネットワークリクエストを削減。

@@ -32,6 +32,8 @@ gem 'active_storage_validations' # active_starageのバリデーション設定
 # [アクティブストレージのバリアントを使用する]
 # 'image_processing'は'mini_magick'も一緒にインストールする
 gem 'image_processing', '~> 1.2'
+# ランダムな値を生成するgemで,メールアドレス、人名、パスワードなどのランダムな値を生成してくれます。
+gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -41,8 +43,6 @@ group :development, :test do
   gem 'rspec-rails'
   # テスト用のgem、FactoryBotをインストール。
   gem 'factory_bot_rails'
-  # ランダムな値を生成するgemで,メールアドレス、人名、パスワードなどのランダムな値を生成してくれます。
-  gem 'faker'
   # pry-railsをインストールすると、pryも一緒にインストールされます。
   gem 'pry-rails'
   # [Can't escape from eval with next]エラーの解消

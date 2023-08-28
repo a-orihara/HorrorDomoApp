@@ -9,7 +9,7 @@ const options = {
 // 2
 const client: AxiosInstance = applyCaseMiddleware(
   axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
     timeout: 5000,
   }),
   options

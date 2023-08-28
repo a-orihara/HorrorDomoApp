@@ -45,6 +45,9 @@ Rails.application.routes.draw do
 
       # api/v1/movies
       resources :movies, only: [:index]
+
+      # api/v1/test
+      resources :tests, only: [:index]
     end
   end
 end

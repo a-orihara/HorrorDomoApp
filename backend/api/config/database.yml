@@ -1,3 +1,5 @@
+# 1
+
 # MySQL. Versions 5.5.8 and up are supported.
 #
 # Install the MySQL driver
@@ -9,21 +11,36 @@
 # And be sure to use new-style password hashing:
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
+
+# 2
 default: &default
   adapter: mysql2
+  # 文字コード
   encoding: utf8mb4
+  # 3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  # 接続に使用するユーザの名前。
+  # username: root／<初期の設定>
   username: user_dev
+  # 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
+  # githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
+  # password: ／<初期の設定>
   password: password_dev
+  # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
   host: db
 
+#  デフォルトでは、開発環境のdbを参照する。
 development:
   <<: *default
+  # database:データベース名。api-app:このアプリの名前。
+  # api_app_developmentという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
   database: api_app_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
+# [警告 test "として定義されたデータベースは、"rake "を実行すると消去され、開発用データベースから再作成されます。
+# このデータベースは開発用や本番用と同じにしないでください。]
 test:
   <<: *default
   database: api_app_test
@@ -48,8 +65,49 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+
+# productionの設定においては、database、username、passwordはベタ書きせずに、環境変数で保存する。
+# .envに保存するので、gitプッシュされない。
 production:
   <<: *default
   database: api_app_production
-  username: api_app
-  password: <%= ENV['API_APP_DATABASE_PASSWORD'] %>
+  # 4
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
+# RDS時、参考
+# DB_USERNAME="RDSの接続ユーザ名"
+# DB_PASSWORD="RDSのパスワード"
+# DB_HOST="RDSのエンドポイント名"
+# DB_DATABASE="myapp"
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 1
+# Railsにおけるデータベースの設定ファイル。
+# Railsアプリケーションを作成すると自動的に生成され、デフォルトではSQLiteを使用する前提で作成されます。
+# MySQL等のSQLite以外のデータベースを使用する前提で生成する場合は、アプリケーションを作成する際に明示的にオプション
+# でデータベースを指定します。
+# $ rails new アプリケーション名 -d データベース
+# $ rails new アプリケーション名 --database=データベース
+# ================================================================================================
+# 2
+# 「&」の部分はアンカーという「YAML」の記述方法。
+# 「&」に続けて「default」という名前をつけると、「default」という名前でハッシューのデータを保存することができます
+# ================================================================================================
+# 3
+# pool:「コネクションプール」。データベースへ接続した時の接続状態を保存しておく役割をします。
+# データベースに再接続する場合、この「コネクションプール」を利用することによって接続時間を短縮する仕組み.
+# この「コネクションプール」の数が足りないとリクエストに対する待ち時間が増えてしまい、
+# 「ActiveRecord::ConnectionTimeoutError」などが発生する。デフォルト値は５。
+# *dotenv-railsをインストールすることにより、「.env」ファイルに記載された環境変数をdockerコンテナ内で、
+# 下記のような記述で取り出せる様になります。ENV['DATABASE_PASSWORD']
+# ================================================================================================
+# 4
+# . `<%= ENV['MYSQL_USER'] %>`の意味とメソッドについて:
+# - ERB (Embedded RuBy)テンプレートの構文で、中のRubyコードを評価して結果を出力します。
+# - `ENV`はRubyの環境変数を取得するためのHash-likeオブジェクトで、この場合は`'MYSQL_USER'`というキーで指定され
+# た環境変数の値を取得します。
+# - 'dotenv-rails' gemは、`.env`ファイルから環境変数を読み込み、Rubyプロセスの環境変数として設定する機能を提供し
+# ます。
+# - このgemがこのテンプレート内で環境変数を使えるようにしているわけではなく、Ruby自体が環境変数にアクセスできるよう
+# にしています。
+

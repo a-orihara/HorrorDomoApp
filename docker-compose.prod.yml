@@ -58,24 +58,23 @@ services:
     # -itのt=tty
     tty: true
 
-  # web:
-  #   build:
-  #     # ./backend/web/内のDockerfileを使う
-  #     context: ./backend/web/
-  #   image: nginx_img
-  #   container_name: nginx-ctr-prod
-  #   # UNIXドメインソケット通信によるコンテナ間通信となるため、web・nginxコンテナで名前付きvolumeをマウント
-  #   # してファイルを共有
-  #   volumes:
-  #     - public-data:/api-app/public
-  #     - tmp-data:/api-app/tmp
-  #   # ローカル80とコンテナ80を接続
-  #   ports:
-  #     - 80:80
-  #   # apiの次にweb(nginx)が立ち上がる
-  #   depends_on:
-  #     - api
-  #     - front
+  web:
+    build:
+      # ./backend/web/内のDockerfileを使う
+      context: ./backend/web/
+    image: nginx_img
+    container_name: nginx-ctr-prod
+    # 8.1
+    volumes:
+      - public-data-prod:/api-app/public
+      - tmp-data-prod:/api-app/tmp
+    # ローカル80とコンテナ80を接続
+    ports:
+      - 80:80
+    # apiの次にweb(nginx)が立ち上がる
+    depends_on:
+      - api
+      - front
 
   front:
     build:
@@ -279,6 +278,23 @@ volumes:
 # 頻繁に書き換えるファイルはバインドマウントの方がいい。
 
 # ================================================================================================
+# 8.1
+# . Nginxで特に設定する理由
+# - Nginxは通常、静的なリソースを効率よく配信するために使用されます。このリソースはAPIコンテナと共有する必要がある場
+# 合があります。
+# - Nginxコンテナは、静的ファイルの提供やリバースプロキシとして動作するために必要です。`public-data-prod` ボリュ
+# ームは、コンテナ内の `/api-app/public` ディレクトリとホストの間でデータを共有するために使用されます。同様に、
+# `tmp-data-prod` ボリュームは一時的なデータやソケットなどの保存に使用されます。
+# ------------------------------------------------------------------------------------------------
+# - `public-data-prod:/api-app/public`
+# - Railsの`public`ディレクトリとNginxで使用する`/api-app/public`をマッピング。
+# - 理由: 静的ファイル（CSS, JS, 画像など）を効率よく配信するため。
+# ------------------------------------------------------------------------------------------------
+# - `tmp-data-prod:/api-app/tmp`
+# - Railsの`tmp`ディレクトリとNginxで使用する`/api-app/tmp`をマッピング。
+# - 理由: 一時ファイルやキャッシュを共有するため。
+
+# ================================================================================================
 # 9
 # - `environment:` セクションは、Dockerコンテナ内で使用される環境変数を定義するためのものです。
 # - コンテナ内部のプロセスやアプリケーションは、これらの環境変数を参照して動作や設定を調整することができます。
@@ -289,7 +305,7 @@ volumes:
 # - `environment:` セクション内の `RAILS_ENV: production` 設定は、Dockerコンテナ内で実行されるRailsアプリケ
 # ーションを本番環境として動作させるために用意されています。
 # ------------------------------------------------------------------------------------------------
-#- `env_file` と `environment:` の設定の違い
+# - `env_file` と `environment:` の設定の違い
 # - `env_file` は外部のファイルから環境変数を読み込むための設定です。指定されたファイルに記述された環境変数がコンテ
 # ナ内にロードされます。
 # - `environment:` は直接Docker Composeファイル内で環境変数を定義するためのセクションです。

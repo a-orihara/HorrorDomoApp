@@ -8,13 +8,13 @@ ddb:
 ddbn:
 	docker-compose -f docker-compose.dev.yml build --no-cache
 
-dup:
+dpu:
 	docker-compose -f docker-compose.prod.yml up --force-recreate
 
-dbp:
+dpb:
 	docker-compose -f docker-compose.prod.yml build
 
-dbpn:
+dpbn:
 	docker-compose -f docker-compose.prod.yml build --no-cache
 
 dsp:

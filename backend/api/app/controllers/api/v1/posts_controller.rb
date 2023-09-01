@@ -45,6 +45,7 @@ class Api::V1::PostsController < ApplicationController
   def create
     # Rails.loggerの省略形
     logger.info "Postのcreateアクションが発火"
+    puts "Postのcreateアクションが発火"
     # 7
     @post = current_api_v1_user.posts.build(post_params)
     if @post.save

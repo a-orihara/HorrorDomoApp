@@ -43,6 +43,8 @@ Rails.application.configure do
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
+  # [システム操作に関する一般的で有用な情報を含めるが、個人を特定できる情報（PII）の不用意な露出を避けるため、
+  # 多くの情報を記録することは避ける。]
   config.log_level = :info
 
   # Prepend all log lines with the following tags.

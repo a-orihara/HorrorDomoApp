@@ -4,10 +4,6 @@ FROM nginx:alpine
 # 2
 RUN rm -f /etc/nginx/conf.d/*
 
-# ローカルのビルドコンテキスト内のNginxの設定ファイル:nginx.confをコンテナに新たにファイルを作成してコピー
-# アプリごとの設定ファイルは「/etc/nginx/conf.d/」の下に新規で作成し、
-# Nginx全体に関わる設定は「/etc/nginx/nginx.conf」を編集するようにします。
-# 今回はアプリ単体の設定なので「/etc/nginx/conf.d/api-app.conf」を作成します。
 # 3
 ADD ./nginx.conf /etc/nginx/conf.d/api-app.conf
 
@@ -41,7 +37,10 @@ CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
 # ------------------------------------------------------------------------------------------------
 # nginx.confが一番初めに読み込まれる。nginx.confがnginx/conf.d以下を読み込む。
 # conf.dディレクトリにバーチャルサーバ毎の設定ファイルを置くことにより、その設定ファイルが読み込まれます。
-
+# ------------------------------------------------------------------------------------------------
+# アプリごとの設定ファイルは「/etc/nginx/conf.d/」の下に新規で作成し、Nginx全体に関わる設定は
+# 「/etc/nginx/nginx.conf」を編集するようにします。
+# 今回はアプリ単体の設定なので「/etc/nginx/conf.d/api-app.conf」を作成します。
 # ================================================================================================
 # 4
 # . `CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf`

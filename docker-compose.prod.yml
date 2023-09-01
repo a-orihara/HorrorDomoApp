@@ -33,13 +33,8 @@ services:
     env_file:
       - ./backend/api/.env
     # 9
-    environment:
-      RAILS_ENV: production
     # 5
-    # rails s:puma(アプリケーションサーバ)が起動。「-C」でPumaの設定ファイルを指定することが可能。
-    # ↓nginxなしの場合。
-    command: bash -c "rm -f tmp/pids/server.pid && rails s -e production -p 3000 -b '0.0.0.0'"
-    # command: bash -c "rm -f tmp/pids/server.pid && mkdir -p tmp/sockets && mkdir -p tmp/pids && bundle exec puma -e production -C config/puma.rb"
+    command: bash -c "rm -f tmp/pids/server.pid && mkdir -p tmp/sockets && mkdir -p tmp/pids && bundle exec puma -e production -C config/puma.rb"
 
     # 8
     volumes:
@@ -82,11 +77,6 @@ services:
       dockerfile: Dockerfile.prod
     image: nextjs-img-prod
     container_name: nextjs-ctr-prod
-    # 同期する
-    # volumes:
-    #   - ./frontend/front-app:/usr/src/front-app
-    # 作業ディレクトリ/front-appをに指定しているので、'npm run dev'のみでOK
-    # command: 'npm run dev'
     ports:
       - "3003:3000"
     depends_on:
@@ -170,6 +160,17 @@ volumes:
 
 # ================================================================================================
 # 5
+# ↓nginxなしの場合。
+# command: bash -c "rm -f tmp/pids/server.pid && rails s -e production -p 3000 -b '0.0.0.0'"
+# ------------------------------------------------------------------------------------------------
+# rails s:puma(アプリケーションサーバ)が起動。「-C」でPumaの設定ファイルを指定することが可能。
+# ------------------------------------------------------------------------------------------------
+# env_fileで本番環境を設定しているので書かなくてもいいが、明示的に[-e production]を記載。
+# ------------------------------------------------------------------------------------------------
+# コマンド全体は、RailsアプリケーションのPumaサーバーを起動するためのものです。
+# 具体的には、tmp/pids/server.pid ファイルを削除し、tmp/sockets ディレクトリと tmp/pids ディレクトリを作成し
+# た後、Pumaをproduction環境で、指定された設定ファイル (config/puma.rb) を使用して実行します。
+# ------------------------------------------------------------------------------------------------
 # . `bash -c`
 # - `bash`はUnixシェルの一つ。
 # - `-c`オプションで指定されたコマンドを文字列として実行。
@@ -191,7 +192,6 @@ volumes:
 # . `-p 3000 -b '0.0.0.0'`の必要性
 # - ポートとバインドアドレスを指定しないとデフォルト値が適用されるが、Docker環境や外部からのアクセスでは不便な場合が多い。
 # ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
 # 「-p」オプションをつけることで「mkdir path/to/dir」のような復数階層のディレクトリを1回で作成することが
 # できる。
 # ------------------------------------------------------------------------------------------------
@@ -201,13 +201,19 @@ volumes:
 # 例：ファイル指定した場合
 # bundle exec puma -e production -C config/puma/production.rb"
 # ------------------------------------------------------------------------------------------------
+# `mkdir -p tmp/sockets && mkdir -p tmp/pids`のコマンドを打つ代わりに、下記をDockerfileに記載しておくのでも
+# 良い。
+# RUN mkdir -p tmp/sockets
+# RUN mkdir -p tmp/pids
+# `# command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -e production -C config/puma.rb"`
+# ------------------------------------------------------------------------------------------------
 # ↓productionモードではディレクトリ内にconfig/master.keyとconfig/credentials.ymlというファイルが必要。
 # ------------------------------------------------------------------------------------------------
-# Pumaではデフォルトの設定ファイルであるconfig/puma.rbのほか、実行環境に応じたconfig/puma/[実行環境].rbという設定
-# ファイルを用意できます。
+# Pumaではデフォルトの設定ファイルであるconfig/puma.rbのほか、実行環境に応じたconfig/puma/[実行環境].rbという
+# 設定ファイルを用意できます。
 # rails sの場合はconfig/puma/[環境名].rb → config/puma.rbの優先順位で設定ファイルを読み込みます。
 # Railsアプリケーションのデフォルトの実行環境はdevelopmentなので、rails sで起動すればconfig/puma/development.rb →
-# config/puma.rbの順で設定ファイルの有無を確認します。そして、ファイルが存在すれば設定を読み込みます
+# config/puma.rbの順で設定ファイルの有無を確認します。そして、ファイルが存在すれば設定を読み込みます。
 # 一方、rails s -e productionもしくはENV[RAILS_ENV] = productionの実行環境でrails sを起動すればconfig/puma/
 # production.rb → config/puma.rbの順で設定ファイルの有無を確認します。
 # ------------------------------------------------------------------------------------------------
@@ -296,6 +302,10 @@ volumes:
 
 # ================================================================================================
 # 9
+# backend/api/.envで設定したので、下記記述は削除。削除前の説明は下記に記載。
+# environment:
+#       RAILS_ENV: production
+# ------------------------------------------------------------------------------------------------
 # - `environment:` セクションは、Dockerコンテナ内で使用される環境変数を定義するためのものです。
 # - コンテナ内部のプロセスやアプリケーションは、これらの環境変数を参照して動作や設定を調整することができます。
 # ------------------------------------------------------------------------------------------------

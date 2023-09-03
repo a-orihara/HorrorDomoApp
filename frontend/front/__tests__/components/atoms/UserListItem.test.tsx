@@ -38,6 +38,7 @@ describe('UserListItem', () => {
     mockUseAuthContext.mockReturnValue({
       currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
     });
+    // handleDeleteUserという関数を返す
     mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
     render(<UserListItem user={mockUser} />);
     expect(screen.getByRole('listitem')).toBeInTheDocument();

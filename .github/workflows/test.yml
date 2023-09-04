@@ -76,8 +76,9 @@ jobs:
       - name: Database create and migrate
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
-          rails db:create RAILS_ENV=test
+          bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
+
       - name: Run rspec
         run: bundle exec rspec
 # @          @@          @@          @@          @@          @@          @@          @@          @
@@ -267,3 +268,5 @@ jobs:
 # - このオプションは、既にインストールされているパッケージとプロジェクトに記述されている依存関係を比較し、必要なファ
 # イルが欠けているかどうかをチェックします。これにより、不整合がある場合に警告やエラーを表示することで問題を特定する。
 
+# rails db:create RAILS_ENV=test
+#           bundle exec rails db:migrate RAILS_ENV=test

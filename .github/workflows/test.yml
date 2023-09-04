@@ -46,31 +46,32 @@ jobs:
         uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
         # 7 jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
         with:
+          # ruby-versionの指定が必要
           ruby-version: "3.1"
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
 
       # 9 jobs.<job_id>.steps.name
-      - name: Cache node modules
-        # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
-        uses: actions/cache@v3
-        with:
-          # 11
-          path: node_modules
-          # おまじない
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache node modules
+      #   # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
+      #   uses: actions/cache@v3
+      #   with:
+      #     # 11
+      #     path: node_modules
+      #     # おまじない
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Bundler and gem install
-        # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
-        run: |
-          gem install bundler
-          bundle install
+      # - name: Bundler and gem install
+      #   # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
+      #   run: |
+      #     gem install bundler
+      #     bundle install
 
-      - name: Yarn install
-        # 13
-        run: yarn install --check-files
+      # - name: Yarn install
+      #   # 13
+      #   run: yarn install --check-files
 
       - name: Database create and migrate
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
@@ -206,6 +207,13 @@ jobs:
 # ===============================================================================================
 # 8
 # bundler-cache: true
+# setup-ruby アクションにより、rubyのBundlerが自動的にインストールされているので、Bundlerのコマンド、
+# [bundle install]が使える。
+# ------------------------------------------------------------------------------------------------
+# with:
+#       bundler-cache: trueで、
+# run: bundle installも一緒に行われている
+# ------------------------------------------------------------------------------------------------
 # - `ruby/setup-ruby@v1`アクションに対してBundlerのキャッシュを使用するよう指示しています。
 # - bundle installを実行し、インストールされたgemsを自動的にキャッシュする設定をするパラメーター。
 # - マップのキーがbundler-cacheで、バリューがtrueなので、bundler-cacheパラメータにtrueが設定されます。

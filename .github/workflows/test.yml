@@ -66,7 +66,7 @@ jobs:
         # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
         run: |
           gem install bundler
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          bundle install
 
       - name: Yarn install
         # 13
@@ -75,7 +75,7 @@ jobs:
       - name: Database create and migrate
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
-          bundle exec rails db:create RAILS_ENV=test
+          rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
       - name: Run rspec
         run: bundle exec rspec

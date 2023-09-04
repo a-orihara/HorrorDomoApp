@@ -42,8 +42,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Ruby
-        # ruby/setup-ruby:Ruby公式のアクション。指定したバージョンのRubyをVMにダウンロード
-        uses: ruby/setup-ruby@v1
+        # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード
+        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
         # 7 jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
         with:
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。

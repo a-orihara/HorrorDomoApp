@@ -40,6 +40,12 @@ jobs:
       - name: Checkout code
         # 6 jobs.<job_id>.steps.uses:アクションの実行を定義
         uses: actions/checkout@v3
+      - name: Show directory structure
+        run: ls -la
+
+      # 現在の作業ディレクトリを確認
+      - name: Show current working directory
+        run: pwd
 
       - name: Set up Ruby
         # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード

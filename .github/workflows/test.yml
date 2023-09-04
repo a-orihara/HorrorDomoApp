@@ -3,8 +3,9 @@
 # 2 name:ワークフローの名前
 name: Run rspec, rubocop
 # 3 on:ワークフローを実行するイベントを指定
-on: pull_request:
-    branches: [ main ]
+on:
+  pull_request:
+    branches: [main]
 # 一つのjob内の全てのstepは同じVM内で実行される。ステップ間ではファイルシステム経由で情報のやり取りが出来る。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。
@@ -50,7 +51,7 @@ jobs:
 
       # 9 jobs.<job_id>.steps.name
       - name: Cache node modules
-      # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
+        # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
         uses: actions/cache@v3
         with:
           # 11
@@ -71,7 +72,7 @@ jobs:
         run: yarn install --check-files
 
       - name: Database create and migrate
-      # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
+        # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
@@ -256,6 +257,4 @@ jobs:
 # . `--check-files`:
 # - このオプションは、既にインストールされているパッケージとプロジェクトに記述されている依存関係を比較し、必要なファ
 # イルが欠けているかどうかをチェックします。これにより、不整合がある場合に警告やエラーを表示することで問題を特定する。
-
-
 

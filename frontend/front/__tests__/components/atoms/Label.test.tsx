@@ -20,7 +20,7 @@ describe('Label', () => {
     expect(labelElement).toHaveClass('test-class');
   });
 
-  test('ブロッククラスを持つ', () => {
+  test('デフォルトのclassName属性のblockを持つ', () => {
     render(<Label className='test-class'>Test Label</Label>);
     const labelElement = screen.getByText('Test Label');
     expect(labelElement).toHaveClass('block');

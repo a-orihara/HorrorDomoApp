@@ -27,6 +27,7 @@ default: &default
   # password: ／<初期の設定>
   password: password_dev
   # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
+  # ホスト（サーバー）名を指定している。これはDocker Composeのサービス名を参照している。
   host: db
 
 #  デフォルトでは、開発環境のdbを参照する。

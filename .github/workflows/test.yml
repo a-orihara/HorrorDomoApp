@@ -1,7 +1,7 @@
 # 1
 
 # 2 name:ワークフローの名前
-name: Run rspec, rubocop
+name: Run rspec
 # 3 on:ワークフローを実行するイベントを指定
 on:
   pull_request:
@@ -40,16 +40,16 @@ jobs:
       - name: Checkout code
         # 6 jobs.<job_id>.steps.uses:アクションの実行を定義
         uses: actions/checkout@v3
-      - name: Show directory structure
-        run: ls -la
 
-      # 現在の作業ディレクトリを確認
-      - name: Show current working directory
-        run: pwd
+      # - name: move to working directory
+      #   run: |
+      #     cd backend/api
+      #     pwd
 
       - name: Set up Ruby
         # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード
-        uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
+        # uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
+        uses: ruby/setup-ruby@v1
         # 7 jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
         with:
           # ruby-versionの指定が必要
@@ -82,6 +82,8 @@ jobs:
       - name: Database create and migrate
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
+          cd backend/api
+          pwd
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 

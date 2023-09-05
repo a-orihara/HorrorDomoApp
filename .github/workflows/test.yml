@@ -45,6 +45,11 @@ jobs:
       #   run: |
       #     cd backend/api
       #     pwd
+      - name: cd api
+        # 13
+        run: |
+          cd backend/api
+          pwd
 
       - name: Set up Ruby
         # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード
@@ -82,8 +87,6 @@ jobs:
       - name: Database create and migrate
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
-          cd backend/api
-          pwd
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
 

@@ -57,7 +57,7 @@ jobs:
         # 7 jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
         with:
           # ruby-versionの指定が必要
-          ruby-version: "3.1"
+          ruby-version: "3.1.2"
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
 

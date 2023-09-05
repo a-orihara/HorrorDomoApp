@@ -2,24 +2,24 @@
 
 # 2 name:ワークフローの名前
 name: Run rspec
-# 3 on:ワークフローを実行するイベントを指定
+# 3 on:イベント。ワークフローを実行するイベントを指定
 on:
   pull_request:
     branches: [main]
-# 一つのjob内の全てのstepは同じVM内で実行される。ステップ間ではファイルシステム経由で情報のやり取りが出来る。
+# 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   rspec:
     # jobの名前（ = jobs<job_id>.name ）
     name: Rspec Test
-    # runs-on:jobが実行されるマシン。必須の設定。
+    # runs-on:jobが実行されるマシン。必須の設定。ジョブはruns-onで指定した環境で実行される。
     runs-on: ubuntu-latest
     # jobs.<job_id>.timeout-minutes:ジョブのタイムアウト時間を定義。単位は分。
     timeout-minutes: 10
     # 4 jobs.<job_id>.services:サービスコンテナを定義。
     services:
       # 4.1 jobs.<job_id>.services.<service_name>:この名前はホスト名として他コンテナから参照できる。
-      db:
+      mysql:
         # jobs.<job_id>.services.<service_name>.image:サービスコンテナのイメージを定義。
         image: mysql:8.0
         # jobs.<job_id>.services.<service_name>.ports:
@@ -34,13 +34,14 @@ jobs:
           MYSQL_ROOT_PASSWORD: rootroot
         # 4.2 jobs.<job_id>.services.<service_name>.options
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
-    # 5 jobs.<job_id>.services.steps:jobが実行するステップの定義
+    # 5 ステップ。jobs.<job_id>.services.steps:jobが実行するステップの定義
     steps:
       # jobs.<job_id>.steps.name:ステップの名前。GitHubリポジトリをgit cloneするアクションの名前を定義。
       - name: Checkout code
-        # 6 jobs.<job_id>.steps.uses:アクションの実行を定義
+        # 6 アクション。jobs.<job_id>.steps.uses:アクションの実行を定義
         uses: actions/checkout@v3
-
+      - name: a
+        run: docker network ls
       # - name: move to working directory
       #   run: |
       #     cd backend/api
@@ -90,6 +91,7 @@ jobs:
         working-directory: ./backend/api
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
+          cp config/database.yml.ci config/database.yml
           rails db:create RAILS_ENV=test
           rails db:migrate RAILS_ENV=test
 
@@ -145,6 +147,11 @@ jobs:
 # on:[push,pull_request]
 
 # ================================================================================================
+# 3.1
+# ジョブは同じ仮想環境上で実行されるステップの集合であり、ジョブごとに仮想環境の新しいインスタンスで実行されます。
+# ステップ間ではファイルシステム経由で情報のやり取りが出来る。
+
+# ================================================================================================
 # 4
 # このセクションは、ジョブ内で使用するコンテナベースのサービスを定義します。
 # git hub action内で、Dockerが使える。イメージを指定してコンテナを作成出来、それをjob内で使用出来る。
@@ -197,6 +204,10 @@ jobs:
 # 映されません。反映させるには:set-envを設定する。
 # 1つのジョブには、steps (ステップ) と呼ばれる一連のタスクがあります。
 # すべてのステップでアクションを実行するとは限りませんが、すべてのアクションはステップとして実行されます。
+# ------------------------------------------------------------------------------------------------
+# ステップは、後述するアクションやコマンドなどを実行できる個別のタスクです。ステップはジョブ内に1つ以上必要です。
+# ジョブ中の各ステップは同じ仮想環境で実行されるため、ジョブ内のアクションはファイルシステムを利用して情報共有可能。た
+# だし、各ステップは別プロセスとして動くので注意が必要です。
 
 # ================================================================================================
 # 6

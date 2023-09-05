@@ -73,22 +73,23 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-node-
 
-      # - name: Bundler and gem install
-      #   # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
-      #   run: |
-      #     gem install bundler
-      #     bundle install
+      - name: Bundler and gem install
+        working-directory: ./backend/api
+        # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
+        run: |
+          gem install bundler
+          bundle install
 
       # - name: Yarn install
       #   # 13
       #   run: yarn install --check-files
 
       - name: Database create and migrate
+        working-directory: ./backend/api
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
-        working-directory: ./backend/api
 
       - name: Run rspec
         run: bundle exec rspec

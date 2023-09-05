@@ -90,8 +90,8 @@ jobs:
         working-directory: ./backend/api
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
-          bundle exec rails db:create RAILS_ENV=test
-          bundle exec rails db:migrate RAILS_ENV=test
+          rails db:create RAILS_ENV=test
+          rails db:migrate RAILS_ENV=test
 
       - name: Run rspec
         run: bundle exec rspec

@@ -19,7 +19,7 @@ jobs:
     # 4 jobs.<job_id>.services:サービスコンテナを定義。
     services:
       # 4.1 jobs.<job_id>.services.<service_name>:この名前はホスト名として他コンテナから参照できる。
-      mysql:
+      db:
         # jobs.<job_id>.services.<service_name>.image:サービスコンテナのイメージを定義。
         image: mysql:8.0
         # jobs.<job_id>.services.<service_name>.ports:
@@ -157,6 +157,9 @@ jobs:
 
 # ================================================================================================
 # 4.1
+# service_nameは、mysqlではなくてdbにする。ここはdocker-compose.dev.ymlの、services: dbに合わせないと、サー
+# ビス名が見つからないとエラーになる。
+# ------------------------------------------------------------------------------------------------
 # ubuntu-latest VM（Virtual Machine）の上でMySQLコンテナが作成されます。
 # git hub actionの仮想環境で使うDB
 

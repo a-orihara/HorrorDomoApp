@@ -49,6 +49,8 @@ jobs:
       #   run: |
       #     cd backend/api
       #     pwd
+      - name: Wait for MySQL
+        run: sleep 10
 
       - name: Set up Ruby
         # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード

@@ -44,6 +44,7 @@ development:
 # このデータベースは開発用や本番用と同じにしないでください。]
 test:
   <<: *default
+  host: db
   database: api_app_test
 
 # As with config/credentials.yml, you never want to store sensitive information,

@@ -40,18 +40,9 @@ jobs:
       - name: Checkout code
         # 6 アクション。jobs.<job_id>.steps.uses:アクションの実行を定義
         uses: actions/checkout@v3
-      - name: a
-        run: docker network ls
-      # - name: move to working directory
-      #   run: |
-      #     cd backend/api
-      #     pwd
-      # - name: cd api
-      #   run: |
-      #     cd backend/api
-      #     pwd
-      - name: Wait for MySQL
-        run: sleep 10
+
+      # - name: Wait for MySQL
+      #   run: sleep 10
 
       - name: Set up Ruby
         # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード
@@ -63,18 +54,21 @@ jobs:
           ruby-version: "3.1.2"
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
+          # 8.1 workingディレクトリを指定 (ここでも指定しないとキャッシュされない)
+          working-directory: ./backend/api
 
-      # 9 jobs.<job_id>.steps.name
-      # - name: Cache node modules
-      #   # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
-      #   uses: actions/cache@v3
-      #   with:
-      #     # 11
-      #     path: node_modules
-      #     # おまじない
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
+      9 jobs.<job_id>.steps.name
+      - name: Cache node modules
+        working-directory: ./backend/api
+        # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
+        uses: actions/cache@v3
+        with:
+          # 11
+          path: node_modules
+          # おまじない
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Bundler and gem install
         working-directory: ./backend/api
@@ -83,9 +77,10 @@ jobs:
           gem install bundler
           bundle install
 
-      # - name: Yarn install
-      #   # 13
-      #   run: yarn install --check-files
+      - name: Yarn install
+        working-directory: ./backend/api
+        # 13
+        run: yarn install --check-files
 
       - name: Database create and migrate
         working-directory: ./backend/api
@@ -160,9 +155,24 @@ jobs:
 # jobs.<job_id> .services
 # servicesで、サービスで使う、サービスコンテナを定義します。servicesは、マップで指定でき、複数のコンテナを立ち上げ可
 # 能です。
-# ジョブをコンテナ内で実行したり、コンテナアクションを実行する場合は、それぞれ同じネットワークを共有した別コンテナとして実行されます。また、servicesのキ
-# 一名（リスト2.54だとpostgres)をホスト名として参照できます。
+# サービスコンテナは、ワークフロー中でアプリケーションをテストもしくは運用するのに必要になるかもしれないサービスをホス
+# トするための、シンプルでポータブルな方法を提供するDockerコンテナです。
+# ジョブをコンテナ内で実行したり、コンテナアクションを実行する場合は、それぞれ同じネットワークを共有した別コンテナとし
+# て実行されます。また、servicesのキ一名（リスト2.54だとpostgres)をホスト名として参照できます。
 # container とは異なり、こちらはホストマシンのホームやワークスペースはデフォ。
+# ------------------------------------------------------------------------------------------------
+# ワークフロー中のジョブは、直接ランナーマシン上(VM上)で実行するようにも、作成したDockerコンテナ中で実行するようにも
+# 設定できます。 [ジョブ]と、[ジョブのサービスコンテナ]との通信は、ジョブがランナーマシン上(VM上)で直接実行されている
+# か、作成したDockerコンテナ内で実行されているかによって異なります。
+# ------------------------------------------------------------------------------------------------
+# ランナーマシン上でジョブを直接実行する場合、localhost:<port> か 127.0.0.1:<port> を使ってサービスコンテナにア
+# クセスできます。
+# 作成したDockerコンテナ内でジョブを実行する場合、GitHubはDockerのユーザー定義ブリッジネットワークを使ってサービス
+# コンテナをジョブに接続します。
+# ------------------------------------------------------------------------------------------------
+# . `jobs.<job_id>.container` と `jobs.<job_id>.services` の違い
+# - `jobs.<job_id>.container` はジョブ自体が実行されるコンテナを指定します。
+# - `jobs.<job_id>.services` はジョブが依存するサービス（例えば、データベース）をコンテナとして起動する設定です。
 
 # ================================================================================================
 # 4.1
@@ -251,6 +261,23 @@ jobs:
 # 「bundle install を実行し、Gemをキャッシュする」というのは、プロジェクトの依存Gem（ライブラリやツール）のインス
 # トールを一度行い、そのインストールされたGemを特定の場所に保存しておくことを意味します。二回目以降の実行でキャッシ
 # ュを読み込むことで、ビルド時間が短縮される。
+
+# ===============================================================================================
+# 8.1
+# - `working-directory`はGitHub Actionsの各ステップが実行される作業ディレクトリを指定するものです。
+# - デフォルトではリポジトリのルートが作業ディレクトリとなりますが、特定のサブディレクトリでコマンドを実行したい場合
+# にこのオプションを使用します。
+# ------------------------------------------------------------------------------------------------
+# - GitHub Actionsはステップ間で状態を共有するために作業ディレクトリを使用します。特定のステップで必要なデータ（例：
+# Gemのキャッシュ）が存在するディレクトリを指定しないと、次のステップでそのデータが利用できない可能性があります。
+# - Bundler(bundle install等)やRailsのコマンドはカレントディレクトリに依存する場合が多いです。そのため、作業ディ
+# レクトリを明示的に指定することで、予期せぬ問題を避けることができます。
+# ------------------------------------------------------------------------------------------------
+# working-directory: は各ステップで必要
+# GitHub Actions では working-directory は各ステップに適用される設定です。各ステップで個別に
+# working-directory を指定しないと、デフォルトのディレクトリ（リポジトリのルートディレクトリ）でコマンドが実行され
+# ます。そのため、複数のステップで同じディレクトリで作業をする場合、各ステップに working-directory を指定する必要
+# があります。
 
 # ===============================================================================================
 # 9

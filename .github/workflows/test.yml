@@ -77,6 +77,10 @@ jobs:
           gem install bundler
           bundle install
 
+      - name: Install Rails
+        working-directory: ./backend/api
+        run: gem install rails
+
       - name: Yarn install
         working-directory: ./backend/api
         # 13
@@ -92,6 +96,23 @@ jobs:
 
       - name: Run rspec
         run: bundle exec rspec
+        working-directory: ./backend/api
+
+  rubocop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          working-directory: ./backend/api
+
+      - name: Run rubocop
+        run: bundle exec rubocop
         working-directory: ./backend/api
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 1

@@ -22,7 +22,7 @@ class Api::V1::PostsController < ApplicationController
         end
         render json: { status: '200', data: posts_with_likes, total_posts: total_posts }, status: :ok
       else
-        return render json: { status: '404', message: 'User not found' }, status: :not_found
+        render json: { status: '404', message: 'User not found' }, status: :not_found
       end
     else
       # 4
@@ -45,7 +45,6 @@ class Api::V1::PostsController < ApplicationController
   def create
     # Rails.loggerの省略形
     logger.info "Postのcreateアクションが発火"
-    puts "Postのcreateアクションが発火"
     # 7
     @post = current_api_v1_user.posts.build(post_params)
     if @post.save

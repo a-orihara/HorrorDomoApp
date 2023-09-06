@@ -97,6 +97,8 @@ jobs:
       - name: Run rspec
         run: bundle exec rspec
         working-directory: ./backend/api
+        env:
+          TMDB_API: ${{ secrets.TMDB_API }}
 
   rubocop:
     runs-on: ubuntu-latest

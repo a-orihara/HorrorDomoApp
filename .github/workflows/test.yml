@@ -57,7 +57,7 @@ jobs:
           # 8.1 workingディレクトリを指定 (ここでも指定しないとキャッシュされない)
           working-directory: ./backend/api
 
-      9 jobs.<job_id>.steps.name
+      # 9 jobs.<job_id>.steps.name
       - name: Cache node modules
         working-directory: ./backend/api
         # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。

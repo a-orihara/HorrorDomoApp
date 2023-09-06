@@ -59,10 +59,10 @@ jobs:
 
       # 9 jobs.<job_id>.steps.name
       - name: Cache node modules
-        working-directory: ./backend/api
         # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
         uses: actions/cache@v3
         with:
+          working-directory: ./backend/api
           # 11
           path: node_modules
           # おまじない

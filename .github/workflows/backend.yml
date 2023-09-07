@@ -16,7 +16,7 @@ jobs:
     # runs-on:jobが実行されるマシン。必須の設定。ジョブはruns-onで指定した環境で実行される。
     runs-on: ubuntu-latest
     # jobs.<job_id>.timeout-minutes:ジョブのタイムアウト時間を定義。単位は分。
-    timeout-minutes: 10
+    timeout-minutes: 5
     # 3.2
     defaults:
       run:
@@ -93,7 +93,7 @@ jobs:
   rubocop:
     name: Rubocop
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     defaults:
       run:
         working-directory: ./backend/api

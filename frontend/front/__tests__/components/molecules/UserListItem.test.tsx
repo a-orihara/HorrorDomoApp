@@ -1,4 +1,3 @@
-// frontend/front/src/components/atoms/UserListItem.test.tsx
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserListItem from '../../../src/components/molecules/listItem/UserListItem';

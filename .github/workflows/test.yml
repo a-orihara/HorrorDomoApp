@@ -6,21 +6,24 @@ name: Run rspec
 on:
   pull_request:
     branches: [main]
-# 3.1
-defaults:
-  run:
-    # 3.2
-    working-directory: ./backend/api
+# # 3.1
+# defaults:
+#   run:
+#     # 3.2
+#     working-directory: ./backend/api
 # 3.3 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   rspec:
     # jobの名前（ = jobs<job_id>.name ）
-    name: Rspec Test
+    name: Rspec
     # runs-on:jobが実行されるマシン。必須の設定。ジョブはruns-onで指定した環境で実行される。
     runs-on: ubuntu-latest
     # jobs.<job_id>.timeout-minutes:ジョブのタイムアウト時間を定義。単位は分。
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./backend/api
     # 4 jobs.<job_id>.services:サービスコンテナを定義。
     services:
       # 4.1 jobs.<job_id>.services.<service_name>:この名前はホスト名として他コンテナから参照できる。
@@ -106,8 +109,12 @@ jobs:
           TMDB_API: ${{ secrets.TMDB_API }}
 
   rubocop:
+    name: Rubocop
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./backend/api
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

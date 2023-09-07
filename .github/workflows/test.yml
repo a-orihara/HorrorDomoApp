@@ -125,6 +125,10 @@ jobs:
           ruby-version: "3.1.2"
           bundler-cache: true
           # working-directory: ./backend/api
+      - name: Bundler and gem install
+        run: |
+          gem install bundler
+          bundle install
 
       - name: Run rubocop
         run: bundle exec rubocop

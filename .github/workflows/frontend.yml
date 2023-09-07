@@ -1,0 +1,26 @@
+name: Run Jest
+# 3 on:イベント。ワークフローを実行するイベントを指定
+on:
+  pull_request:
+    branches: [main]
+
+# 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
+jobs:
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/front
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.17.1"
+          cache: "yarn"
+          cache-dependency-path: "frontend/front/package.json" # ファイルのパスを指定
+      - name: Install dependencies
+        run: npm install
+      - name: Run Jest
+        run: npm run test

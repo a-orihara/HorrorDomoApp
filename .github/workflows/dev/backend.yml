@@ -1,7 +1,7 @@
 # 1
 
 # 2 name:ワークフローの名前
-name: Run rspec
+name: Run Test and lint
 # 3 on:イベント。ワークフローを実行するイベントを指定
 on:
   pull_request:

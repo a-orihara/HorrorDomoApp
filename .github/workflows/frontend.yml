@@ -17,9 +17,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Set up Node.js
+        # 1
         uses: actions/setup-node@v3
         with:
           node-version: "16.17.1"
+          # 2
           cache-dependency-path: "frontend/front/package.json" # ファイルのパスを指定
       - name: Install dependencies
         run: npm install
@@ -47,3 +49,19 @@ jobs:
         run: npm run format
       - name: lint
         run: npm run lint
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 1
+# . `uses: actions/setup-node@v3`
+# - このアクションは、ワークフロー内でNode.jsをセットアップするために使用されます。
+# - JavaScriptプロジェクトには、特定のNode.jsのバージョンが必要な場合があります。このアクションは、ジョブが実行さ
+# れる仮想マシン（VM）に指定されたバージョンのNode.jsをインストールしてセットアップします。
+
+# ================================================================================================
+# 2
+# .`cache-dependency-path: "frontend/front/package.json"`
+# - `cache-dependency-path`: 依存関係のキャッシュのために依存関係ファイル（ここでは`package.json`）のパスを指
+# 定します。
+# - 依存関係のキャッシュを効率的に行い、ビルド時間を短縮します。
+# - ファイルにリストされた依存関係（npm パッケージ）をキャッシュします（存在する場合）。
+# - キャッシュが存在する場合、次回のビルドでは依存関係のインストールが高速になります。
+

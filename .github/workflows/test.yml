@@ -6,12 +6,8 @@ name: Run rspec
 on:
   pull_request:
     branches: [main]
-# # 3.1
-# defaults:
-#   run:
-#     # 3.2
-#     working-directory: ./backend/api
-# 3.3 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
+
+# 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   rspec:
@@ -21,8 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     # jobs.<job_id>.timeout-minutes:ジョブのタイムアウト時間を定義。単位は分。
     timeout-minutes: 10
+    # 3.2
     defaults:
       run:
+        # 3.3
         working-directory: ./backend/api
     # 4 jobs.<job_id>.services:サービスコンテナを定義。
     services:
@@ -30,8 +28,7 @@ jobs:
       mysql:
         # jobs.<job_id>.services.<service_name>.image:サービスコンテナのイメージを定義。
         image: mysql:8.0
-        # jobs.<job_id>.services.<service_name>.ports:
-        # ホストマシンからサービスコンテナにアクセスするポート番号を定義。
+        # 4.2 jobs.<job_id>.services.<service_name>.ports:
         ports:
           - 3306:3306
         # jobs.<job_id>.services.<service_name>.env:コンテナ内の環境変数を定義。
@@ -40,7 +37,7 @@ jobs:
           # MYSQL_ROOT_PASSWORDに空を設定できる用にするフラグ."yes"を設定することで空を設定することが可能。
           # MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: rootroot
-        # 4.2 jobs.<job_id>.services.<service_name>.options
+        # 4.3 jobs.<job_id>.services.<service_name>.options
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
     # 5 ステップ。jobs.<job_id>.services.steps:jobが実行するステップの定義
     steps:
@@ -48,13 +45,7 @@ jobs:
       - name: Checkout code
         # 6 アクション。jobs.<job_id>.steps.uses:アクションの実行を定義
         uses: actions/checkout@v3
-
-      # - name: Wait for MySQL
-      #   run: sleep 10
-
       - name: Set up Ruby
-        # ruby/setup-ruby:Ruby公式のアクション。指定したバージョン(v1.146.0)のRubyをVMにダウンロード
-        # uses: ruby/setup-ruby@55283cc23133118229fd3f97f9336ee23a179fcf
         uses: ruby/setup-ruby@v1
         # 7 jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
         with:
@@ -62,40 +53,32 @@ jobs:
           ruby-version: "3.1.2"
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
-          # 8.1 workingディレクトリを指定 (ここでも指定しないとキャッシュされない)
-          # working-directory: ./backend/api
-
-      # 9 jobs.<job_id>.steps.name
-      - name: Cache node modules
-        # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
-        uses: actions/cache@v3
-        with:
-          # working-directory: ./backend/api
-          # 11
-          path: node_modules
-          # おまじない
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # # 9 jobs.<job_id>.steps.name
+      # - name: Cache node modules
+      #   # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
+      #   uses: actions/cache@v3
+      #   with:
+      #     # 11
+      #     path: node_modules
+      #     # おまじない
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
       - name: Bundler and gem install
-        # working-directory: ./backend/api
         # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
         run: |
           gem install bundler
           bundle install
 
       - name: Install Rails
-        # working-directory: ./backend/api
         run: gem install rails
 
-      - name: Yarn install
-        # working-directory: ./backend/api
-        # 13
-        run: yarn install --check-files
+      # - name: Yarn install
+      #   # 13
+      #   run: yarn install --check-files
 
       - name: Database create and migrate
-        # working-directory: ./backend/api
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
           cp config/database.yml.ci config/database.yml
@@ -104,7 +87,6 @@ jobs:
 
       - name: Run rspec
         run: bundle exec rspec
-        # working-directory: ./backend/api
         env:
           TMDB_API: ${{ secrets.TMDB_API }}
 
@@ -124,7 +106,6 @@ jobs:
         with:
           ruby-version: "3.1.2"
           bundler-cache: true
-          # working-directory: ./backend/api
       - name: Bundler and gem install
         run: |
           gem install bundler
@@ -132,7 +113,6 @@ jobs:
 
       - name: Run rubocop
         run: bundle exec rubocop
-        # working-directory: ./backend/api
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 1
 # 一般的にCI/CDでやることはビルドとテストとデプロイの3点です。
@@ -183,9 +163,15 @@ jobs:
 
 # ================================================================================================
 # 3.1
+# ジョブは同じ仮想環境上で実行されるステップの集合であり、ジョブごとに仮想環境の新しいインスタンスで実行されます。
+# ステップ間ではファイルシステム経由で情報のやり取りが出来る。
+
+# ================================================================================================
+# 3.2
 # defaults
 # ワークフローのトップレベルでdefaultsを指定すると、ワークフロー内のすべてのジョブにデフォルトで適用される設定を定義
 # できます。
+# * 結局defaultsの設定がうまく反映されず、それぞれの`jobsにjobs.<job_id>.defaults.run`を設定。
 # ------------------------------------------------------------------------------------------------
 # defaults.run
 # defaultsでrunを設定することで、ワークフロー内のすべてのrunステップにデフォルトで適用される設定を定義できます。
@@ -195,10 +181,22 @@ jobs:
 # ジョブに対してdefaultsでrunを設定することで、特定のジョブ内のすべてのrunステップにデフォルトで適用される設定を定
 # 義できます。
 
-# ================================================================================================
+# ===============================================================================================
 # 3.3
-# ジョブは同じ仮想環境上で実行されるステップの集合であり、ジョブごとに仮想環境の新しいインスタンスで実行されます。
-# ステップ間ではファイルシステム経由で情報のやり取りが出来る。
+# - `working-directory`はGitHub Actionsの各ステップが実行される作業ディレクトリを指定するものです。
+# - デフォルトではリポジトリのルートが作業ディレクトリとなりますが、特定のサブディレクトリでコマンドを実行したい場合
+# にこのオプションを使用します。
+# ------------------------------------------------------------------------------------------------
+# - GitHub Actionsはステップ間で状態を共有するために作業ディレクトリを使用します。特定のステップで必要なデータ（例：
+# Gemのキャッシュ）が存在するディレクトリを指定しないと、次のステップでそのデータが利用できない可能性があります。
+# - Bundler(bundle install等)やRailsのコマンドはカレントディレクトリに依存する場合が多いです。そのため、作業ディ
+# レクトリを明示的に指定することで、予期せぬ問題を避けることができます。
+# ------------------------------------------------------------------------------------------------
+# working-directory: は各ステップで必要
+# GitHub Actions では working-directory は各ステップに適用される設定です。各ステップで個別に
+# working-directory を指定しないと、デフォルトのディレクトリ（リポジトリのルートディレクトリ）でコマンドが実行され
+# ます。そのため、複数のステップで同じディレクトリで作業をする場合、各ステップに working-directory を指定する必要
+# があります。
 
 # ================================================================================================
 # 4
@@ -260,6 +258,11 @@ jobs:
 # 設定がないと、サービスが起動していない状態でテストが始まる可能性がある。
 
 # ================================================================================================
+# 4.3
+# jobs.<job_id>.services.<service_name>.ports:
+# ホストマシンからサービスコンテナにアクセスするポート番号を定義。
+
+# ================================================================================================
 # 5
 # このstepsの作業はVM(ubuntu-latest)上で行われる。
 # ------------------------------------------------------------------------------------------------
@@ -315,23 +318,6 @@ jobs:
 # 「bundle install を実行し、Gemをキャッシュする」というのは、プロジェクトの依存Gem（ライブラリやツール）のインス
 # トールを一度行い、そのインストールされたGemを特定の場所に保存しておくことを意味します。二回目以降の実行でキャッシ
 # ュを読み込むことで、ビルド時間が短縮される。
-
-# ===============================================================================================
-# 8.1
-# - `working-directory`はGitHub Actionsの各ステップが実行される作業ディレクトリを指定するものです。
-# - デフォルトではリポジトリのルートが作業ディレクトリとなりますが、特定のサブディレクトリでコマンドを実行したい場合
-# にこのオプションを使用します。
-# ------------------------------------------------------------------------------------------------
-# - GitHub Actionsはステップ間で状態を共有するために作業ディレクトリを使用します。特定のステップで必要なデータ（例：
-# Gemのキャッシュ）が存在するディレクトリを指定しないと、次のステップでそのデータが利用できない可能性があります。
-# - Bundler(bundle install等)やRailsのコマンドはカレントディレクトリに依存する場合が多いです。そのため、作業ディ
-# レクトリを明示的に指定することで、予期せぬ問題を避けることができます。
-# ------------------------------------------------------------------------------------------------
-# working-directory: は各ステップで必要
-# GitHub Actions では working-directory は各ステップに適用される設定です。各ステップで個別に
-# working-directory を指定しないと、デフォルトのディレクトリ（リポジトリのルートディレクトリ）でコマンドが実行され
-# ます。そのため、複数のステップで同じディレクトリで作業をする場合、各ステップに working-directory を指定する必要
-# があります。
 
 # ===============================================================================================
 # 9

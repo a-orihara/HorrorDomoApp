@@ -6,7 +6,12 @@ name: Run rspec
 on:
   pull_request:
     branches: [main]
-# 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
+# 3.1
+defaults:
+  run:
+    # 3.2
+    working-directory: ./backend/api
+# 3.3 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   rspec:
@@ -55,14 +60,14 @@ jobs:
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
           # 8.1 workingディレクトリを指定 (ここでも指定しないとキャッシュされない)
-          working-directory: ./backend/api
+          # working-directory: ./backend/api
 
       # 9 jobs.<job_id>.steps.name
       - name: Cache node modules
         # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
         uses: actions/cache@v3
         with:
-          working-directory: ./backend/api
+          # working-directory: ./backend/api
           # 11
           path: node_modules
           # おまじない
@@ -71,23 +76,23 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Bundler and gem install
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
         # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
         run: |
           gem install bundler
           bundle install
 
       - name: Install Rails
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
         run: gem install rails
 
       - name: Yarn install
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
         # 13
         run: yarn install --check-files
 
       - name: Database create and migrate
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
         # actions/checkout@v3によってチェックアウトされたVMコード内のdatabase.yml.ciをdatabase.ymlにコピーします。
         run: |
           cp config/database.yml.ci config/database.yml
@@ -96,7 +101,7 @@ jobs:
 
       - name: Run rspec
         run: bundle exec rspec
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
         env:
           TMDB_API: ${{ secrets.TMDB_API }}
 
@@ -111,11 +116,11 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          working-directory: ./backend/api
+          # working-directory: ./backend/api
 
       - name: Run rubocop
         run: bundle exec rubocop
-        working-directory: ./backend/api
+        # working-directory: ./backend/api
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 1
 # 一般的にCI/CDでやることはビルドとテストとデプロイの3点です。
@@ -166,6 +171,20 @@ jobs:
 
 # ================================================================================================
 # 3.1
+# defaults
+# ワークフローのトップレベルでdefaultsを指定すると、ワークフロー内のすべてのジョブにデフォルトで適用される設定を定義
+# できます。
+# ------------------------------------------------------------------------------------------------
+# defaults.run
+# defaultsでrunを設定することで、ワークフロー内のすべてのrunステップにデフォルトで適用される設定を定義できます。
+# ------------------------------------------------------------------------------------------------
+# job内でjobに個別に設定する事も可能
+# jobs.<job_id>.defaults.run
+# ジョブに対してdefaultsでrunを設定することで、特定のジョブ内のすべてのrunステップにデフォルトで適用される設定を定
+# 義できます。
+
+# ================================================================================================
+# 3.3
 # ジョブは同じ仮想環境上で実行されるステップの集合であり、ジョブごとに仮想環境の新しいインスタンスで実行されます。
 # ステップ間ではファイルシステム経由で情報のやり取りが出来る。
 

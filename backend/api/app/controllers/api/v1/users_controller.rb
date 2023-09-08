@@ -128,11 +128,12 @@ class Api::V1::UsersController < ApplicationController
       # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)
       # currrentUserのいいねの真偽値情報を取得（いいねするのはcurrrentUserのため）
-      liked_posts_with_likes = liked_posts.map do |post|
+      liked_posts_with_likes_info = liked_posts.map do |post|
           # currrentUserがいいねしているかの真偽値をlikedに代入
           liked = current_api_v1_user.already_liked?(post)
           # 2
-          post.as_json.merge(liked: liked)
+          likes_count = post.likes.count
+          post.as_json.merge(liked: liked, likes_count: likes_count)
       end
       # 指定userのliked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
       # ↓ 書換:liked_users = liked_posts.map { |post| post.user }.uniq
@@ -147,7 +148,7 @@ class Api::V1::UsersController < ApplicationController
       # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づく集合を返す
       render json: {
         status: '200',
-        liked_posts: liked_posts_with_likes,
+        liked_posts: liked_posts_with_likes_info,
         total_liked_counts: total_liked_counts,
         liked_users: liked_users_with_avatar
       }

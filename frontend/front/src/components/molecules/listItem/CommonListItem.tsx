@@ -52,10 +52,8 @@ const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemP
       <p className='text-left text-sm md:text-xl'>{truncateContent}</p>
       <div className='flex'>
         <p className='mr-5 text-xs lg:text-base'>作成日時:{postCreatedTime}</p>
-        {/* 1 currentUserで条件を満たせばいいねを表示する */}
-        {currentUser && currentUser.id !== post.userId && (
-          <LikeButtonIcon postId={post.id} liked={post.liked} updatePostLikesCount={updatePostLikesCount} />
-        )}
+        {/* 1  */}
+        <LikeButtonIcon postId={post.id} liked={post.liked} updatePostLikesCount={updatePostLikesCount} />
         <p className='ml-2 mr-4 text-base lg:text-lg'>{postLikesCount}</p>
         {/* currentUserで条件を満たせば投稿を削除する */}
         {currentUser?.id === post.userId && (
@@ -80,6 +78,13 @@ export default CommonListItem;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+以前のコード
+currentUserで条件を満たせばいいねを表示する
+------------------------------------------------------------------------------------------------
+{currentUser && currentUser.id !== post.userId && (
+          <LikeButtonIcon postId={post.id} liked={post.liked} updatePostLikesCount={updatePostLikesCount} />
+        )}
+------------------------------------------------------------------------------------------------
 currentUserが定義されている場合にのみLikeButtonIconコンポーネントを描画します。
 よって、LikeButtonIconコンポーネントに渡されるuserIdは常にnumber型となり、undefinedは渡されません。
 ------------------------------------------------------------------------------------------------

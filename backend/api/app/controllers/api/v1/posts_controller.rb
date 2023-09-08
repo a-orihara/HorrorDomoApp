@@ -17,8 +17,11 @@ class Api::V1::PostsController < ApplicationController
         posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
         posts_with_likes = posts.map do |post|
+          # likedは真偽値
           liked = current_api_v1_user.already_liked?(post)
-          post.as_json.merge(liked: liked)
+          # そのpostのlikes数を取得
+          likes_count = post.likes.count
+          post.as_json.merge(liked: liked, likes_count: likes_count)
         end
         render json: { status: '200', data: posts_with_likes, total_posts: total_posts }, status: :ok
       else

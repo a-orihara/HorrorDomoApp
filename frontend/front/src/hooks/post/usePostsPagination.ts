@@ -22,7 +22,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
         // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
         // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
         const res = await getPostListByUserId(page, itemsPerPage, userId);
-        // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostをセット
+        // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostsをセット
         setPosts(res.data.data);
         // 指定したuserIdのユーザーの投稿総数をセット
         setTotalPostsCount(res.data.totalPosts);

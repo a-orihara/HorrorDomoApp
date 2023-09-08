@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { getPostLikesCountByPostId } from '../../../api/post';
+import { useState } from 'react';
 import useFormattedTime from '../../../hooks/helpers/useFormattedTime';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
@@ -17,25 +16,8 @@ const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemP
   const postCreatedTime = useFormattedTime(post.createdAt);
   // postの文字数が30文字より多い場合は、30文字までを表示し、それ以降は...と表示
   const truncateContent = post.content.length > 30 ? `${post.content.substring(0, 30)}...` : post.content;
-  // postのlikes数
-  const [postLikesCount, setPostLikesCount] = useState<number | null>(null);
-
-  // CommonListItemに描画されるpostにlikes数をセット
-  useEffect(() => {
-    // postにそのpostのlikes数をセットする関数
-    const handleGetPostLikesCountByPostId = async () => {
-      try {
-        // APIを直接呼び出す
-        const res = await getPostLikesCountByPostId(post.id);
-        // ローカル state を更新する
-        setPostLikesCount(res.data.postLikesCount);
-      } catch (err) {
-        alert('投稿を表示できません');
-      }
-    };
-    // 関数を呼び出し
-    handleGetPostLikesCountByPostId();
-  }, []);
+  // 1.1 postのlikes数
+  const [postLikesCount, setPostLikesCount] = useState<number | null>(post.likesCount);
 
   // いいねボタンを押した時に、いいね数を更新（+-1）する関数。引数はいいねしたかどうかの真偽値
   const updatePostLikesCount = (liked: boolean) => {
@@ -96,6 +78,14 @@ LikeButtonIconにundefinedが渡されることはありません。
 . Reactのコンポーネントは可能な限り "pure"（純粋）であるべきです。つまり、ある入力が与えられた時に同じ出力を返すべ
 きです。したがって、undefinedやnullが許容されないpropsを持つコンポーネントにそれらの値を渡すべきではありません。
 これにより、コンポーネントの安定性と予測可能性が保証されます。
+
+================================================================================================
+1.1
+以前は、別途[handleGetPostLikesCountByPostId]を作成して、postLikesCountを取得していた。
+------------------------------------------------------------------------------------------------
+現在各CommonListItemコンポーネントが描画されるたびに、APIリクエストが送られてpostLikesCountが取得されています
+。これはパフォーマンス上良くありません。APIから一度で全ての必要なデータを取得し、それをusePostsPaginationフック
+で管理するのが良いでしょう。
 
 ===============================================================================================
 2

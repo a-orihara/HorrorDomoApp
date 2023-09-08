@@ -4,17 +4,22 @@ type LikeButtonIconProps = {
   postId: number;
   liked: boolean;
   // userId: number;
+  updatePostLikesCount: (liked: boolean) => void;
 };
 
 // 指定userのlikedPostのidと、そのlikedPostに対するcurrentUserのliked（真偽値）
 // postIdを使ってpostを指定、 likedでpostの現在のいいねの真偽値を取得
-export const LikeButtonIcon = ({ postId, liked }: LikeButtonIconProps) => {
+export const LikeButtonIcon = ({ postId, liked, updatePostLikesCount }: LikeButtonIconProps) => {
   // useToggleLikeは、いいねの作成と削除、いいね総数の更新を処理する。
   // 引数は指定userのlikedPostのidと、そのlikedPostに対するcurrentUserのliked（真偽値）
   const { isLiked, handleToggleLike } = useToggleLike(postId, liked);
-  // console.log(`LikeButtonIconのisLikedは: ${isLiked}`);
+  // likeが押された時に、likeをcreateし、postのlike数を更新（+-1）する関数。引数はlikedの真偽値
+  const handleButtonClick = () => {
+    handleToggleLike();
+    updatePostLikesCount(isLiked);
+  };
   return (
-    <button onClick={() => handleToggleLike()}>
+    <button onClick={handleButtonClick}>
       <svg
         xmlns='http://www.w3.org/2000/svg'
         // isLiked（真偽値）の結果で色が変わる

@@ -33,9 +33,9 @@ class Api::V1::PostsController < ApplicationController
 
   # 11
   def show
-    @post = Post.find_by(id: params[:id])
-    if @post
-      render json: { status: 200, data: @post }
+    post = Post.find_by(id: params[:id])
+    if post
+      render json: { status: 200, data: post }
     else
       render json: { status: '404', message: '投稿が見つかりません' }, status: :not_found
     end
@@ -63,6 +63,17 @@ class Api::V1::PostsController < ApplicationController
     # render json: { error: '削除に失敗しました' }, status: :unprocessable_entity
     # correct_userのエラーメッセージに合わせるため、
     render json: { status: '422', message: '削除に失敗しました', errors: @post.errors.full_messages.join(', ') }, status: :unprocessable_entity
+    end
+  end
+
+  # 指定postのlikes数を取得
+  def likes_count
+    post = Post.find_by(id: params[:id])
+    if post
+      post_likes_count = post.likes.count
+      render json: { status: '200', post_likes_count: post_likes_count }, status: :ok
+    else
+      render json: { status: '404', message: 'User not found' }, status: :not_found
     end
   end
 

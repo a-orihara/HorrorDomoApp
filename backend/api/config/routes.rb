@@ -30,6 +30,9 @@ Rails.application.routes.draw do
           # 5
           delete :destroy, on: :collection
         end
+        member do
+          get :likes_count  # こちらの行を追加
+        end
       end
 
       # `/api/v1/likes/:id` likeリソース単体に対するdestroyのルーティングを追加

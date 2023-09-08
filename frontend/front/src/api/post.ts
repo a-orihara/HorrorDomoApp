@@ -72,6 +72,18 @@ export const getPostListByUserId = async (page: number, itemsPerPage: number, us
   });
 };
 
+export const getPostLikesCountByPostId = async (postId: number) => {
+  console.log('getPostLikesCountByPostIdが呼ばれた');
+  return client.get(`/posts/${postId}/likes_count`, {
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+    // res:指定したページの指定した表示件数分の、そのidで指定されたユーザーのpostと総post数
+  });
+};
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

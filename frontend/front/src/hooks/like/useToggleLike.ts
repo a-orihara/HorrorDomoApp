@@ -24,6 +24,7 @@ export const useToggleLike = (postId: number, liked: boolean) => {
         res = await deleteLike(postId);
         setIsLiked(false);
       } else {
+        console.log('いいね作成');
         res = await createLike(postId);
         setIsLiked(true);
       }

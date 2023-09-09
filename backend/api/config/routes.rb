@@ -26,6 +26,10 @@ Rails.application.routes.draw do
       # api/v1/posts
       resources :posts, only: [:index, :show, :create, :destroy] do
         # /api/v1/posts/search
+#         検索に get :search で GET メソッドを使用するか
+# 一般的に、検索やデータの取得は GET メソッドで行われます。
+# GET メソッドは冪等性があり、サーバーの状態を変更しない操作に適しています。
+# 検索パラメーターがシンプルであり、URLに組み込むことが可能な場合は、GET メソッドが適しています。
         collection do
           get :search
         end

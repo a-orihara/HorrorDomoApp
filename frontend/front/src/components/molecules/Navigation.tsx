@@ -4,6 +4,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useSignOut } from '../../hooks/auth/useSignOut';
 import Button from '../atoms/Button';
 import AlertMessage from './AlertMessage';
+import PostSearchForm from './form/PostSearchForm';
 // ================================================================================================
 // 1
 const Navigation = () => {
@@ -40,14 +41,17 @@ const Navigation = () => {
         )}
 
         {!loading && isSignedIn && (
-          <li>
-            <Button
-              className='flex h-8 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:h-12 md:text-2xl'
-              onClick={handleSignOut}
-            >
-              SignOut
-            </Button>
-          </li>
+          <div>
+            <PostSearchForm></PostSearchForm>
+            <li>
+              <Button
+                className='flex h-8 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:h-12 md:text-2xl'
+                onClick={handleSignOut}
+              >
+                SignOut
+              </Button>
+            </li>
+          </div>
         )}
       </ul>
       <AlertMessage></AlertMessage>

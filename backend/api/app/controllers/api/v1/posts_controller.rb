@@ -69,6 +69,12 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  def search
+    query = params[:query]
+    posts = Post.where("title LIKE ?", "%#{query}%")
+    render json: { status: '200', data: posts }, status: :ok
+  end
+
   private
 
   # 10 post_params で Strong Parameters を使っていることにより、content 属性だけWeb 経由で変更可能

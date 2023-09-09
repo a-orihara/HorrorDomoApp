@@ -7,6 +7,7 @@ class Api::V1::HomePagesController < ApplicationController
       per_page = params[:per_page] || 10
       if params[:user_id]
         # feed_itemはpostインスタンスの集合
+        # Post モデルに定義されている default_scope -> { order(created_at: :desc) } が適用されているため、投稿作成順
         feed_posts = current_api_v1_user.feed.page(page).per(per_page)
         # feed_postsにいいねしているかの真偽値を持たせる
         feed_posts_with_likes_info = feed_posts.map do |post|

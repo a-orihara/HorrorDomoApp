@@ -84,6 +84,36 @@ export const getPostLikesCountByPostId = async (postId: number) => {
   });
 };
 
+type SearchParams = {
+  query: string;
+};
+// axios.get メソッドは最大で2つの引数までしか受け取りません。第1引数はURL、第2引数はオプション（ヘッダー、パラメーターなど）です。
+export const searchPosts = (params: SearchParams) => {
+  return client.get('/api/v1/posts/search', {
+    params: { query: params.query },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
+// export const searchPosts = (params: SearchParams) => {
+//   return client.get(
+//     '/api/v1/posts/search',
+//     {
+//       params: { query: params.query },
+//     },
+//     {
+//       headers: {
+//         'access-token': Cookies.get('_access_token'),
+//         client: Cookies.get('_client'),
+//         uid: Cookies.get('_uid'),
+//       },
+//     }
+//   );
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

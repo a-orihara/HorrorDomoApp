@@ -25,6 +25,10 @@ Rails.application.routes.draw do
       end
       # api/v1/posts
       resources :posts, only: [:index, :show, :create, :destroy] do
+        # /api/v1/posts/search
+        collection do
+          get :search
+        end
         # 4 api/v1/posts/:post_id/likes
         resources :likes, only: [:create] do
           # 5

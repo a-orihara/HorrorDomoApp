@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useFollowingPagination } from '../../hooks/follow/useFollowingPagination';
-import useGetUserById from '../../hooks/user/useGetUserById';
+// import useGetUserById from '../../hooks/user/useGetUserById';
 import Pagination from '../molecules/Pagination';
 import { FollowList } from '../organisms/list/FollowList';
 
@@ -13,20 +13,18 @@ const FollowingPage = () => {
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // ルーターパラメーターのidに対応するユーザー情報を取得
   // console.log(`FollowingPage.tsxのuserId: ${userId}`);
-  const { user, handleGetUserById } = useGetUserById(userId);
+  // const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
   const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
-  // console.log(`FollowingPageの:${totalFollowingCount}`);
-  // console.log(`FollowingPageのfollowing:${JSON.stringify(following)}`);
 
-  useEffect(() => {
-    handleGetUserById();
-    // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いる
-  }, [userId, handleGetUserById]);
+  // useEffect(() => {
+  //   handleGetUserById();
+  //   // handleGetUserById()にuserIdが渡されているので、依存配列にidよりuserIdを用いる
+  // }, [userId, handleGetUserById]);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  // if (!user) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className='flex flex-1 flex-col'>

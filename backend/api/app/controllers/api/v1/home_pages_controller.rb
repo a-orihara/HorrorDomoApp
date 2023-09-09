@@ -7,18 +7,19 @@ class Api::V1::HomePagesController < ApplicationController
       per_page = params[:per_page] || 10
       if params[:user_id]
         # feed_itemはpostインスタンスの集合
-        feed_items = current_api_v1_user.feed.page(page).per(per_page)
-        # feed_itemsにいいねしているかの真偽値を持たせる
-        feed_items_with_likes = feed_items.map do |item|
+        feed_posts = current_api_v1_user.feed.page(page).per(per_page)
+        # feed_postsにいいねしているかの真偽値を持たせる
+        feed_posts_with_likes_info = feed_posts.map do |post|
           # いいねしているかの真偽値をlikedに代入
-          liked = current_api_v1_user.already_liked?(item)
+          liked = current_api_v1_user.already_liked?(post)
+          likes_count = post.likes.count
           # 2
-          item.as_json.merge(liked: liked)
+          post.as_json.merge(liked: liked, likes_count: likes_count)
         end
         feed_total_count = current_api_v1_user.feed.count
         # 1 ここにユーザーの配列?
-        # feed_itemsのfeed_user_idsである事に注意
-        feed_user_ids = feed_items.map(&:user_id).uniq
+        # feed_postsのfeed_user_idsである事に注意
+        feed_user_ids = feed_posts.map(&:user_id).uniq
         # feed_user_idsに紐づくuser情報を取得
         feed_users = User.where(id: feed_user_ids)
         # 各ユーザに対してgenerate_avatar_urlを実行し、as_jsonとmergeを使って、avatar_urlを含む新しいハッシュを生成
@@ -30,7 +31,7 @@ class Api::V1::HomePagesController < ApplicationController
         render json: {
           status: '200',
           # いいねしているかの真偽値を持たせたfeed
-          data: feed_items_with_likes,
+          data: feed_posts_with_likes_info,
           # feed_total_countはpaginationに必要
           feed_total_count: feed_total_count,
           # avatar情報付属したfeed_users
@@ -45,8 +46,8 @@ end
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-user_ids = feed_items.map(&:user_id).uniq
-= user_ids = feed_items.map { |item| item.user_id }.uniq
+user_ids = feed_posts.map(&:user_id).uniq
+= user_ids = feed_posts.map { |item| item.user_id }.uniq
 ------------------------------------------------------------------------------------------------
 uniq はRubyの配列（Array）に対して使われるメソッド
 uniq メソッドは、配列から重複する要素を取り除いた新しい配列を返します。
@@ -70,7 +71,7 @@ numbers 配列自体は変更されないため、unique_numbers を使って重
 `item` のハッシュに `liked` というキーで、`liked` 変数（`current_api_v1_user.already_liked?(item)` の
 結果）の真偽値が格納されます。
 - `item.as_json.merge(liked: liked)` は、`item` の属性を含むハッシュに `liked` の情報（真偽値）を追加した
-新しいハッシュを生成します。この操作により、各 `item` の「いいね」情報を格納した `feed_items_with_likes` 配列
+新しいハッシュを生成します。この操作により、各 `item` の「いいね」情報を格納した `feed_posts_with_likes` 配列
 が作成されます。
 - `merge` メソッドは、ハッシュ同士を結合するために使用されます。引数として与えられたハッシュのキーと値を、元のハッ
 シュに追加して新しいハッシュを生成します。重複するキーがある場合は、引数として与えられたハッシュの値が優先されます。

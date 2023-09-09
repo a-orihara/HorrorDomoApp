@@ -25,7 +25,7 @@ RSpec.describe 'Api::V1::HomePages', type: :request do
       end
 
       it '正しいフィード情報を返すこと' do
-        # レスポンスのJSON形式を8種に変換し、 json 変数に格納
+        # レスポンスのJSON形式をハッシュに変換し、 json 変数に格納
         json = response.parsed_body
         # puts ":#{json['data']}"
         # json 変数内のデータの中に 'data' フィールドが存在することを確認

@@ -6,6 +6,7 @@ export type Post = {
   liked: boolean;
   createdAt: string;
   updatedAt: string;
+  likesCount: number;
 };
 
 export type CreatePostParams = {

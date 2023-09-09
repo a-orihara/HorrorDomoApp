@@ -16,11 +16,14 @@ class Api::V1::PostsController < ApplicationController
         # 指定したページの1ページ当たりの表示件数分のpostを取得
         posts = user.posts.page(page).per(per_page)
         total_posts = user.posts.count
-        posts_with_likes = posts.map do |post|
+        posts_with_likes_info = posts.map do |post|
+          # likedは真偽値
           liked = current_api_v1_user.already_liked?(post)
-          post.as_json.merge(liked: liked)
+          # そのpostのlikes数を取得
+          likes_count = post.likes.count
+          post.as_json.merge(liked: liked, likes_count: likes_count)
         end
-        render json: { status: '200', data: posts_with_likes, total_posts: total_posts }, status: :ok
+        render json: { status: '200', data: posts_with_likes_info, total_posts: total_posts }, status: :ok
       else
         render json: { status: '404', message: 'User not found' }, status: :not_found
       end
@@ -33,9 +36,9 @@ class Api::V1::PostsController < ApplicationController
 
   # 11
   def show
-    @post = Post.find_by(id: params[:id])
-    if @post
-      render json: { status: 200, data: @post }
+    post = Post.find_by(id: params[:id])
+    if post
+      render json: { status: 200, data: post }
     else
       render json: { status: '404', message: '投稿が見つかりません' }, status: :not_found
     end

@@ -4,6 +4,7 @@ import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
 import { useToggleFeed } from '../../hooks/useToggleFeed';
 import CreatePostLink from '../atoms/CreatePostLink';
+import PostSearchForm from '../molecules/form/PostSearchForm';
 import FeedArea from '../organisms/area/FeedArea';
 import LikedPostArea from '../organisms/area/LikedPostArea';
 import Sidebar from '../organisms/Sidebar';
@@ -43,6 +44,7 @@ const HomePage = () => {
           </div>
 
           <div className='flex-1 lg:w-full'>
+            <PostSearchForm></PostSearchForm>
             {showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (

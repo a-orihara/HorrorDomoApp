@@ -6,14 +6,19 @@ import Input from '../../atoms/Input';
 type PostSearchFormProps = {
   // setSearchedPosts: (posts: [Post]) => void;
   setSearchQuery: (query: string) => void;
+  setIsSearchActive: (active: boolean) => void;
 };
 
-const PostSearchForm = ({ setSearchQuery }: PostSearchFormProps) => {
+// 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するため、
+// setIsSearchActiveをpropとしてPostSearchFormに渡す
+const PostSearchForm = ({ setSearchQuery, setIsSearchActive }: PostSearchFormProps) => {
   // 検索キーワードを管理する状態
   const [query, setQuery] = useState('');
   // const [searchedPosts, setSearchedPosts] = useState<Post>();
   const handleSearchClick = () => {
     setSearchQuery(query);
+    // 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するために、状態変数を更新する
+    setIsSearchActive(true);
   };
 
   // // 検索ボタンをクリックした際の処理

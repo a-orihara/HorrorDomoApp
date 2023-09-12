@@ -21,6 +21,8 @@ const HomePage = () => {
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
   // const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  // 検索が実行されたかどうかを追跡する状態変数
+  const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -48,15 +50,21 @@ const HomePage = () => {
           </div>
 
           <div className='flex-1 lg:w-full'>
-            {/* <PostSearchForm setSearchedPosts={setSearchedPosts} setSearchQuery={setSearchQuery}></PostSearchForm> */}
-            <PostSearchForm setSearchQuery={setSearchQuery}></PostSearchForm>
-            <SearchedPostArea query={searchQuery}></SearchedPostArea>
-
-            {showLikedPostArea ? (
+            <PostSearchForm setIsSearchActive={setIsSearchActive} setSearchQuery={setSearchQuery}></PostSearchForm>
+            {/* <SearchedPostArea query={searchQuery}></SearchedPostArea> */}
+            {isSearchActive && searchQuery ? (
+              <SearchedPostArea query={searchQuery}></SearchedPostArea>
+            ) : showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (
               <FeedArea user={currentUser}></FeedArea>
             )}
+
+            {/* {showLikedPostArea ? (
+              <LikedPostArea user={currentUser}></LikedPostArea>
+            ) : (
+              <FeedArea user={currentUser}></FeedArea>
+            )} */}
           </div>
         </div>
       ) : (

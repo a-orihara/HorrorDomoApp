@@ -1,22 +1,25 @@
-import { useFeedPagination } from '../../../hooks/user/useFeedPagination';
-import { User } from '../../../types/user';
+import { useSearchedPostsPagination } from '../../../hooks/post/useSearchedPostsPagination';
 import FeedListItem from '../../molecules/listItem/FeedListItem';
 // import Pagination from '../../molecules/Pagination';
 // import FeedList from '../list/FeedList';
 import CommonPostArea from './CommonPostArea';
 
 type SearchedPostAreaProps = {
-  user: User;
+  query: string;
 };
 
-const SearchedPostArea = ({ user }: SearchedPostAreaProps) => {
-  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
+const SearchedPostArea = ({ query }: SearchedPostAreaProps) => {
+  const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange } = useSearchedPostsPagination(
+    10,
+    query
+  );
+
   return (
     <div>
       <CommonPostArea
-        users={feedUsers}
-        posts={feedPosts}
-        totalPostsCount={totalFeedPostsCount}
+        users={searchedPostUsers}
+        posts={searchedPosts}
+        totalPostsCount={searchedTotalPostsCount}
         handlePageChange={handlePageChange}
         // 孫のCommonPostListに渡す
         noPostsMessage='投稿がありません'

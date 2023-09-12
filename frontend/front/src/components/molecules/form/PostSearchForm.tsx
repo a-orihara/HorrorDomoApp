@@ -1,23 +1,34 @@
 // frontend/front/src/components/molecules/form/SearchForm.tsx
 import { useState } from 'react';
-import { searchPosts } from '../../../api/post';
+// import { searchPosts } from '../../../api/post';
 import Input from '../../atoms/Input';
 
-const PostSearchForm = () => {
+type PostSearchFormProps = {
+  // setSearchedPosts: (posts: [Post]) => void;
+  setSearchQuery: (query: string) => void;
+};
+
+const PostSearchForm = ({ setSearchQuery }: PostSearchFormProps) => {
   // 検索キーワードを管理する状態
   const [query, setQuery] = useState('');
-
-  // 検索ボタンをクリックした際の処理
-  const handleSearchClick = async () => {
-    // ここで検索APIを呼び出す処理を書く
-    try {
-      const res = await searchPosts({ query });
-      // ここで検索結果を扱う（例: 状態を更新する、画面に結果を表示する等）
-      console.log(`response.data:${JSON.stringify(res.data.data)}`);
-    } catch (error) {
-      console.error('Search failed:', error);
-    }
+  // const [searchedPosts, setSearchedPosts] = useState<Post>();
+  const handleSearchClick = () => {
+    setSearchQuery(query);
   };
+
+  // // 検索ボタンをクリックした際の処理
+  // const handleSearchClick = async () => {
+  //   // ここで検索APIを呼び出す処理を書く
+  //   try {
+  //     const res = await searchPosts({ query });
+  //     // ここで検索結果を扱う（例: 状態を更新する、画面に結果を表示する等）
+  //     console.log(`response.data:${JSON.stringify(res.data.data)}`);
+  //     setSearchedPosts(res.data.data);
+  //     setSearchQuery(query);
+  //   } catch (error) {
+  //     console.error('Search failed:', error);
+  //   }
+  // };
   return (
     <div className='m-1 flex flex-row items-center'>
       <form onSubmit={(e) => e.preventDefault()}>
@@ -39,7 +50,7 @@ const PostSearchForm = () => {
               strokeWidth='2'
               strokeLinecap='round'
               strokeLinejoin='round'
-              onClick={handleSearchClick} // Added onClick
+              onClick={handleSearchClick}
             >
               <circle cx='11' cy='11' r='8' />
               <line x1='21' y1='21' x2='16.65' y2='16.65' />

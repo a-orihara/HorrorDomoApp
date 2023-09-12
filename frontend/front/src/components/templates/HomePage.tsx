@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { usePostContext } from '../../contexts/PostContext';
 import useFirstTimeLogin from '../../hooks/useFirstTimeLogin';
@@ -7,6 +8,7 @@ import CreatePostLink from '../atoms/CreatePostLink';
 import PostSearchForm from '../molecules/form/PostSearchForm';
 import FeedArea from '../organisms/area/FeedArea';
 import LikedPostArea from '../organisms/area/LikedPostArea';
+import SearchedPostArea from '../organisms/area/SearchedPostArea';
 import Sidebar from '../organisms/Sidebar';
 import UserInfo from '../organisms/UserInfo';
 
@@ -17,6 +19,8 @@ const HomePage = () => {
   const { currentUserPostsCount } = usePostContext();
   // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
+  // const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -44,7 +48,10 @@ const HomePage = () => {
           </div>
 
           <div className='flex-1 lg:w-full'>
-            <PostSearchForm></PostSearchForm>
+            {/* <PostSearchForm setSearchedPosts={setSearchedPosts} setSearchQuery={setSearchQuery}></PostSearchForm> */}
+            <PostSearchForm setSearchQuery={setSearchQuery}></PostSearchForm>
+            <SearchedPostArea query={searchQuery}></SearchedPostArea>
+
             {showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (

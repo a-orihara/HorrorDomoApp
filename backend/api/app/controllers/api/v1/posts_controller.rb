@@ -90,7 +90,13 @@ class Api::V1::PostsController < ApplicationController
           post.as_json.merge(liked: liked, likes_count: likes_count)
     end
     puts "ここよposts_with_likes_info: #{posts_with_likes_info}"
-    render json: { status: '200', data: posts_with_likes_info, total_posts: total_posts }, status: :ok
+    user_ids = posts.map(&:user_id).uniq
+    users = User.where(id: user_ids)
+    users_with_avatar = users.map do |user|
+          avatar_url = generate_avatar_url(user)
+          user.as_json.merge(avatar_url: avatar_url)
+    end
+    render json: { status: '200', data: posts_with_likes_info, total_posts: total_posts, users: users_with_avatar }, status: :ok
   end
 
   private

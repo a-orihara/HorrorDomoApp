@@ -7,11 +7,13 @@ type PostSearchFormProps = {
   // setSearchedPosts: (posts: [Post]) => void;
   setSearchQuery: (query: string) => void;
   setIsSearchActive: (active: boolean) => void;
+  // SearchedPostAreaが表示されているかどうか;
+  isSearchActive: boolean;
 };
 
 // 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するため、
 // setIsSearchActiveをpropとしてPostSearchFormに渡す
-const PostSearchForm = ({ setSearchQuery, setIsSearchActive }: PostSearchFormProps) => {
+const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: PostSearchFormProps) => {
   // 検索キーワードを管理する状態
   const [query, setQuery] = useState('');
   // const [searchedPosts, setSearchedPosts] = useState<Post>();
@@ -20,6 +22,14 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive }: PostSearchFormPro
     // 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するために、状態変数を更新する
     setIsSearchActive(true);
   };
+
+  const handleBackClick = () => {
+    setIsSearchActive(false);
+    setSearchQuery('');
+  };
+
+  console.log('テスト');
+  console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
 
   // // 検索ボタンをクリックした際の処理
   // const handleSearchClick = async () => {
@@ -60,6 +70,8 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive }: PostSearchFormPro
               <circle cx='11' cy='11' r='8' />
               <line x1='21' y1='21' x2='16.65' y2='16.65' />
             </svg>
+            {/* isSearchActiveがtrueの時のみ表示されるボタン */}
+            {isSearchActive && <button onClick={handleBackClick}>Back</button>}
           </div>
         </div>
       </form>

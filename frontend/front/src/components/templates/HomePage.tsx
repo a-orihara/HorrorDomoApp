@@ -50,8 +50,12 @@ const HomePage = () => {
           </div>
 
           <div className='flex-1 lg:w-full'>
-            <PostSearchForm setIsSearchActive={setIsSearchActive} setSearchQuery={setSearchQuery}></PostSearchForm>
-            {/* <SearchedPostArea query={searchQuery}></SearchedPostArea> */}
+            <PostSearchForm
+              setIsSearchActive={setIsSearchActive}
+              setSearchQuery={setSearchQuery}
+              isSearchActive={isSearchActive}
+            ></PostSearchForm>
+            {/* 検索がアクティブかどうか(isSearchActive)に基づき、searchQueryが空でなければ、対応するコンポーネントを表示する。 */}
             {isSearchActive && searchQuery ? (
               <SearchedPostArea query={searchQuery}></SearchedPostArea>
             ) : showLikedPostArea ? (
@@ -59,7 +63,6 @@ const HomePage = () => {
             ) : (
               <FeedArea user={currentUser}></FeedArea>
             )}
-
             {/* {showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (

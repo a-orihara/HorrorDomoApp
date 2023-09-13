@@ -5,13 +5,13 @@ import FeedListItem from '../../molecules/listItem/FeedListItem';
 import CommonPostArea from './CommonPostArea';
 
 type SearchedPostAreaProps = {
-  query: string;
+  searchQuery: string;
 };
 
-const SearchedPostArea = ({ query }: SearchedPostAreaProps) => {
+const SearchedPostArea = ({ searchQuery }: SearchedPostAreaProps) => {
   const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange } = useSearchedPostsPagination(
     10,
-    query
+    searchQuery
   );
 
   return (

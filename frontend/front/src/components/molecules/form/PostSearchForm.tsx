@@ -1,64 +1,54 @@
-// frontend/front/src/components/molecules/form/SearchForm.tsx
 import { useState } from 'react';
-// import { searchPosts } from '../../../api/post';
 import Input from '../../atoms/Input';
 
 type PostSearchFormProps = {
-  // setSearchedPosts: (posts: [Post]) => void;
-  setSearchQuery: (query: string) => void;
+  // enterQuery(入力語句)をSearchQuery(検索語句)にセットする。検索語句は親(Home)を通して、SearchedPostAreaに渡る。
+  setSearchQuery: (enterQuery: string) => void;
+  // IsSearchActive(検索postを表示するかどうかを決める)をセットする関数
   setIsSearchActive: (active: boolean) => void;
-  // SearchedPostAreaが表示されているかどうか;
+  // SearchedPostAreaが表示されるかどうかの真偽値;
   isSearchActive: boolean;
 };
 
-// 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するため、
-// setIsSearchActiveをpropとしてPostSearchFormに渡す
 const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: PostSearchFormProps) => {
-  // 検索キーワードを管理する状態
-  const [query, setQuery] = useState('');
-  // const [searchedPosts, setSearchedPosts] = useState<Post>();
+  // 入力語句を管理する状態
+  const [enterQuery, setEnterQueryQuery] = useState('');
+
+  // 検索アイコンを押すと発火。入力語句を検索語句に代入、検索状態をアクティブ(true)にする
   const handleSearchClick = () => {
-    setSearchQuery(query);
-    // 検索クエリを設定するだけでなく、検索がアクティブであることをHomePageに通知するために、状態変数を更新する
+    // 入力語句を検索語句に代入
+    setSearchQuery(enterQuery);
+    // 検索状態をアクティブ(true)。親(Home)に通知。
     setIsSearchActive(true);
   };
 
+  // 戻るボタンを押すと発火
   const handleBackClick = () => {
+    // 検索状態を非アクティブ(false)。結果としてSearchedPostAreaを非表示。
     setIsSearchActive(false);
+    // 検索語句を空
     setSearchQuery('');
+    // 入力語句を空（戻るを押しても入力欄に語句が残ったままにしない為）
+    setEnterQueryQuery('');
   };
-
-  console.log('テスト');
   console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
 
-  // // 検索ボタンをクリックした際の処理
-  // const handleSearchClick = async () => {
-  //   // ここで検索APIを呼び出す処理を書く
-  //   try {
-  //     const res = await searchPosts({ query });
-  //     // ここで検索結果を扱う（例: 状態を更新する、画面に結果を表示する等）
-  //     console.log(`response.data:${JSON.stringify(res.data.data)}`);
-  //     setSearchedPosts(res.data.data);
-  //     setSearchQuery(query);
-  //   } catch (error) {
-  //     console.error('Search failed:', error);
-  //   }
-  // };
   return (
     <div className='m-1 flex flex-row items-center'>
       <form onSubmit={(e) => e.preventDefault()}>
-        <div>
+        <div className='flex flex-row'>
           {/* Input and SVG wrapped in a div */}
           <div className='relative items-center'>
             <Input
               className='sm :ml-4 p-1 text-base md:text-lg lg:text-2xl'
               placeholder='映画のタイトルを入力'
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              // 入力文字を格納
+              value={enterQuery}
+              onChange={(e) => setEnterQueryQuery(e.target.value)}
             />
             {/* 検索アイコン */}
             <svg
-              className='absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 transform cursor-pointer text-basic-green lg:h-8 lg:w-8'
+              className='absolute right-0 top-1/2 h-4 w-4 -translate-y-1/2 transform cursor-pointer text-basic-green md:h-8 md:w-8'
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
@@ -70,9 +60,16 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
               <circle cx='11' cy='11' r='8' />
               <line x1='21' y1='21' x2='16.65' y2='16.65' />
             </svg>
-            {/* isSearchActiveがtrueの時のみ表示されるボタン */}
-            {isSearchActive && <button onClick={handleBackClick}>Back</button>}
           </div>
+          {/* isSearchActiveがtrueの時のみ表示されるボタン */}
+          {isSearchActive && (
+            <button
+              className='ml-4 text-basic-green hover:bg-basic-orange hover:text-basic-pink'
+              onClick={handleBackClick}
+            >
+              戻る
+            </button>
+          )}
         </div>
       </form>
     </div>

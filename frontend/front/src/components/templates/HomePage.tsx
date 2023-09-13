@@ -19,10 +19,12 @@ const HomePage = () => {
   const { currentUserPostsCount } = usePostContext();
   // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
-  // const [searchedPosts, setSearchedPosts] = useState<Post[]>([]);
+  // 検索語句。状態は親[Home]で管理。
+  // searchQueryは[SearchedPostArea]のpagination取得に、setSearchQueryは[PostSearchForm]で使用
   const [searchQuery, setSearchQuery] = useState<string>('');
-  // 検索が実行されたかどうかを追跡する状態変数
+  // 検索がボタンが押された(検索が実行されたか）を追跡する状態変数（真偽値）
   const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
+  console.log(`%c現在のsearchQuery:${searchQuery}`, 'color: red');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -51,23 +53,22 @@ const HomePage = () => {
 
           <div className='flex-1 lg:w-full'>
             <PostSearchForm
+              // SearchActiveを活性、非活性化するためにsetIsSearchActiveを使用
               setIsSearchActive={setIsSearchActive}
+              // 入力語句を検索語句にセットする為にsetSearchQueryを使用
               setSearchQuery={setSearchQuery}
+              // [PostSearchForm]で戻るボタンを表示、非表示を切り替えるためにisSearchActiveを使用
               isSearchActive={isSearchActive}
             ></PostSearchForm>
-            {/* 検索がアクティブかどうか(isSearchActive)に基づき、searchQueryが空でなければ、対応するコンポーネントを表示する。 */}
+            {/* 3 isSearchActiveがtrue(アクティブ)、searchQueryが空でなければ表示 */}
             {isSearchActive && searchQuery ? (
-              <SearchedPostArea query={searchQuery}></SearchedPostArea>
+              // searchQueryは、[SearchedPostArea]のpagination取得に使用
+              <SearchedPostArea searchQuery={searchQuery}></SearchedPostArea>
             ) : showLikedPostArea ? (
               <LikedPostArea user={currentUser}></LikedPostArea>
             ) : (
               <FeedArea user={currentUser}></FeedArea>
             )}
-            {/* {showLikedPostArea ? (
-              <LikedPostArea user={currentUser}></LikedPostArea>
-            ) : (
-              <FeedArea user={currentUser}></FeedArea>
-            )} */}
           </div>
         </div>
       ) : (
@@ -111,4 +112,19 @@ currentUserがundefinedであるかどうかに関わらず、userIdの値は必
 showWelcomeMessage:初回ログイン時にメッセージを表示するかを判定する真偽値
 useFirstTimeLogin:初回ログイン時にメッセージを表示するためのカスタムフック
 
+================================================================================================
+3
+isSearchActive： 検索がアクティブ（検索がボタンが押された）かどうかを示す。
+searchQuery： ユーザーが何を検索しているか（検索された文字列があるか）を表す文字列。
+両方の条件が真の場合、<SearchedPostArea query={searchQuery}>が表示されます。
+------------------------------------------------------------------------------------------------
+: showLikedPostArea ? ( <LikedPostArea user={currentUser}></LikedPostArea> )
+この部分は、最初の部分（isSearchActive && searchQuery）が偽の場合に実行される。
+showLikedPostAreaがtrueかfalseかをチェックする。
+もしtrueなら、<LikedPostArea user={currentUser}>が表示される。
+------------------------------------------------------------------------------------------------
+<FeedArea user={currentUser}></FeedArea>
+この部分は、最初の部分(isSearchActive && searchQuery)と2番目の部分(showLikedPostArea)の両方がfalseの場合
+に実行されます。
+デフォルトでは<FeedArea user={currentUser}>が表示されます。
 */

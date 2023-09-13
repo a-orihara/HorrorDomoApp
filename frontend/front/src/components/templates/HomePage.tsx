@@ -24,7 +24,7 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   // 検索がボタンが押された(検索が実行されたか）を追跡する状態変数（真偽値）
   const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
-  console.log(`%c現在のsearchQuery:${searchQuery}`, 'color: red');
+  // console.log(`%c現在のsearchQuery:${searchQuery}`, 'color: red');
 
   return (
     <div className='flex flex-1 flex-col'>

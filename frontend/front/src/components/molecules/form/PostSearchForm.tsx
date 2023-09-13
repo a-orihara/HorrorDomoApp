@@ -14,6 +14,13 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
   // 入力語句を管理する状態
   const [enterQuery, setEnterQueryQuery] = useState('');
 
+  // formのinputでenterキーを押すと発火。検索アイコン以外でも発火するようにする。
+  const handleSubmit = (e: React.FormEvent) => {
+    // 2
+    e.preventDefault();
+    handleSearchClick();
+  };
+
   // 検索アイコンを押すと発火。入力語句を検索語句に代入、検索状態をアクティブ(true)にする
   const handleSearchClick = () => {
     // 入力語句を検索語句に代入
@@ -35,7 +42,7 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
 
   return (
     <div className='m-1 flex flex-row items-center'>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <div className='flex flex-row'>
           {/* Input and SVG wrapped in a div */}
           <div className='relative items-center'>
@@ -89,4 +96,17 @@ export default PostSearchForm;
 - `e.preventDefault()` は、イベントのデフォルトの動作（この場合、ページのリロードや遷移）をキャンセルします。
 - このコードが存在することで、フォームのサブミットが起きてもページはリロードされず、`handleSearchClick` 関数が呼
 び出されるだけとなります。
+
+================================================================================================
+2
+.e.preventDefault()は具体的に何をするのですか？
+e.preventDefault()メソッドは、HTML要素のデフォルトの動作を阻止します。JavaScriptでは、eはeventを表すことが多
+く、ハンドラのトリガーとなったイベントを表すオブジェクトです。
+あなたのコードでは、e.preventDefault()は、フォームが送信されたときに発生するhandleSubmit関数内で使用されていま
+す。デフォルトでは、フォームを送信するとページがリロードされますが、e.preventDefault() はこの動作を停止し、ペー
+ジがリロードされないようにします。
+------------------------------------------------------------------------------------------------
+.e.preventDefault()は具体的にどのような誤動作を防ぐのでしょうか？
+意図しないページのリロード： e.preventDefault()が防ぐ主な誤動作は、フォームが送信されたときにページがリロードさ
+れることです。リロードはウェブアプリケーションの流れを中断させ、パフォーマンスに不必要な負担をかける可能性があります。
 */

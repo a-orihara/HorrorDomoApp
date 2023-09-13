@@ -1,10 +1,11 @@
 import { useSearchedPostsPagination } from '../../../hooks/post/useSearchedPostsPagination';
-import FeedListItem from '../../molecules/listItem/FeedListItem';
+import PostListItem from '../../molecules/listItem/PostListItem';
 // import Pagination from '../../molecules/Pagination';
 // import FeedList from '../list/FeedList';
 import CommonPostArea from './CommonPostArea';
 
 type SearchedPostAreaProps = {
+  // [PostSearchForm]の検索欄に入力された検索語句。pagination取得に使用
   searchQuery: string;
 };
 
@@ -24,7 +25,7 @@ const SearchedPostArea = ({ searchQuery }: SearchedPostAreaProps) => {
         // 孫のCommonPostListに渡す
         noPostsMessage='投稿がありません'
         // 孫のCommonPostListに渡し、ListItemContentで使用
-        ListItemComponent={({ post, user }) => <FeedListItem feedPost={post} feedUser={user} />}
+        ListItemComponent={({ post, user }) => <PostListItem post={post} user={user} />}
       />
     </div>
   );

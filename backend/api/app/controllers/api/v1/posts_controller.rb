@@ -70,17 +70,12 @@ class Api::V1::PostsController < ApplicationController
   end
 
   # 9.1
-  # def search
-  #   query = params[:query]
-  #   posts = Post.where("title LIKE ?", "%#{query}%")
-  #   render json: { status: '200', data: posts }, status: :ok
-  # end
   def search
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     query = params[:query]
     posts = Post.where("title LIKE ?", "%#{query}%").page(page).per(per_page)
-    puts "ここよposts: #{posts}"
+    # puts "ここよposts: #{posts}"
     total_posts = Post.where("title LIKE ?", "%#{query}%").count
     posts_with_likes_info = posts.map do |post|
           # likedは真偽値
@@ -89,7 +84,7 @@ class Api::V1::PostsController < ApplicationController
           likes_count = post.likes.count
           post.as_json.merge(liked: liked, likes_count: likes_count)
     end
-    puts "ここよposts_with_likes_info: #{posts_with_likes_info}"
+    # puts "ここよposts_with_likes_info: #{posts_with_likes_info}"
     user_ids = posts.map(&:user_id).uniq
     users = User.where(id: user_ids)
     users_with_avatar = users.map do |user|

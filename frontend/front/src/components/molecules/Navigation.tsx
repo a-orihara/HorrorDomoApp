@@ -14,35 +14,38 @@ const Navigation = () => {
   const handleSignOut = useSignOut();
   // ================================================================================================
   return (
-    <nav className=' flex h-16 w-1/2 items-center justify-around  text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
+    <nav className='flex h-16 items-center justify-around text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 2 */}
-      <ul className='flex flex-1 flex-row items-center justify-around '>
-        <li>
+      <ul className='flex flex-1 flex-row items-center justify-around'>
+        <li className='flex-1 '>
           <Link href={'/'}>
-            <a className='hover:text-basic-pink'>HOME</a>
+            <a className='flex items-center justify-around hover:text-basic-pink'>HOME</a>
           </Link>
         </li>
 
+        {/* 3 */}
         {router.pathname !== '/signup' && !loading && !isSignedIn && (
-          <li>
+          <li className='flex-1'>
             <Link href={'/signup'}>
-              <a className='hover:text-basic-pink'>SignUp</a>
+              <a className='flex items-center justify-around hover:text-basic-pink'>SignUp</a>
             </Link>
           </li>
         )}
 
+        {/* 4 */}
         {!loading && !isSignedIn && (
-          <li>
+          <li className='flex-1'>
             <Link href={'/signin'}>
-              <a className='hover:text-basic-pink'>SignIn</a>
+              <a className='flex items-center justify-around hover:text-basic-pink'>SignIn</a>
             </Link>
           </li>
         )}
 
+        {/* 5 */}
         {!loading && isSignedIn && (
-          <li>
+          <li className='flex flex-1 items-center justify-center'>
             <Button
-              className='flex h-8 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:h-12 md:text-2xl'
+              className='flex h-8 items-center justify-center bg-basic-green text-base text-white hover:bg-basic-pink md:h-12 md:text-lg lg:text-xl'
               onClick={handleSignOut}
             >
               SignOut
@@ -94,5 +97,22 @@ router.pathnameは、<Link>コンポーネントのhref属性などで使用さ�
 '/signup' ページでない場合に true を返します。
 ./signupページでなく、非同期処理が終わり、認証してなければ、SignUpリンクを表示
 ./signupページでなく、非同期処理が終わり、認証していれば、SignOutリンクを表示
+
+================================================================================================
+3
+現在のURLパスが '/signup' ではない。
+データの読み込みが完了していて、loading が false である。
+ユーザーがサインインしていないことを示すため、isSignedIn が false である
+
+================================================================================================
+4
+データの読み込みが完了していて、loading が false である。
+ユーザーがサインインしていないことを示すため、isSignedIn が false である。
+
+================================================================================================
+5
+データの読み込みが完了していて、loading が false である。
+ユーザーがサインインしていて、isSignedIn が true である。
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 */

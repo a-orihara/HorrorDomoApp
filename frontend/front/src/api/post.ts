@@ -84,6 +84,27 @@ export const getPostLikesCountByPostId = async (postId: number) => {
   });
 };
 
+type SearchParams = {
+  page: number;
+  itemsPerPage: number;
+  query: string;
+};
+// 4 axios.get メソッドは最大で2つの引数までしか受け取りません。第1引数はURL、第2引数はオプション（ヘッダー、パラメーターなど）です。
+export const getSearchedPosts = (params: SearchParams) => {
+  return client.get('/posts/search', {
+    params: {
+      page: params.page + 1,
+      per_page: params.itemsPerPage,
+      query: params.query,
+    },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
@@ -199,4 +220,54 @@ pageとper_pageは、indexアクション内でそれぞれ現在のページ番
 得する投稿の範囲が決定されます。
 user_idは、indexアクション内で投稿を取得するユーザーを決定します。指定されたuser_idが存在する場合はそのユーザー
 の投稿を、存在しない場合はログインユーザーの投稿を取得します。
+
+================================================================================================
+4
+`searchPosts`
+. `client.get` (axios.get)メソッドは最大で2つの引数を受け取ります。第1引数はリクエストを送るURL、第2引数はオ
+プション（ヘッダー、パラメーターなど）です。
+------------------------------------------------------------------------------------------------
+1. `searchPosts`の引数`params` がオブジェクト型の理由**:
+- 拡張性: 現在は`query`のみを検索パラメータとして送りますが、将来的に複数のパラメータ（例：ページ番号、ソートオプ
+ションなど）が必要になるかもしれません。オブジェクトを使用すると、後で簡単に新しいプロパティを追加できます。
+- 可読性: オブジェクト型を使うことで、どのパラメータが何を意味するのかが明確になり、コードの可読性が向上します。
+- TypeScriptの型安全性: `SearchParams` 型で明示的に型を定義しているので、間違った型のデータが渡されるとコンパ
+イルエラーが発生します。
+------------------------------------------------------------------------------------------------
+引数をstring型のqueryに書き換える:
+
+export const searchPosts = (query: string) => {
+  return client.get('/posts/search', {
+    params: { query: query },
+    headers: {
+      'access-token': Cookies.get('_access_token'),
+      client: Cookies.get('_client'),
+      uid: Cookies.get('_uid'),
+    },
+  });
+};
+------------------------------------------------------------------------------------------------
+. **第1引数 `/posts/search`**:
+この部分はAPIエンドポイントを指定します。`/posts/search`というURLにGETリクエストを送信することで、記事の検索が
+行われます。
+------------------------------------------------------------------------------------------------
+. **第2引数 オプション**:
+- **`params: { query: params.query }`**: `params` オプションで、検索クエリをサーバに送ります。
+`params.query`は、前の部分のコードで設定された`SearchParams`型のオブジェクトから取得されます。
+- axios.getの第二引数で`params`プロパティを使うことで、URLのクエリパラメータを設定できます。そのため、この形式
+に合わせて`params`をオブジェクト型にしています。
+- axios.getでクエリパラメータを送る場合、この形式が一般的ですが、必ずしもこの形式でなければならないわけではありま
+せん。たとえば、URLを直接操作してクエリパラメータを組み込む方法もあります。
+------------------------------------------------------------------------------------------------
+URLを直接操作してクエリパラメータを組み込む方法
+
+client.get(`/posts/search?query=${query}`, {
+  headers: {
+    'access-token': Cookies.get('_access_token'),
+    client: Cookies.get('_client'),
+    uid: Cookies.get('_uid'),
+  },
+});
+------------------------------------------------------------------------------------------------
+- **`headers`**: ここで各種HTTPヘッダーを設定しています。
 */

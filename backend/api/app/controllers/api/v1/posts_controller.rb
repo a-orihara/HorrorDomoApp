@@ -69,6 +69,31 @@ class Api::V1::PostsController < ApplicationController
     end
   end
 
+  # 9.1
+  def search
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    query = params[:query]
+    posts = Post.where("title LIKE ?", "%#{query}%").page(page).per(per_page)
+    # puts "ここよposts: #{posts}"
+    total_posts = Post.where("title LIKE ?", "%#{query}%").count
+    posts_with_likes_info = posts.map do |post|
+          # likedは真偽値
+          liked = current_api_v1_user.already_liked?(post)
+          # そのpostのlikes数を取得
+          likes_count = post.likes.count
+          post.as_json.merge(liked: liked, likes_count: likes_count)
+    end
+    # puts "ここよposts_with_likes_info: #{posts_with_likes_info}"
+    user_ids = posts.map(&:user_id).uniq
+    users = User.where(id: user_ids)
+    users_with_avatar = users.map do |user|
+          avatar_url = generate_avatar_url(user)
+          user.as_json.merge(avatar_url: avatar_url)
+    end
+    render json: { status: '200', data: posts_with_likes_info, total_posts: total_posts, users: users_with_avatar }, status: :ok
+  end
+
   private
 
   # 10 post_params で Strong Parameters を使っていることにより、content 属性だけWeb 経由で変更可能
@@ -360,6 +385,45 @@ contentのエラーが一つの場合でも、join(', ')メソッドは有用で
 ------------------------------------------------------------------------------------------------
 :unprocessable_entity（処理不能な実体）はRailsで使用されるシンボルで、HTTPステータスコードの'422'を表します。
 
+================================================================================================
+9.1
+. `query = params[:query]`
+- この行では、クライアントから送られてくる`query`パラメータ（検索文字列）を取得しています。
+- 検索クエリとして使用するためのパラメータを取得します。
+------------------------------------------------------------------------------------------------
+. `posts = Post.where("title LIKE ?", "%#{query}%")`
+- この行では、`Post` モデルから`title`カラムが検索クエリに部分一致するレコードを取得しています。
+- 検索クエリにマッチする`Post` レコードをデータベースから探し出します。
+------------------------------------------------------------------------------------------------
+`.Post.whereのメソッドと引数`
+- `Post.where` は、ActiveRecordの`where`メソッドを使用しています。このメソッドは、指定した条件にマッチするレ
+コードをデータベースから取得します。
+- `Post` モデルから特定の条件に一致するレコードを取得するために使用します。
+------------------------------------------------------------------------------------------------
+. `("title LIKE ?", "%#{query}%")の"title LIKE ?"
+- `"title LIKE ?"`はSQLの`LIKE`演算子を使用しています。`LIKE`はSQLの演算子の一つで、文字列が特定のパターンと
+一致するかどうかを判断します。`%`は任意の0文字以上の文字列に一致するワイルドカードです。
+- これは部分一致検索を行う際に使用します。たとえば、`query`が`"test"`であれば、`"My test Post"`、`"test"`、
+`"Another test"` などがマッチします。
+------------------------------------------------------------------------------------------------
+- `?`はプレースホルダであり、後の`"%#{query}%"`で置き換えられます。
+------------------------------------------------------------------------------------------------
+.`%#{query}%`
+- `%#{query}%` という形式では、`%` はSQLのLIKE演算子で使用するワイルドカードです。ワイルドカード`%`が前後につ
+いているため、`query`が含まれる任意の位置の文字列にマッチします。
+- 例えば、`query` が "test" であれば、"This is a test"、"test example"、"another test case" など、
+"test" を含むすべての `title` をマッチさせることができます。
+------------------------------------------------------------------------------------------------
+この`Post.where("title LIKE ?", "%#{query}%")`の全体的な利用意図は、`title`カラムに含まれるテキストがクラ
+イアントから送信された検索クエリに部分一致する`Post`レコードをデータベースから取得することです。
+------------------------------------------------------------------------------------------------
+. `render json: { status: '200', data: posts }, status: :ok`
+- この行では、検索結果をJSON形式でレスポンスとして返します。HTTPステータスコードは200（OK）です。
+- クライアントに検索結果を返すため、適切な形式とステータスコードでレスポンスを生成します。
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+この`search`メソッドは、クライアントから送られてくる検索クエリを用いて、`Post`モデル内で該当するレコードを検索し、その結果をJSON形式で返す役割を果たしています。
 ================================================================================================
 10
 コントローラは post キーの下に content キーが存在することを期待しているため、{ post: params },つまり、

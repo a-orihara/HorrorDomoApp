@@ -7,6 +7,10 @@ set -e
 # 2
 rm -f /api-app/tmp/pids/server.pid
 
+bundle exec rails db:create
+bundle exec rails db:migrate
+bundle exec rails db:seed
+
 # CMDで渡されたコマンド（コンテナのメインプロセス。→Railsのサーバー起動）を実行
 exec "$@"
 

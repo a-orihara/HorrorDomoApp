@@ -68,6 +68,8 @@ group :development do
   gem "rubocop-rspec", require: false
   # binding.pryでステップ実行できるようにする
   gem 'pry-byebug'
+  # Rubyのコード補完、ドキュメントを提供してくれるライブラリ
+  gem "solargraph"
 end
 
 # 下記追加 --------------------------------------

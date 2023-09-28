@@ -57,6 +57,7 @@ services:
     build:
       # ./backend/web/内のDockerfileを使う
       context: ./backend/web/
+      dockerfile: Dockerfile.prod
     image: nginx-img-prod
     container_name: nginx-ctr-prod
     # 8.1

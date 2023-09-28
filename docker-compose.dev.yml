@@ -18,6 +18,7 @@ services:
       MYSQL_ROOT_PASSWORD: root_password_dev
       MYSQL_USER: user_dev
       MYSQL_PASSWORD: password_dev
+      # MYSQL_DATABASE: myapp_development
       TZ: Asia/Tokyo
     # ローカル3306とコンテナ3306を接続
     ports:
@@ -55,24 +56,6 @@ services:
     # -itは-i, --interactiveと-t, --ttyの組み合わせで、疑似ターミナルの割り当てを行い標準入出力を行えるよう
     # にするためのコマンドです。
 
-  # web:
-  #   build:
-  #     # ./backend/web/内のDockerfileを使う
-  #     context: ./backend/web/
-  #   image: nginx_img
-  #   container_name: nginx-ctr
-  #   # UNIXドメインソケット通信によるコンテナ間通信となるため、web・nginxコンテナで名前付きvolumeをマウント
-  #   # してファイルを共有
-  #   volumes:
-  #     - public-data:/api-app/public
-  #     - tmp-data:/api-app/tmp
-  #   # ローカル80とコンテナ80を接続
-  #   ports:
-  #     - 80:80
-  #   # apiの次にweb(nginx)が立ち上がる
-  #   depends_on:
-  #     - api
-  #     - front
   front:
     build:
       context: ./frontend/front

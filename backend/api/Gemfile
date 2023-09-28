@@ -22,7 +22,10 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 # 下記追加 --------------------------------------
+# 環境変数を読み込む
 gem 'dotenv-rails'
+# 環境毎の設定管理を行う。dotenv-railsの後に入れないとエラーになる。
+gem 'config'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'rails-i18n' # 日本語化

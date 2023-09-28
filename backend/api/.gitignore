@@ -70,3 +70,6 @@ yarn-debug.log*
 
 # Macが自動生成する隠しファイル。フォルダやファイルに関するmeta情報が格納されている。
 .DS_Store
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml

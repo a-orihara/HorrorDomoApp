@@ -16,7 +16,7 @@ COPY Gemfile.lock /api-app/Gemfile.lock
 # Gemfileに記載されたGem(初回時はrailsが記載)をインストールする。再ビルド時にbundle installするために記載。
 RUN bundle install
 # ------------------------------------------------------------------------------------------------
-COPY . /api-app
+# COPY . /api-app
 # ------------------------------------------------------------------------------------------------
 # コンテナ起動時に毎回実行されるスクリプトを追加する。/usr/bin/はコンテナのLinuxベースのディレクトリ。
 COPY entrypoint.sh /usr/bin/
@@ -25,8 +25,8 @@ RUN chmod +x /usr/bin/entrypoint.sh
 # 2 ENTRYPOINTはdocker runの時に実行される
 ENTRYPOINT ["entrypoint.sh"]
 # ------------------------------------------------------------------------------------------------
-VOLUME /api-app/public
-VOLUME /api-app/tmp
+# VOLUME /api-app/public
+# VOLUME /api-app/tmp
 # ------------------------------------------------------------------------------------------------
 
 # 4

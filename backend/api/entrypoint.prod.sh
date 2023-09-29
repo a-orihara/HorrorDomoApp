@@ -8,6 +8,7 @@ echo "rm -f /myapp/tmp/pids/server.pid"
 rm -f /myapp/tmp/pids/server.pid
 
 echo "bundle exec rails db:create RAILS_ENV=production"
+# 1
 bundle exec rails db:create RAILS_ENV=production
 
 echo "bundle exec rails db:migrate RAILS_ENV=production"
@@ -17,10 +18,21 @@ echo "bundle exec rails db:seed RAILS_ENV=production"
 bundle exec rails db:seed RAILS_ENV=production
 
 echo "exec pumactl start"
-# 1
+# 2
 bundle exec pumactl start
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
+# ================================================================================================
+# 1
+# 初回デプロイにおいては、そもそもマイグレーションを行うDBがないところからのスタートになりますので、
+# db:create
+# db:migrate
+# db:seed
+# を順に実行させます。
+# このうち、 db:create と db:seed は2回目以降のデプロイでは実行不要のため、のちほど削除する予定です。
+
+# ================================================================================================
+# 2
 # bundle exec pumactl start
 # ================================================================================================
 # bundle exec

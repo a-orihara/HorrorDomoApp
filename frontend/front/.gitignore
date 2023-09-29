@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Macが自動生成する隠しファイル。フォルダやファイルに関するmeta情報が格納されている。
+.DS_Store

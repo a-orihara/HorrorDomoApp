@@ -10,6 +10,8 @@ ADD ./nginx.conf /etc/nginx/conf.d/api-app.conf
 # 4 ビルド完了後にNginxを起動
 CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
 
+EXPOSE 80
+
 
 
 # ./container/nginx/default.conf:/etc/nginx/conf.d/default.conf
@@ -44,6 +46,13 @@ CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
 # ================================================================================================
 # 4
 # . `CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf`
+# ------------------------------------------------------------------------------------------------
+# - /usr/sbin/nginx： コンテナ内のNginx実行ファイルへのパスです。Nginxはこの実行ファイルを使用して起動します。
+# - g 'daemon off;'： このフラグはNginxがフォアグラウンドで実行されるようにします。デフォルトではNginxはデーモン
+# として起動しますが、DockerではDockerコンテナが終了しないようにフォアグラウンドで実行し続けたいものです。
+# - -c /etc/nginx/nginx.conf： このフラグはNginx設定ファイルのパスを指定します。この場合、
+# `/etc/nginx/nginx.conf`を指します。
+# ------------------------------------------------------------------------------------------------
 # -  nginxを前面で実行し、コンテナが停止しないようにする。
 # -  `-g 'daemon off;'` でnginxをデーモンとしてではなく前面で実行。 `-c /etc/nginx/nginx.conf` で設定ファ
 # イルを指定。

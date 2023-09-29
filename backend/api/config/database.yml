@@ -74,8 +74,9 @@ production:
   <<: *default
   database: api_app_production
   # 4
-  username: <%= ENV['MYSQL_USER'] %>
-  password: <%= ENV['MYSQL_PASSWORD'] %>
+  # username: <%= ENV['MYSQL_USER'] %>
+  # password: <%= ENV['MYSQL_PASSWORD'] %>
+  url: <%= Rails.application.credentials.production[:database_url] %>
 # RDS時、参考
 # DB_USERNAME="RDSの接続ユーザ名"
 # DB_PASSWORD="RDSのパスワード"

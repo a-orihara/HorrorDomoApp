@@ -56,6 +56,9 @@ Rails.application.routes.draw do
 
       # api/v1/test
       resources :tests, only: [:index]
+
+      # /api/v1/health_check
+      get "health_check", to: "health_check#index"
     end
   end
 end

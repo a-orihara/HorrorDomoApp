@@ -15,20 +15,13 @@ COPY Gemfile.lock /api-app/Gemfile.lock
 # RUN mkdir -p /api-app/tmp/sockets
 # Gemfileに記載されたGem(初回時はrailsが記載)をインストールする。再ビルド時にbundle installするために記載。
 RUN bundle install
-# ------------------------------------------------------------------------------------------------
-COPY . /api-app
-# ------------------------------------------------------------------------------------------------
+# COPY . /api-app
 # コンテナ起動時に毎回実行されるスクリプトを追加する。/usr/bin/はコンテナのLinuxベースのディレクトリ。
 COPY entrypoint.sh /usr/bin/
 # 1.1 entrypoint.shの権限(+x:すべてのユーザーに実行権限を追加)を変更
 RUN chmod +x /usr/bin/entrypoint.sh
 # 2 ENTRYPOINTはdocker runの時に実行される
 ENTRYPOINT ["entrypoint.sh"]
-# ------------------------------------------------------------------------------------------------
-# VOLUME /api-app/public
-# VOLUME /api-app/tmp
-# ------------------------------------------------------------------------------------------------
-
 # 4
 # EXPOSE 3000
 # 3 イメージの実行時に実行するメインプロセス

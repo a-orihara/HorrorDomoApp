@@ -141,5 +141,4 @@ EXPOSE 3000
 
 # ================================================================================================
 # 再ビルドのコマンド
-# docker build --no-cache -t rails-image-prod -f backend/api/Dockerfile.prod .
-
+# docker build --no-cache -t rails-img-prod -f backend/api/Dockerfile.prod ./backend/api/

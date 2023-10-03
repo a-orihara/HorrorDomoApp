@@ -1,8 +1,9 @@
-# 1  FROM nginx:1.22.1-alpine
-FROM nginx:alpine
+FROM nginx:1.22.1-alpine
+# FROM nginx:latest
 
 # 1.1 ヘルスチェック用
-RUN apt-get update && apt-get install -y curl vim sudo lsof
+# RUN apt-get update && apt-get install -y curl vim sudo lsof
+RUN apk --no-cache add curl vim sudo lsof
 
 # 2
 RUN rm -f /etc/nginx/conf.d/*
@@ -25,7 +26,9 @@ EXPOSE 80
 # - `nginx:alpine`は、Nginx WebサーバーがプリインストールされたAlpine LinuxベースのDockerイメージ。
 # - Alpineは軽量なLinuxディストリビューション。
 # - `FROM nginx:1.22.1-alpine` 1.22.1バージョンを指定。ないと最新のバージョンを取得
-
+# * Alpineだとapt-getできない為、変更
+# * - なぜ apk --no-cache?
+# - no-cache` オプションを使うと、ローカルキャッシュなしでパッケージをインストー ルできるので、イメージが軽くなる。
 # ================================================================================================
 # 1.1
 # . apt-get update
@@ -57,6 +60,7 @@ EXPOSE 80
 # ================================================================================================
 # 2
 # . `RUN rm -f /etc/nginx/conf.d/*` :
+# - /etc/nginxディレクトリは、nginxの設定ファイルやディレクトリが置かれる。
 # - このコマンドは、Nginxの設定ファイルが格納されている`/etc/nginx/conf.d/`ディレクトリ内の全ファイルを削除。
 # - 理由は、デフォルトの設定を一掃し、カスタム設定だけを使いたいため。
 # - `rm -f`は強制削除なので、エラーを出さずに削除が行われる。
@@ -68,7 +72,7 @@ EXPOSE 80
 # . `ADD nginx.conf /etc/nginx/conf.d/api-app.conf`
 # - ローカルの`nginx.conf` ファイルをDockerコンテナの `/etc/nginx/conf.d/api-app.conf` へ追加。
 # ------------------------------------------------------------------------------------------------
-# nginx.confが一番初めに読み込まれる。nginx.confがnginx/conf.d以下を読み込む。
+# nginxを起動すると、masterプロセスを使って、nginx.confが一番初めに読み込まれる。nginx.confがnginx/conf.d以下を読み込む。
 # conf.dディレクトリにバーチャルサーバ毎の設定ファイルを置くことにより、その設定ファイルが読み込まれます。
 # ------------------------------------------------------------------------------------------------
 # アプリごとの設定ファイルは「/etc/nginx/conf.d/」の下に新規で作成し、Nginx全体に関わる設定は

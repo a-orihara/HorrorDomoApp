@@ -3,9 +3,11 @@
 # 2 name:ワークフローの名前
 name: Run Rspec and Rubocop
 # 3 on:イベント。ワークフローを実行するイベントを指定
+# on:
+#   pull_request:
+#     branches: [main]
 on:
-  pull_request:
-    branches: [main]
+  push:
 
 # 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
@@ -69,7 +71,7 @@ jobs:
         # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
         run: |
           gem install bundler
-          bundle install
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
 
       - name: Install Rails
         run: gem install rails

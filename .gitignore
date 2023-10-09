@@ -1,2 +1,3 @@
 # Macが自動生成する隠しファイル。フォルダやファイルに関するmeta情報が格納されている。
 .DS_Store
+/sessionmanager-bundle

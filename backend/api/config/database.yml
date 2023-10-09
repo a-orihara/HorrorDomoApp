@@ -19,16 +19,7 @@ default: &default
   encoding: utf8mb4
   # 3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # 接続に使用するユーザの名前。
-  # username: root／<初期の設定>
-  username: user_dev
-  # 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
-  # githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
-  # password: ／<初期の設定>
-  password: password_dev
-  # host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
-  # ホスト（サーバー）名を指定している。これはDocker Composeのサービス名を参照している。
-  host: db
+  port: 3306
 
 #  デフォルトでは、開発環境のdbを参照する。
 development:
@@ -36,6 +27,12 @@ development:
   # database:データベース名。api-app:このアプリの名前。
   # api_app_developmentという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
   database: api_app_development
+  # db接続に使用するユーザの名前。<初期の設定>／username: root
+  username: user_dev
+  # 3.1
+  password: password_dev
+  # 3.2
+  host: db
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -46,6 +43,8 @@ test:
   <<: *default
   host: db
   database: api_app_test
+  username: user_dev
+  password: password_dev
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -74,14 +73,15 @@ production:
   <<: *default
   database: api_app_production
   # 4
-  # username: <%= ENV['MYSQL_USER'] %>
-  # password: <%= ENV['MYSQL_PASSWORD'] %>
+  # username: <%= ENV['RDS_USERNAME'] %>
+  # password: <%= ENV['RDS_PASSWORD'] %>
+  # 5
   url: <%= Rails.application.credentials.production[:database_url] %>
 # RDS時、参考
-# DB_USERNAME="RDSの接続ユーザ名"
-# DB_PASSWORD="RDSのパスワード"
-# DB_HOST="RDSのエンドポイント名"
-# DB_DATABASE="myapp"
+# RDS_USERNAME="RDSの接続ユーザ名"
+# RDS_PASSWORD="RDSのパスワード"
+# RDS_HOST="RDSのエンドポイント名"
+# RDS_DATABASE="myapp"
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 1
@@ -103,6 +103,25 @@ production:
 # 「ActiveRecord::ConnectionTimeoutError」などが発生する。デフォルト値は５。
 # *dotenv-railsをインストールすることにより、「.env」ファイルに記載された環境変数をdockerコンテナ内で、
 # 下記のような記述で取り出せる様になります。ENV['DATABASE_PASSWORD']
+
+# ================================================================================================
+# 3.1
+# 接続する際に利用するパスワード。passwordは特に設定がなければデフォルトでpassword
+# githubへ上げる事を想定してパスワードはなるべくなら環境変数で設定した方がいい
+# password: ／<初期の設定は何も設定なし>
+
+# ================================================================================================
+# 3.2
+# host: localhost(自分のPC)からの変更。データベースのアクセス先にdb(docker-composeのサービス名)を指定。
+# ホスト（サーバー）名を指定している。これはDocker Composeのサービス名を参照している。
+# host: db` は通常、RailsアプリケーションをDockerコンテナで実行しており、`docker-compose.yml` ファイルに `db`
+# という名前のサービスがある場合に記載
+# Docker化された環境では、`docker-compose.yml`で定義されたサービス名をホスト名として異なるサービスに接続すること
+# ができます。
+# Dockerネットワーキングでは、`db`はDockerがDBを実行しているサービスに割り当てる内部IPアドレスに解決されます。
+# ------------------------------------------------------------------------------------------------
+# 本番環境ではDockerコンテナを使用せず、RDSを使用している為、個別の設定をしている。
+
 # ================================================================================================
 # 4
 # . `<%= ENV['MYSQL_USER'] %>`の意味とメソッドについて:
@@ -113,6 +132,21 @@ production:
 # ます。
 # - このgemがこのテンプレート内で環境変数を使えるようにしているわけではなく、Ruby自体が環境変数にアクセスできるよう
 # にしています。
+
+# ================================================================================================
+# 5
+# - このERB構文は、`production`環境に固有のRailsクレデンシャルから`:database_url`を取得します。
+# - これにより、データベースエンジン、ユーザ名、パスワード、ホストを含む接続情報をすべて1行で指定できるようになる。
+# - 機密データを安全に管理しやすくするためです。
+# ------------------------------------------------------------------------------------------------
+# **これはRDSにつながりますか？
+# - はい。`Rails.application.credentials.production[:database_url]`の`:database_url`には、AWS RDSでホ
+# ストされているMySQLデータベースの接続情報が含まれています。
+# - URLのフォーマットは以下の通りです： 「ここで `username` と `password` は RDS データベースにアクセスするため
+# の認証情報です。
+# ------------------------------------------------------------------------------------------------
+# production`では、Railsの認証情報のURLを使用する。この行では `username` と `password` が URL の一部であるた
+# め、直接指定する必要がありません。
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # backend/api/config/database.yml.ciの解説

@@ -109,10 +109,11 @@ jobs:
         with:
           ruby-version: "3.1.2"
           bundler-cache: true
+
       - name: Bundler and gem install
         run: |
           gem install bundler
-          bundle install
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
 
       - name: Run rubocop
         run: bundle exec rubocop

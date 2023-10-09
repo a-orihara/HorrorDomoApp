@@ -55,17 +55,18 @@ jobs:
           ruby-version: "3.1.2"
           # 8 bundle installを実行し、インストールされたgemsを自動的にキャッシュする。
           bundler-cache: true
-      # # 9 jobs.<job_id>.steps.name
-      # - name: Cache node modules
-      #   # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
-      #   uses: actions/cache@v3
-      #   with:
-      #     # 11
-      #     path: node_modules
-      #     # おまじない
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-node-
+
+      # 9 jobs.<job_id>.steps.name
+      - name: Cache node modules
+        # 10 actions/cache(GitHub公式のアクション)を使う事でキャッシュの機能が利用可能。
+        uses: actions/cache@v3
+        with:
+          # 11
+          path: node_modules
+          # おまじない
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Bundler and gem install
         # 12 jobs.<job_id>.steps.run:コマンドラインの実行を定義
@@ -349,6 +350,7 @@ jobs:
 # - `gem install bundler` コマンドは、Bundlerと呼ばれるGemをインストール。
 # - Bundlerは、Rubyプロジェクトで使用される依存関係を管理し、`Gemfile` と `Gemfile.lock` ファイルを使用して必
 # 要なGemのバージョンや依存関係を追跡します。
+# ------------------------------------------------------------------------------------------------
 # . `bundle install --jobs 4 --retry 3 --path vendor/bundle`
 # - `bundle install` コマンドは、`Gemfile` 内に指定されたGemの依存関係を解決し、Gemをインストールします。
 # - `--jobs 4` オプションは、同時に実行するジョブの数を指定。この場合、最大で4つのジョブが同時に実行されます。
@@ -357,6 +359,13 @@ jobs:
 # - `--path vendor/bundle` オプションは、インストールされたGemをプロジェクト内の `vendor/bundle` ディレクト
 # リに配置することを指定します。これにより、プロジェクトごとにGemを管理し、システム全体のGemとの競合を避けることがで
 # きます。
+# ------------------------------------------------------------------------------------------------
+# --path vendor/bundle オプションをつける意味
+# オプションをつけると、RubyプロジェクトのGem（ライブラリや依存関係）をプロジェクトのディレクトリ内の、
+# `vendor/bundle`ディレクトリにインストールすることができます。これにより、プロジェクトごとに独立したGemセットを持
+# つことができます。一方、オプションをつけない場合、通常はシステム全体のGemセットにインストールされます。
+# システム全体のGemセットに保存されると、同じGemの異なるバージョンを異なるプロジェクトで共有する場合、競合が発生する
+# 可能性があります。
 
 # ===============================================================================================
 # 13

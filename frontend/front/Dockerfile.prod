@@ -1,7 +1,7 @@
 # 7
 
 # 2 alpine:Linuxのディストリビューション。軽量なAlpine上でNodeJSのv16系を動かす。
-FROM node:16-alpine AS deps
+FROM node:19.4.0-alpine AS deps
 # 3
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/front
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Build環境
-FROM node:16-alpine AS builder
+FROM node:19.4.0-alpine AS builder
 WORKDIR /usr/src/front
 # 4.1 depsの/usr/src/front/node_modulesを builderのnode_modulesにコピー。
 COPY --from=deps /usr/src/front/node_modules ./node_modules
@@ -23,7 +23,7 @@ RUN npm run build
 
 # 実行環境
 # runner ステージでは最終的なイメージに含めたいものだけの抽出を行ないます。
-FROM node:16-alpine AS runner
+FROM node:19.4.0-alpine AS runner
 WORKDIR /usr/src/front
 # node.jsの本番環境
 ENV NODE_ENV production

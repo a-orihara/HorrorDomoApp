@@ -29,11 +29,14 @@ WORKDIR /usr/src/front
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 # 5.1 publicディレクトリにはアイコン等の公開ファイルが入っています。
-COPY --from=builder /usr/src/front/next.config.js ./
+COPY --from=builder /usr/src/front/next.config.js ./next.config.js
 COPY --from=builder /usr/src/front/.next ./.next
+COPY --from=builder /usr/src/front/.env.production.local ./.env.production.local
 COPY --from=builder /usr/src/front/public ./public
 COPY --from=builder /usr/src/front/package.json ./package.json
+COPY --from=builder /usr/src/front/package-lock.json ./package-lock.json
 COPY --from=deps /usr/src/front/node_modules ./node_modules
+EXPOSE 80
 # 6
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front/.next/standalone ./
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front//.next/static ./.next/static

@@ -1,7 +1,7 @@
 # 7
 
 # 2 alpine:Linuxのディストリビューション。軽量なAlpine上でNodeJSのv16系を動かす。
-FROM node:16-alpine AS deps
+FROM node:19.4.0-alpine AS deps
 # 3
 RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/front
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm ci
 
 # Build環境
-FROM node:16-alpine AS builder
+FROM node:19.4.0-alpine AS builder
 WORKDIR /usr/src/front
 # 4.1 depsの/usr/src/front/node_modulesを builderのnode_modulesにコピー。
 COPY --from=deps /usr/src/front/node_modules ./node_modules
@@ -23,17 +23,20 @@ RUN npm run build
 
 # 実行環境
 # runner ステージでは最終的なイメージに含めたいものだけの抽出を行ないます。
-FROM node:16-alpine AS runner
+FROM node:19.4.0-alpine AS runner
 WORKDIR /usr/src/front
 # node.jsの本番環境
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 # 5.1 publicディレクトリにはアイコン等の公開ファイルが入っています。
-COPY --from=builder /usr/src/front/next.config.js ./
+COPY --from=builder /usr/src/front/next.config.js ./next.config.js
 COPY --from=builder /usr/src/front/.next ./.next
+COPY --from=builder /usr/src/front/.env.production.local ./.env.production.local
 COPY --from=builder /usr/src/front/public ./public
 COPY --from=builder /usr/src/front/package.json ./package.json
+COPY --from=builder /usr/src/front/package-lock.json ./package-lock.json
 COPY --from=deps /usr/src/front/node_modules ./node_modules
+EXPOSE 80
 # 6
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front/.next/standalone ./
 # COPY --from=builder --chown=nextjs:nodejs /usr/src/front//.next/static ./.next/static
@@ -211,6 +214,13 @@ CMD [ "npm", "start" ]
 # の下には、node_modulesから、使用するファイルのみがコピーされ、さらにnext startコマンドの代わりに使用できる最小
 # 限のserver.jsファイルが生成されます。要するに、自動的にstandaloneフォルダが作成され、その中に動作に必要な最小限
 # のファイル群がコピーされるという便利な機能です。この機能によってビルドサイズを削減できます。
+# ------------------------------------------------------------------------------------------------
+# AWS ECSでコンテナ起動したタイミングで当コマンドが実行され、Next サーバーが起動してアクセスができるようになる。
+# ------------------------------------------------------------------------------------------------
+# ビルドと実行の2ステージでdockerfileを構成するやり方はマルチステージビルドと呼ばれるもので、Next.jsに含めた多くの
+# フロントエンドフレームワークの本番デプロイ時に採用される方式です。
+# 最終的にコンテナ内に残るのは実行ステージ側のイメージのみとなり、イメージを軽量化することができるので、パフォーマンス
+# の向上が期待できます
 
 # ================================================================================================
 # 7

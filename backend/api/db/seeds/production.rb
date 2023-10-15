@@ -44,6 +44,16 @@ image_paths = %w[
   app/assets/images/woman2.png
   app/assets/images/woman3.png
 ]
+# image_paths = %w[
+#   man1.png
+#   man2.png
+#   man3.png
+#   woman1.png
+#   woman2.png
+#   woman3.png
+# ]
+
+
 
 50.times do |n|
   name  = Faker::Name.name

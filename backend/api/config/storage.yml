@@ -9,12 +9,14 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
-# amazon:
-#   service: S3
-#   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-#   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-#   region: us-east-1
-#   bucket: your_own_bucket
+# [rails credentials:editを使用して、AWSシークレットを設定する（aws:access_key_id|secret_access_keyとして）。]
+amazon:
+  service: S3
+  # 3
+  # access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
+  # secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
+  region: ap-northeast-1
+  bucket: "portfolio-rails-active-strage-s3-bucket"
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
@@ -45,9 +47,13 @@ local:
 # このファイルを使って、アプリケーション内で has_one_attached で指定されたモデルに対して、指定したストレージサー
 # ビスを使ってファイルをアップロードできます。
 # Disk サービスが使用される場合、上記の例では tmp/storage ディレクトリまたは storage ディレクトリに保存されます。
-
 # ここでアップロード先の環境を定義し、どの方法を使うかはconfig/environments/*.rbで定義をします
+# ------------------------------------------------------------------------------------------------
+# デフォルト設定なら添付ファイルは、
 
+# development/production環境： /storage
+# test環境： /tmp/storage
+# に置きます。
 # ------------------------------------------------------------------------------------------------
 # Rails.root.join は、Railsアプリケーションのルートディレクトリからの相対パスを引数として受け取り、絶対パスを
 # 返すメソッドです。
@@ -57,6 +63,7 @@ local:
 # 対パスを取得することができます。
 # 例えばRails.root が /Users/yourname/yourapp だった場合、<%= Rails.root.join("tmp/storage") %> の戻り
 # 値は /Users/yourname/yourapp/tmp/storage になります。
+
 # ================================================================================================
 # 2
 # `local`: ローカルのファイルシステムに保存するためのストレージを定義するための設定
@@ -67,3 +74,8 @@ local:
 # `width`: 幅のサイズを指定する
 # `height`: 高さのサイズを指定する
 # Active Storageを使って、ローカルのファイルシステムに画像を保存し、リサイズすることができます。
+
+# ================================================================================================
+# 3
+# AWS EC2 や ECS上で動作させる場合などは、IAM Roleの認証情報が読み込まれるので、access_key_id, 
+# secret_access_key の設定は不要です。

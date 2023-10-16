@@ -2,3 +2,61 @@
 .DS_Store
 /sessionmanager-bundle
 /sessionmanager-bundle.zip
+
+# 下記はterraformの.gitignore
+# mac specific
+.DS_Store
+.ansible
+.azure/
+.bash_history
+# don't check storage creds into GH
+.boto
+.cache
+*.code-workspace
+#  may contain gcloud files
+.config
+.gitconfig
+.local
+# .netrc contains secrets for service tokens
+.netrc
+*.plan
+.sentinel
+# .ssh dir may contain private keys
+.ssh
+.terrascan
+# Terraform dot files
+.terraform
+.terraformrc
+**/.terraform/*
+.terraform.d
+*.tfstate
+*.tfstate.*
+.vscode
+.idea
+.idea
+
+# Palo auth codes
+authcodes
+# Crash log files
+crash.log
+credentials.json
+# Palo specific
+init-cfg.txt
+temp
+terraform.rc
+tmp
+# Auto variables
+terraform.tfvars
+terraform.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# - `.gitignore` ファイルは `HorrorDomoApp/` ディレクトリ配下に作成するのが一般的です。
+# ------------------------------------------------------------------------------------------------
+# - `.gitignore` ファイルはリポジトリのルートから読み取られ、その設定はサブディレクトリに再帰的に適用されます。し
+# たがって、`HorrorDomoApp/` ディレクトリ配下に `.gitignore` ファイルを置くことで、
+# `HorrorDomoApp/terraform/` や `HorrorDomoApp/terraform/.terraform/` などのサブディレクトリも含めて、指
+# 定されたパターンに一致するファイルやディレクトリが無視されます。
+# ------------------------------------------------------------------------------------------------
+# - プロジェクト全体に対して一貫した無視ルールを適用するためにも、`HorrorDomoApp/` 配下に置くのが効率的です。

@@ -1,7 +1,7 @@
 # 1 テスト用ファイル
 resource "local_file" "helloworld" {
-    content  = "hello world!"
-    filename = "hello.txt"
+  content  = "hello world!"
+  filename = "hello.txt"
 }
 
 /*

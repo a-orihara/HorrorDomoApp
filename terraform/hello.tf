@@ -47,4 +47,7 @@ terraform apply
 作成されたファイルを確認する
 インストールフォルダに「hello.txt」ファイルが作成されています。
 ファイルを開くと「hellow world!」が書き込まれています！
+
+terraform fmt
+ファイルの整形
 */

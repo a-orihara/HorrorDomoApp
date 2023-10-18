@@ -1,15 +1,15 @@
 
 
 # 3
-resource "aws_instance" "hello-world" {
-  # ami           = "ami-0ce107ae7af2e92b5"
-  ami           = "ami-0fd8f5842685ca887"
-  instance_type = "t2.micro"
-  # EC2の"Name"というキーに"HelloWorld"という値のタグが設定されています。
-  tags = {
-    Name = "HelloWorld"
-  }
-}
+# resource "aws_instance" "hello-world" {
+#   # ami           = "ami-0ce107ae7af2e92b5"
+#   ami           = "ami-0fd8f5842685ca887"
+#   instance_type = "t2.micro"
+#   # EC2の"Name"というキーに"HelloWorld"という値のタグが設定されています。
+#   tags = {
+#     Name = "HelloWorld"
+#   }
+# }
 
 # ---------------------------------------------
 # Terraform configuration

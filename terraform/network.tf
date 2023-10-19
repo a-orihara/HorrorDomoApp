@@ -128,6 +128,12 @@ resource "aws_internet_gateway" "portfolio-igw-tf" {
     "Name" = "portfolio-igw"
   }
 }
+resource "aws_route" "portfolio-igw-aws-route-tf" {
+  route_table_id         = aws_route_table.portfolio-pub-rtb-tf.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.portfolio-igw-tf.id
+
+}
 
 
 /*

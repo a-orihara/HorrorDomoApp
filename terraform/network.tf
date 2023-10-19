@@ -89,12 +89,12 @@ resource "aws_route_table" "portfolio-pub-rtb-tf" {
   }
 }
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
-resource "aws_route_table_association" "portfolio-pub-subnet-a-rtb-assoc-tf" {
+resource "aws_route_table_association" "portfolio-pub-rtb-assoc-pub-subnet-a-tf" {
   route_table_id = aws_route_table.portfolio-pub-rtb-tf.id
   subnet_id      = aws_subnet.portfolio-pub-subnet-a-tf.id
 }
 
-resource "aws_route_table_association" "portfolio-pub-subnet-c-rtb-assoc-tf" {
+resource "aws_route_table_association" "portfolio-pub-rtb-assoc-pub-subnet-c-tf" {
   route_table_id = aws_route_table.portfolio-pub-rtb-tf.id
   subnet_id      = aws_subnet.portfolio-pub-subnet-c-tf.id
 }
@@ -105,10 +105,18 @@ resource "aws_route_table_association" "portfolio-pub-subnet-c-rtb-assoc-tf" {
 resource "aws_route_table" "portfolio-priv-rtb-tf" {
   vpc_id = aws_vpc.portfolio-vpc-tf.id
   # privのrtbはigwで外部と接続はしない
-  route            = []
+  route = []
   tags = {
     Name = "portfolio-priv-rtb"
   }
+}
+resource "aws_route_table_association" "portfolio-priv-rtb-assoc-priv-subnet-a-tf" {
+  route_table_id = aws_route_table.portfolio-priv-rtb-tf.id
+  subnet_id      = aws_subnet.portfolio-priv-subnet-a-tf.id
+}
+resource "aws_route_table_association" "portfolio-priv-rtb-assoc-priv-subnet-c-tf" {
+  route_table_id = aws_route_table.portfolio-priv-rtb-tf.id
+  subnet_id      = aws_subnet.portfolio-priv-subnet-c-tf.id
 }
 
 # ---------------------------------------------

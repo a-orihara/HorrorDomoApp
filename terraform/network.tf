@@ -100,7 +100,7 @@ resource "aws_route_table_association" "portfolio-pub-rtb-assoc-pub-subnet-c-tf"
 }
 
 # ---------------------------------------------
-# Route Table(Priv)
+# 3 Route Table(Priv)
 # ---------------------------------------------
 resource "aws_route_table" "portfolio-priv-rtb-tf" {
   vpc_id = aws_vpc.portfolio-vpc-tf.id
@@ -120,7 +120,7 @@ resource "aws_route_table_association" "portfolio-priv-rtb-assoc-priv-subnet-c-t
 }
 
 # ---------------------------------------------
-# Internet Gateway
+# 4 Internet Gateway
 # ---------------------------------------------
 resource "aws_internet_gateway" "portfolio-igw-tf" {
   vpc_id = aws_vpc.portfolio-vpc-tf.id
@@ -185,6 +185,14 @@ resource "aws_route" "portfolio-igw-aws-route-tf" {
 terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf subnet-xxxxxx/rtb-yyyyyy
 または
 terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf igw-xxxxxx/rtb-yyyyyy
+
+================================================================================================
+3
+rtbの作成には、"aws_route_table"と、"aws_route_table_association"の二つのresourceが必要
+
+================================================================================================
+4
+igwの作成には、"aws_internet_gateway"と、"aws_route"の二つのresourceが必要
 
 
 理由：

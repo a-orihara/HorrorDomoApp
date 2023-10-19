@@ -78,6 +78,7 @@ resource "aws_subnet" "portfolio-priv-subnet-c-tf" {
 # ---------------------------------------------
 resource "aws_route_table" "portfolio-pub-rtb-tf" {
   vpc_id = aws_vpc.portfolio-vpc-tf.id
+  # pubのrtbはigwで外部と接続
   route {
     # 全てのトラフィック（0.0.0.0/0）をigwへとルーティングします。
     cidr_block = "0.0.0.0/0"
@@ -87,7 +88,28 @@ resource "aws_route_table" "portfolio-pub-rtb-tf" {
     "Name" = "portfolio-pub-rtb"
   }
 }
+# 2 パブリック用rtbとパブリックsub-netとの関連付け
+resource "aws_route_table_association" "portfolio-pub-subnet-a-rtb-assoc-tf" {
+  route_table_id = aws_route_table.portfolio-pub-rtb-tf.id
+  subnet_id      = aws_subnet.portfolio-pub-subnet-a-tf.id
+}
 
+resource "aws_route_table_association" "portfolio-pub-subnet-c-rtb-assoc-tf" {
+  route_table_id = aws_route_table.portfolio-pub-rtb-tf.id
+  subnet_id      = aws_subnet.portfolio-pub-subnet-c-tf.id
+}
+
+# ---------------------------------------------
+# Route Table(Priv)
+# ---------------------------------------------
+resource "aws_route_table" "portfolio-priv-rtb-tf" {
+  vpc_id = aws_vpc.portfolio-vpc-tf.id
+  # privのrtbはigwで外部と接続はしない
+  route            = []
+  tags = {
+    Name = "portfolio-priv-rtb"
+  }
+}
 
 # ---------------------------------------------
 # Internet Gateway
@@ -140,35 +162,45 @@ resource "aws_internet_gateway" "portfolio-igw-tf" {
 - VPC内でEC2インスタンスなどがDNSホスト名（例：ip-192-0-2-44）を持つことができるようになります。これが有効にな
 っていると、IPアドレスだけでなくDNSホスト名でもリソースにアクセスできます。
 
-resource "aws_route_table" "portfolio-pub-rtb-tf" {
-    id               = "rtb-0f3"
-    propagating_vgws = []
-    route            = [
-        {
-            carrier_gateway_id         = ""
-            cidr_block                 = "0.0.0.0/0"
-            destination_prefix_list_id = ""
-            egress_only_gateway_id     = ""
-            gateway_id                 = "igw-056"
-            instance_id                = ""
-            ipv6_cidr_block            = ""
-            local_gateway_id           = ""
-            nat_gateway_id             = ""
-            network_interface_id       = ""
-            transit_gateway_id         = ""
-            vpc_endpoint_id            = ""
-            vpc_peering_connection_id  = ""
-        },
-    ]
-    tags             = {
-        "Name" = "portfolio-pub-rtb"
-    }
-    tags_all         = {
-        "Name" = "portfolio-pub-rtb"
-    }
-    vpc_id           = "vpc-0fd"
+================================================================================================
+2
+`terraform import`コマンドで`aws_route_table_association`リソースをインポートする際、IDのフォーマットが特
+定の形式である必要があります。この形式は「subnet ID/route table ID」または「gateway ID/route table ID」で
+す。
+------------------------------------------------------------------------------------------------
+terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf subnet-xxxxxx/rtb-yyyyyy
+または
+terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf igw-xxxxxx/rtb-yyyyyy
 
-    timeouts {}
-}
+
+理由：
+
+- TerraformはAWSリソースを独自の状態ファイルにマッピングするため、IDのフォーマットが重要です。
+- インポートする際のIDの形式が不正確であれば、Terraformはどのリソースをインポートすればよいのかわからなくなってしまいます。
+
+ファイルパスは通常`main.tf`またはリソースを定義しているTerraform設定ファイルになります。
+
+"RouteTables": [
+        {
+            "Associations": [
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-0ab",
+                    "RouteTableId": "rtb-0f3",
+                    "SubnetId": "subnet-020",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                },
+                {
+                    "Main": false,
+                    "RouteTableAssociationId": "rtbassoc-064",
+                    "RouteTableId": "rtb-0f3",
+                    "SubnetId": "subnet-092",
+                    "AssociationState": {
+                        "State": "associated"
+                    }
+                }
+            ]
 */
 

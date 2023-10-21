@@ -39,6 +39,11 @@ variable "environment" {
   type = string
 }
 
+# variable ブロックは、Terraformの設定ファイルで変数を定義。変数名：domain、型はstring
+variable "domain" {
+  type = string
+}
+
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

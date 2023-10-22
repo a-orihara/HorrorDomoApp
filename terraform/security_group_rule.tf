@@ -86,6 +86,20 @@ resource "aws_security_group_rule" "portfolio_priv_sg_out_all_tf" {
   type              = "egress"
 }
 
+# ================================================================================================
+# portfolio_front in
+# ================================================================================================
+resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv4_tf" {
+  cidr_blocks       = [
+      "0.0.0.0/0",
+  ]
+  from_port         = 80
+  ipv6_cidr_blocks  = []
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  to_port           = 80
+  type              = "ingress"
+}
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

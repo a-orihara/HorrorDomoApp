@@ -31,11 +31,16 @@ provider "aws" {
 # Variables
 # ---------------------------------------------
 # 3
-variable "project" {
-  type = string
-}
+# variable "project" {
+#   type = string
+# }
 
-variable "environment" {
+# variable "environment" {
+#   type = string
+# }
+
+# variable ブロックは、Terraformの設定ファイルで変数を定義。変数名：domain、型はstring
+variable "domain" {
   type = string
 }
 
@@ -89,6 +94,10 @@ terraform apply
 ================================================================================================
 terraform fmt
 ファイルの整形
+================================================================================================
+rm terraform/*.backup
+terraform/terraform.tfstate.<番号>.backupを手動で削除: 古いまたは不要な .backup ファイルを手動で削除するこ
+とができます。
 ================================================================================================
 HCL2構文
 terraform apply

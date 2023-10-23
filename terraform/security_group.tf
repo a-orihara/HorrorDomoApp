@@ -27,6 +27,16 @@ resource "aws_security_group" "portfolio_front_sg_tf" {
   vpc_id      = aws_vpc.portfolio_vpc_tf.id
 }
 
+# ================================================================================================
+# Security Group "alb-frontend"
+# ================================================================================================
+resource "aws_security_group" "portfolio_alb-frontend-sg_tf" {
+  description = "portfolio-alb-frontend-sg"
+  name        = "portfolio-alb-frontend-sg"
+  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+}
+
+
 
 
 

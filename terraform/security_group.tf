@@ -30,7 +30,7 @@ resource "aws_security_group" "portfolio_front_sg_tf" {
 # ================================================================================================
 # Security Group "alb-frontend"
 # ================================================================================================
-resource "aws_security_group" "portfolio_alb-frontend-sg_tf" {
+resource "aws_security_group" "portfolio_alb_frontend_sg_tf" {
   description = "portfolio-alb-frontend-sg"
   name        = "portfolio-alb-frontend-sg"
   vpc_id      = aws_vpc.portfolio_vpc_tf.id

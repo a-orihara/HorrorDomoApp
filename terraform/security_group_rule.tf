@@ -1,5 +1,5 @@
 # ================================================================================================
-# portfolio_pub in
+# pub in
 # ================================================================================================
 # 1
 resource "aws_security_group_rule" "portfolio_pub_sg_in_http_ipv4_tf" {
@@ -30,7 +30,7 @@ resource "aws_security_group_rule" "portfolio_pub_sg_in_http_ipv6_tf" {
 }
 
 # ================================================================================================
-# portfolio_pub out
+# pub out
 # ================================================================================================
 # 2 アウトバウンドはデフォルトの設定
 resource "aws_security_group_rule" "portfolio_pub_sg_out_all_tf" {
@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "portfolio_pub_sg_out_rds_tf" {
 }
 
 # ================================================================================================
-# portfolio_priv in
+# priv in
 # ================================================================================================
 resource "aws_security_group_rule" "portfolio_priv_sg_in_rds_tf" {
   from_port                = 3306
@@ -72,7 +72,7 @@ resource "aws_security_group_rule" "portfolio_priv_sg_in_rds_tf" {
 }
 
 # ================================================================================================
-# portfolio_priv out
+# priv out
 # ================================================================================================
 resource "aws_security_group_rule" "portfolio_priv_sg_out_all_tf" {
   cidr_blocks = [
@@ -87,11 +87,11 @@ resource "aws_security_group_rule" "portfolio_priv_sg_out_all_tf" {
 }
 
 # ================================================================================================
-# portfolio_front in
+# front in
 # ================================================================================================
 resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv4_tf" {
-  cidr_blocks       = [
-      "0.0.0.0/0",
+  cidr_blocks = [
+    "0.0.0.0/0",
   ]
   from_port         = 80
   ipv6_cidr_blocks  = []
@@ -102,31 +102,83 @@ resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv4_tf" {
 }
 
 resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv6_tf" {
-    cidr_blocks       = []
-    from_port         = 80
-    ipv6_cidr_blocks  = [
-        "::/0",
-    ]
-    protocol          = "tcp"
-    security_group_id = aws_security_group.portfolio_front_sg_tf.id
-    to_port           = 80
-    type              = "ingress"
+  cidr_blocks = []
+  from_port   = 80
+  ipv6_cidr_blocks = [
+    "::/0",
+  ]
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  to_port           = 80
+  type              = "ingress"
 }
 
 # ================================================================================================
-# portfolio_front out
+# front out
 # ================================================================================================
 resource "aws_security_group_rule" "portfolio_front_sg_out_all_tf" {
-    cidr_blocks       = [
-        "0.0.0.0/0",
-    ]
-    from_port         = 0
-    ipv6_cidr_blocks  = []
-    protocol          = "-1"
-    security_group_id = aws_security_group.portfolio_front_sg_tf.id
-    to_port           = 0
-    type              = "egress"
+  cidr_blocks = [
+    "0.0.0.0/0",
+  ]
+  from_port         = 0
+  ipv6_cidr_blocks  = []
+  protocol          = "-1"
+  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  to_port           = 0
+  type              = "egress"
 }
+
+# ================================================================================================
+# alb_frontend in
+# ================================================================================================
+resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_http_ipv4_tf" {
+  cidr_blocks = [
+    "0.0.0.0/0",
+  ]
+  from_port         = 80
+  ipv6_cidr_blocks  = []
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_alb_frontend_sg_tf.id
+  to_port           = 80
+  type              = "ingress"
+}
+
+resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_https_ipv4_tf" {
+  cidr_blocks = [
+    "0.0.0.0/0",
+  ]
+  from_port         = 443
+  ipv6_cidr_blocks  = []
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_alb_frontend_sg_tf.id
+  to_port           = 443
+  type              = "ingress"
+}
+
+resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_http_ipv6_tf" {
+  cidr_blocks = []
+  from_port   = 80
+  ipv6_cidr_blocks = [
+    "::/0",
+  ]
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_alb_frontend_sg_tf.id
+  to_port           = 80
+  type              = "ingress"
+}
+
+resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_https_ipv6_tf" {
+  cidr_blocks = []
+  from_port   = 443
+  ipv6_cidr_blocks = [
+    "::/0",
+  ]
+  protocol          = "tcp"
+  security_group_id = aws_security_group.portfolio_alb_frontend_sg_tf.id
+  to_port           = 443
+  type              = "ingress"
+}
+
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -139,6 +191,14 @@ iPV4:0.0.0.0/0
 terraform import aws_security_group_rule.portfolio_pub_sg_in_http_ipv4_tf sg-0264949bc0da0c58e_ingress_tcp_80_80_0.0.0.0/0
 iPV6:::/0
 terraform import aws_security_group_rule.portfolio_front_sg_in_http_ipv6_tf sg-0420324d5aebff0c7_ingress_tcp_80_80_::/0
+------------------------------------------------------------------------------------------------
+インバウンドルールのfrom_portとto_portに関する説明
+- from_port: 80
+理由: HTTPの通信は通常ポート80で行われます。インバウンドルールでタイプがHTTPと指定されている場合、起点となるポー
+ト番号は80になります。
+- to_port: 80
+理由: このインバウンドルールはHTTP通信専用であり、HTTPはポート80を使用します。そのため、終点のポート番号も80に設
+定されます。
 ================================================================================================
 2
 アウトバウンドルール（デフォルトの設定）

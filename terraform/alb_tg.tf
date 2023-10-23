@@ -4,7 +4,7 @@
 # 1
 resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
   # 1.1
-  deregistration_delay          = "300"
+  deregistration_delay = "300"
   # 1.2
   load_balancing_algorithm_type = "round_robin"
   name                          = "portfolio-alb-tg"
@@ -12,34 +12,68 @@ resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
   protocol                      = "HTTP"
   protocol_version              = "HTTP1"
   # 新しいターゲットがトラフィックの対象となる際に、徐々にトラフィックを増やすための遅延時間
-  slow_start                    = 0
-  tags                          = {}
-  tags_all                      = {}
+  slow_start = 0
+  tags       = {}
+  tags_all   = {}
   # 1.3
-  target_type                   = "ip"
-  vpc_id   = aws_vpc.portfolio_vpc_tf.id
+  target_type = "ip"
+  vpc_id      = aws_vpc.portfolio_vpc_tf.id
   # 1.4 ロードバランサーがターゲットの健康状態を監視するための設定
   health_check {
-      enabled             = true
-      healthy_threshold   = 5
-      interval            = 30
-      matcher             = "200"
-      path                = "/api/v1/health_check"
-      port                = "traffic-port"
-      protocol            = "HTTP"
-      timeout             = 5
-      unhealthy_threshold = 2
+    enabled             = true
+    healthy_threshold   = 5
+    interval            = 30
+    matcher             = "200"
+    path                = "/api/v1/health_check"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 2
   }
   # 1.5
   stickiness {
-      cookie_duration = 86400
-      enabled         = false
-      type            = "lb_cookie"
+    cookie_duration = 86400
+    enabled         = false
+    type            = "lb_cookie"
   }
 }
 
 # 2
 # resource "aws_lb_target_group_attachment" "portfolio_alb_tg_att_tf" {}
+
+# ---------------------------------------------
+# frontend_alb_tg
+# ---------------------------------------------
+resource "aws_lb_target_group" "portfolio_frontend_alb_tg_tf" {
+  deregistration_delay          = "300"
+  load_balancing_algorithm_type = "round_robin"
+  name                          = "portfolio-frontend-alb-tg"
+  port                          = 80
+  protocol                      = "HTTP"
+  protocol_version              = "HTTP1"
+  slow_start                    = 0
+  tags                          = {}
+  tags_all                      = {}
+  target_type                   = "ip"
+  vpc_id                        = aws_vpc.portfolio_vpc_tf.id
+  health_check {
+    enabled             = true
+    healthy_threshold   = 5
+    interval            = 30
+    matcher             = "200"
+    path                = "/api/health_check"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
+  stickiness {
+    cookie_duration = 86400
+    enabled         = false
+    type            = "lb_cookie"
+  }
+}
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

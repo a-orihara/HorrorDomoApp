@@ -3,7 +3,7 @@
 # ---------------------------------------------
 # 1
 resource "aws_lb" "portfolio_alb_tf" {
-  desync_mitigation_mode           = "defensive"
+  desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-alb-741782418.ap-northeast-1.elb.amazonaws.com"
   drop_invalid_header_fields       = false
   enable_cross_zone_load_balancing = true
@@ -50,10 +50,10 @@ resource "aws_lb_listener" "portfolio_alb_listener_http" {
   tags              = {}
   tags_all          = {}
   default_action {
-      # エラーになるので一旦コメントアウト
-      # order            = 0
-      target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
-      type             = "forward"
+    # エラーになるので一旦コメントアウト
+    # order            = 0
+    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    type             = "forward"
   }
   timeouts {}
 }
@@ -67,9 +67,9 @@ resource "aws_lb_listener" "portfolio_alb_listener_https" {
   tags              = {}
   tags_all          = {}
   default_action {
-      # order            = 0
-      target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
-      type             = "forward"
+    # order            = 0
+    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    type             = "forward"
   }
   timeouts {}
 }
@@ -78,7 +78,7 @@ resource "aws_lb_listener" "portfolio_alb_listener_https" {
 # frontend_alb
 # ---------------------------------------------
 resource "aws_lb" "portfolio_frontend_alb_tf" {
-  desync_mitigation_mode           = "defensive"
+  desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-frontend-alb-1834571258.ap-northeast-1.elb.amazonaws.com"
   drop_invalid_header_fields       = false
   enable_cross_zone_load_balancing = true
@@ -90,25 +90,25 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   ip_address_type                  = "ipv4"
   load_balancer_type               = "application"
   name                             = "portfolio-frontend-alb"
-  security_groups                  = [
-      aws_security_group.portfolio_alb_frontend_sg_tf.id,
+  security_groups = [
+    aws_security_group.portfolio_alb_frontend_sg_tf.id,
   ]
   subnets = [
-  aws_subnet.portfolio_pub_subnet_a_tf.id,
-  aws_subnet.portfolio_pub_subnet_c_tf.id,
+    aws_subnet.portfolio_pub_subnet_a_tf.id,
+    aws_subnet.portfolio_pub_subnet_c_tf.id,
   ]
-  tags                             = {}
-  tags_all                         = {}
+  tags     = {}
+  tags_all = {}
   # vpc_id                           = "vpc-0fd0788c8a372ee22"
   # zone_id                          = "Z14GRHDCWA56QT"
   # access_logs {
   #     enabled = false
   # }
   subnet_mapping {
-      subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
+    subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
   }
   subnet_mapping {
-      subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
+    subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
   }
   timeouts {}
 }
@@ -117,17 +117,17 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
 # frontend_alb_listener
 # ---------------------------------------------
 resource "aws_lb_listener" "portfolio_frontend_alb_listener_http" {
-    load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
-    port              = 80
-    protocol          = "HTTP"
-    tags              = {}
-    tags_all          = {}
-    default_action {
-        # order            = 0
-        target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-frontend-alb-tg/0e4fdfc60b41a86f"
-        type             = "forward"
-    }
-    timeouts {}
+  load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
+  port              = 80
+  protocol          = "HTTP"
+  tags              = {}
+  tags_all          = {}
+  default_action {
+    # order            = 0
+    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    type             = "forward"
+  }
+  timeouts {}
 }
 
 /*

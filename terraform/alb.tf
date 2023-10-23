@@ -113,7 +113,22 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   timeouts {}
 }
 
-
+# ---------------------------------------------
+# frontend_alb_listener
+# ---------------------------------------------
+resource "aws_lb_listener" "portfolio_frontend_alb_listener_http" {
+    load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
+    port              = 80
+    protocol          = "HTTP"
+    tags              = {}
+    tags_all          = {}
+    default_action {
+        # order            = 0
+        target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-frontend-alb-tg/0e4fdfc60b41a86f"
+        type             = "forward"
+    }
+    timeouts {}
+}
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

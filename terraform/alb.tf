@@ -130,6 +130,23 @@ resource "aws_lb_listener" "portfolio_frontend_alb_listener_http" {
   timeouts {}
 }
 
+resource "aws_lb_listener" "portfolio_frontend_alb_listener_https" {
+  load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
+  tags              = {}
+  tags_all          = {}
+  default_action {
+    # order            = 0
+    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    type             = "forward"
+  }
+  timeouts {}
+}
+
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

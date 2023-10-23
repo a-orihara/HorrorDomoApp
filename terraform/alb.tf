@@ -38,14 +38,47 @@ resource "aws_lb" "portfolio_alb_tf" {
   timeouts {}
 }
 
-# resource "aws_lb_listener" "alb_listener_http" {
+# ---------------------------------------------
+# alb_listener
+# ---------------------------------------------
+# 2
+resource "aws_lb_listener" "portfolio_alb_listener_http" {
+  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+  port              = 80
+  protocol          = "HTTP"
+  tags              = {}
+  tags_all          = {}
+  default_action {
+      # エラーになるので一旦コメントアウト
+      # order            = 0
+      target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+      type             = "forward"
+  }
+  timeouts {}
+}
 
-# }
+resource "aws_lb_listener" "portfolio_alb_listener_https" {
+  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
+  tags              = {}
+  tags_all          = {}
+  default_action {
+      # order            = 0
+      target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+      type             = "forward"
+  }
+  timeouts {}
+}
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 - terraform importでaws_lbリソースをインポートするコマンドの書式:
 terraform import aws_lb.<your_resource_name> <load_balancer_arn>
 
-
+2
+terraform import aws_lb_listener.<NAME> <LISTENER_ARN>
 */

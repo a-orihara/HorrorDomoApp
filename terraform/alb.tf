@@ -25,7 +25,7 @@ resource "aws_lb" "portfolio_alb_tf" {
   tags     = {}
   tags_all = {}
   # このコンフィギュレーションを適用した結果に基づいて自動的に決定されます。
-  # vpc_id   = aws_vpc.portfolio_vpc_tf.id
+  # vpc_id   = aws_vpc.vpc.id
   # zone_id  = "Z14GRHDCWA56QT"
   # access_logs {
   #     enabled = false

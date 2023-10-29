@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
   tags_all   = {}
   # 1.3
   target_type = "ip"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
   # 1.4 ロードバランサーがターゲットの健康状態を監視するための設定
   health_check {
     enabled             = true
@@ -55,7 +55,7 @@ resource "aws_lb_target_group" "portfolio_frontend_alb_tg_tf" {
   tags                          = {}
   tags_all                      = {}
   target_type                   = "ip"
-  vpc_id                        = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                        = aws_vpc.vpc.id
   health_check {
     enabled             = true
     healthy_threshold   = 5

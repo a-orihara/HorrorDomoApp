@@ -2,7 +2,8 @@
 # VPC
 # ---------------------------------------------
 # 1
-resource "aws_vpc" "portfolio_vpc_tf" {
+# resource "aws_vpc" "portfolio_vpc_tf" {
+resource "aws_vpc" "vpc" {
   cidr_block                       = "10.0.0.0/16"
   assign_generated_ipv6_cidr_block = false
   # DNSサポートを有効（デフォルト）
@@ -27,7 +28,7 @@ resource "aws_subnet" "portfolio_pub_subnet_a_tf" {
   availability_zone = "ap-northeast-1a"
   cidr_block        = "10.0.1.0/24"
   # resource "aws_vpc"の"portfolio_vpc_tf"のid
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+  vpc_id = aws_vpc.vpc.id
   # インスタンス作成時にIPv6アドレスを割り当てるかどうか。
   assign_ipv6_address_on_creation = false
   # インスタンス起動時にパブリックIPを自動割り当てるかどうか。
@@ -40,7 +41,7 @@ resource "aws_subnet" "portfolio_pub_subnet_a_tf" {
 resource "aws_subnet" "portfolio_pub_subnet_c_tf" {
   availability_zone               = "ap-northeast-1c"
   cidr_block                      = "10.0.3.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -54,7 +55,7 @@ resource "aws_subnet" "portfolio_pub_subnet_c_tf" {
 resource "aws_subnet" "portfolio_priv_subnet_a_tf" {
   availability_zone               = "ap-northeast-1a"
   cidr_block                      = "10.0.2.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -65,7 +66,7 @@ resource "aws_subnet" "portfolio_priv_subnet_a_tf" {
 resource "aws_subnet" "portfolio_priv_subnet_c_tf" {
   availability_zone               = "ap-northeast-1c"
   cidr_block                      = "10.0.4.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -77,7 +78,7 @@ resource "aws_subnet" "portfolio_priv_subnet_c_tf" {
 # Route Table(Pub)
 # ---------------------------------------------
 resource "aws_route_table" "portfolio_pub_rtb_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+  vpc_id = aws_vpc.vpc.id
   # pubのrtbはigwで外部と接続
   route {
     # 全てのトラフィック（0.0.0.0/0）をigwへとルーティングします。
@@ -103,7 +104,7 @@ resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_c_tf"
 # 3 Route Table(Priv)
 # ---------------------------------------------
 resource "aws_route_table" "portfolio_priv_rtb_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+  vpc_id = aws_vpc.vpc.id
   # privのrtbはigwで外部と接続はしない
   route = []
   tags = {
@@ -123,7 +124,7 @@ resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_c_t
 # 4 Internet Gateway
 # ---------------------------------------------
 resource "aws_internet_gateway" "portfolio_igw_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+  vpc_id = aws_vpc.vpc.id
   tags = {
     "Name" = "portfolio-igw"
   }

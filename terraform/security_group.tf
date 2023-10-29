@@ -6,7 +6,7 @@ resource "aws_security_group" "portfolio_pub_sg_tf" {
   # 1.1
   description = "portfolio-pub-sg"
   name        = "portfolio-pub-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
@@ -15,7 +15,7 @@ resource "aws_security_group" "portfolio_pub_sg_tf" {
 resource "aws_security_group" "portfolio_priv_sg_tf" {
   description = "portfolio-priv-sg"
   name        = "portfolio-priv-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
@@ -24,7 +24,7 @@ resource "aws_security_group" "portfolio_priv_sg_tf" {
 resource "aws_security_group" "portfolio_front_sg_tf" {
   description = "portfolio-front-sg"
   name        = "portfolio-front-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
@@ -33,7 +33,7 @@ resource "aws_security_group" "portfolio_front_sg_tf" {
 resource "aws_security_group" "portfolio_alb_frontend_sg_tf" {
   description = "portfolio-alb-frontend-sg"
   name        = "portfolio-alb-frontend-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
@@ -42,7 +42,7 @@ resource "aws_security_group" "portfolio_alb_frontend_sg_tf" {
 resource "aws_security_group" "portfolio_alb_sg_tf" {
   description = "portfolio-alb-sg"
   name        = "portfolio-alb-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 

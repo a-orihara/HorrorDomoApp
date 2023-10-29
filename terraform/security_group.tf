@@ -12,7 +12,7 @@ resource "aws_security_group" "pub_sg" {
 # ================================================================================================
 # Security Group "priv"
 # ================================================================================================
-resource "aws_security_group" "portfolio_priv_sg_tf" {
+resource "aws_security_group" "priv_sg" {
   description = "portfolio-priv-sg"
   name        = "portfolio-priv-sg"
   vpc_id      = aws_vpc.vpc.id

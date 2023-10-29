@@ -96,7 +96,7 @@ resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv4_tf" {
   from_port         = 80
   ipv6_cidr_blocks  = []
   protocol          = "tcp"
-  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  security_group_id = aws_security_group.front_sg.id
   to_port           = 80
   type              = "ingress"
 }
@@ -108,7 +108,7 @@ resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv6_tf" {
     "::/0",
   ]
   protocol          = "tcp"
-  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  security_group_id = aws_security_group.front_sg.id
   to_port           = 80
   type              = "ingress"
 }
@@ -123,7 +123,7 @@ resource "aws_security_group_rule" "portfolio_front_sg_out_all_tf" {
   from_port         = 0
   ipv6_cidr_blocks  = []
   protocol          = "-1"
-  security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  security_group_id = aws_security_group.front_sg.id
   to_port           = 0
   type              = "egress"
 }
@@ -187,7 +187,7 @@ resource "aws_security_group_rule" "portfolio_alb_frontend_sg_out_front_tf" {
   from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.portfolio_alb_frontend_sg_tf.id
-  source_security_group_id = aws_security_group.portfolio_front_sg_tf.id
+  source_security_group_id = aws_security_group.front_sg.id
   to_port                  = 80
   type                     = "egress"
 }

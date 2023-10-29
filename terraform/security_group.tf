@@ -21,7 +21,7 @@ resource "aws_security_group" "priv_sg" {
 # ================================================================================================
 # Security Group "front"
 # ================================================================================================
-resource "aws_security_group" "portfolio_front_sg_tf" {
+resource "aws_security_group" "front_sg" {
   description = "portfolio-front-sg"
   name        = "portfolio-front-sg"
   vpc_id      = aws_vpc.vpc.id

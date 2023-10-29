@@ -84,7 +84,7 @@ resource "aws_route_table" "pub_rtb" {
   route {
     # 全てのトラフィック（0.0.0.0/0）をigwへとルーティングします。
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.portfolio_igw_tf.id
+    gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
     "Name" = "portfolio-pub-rtb"
@@ -124,7 +124,7 @@ resource "aws_route_table_association" "priv_rtb_assoc_priv_subnet_c" {
 # ---------------------------------------------
 # 4 Internet Gateway
 # ---------------------------------------------
-resource "aws_internet_gateway" "portfolio_igw_tf" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     "Name" = "portfolio-igw"
@@ -134,7 +134,7 @@ resource "aws_internet_gateway" "portfolio_igw_tf" {
 resource "aws_route" "portfolio_igw_aws_route_tf" {
   route_table_id         = aws_route_table.pub_rtb.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.portfolio_igw_tf.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 

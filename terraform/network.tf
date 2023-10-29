@@ -91,13 +91,12 @@ resource "aws_route_table" "pub_rtb" {
   }
 }
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
-# resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
 resource "aws_route_table_association" "pub_rtb_assoc_pub_subnet_a" {
   route_table_id = aws_route_table.pub_rtb.id
   subnet_id      = aws_subnet.pub_subnet_a.id
 }
 
-resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_c_tf" {
+resource "aws_route_table_association" "pub_rtb_assoc_pub_subnet_c" {
   route_table_id = aws_route_table.pub_rtb.id
   subnet_id      = aws_subnet.pub_subnet_c.id
 }

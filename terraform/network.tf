@@ -131,7 +131,8 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 # 4.1
-resource "aws_route" "portfolio_igw_aws_route_tf" {
+# resource "aws_route" "portfolio_igw_aws_route_tf" {
+resource "aws_route" "igw_aws_route" {
   route_table_id         = aws_route_table.pub_rtb.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
@@ -203,8 +204,8 @@ igwの作成には、"aws_internet_gateway"と、"aws_route"の二つのresource
 ================================================================================================
 4.1
 resource "aws_route"をインポートするコマンド
-terraform import aws_route.portfolio_igw_aws_route_tf <pub-rtbのid>_<igwの送信先アドレス>
+terraform import aws_route" "igw_aws_route.igw.id <pub-rtbのid>_<igwの送信先アドレス>
 ------------------------------------------------------------------------------------------------
-terraform import aws_route.portfolio_igw_aws_route_tf rtb-0f399e773e2ee2cf7_0.0.0.0/0
+terraform import aws_route" "igw_aws_route.igw.id rtb-0f399e773e2ee2cf7_0.0.0.0/0
 */
 

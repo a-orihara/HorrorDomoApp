@@ -76,7 +76,9 @@ resource "aws_subnet" "priv_subnet_c" {
 # ---------------------------------------------
 # Route Table(Pub)
 # ---------------------------------------------
-resource "aws_route_table" "portfolio_pub_rtb_tf" {
+# resource "aws_route_table" "portfolio_pub_rtb_tf" {
+
+resource "aws_route_table" "pub_rtb" {
   vpc_id = aws_vpc.vpc.id
   # pubのrtbはigwで外部と接続
   route {
@@ -90,12 +92,12 @@ resource "aws_route_table" "portfolio_pub_rtb_tf" {
 }
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
 resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
-  route_table_id = aws_route_table.portfolio_pub_rtb_tf.id
+  route_table_id = aws_route_table.pub_rtb.id
   subnet_id      = aws_subnet.pub_subnet_a.id
 }
 
 resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_c_tf" {
-  route_table_id = aws_route_table.portfolio_pub_rtb_tf.id
+  route_table_id = aws_route_table.pub_rtb.id
   subnet_id      = aws_subnet.pub_subnet_c.id
 }
 
@@ -130,7 +132,7 @@ resource "aws_internet_gateway" "portfolio_igw_tf" {
 }
 # 4.1
 resource "aws_route" "portfolio_igw_aws_route_tf" {
-  route_table_id         = aws_route_table.portfolio_pub_rtb_tf.id
+  route_table_id         = aws_route_table.pub_rtb.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.portfolio_igw_tf.id
 }

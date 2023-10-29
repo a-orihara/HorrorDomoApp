@@ -2,7 +2,6 @@
 # VPC
 # ---------------------------------------------
 # 1
-# resource "aws_vpc" "portfolio_vpc_tf" {
 resource "aws_vpc" "vpc" {
   cidr_block                       = "10.0.0.0/16"
   assign_generated_ipv6_cidr_block = false
@@ -24,7 +23,7 @@ resource "aws_vpc" "vpc" {
 # ---------------------------------------------
 # Public Subnet
 # ---------------------------------------------
-resource "aws_subnet" "portfolio_pub_subnet_a_tf" {
+resource "aws_subnet" "pub_subnet_a" {
   availability_zone = "ap-northeast-1a"
   cidr_block        = "10.0.1.0/24"
   # resource "aws_vpc"の"portfolio_vpc_tf"のid
@@ -92,7 +91,7 @@ resource "aws_route_table" "portfolio_pub_rtb_tf" {
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
 resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
   route_table_id = aws_route_table.portfolio_pub_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_pub_subnet_a_tf.id
+  subnet_id      = aws_subnet.pub_subnet_a.id
 }
 
 resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_c_tf" {

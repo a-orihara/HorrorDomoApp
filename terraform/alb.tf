@@ -19,19 +19,19 @@ resource "aws_lb" "portfolio_alb_tf" {
     aws_security_group.portfolio_alb_sg_tf.id,
   ]
   subnets = [
-    aws_subnet.portfolio_pub_subnet_a_tf.id,
+    aws_subnet.pub_subnet_a.id,
     aws_subnet.portfolio_pub_subnet_c_tf.id,
   ]
   tags     = {}
   tags_all = {}
   # このコンフィギュレーションを適用した結果に基づいて自動的に決定されます。
-  # vpc_id   = aws_vpc.vpc.id
+  # vpc_id   = aws_vpc.portfolio_vpc_tf.id
   # zone_id  = "Z14GRHDCWA56QT"
   # access_logs {
   #     enabled = false
   # }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
+    subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
     subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
@@ -95,7 +95,7 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
     aws_security_group.portfolio_alb_frontend_sg_tf.id,
   ]
   subnets = [
-    aws_subnet.portfolio_pub_subnet_a_tf.id,
+    aws_subnet.pub_subnet_a.id,
     aws_subnet.portfolio_pub_subnet_c_tf.id,
   ]
   tags     = {}
@@ -106,7 +106,7 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   #     enabled = false
   # }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
+    subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
     subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id

@@ -92,7 +92,7 @@ resource "aws_route_table" "pub_rtb" {
 }
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
 # resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
-resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
+resource "aws_route_table_association" "pub_rtb_assoc_pub_subnet_a" {
   route_table_id = aws_route_table.pub_rtb.id
   subnet_id      = aws_subnet.pub_subnet_a.id
 }
@@ -185,7 +185,7 @@ resource "aws_route" "portfolio_igw_aws_route_tf" {
 定の形式である必要があります。この形式は「subnet ID/route table ID」または「gateway ID/route table ID」で
 す。
 ------------------------------------------------------------------------------------------------
-terraform import aws_route_table_association.portfolio_pub_subnet_a_rtb_assoc_tf subnet-xxxxxx/rtb-yyyyyy
+terraform import aws_route_table_association.pub_subnet_a_rtb_assoc subnet-xxxxxx/rtb-yyyyyy
 または
 terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf igw-xxxxxx/rtb-yyyyyy
 

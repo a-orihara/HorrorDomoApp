@@ -62,7 +62,7 @@ resource "aws_subnet" "priv_subnet_a" {
   }
 }
 
-resource "aws_subnet" "portfolio_priv_subnet_c_tf" {
+resource "aws_subnet" "priv_subnet_c" {
   availability_zone               = "ap-northeast-1c"
   cidr_block                      = "10.0.4.0/24"
   vpc_id                          = aws_vpc.vpc.id
@@ -116,7 +116,7 @@ resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_a_t
 }
 resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_c_tf" {
   route_table_id = aws_route_table.portfolio_priv_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_priv_subnet_c_tf.id
+  subnet_id      = aws_subnet.priv_subnet_c.id
 }
 
 # ---------------------------------------------

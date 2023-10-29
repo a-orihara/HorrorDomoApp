@@ -92,7 +92,7 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   load_balancer_type               = "application"
   name                             = "portfolio-frontend-alb"
   security_groups = [
-    aws_security_group.portfolio_alb_frontend_sg_tf.id,
+    aws_security_group.alb_frontend_sg.id,
   ]
   subnets = [
     aws_subnet.pub_subnet_a.id,

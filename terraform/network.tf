@@ -112,7 +112,7 @@ resource "aws_route_table" "priv_rtb" {
     Name = "portfolio-priv-rtb"
   }
 }
-resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_a_tf" {
+resource "aws_route_table_association" "priv_rtb_assoc_priv_subnet_a" {
   route_table_id = aws_route_table.priv_rtb.id
   subnet_id      = aws_subnet.priv_subnet_a.id
 }

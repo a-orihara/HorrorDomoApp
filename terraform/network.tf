@@ -131,7 +131,6 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 # 4.1
-# resource "aws_route" "portfolio_igw_aws_route_tf" {
 resource "aws_route" "igw_aws_route" {
   route_table_id         = aws_route_table.pub_rtb.id
   destination_cidr_block = "0.0.0.0/0"

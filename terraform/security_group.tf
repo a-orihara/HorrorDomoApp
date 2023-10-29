@@ -2,7 +2,7 @@
 # Security Group "pub"
 # ================================================================================================
 # 1 ここでは、セキュリティグループのルールを除外する(no ingress or egress rules)
-resource "aws_security_group" "portfolio_pub_sg_tf" {
+resource "aws_security_group" "pub_sg" {
   # 1.1
   description = "portfolio-pub-sg"
   name        = "portfolio-pub-sg"
@@ -73,8 +73,8 @@ TerraformのAWSセキュリティグループルールの`import`コマンドは
 terraform import aws_security_group_rule.portfolio-pub-sg-in-http-ipv4-tf sg-0264949bc0da0c58e_ingress_tcp_80_80_0.0.0.0/0
 
 いらないルールを消す
-terraform state rm 'aws_security_group.portfolio_pub_sg_tf.egress'
-terraform state rm 'aws_security_group.portfolio_pub_sg_tf.ingress'
+terraform state rm 'aws_security_group.pub_sg.egress'
+terraform state rm 'aws_security_group.pub_sg.ingress'
 
 ------------------------------------------------------------------------------------------------
 -

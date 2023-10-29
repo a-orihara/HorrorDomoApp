@@ -20,7 +20,7 @@ resource "aws_lb" "portfolio_alb_tf" {
   ]
   subnets = [
     aws_subnet.pub_subnet_a.id,
-    aws_subnet.portfolio_pub_subnet_c_tf.id,
+    aws_subnet.pub_subnet_c.id,
   ]
   tags     = {}
   tags_all = {}
@@ -34,7 +34,7 @@ resource "aws_lb" "portfolio_alb_tf" {
     subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
+    subnet_id = aws_subnet.pub_subnet_c.id
   }
   timeouts {}
 }
@@ -96,7 +96,7 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   ]
   subnets = [
     aws_subnet.pub_subnet_a.id,
-    aws_subnet.portfolio_pub_subnet_c_tf.id,
+    aws_subnet.pub_subnet_c.id,
   ]
   tags     = {}
   tags_all = {}
@@ -109,7 +109,7 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
     subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
+    subnet_id = aws_subnet.pub_subnet_c.id
   }
   timeouts {}
 }

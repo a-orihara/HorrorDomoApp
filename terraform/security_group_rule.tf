@@ -195,7 +195,7 @@ resource "aws_security_group_rule" "alb_frontend_sg_out_front" {
 # ================================================================================================
 # alb in
 # ================================================================================================
-resource "aws_security_group_rule" "portfolio_alb_sg_in_http_ipv4_tf" {
+resource "aws_security_group_rule" "alb_sg_in_http_ipv4" {
   cidr_blocks = [
     "0.0.0.0/0",
   ]

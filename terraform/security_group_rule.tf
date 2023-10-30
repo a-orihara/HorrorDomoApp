@@ -90,7 +90,7 @@ resource "aws_security_group_rule" "priv_sg_out_all" {
 # ================================================================================================
 # front in
 # ================================================================================================
-resource "aws_security_group_rule" "portfolio_front_sg_in_http_ipv4_tf" {
+resource "aws_security_group_rule" "front_sg_in_http_ipv4" {
   cidr_blocks = [
     "0.0.0.0/0",
   ]

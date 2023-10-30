@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "pub_sg_in_http_ipv6" {
 # pub out
 # ================================================================================================
 # 2 アウトバウンドはデフォルトの設定
-resource "aws_security_group_rule" "portfolio_pub_sg_out_all_tf" {
+resource "aws_security_group_rule" "pub_sg_out_all" {
   cidr_blocks = ["0.0.0.0/0"]
   # 送信元ポートの設定です。この値が0の場合、すべてのポートを許可することを意味します。
   from_port = 0
@@ -277,7 +277,7 @@ terraform import aws_security_group_rule.portfolio_front_sg_in_http_ipv6_tf sg-0
 2
 アウトバウンドルール（デフォルトの設定）
 タイプ：すべてのトラフィック、プロトコル：すべて、ポート範囲：すべて、送信先 ：カスタム 0.0.0.0/0は、
-terraform import aws_security_group_rule.portfolio_pub_sg_out_all_tf sg-0264949bc0da0c58e_egress_all_0_65535_0.0.0.0/0
+terraform import aws_security_group_rule.pub_sg_out_all sg-0264949bc0da0c58e_egress_all_0_65535_0.0.0.0/0
 で取り込み
 
 ================================================================================================

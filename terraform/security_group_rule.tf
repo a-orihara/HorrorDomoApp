@@ -219,7 +219,7 @@ resource "aws_security_group_rule" "alb_sg_in_https_ipv4" {
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "portfolio_alb_sg_in_http_ipv6_tf" {
+resource "aws_security_group_rule" "alb_sg_in_http_ipv6" {
   cidr_blocks = []
   from_port   = 80
   ipv6_cidr_blocks = [

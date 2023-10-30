@@ -63,7 +63,8 @@ resource "aws_security_group_rule" "pub_sg_out_rds" {
 # ================================================================================================
 # priv in
 # ================================================================================================
-resource "aws_security_group_rule" "portfolio_priv_sg_in_rds_tf" {
+# resource "aws_security_group_rule" "portfolio_priv_sg_in_rds_tf" {
+resource "aws_security_group_rule" "priv_sg_in_rds" {
   from_port                = 3306
   protocol                 = "tcp"
   security_group_id        = aws_security_group.priv_sg.id

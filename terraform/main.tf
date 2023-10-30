@@ -43,6 +43,10 @@ provider "aws" {
 variable "domain" {
   type = string
 }
+# typeを指定していない場合、デフォルトとしてtypeはstringとして扱われます。
+variable "rds_instance_name" {}
+variable "mysql_db_username" {}
+variable "mysql_db_password" {}
 
 
 /*

@@ -65,8 +65,8 @@ resource "aws_lb_listener" "alb_listener_https" {
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = aws_acm_certificate.acm_cert.arn
   # certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
-  tags              = {}
-  tags_all          = {}
+  tags     = {}
+  tags_all = {}
   default_action {
     # order            = 0
     target_group_arn = aws_lb_target_group.alb_tg.arn

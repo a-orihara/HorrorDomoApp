@@ -233,7 +233,7 @@ resource "aws_security_group_rule" "alb_sg_in_http_ipv6" {
 
 resource "aws_security_group_rule" "alb_sg_in_https_ipv6" {
   cidr_blocks = []
-  from_port         = 443
+  from_port   = 443
   ipv6_cidr_blocks = [
     "::/0",
   ]

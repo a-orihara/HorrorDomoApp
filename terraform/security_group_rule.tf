@@ -143,8 +143,7 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_http_ipv4" {
   to_port           = 80
   type              = "ingress"
 }
-
-resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_https_ipv4_tf" {
+resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv4" {
   cidr_blocks = [
     "0.0.0.0/0",
   ]

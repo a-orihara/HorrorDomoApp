@@ -246,7 +246,7 @@ resource "aws_security_group_rule" "alb_sg_in_https_ipv6" {
 # ================================================================================================
 # alb out
 # ================================================================================================
-resource "aws_security_group_rule" "portfolio_alb_sg_out_pub_tf" {
+resource "aws_security_group_rule" "alb_sg_out_pub" {
   from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.alb_sg.id

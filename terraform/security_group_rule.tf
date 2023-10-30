@@ -117,7 +117,7 @@ resource "aws_security_group_rule" "front_sg_in_http_ipv6" {
 # ================================================================================================
 # front out
 # ================================================================================================
-resource "aws_security_group_rule" "portfolio_front_sg_out_all_tf" {
+resource "aws_security_group_rule" "front_sg_out_all" {
   cidr_blocks = [
     "0.0.0.0/0",
   ]

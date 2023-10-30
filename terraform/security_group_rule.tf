@@ -155,7 +155,6 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv4" {
   type              = "ingress"
 }
 
-# resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_http_ipv6_tf" {
 resource "aws_security_group_rule" "alb_frontend_sg_in_http_ipv6" {
   cidr_blocks = []
   from_port   = 80
@@ -168,7 +167,6 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_http_ipv6" {
   type              = "ingress"
 }
 
-# resource "aws_security_group_rule" "portfolio_alb_frontend_sg_in_https_ipv6_tf" {
 resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv6" {
   cidr_blocks = []
   from_port   = 443
@@ -185,7 +183,7 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv6" {
 # alb_frontend out
 # ================================================================================================
 # 3
-resource "aws_security_group_rule" "portfolio_alb_frontend_sg_out_front_tf" {
+resource "aws_security_group_rule" "alb_frontend_sg_out_front" {
   from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.alb_frontend_sg.id

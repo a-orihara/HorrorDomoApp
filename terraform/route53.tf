@@ -1,8 +1,7 @@
 # ---------------------------------------------
 # Route53 "aws_route53_zone"
 # ---------------------------------------------
-
-resource "aws_route53_zone" "portfolio_route53_zone_tf" {
+resource "aws_route53_zone" "route53_zone" {
   comment = "HostedZone created by Route53 Registrar"
   # ドメイン名
   # 1 var:Terraformで変数を参照するためのprefix。設定ファイル内で定義された変数を参照する為に使用
@@ -22,7 +21,7 @@ resource "aws_route53_zone" "portfolio_route53_zone_tf" {
 # records = []
 # ttl     = 0
 # type    = "A"
-# zone_id = aws_route53_zone.portfolio_route53_zone_tf.id
+# zone_id = aws_route53_zone.route53_zone.id
 # alias {
 #     evaluate_target_health = true
 #     # albのidが必要

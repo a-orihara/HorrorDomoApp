@@ -37,7 +37,7 @@ resource "aws_acm_certificate" "portfolio_acm_cert" {
   }
   # 1.3 acmはroute53のレコードと依存関係にある
   depends_on = [
-    aws_route53_zone.portfolio_route53_zone_tf
+    aws_route53_zone.route53_zone
   ]
 }
 
@@ -62,7 +62,7 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
   records         = [each.value.record]
   ttl             = 300
   type            = each.value.type
-  zone_id         = aws_route53_zone.portfolio_route53_zone_tf.id
+  zone_id         = aws_route53_zone.route53_zone.id
 }
 
 # ================================================================================================
@@ -160,10 +160,10 @@ SSL/TLS証明書（HTTPS証明書）に含まれる代替のドメイン名（Su
 に検出できない依存関係を指定する場合に使用します。
 - `depends_on` の値は、依存するリソースのリストとして指定します。
 ------------------------------------------------------------------------------------------------
-. **`depends_on = [ aws_route53_zone.portfolio_route53_zone_tf ]` を設定する意図**:
+. **`depends_on = [ aws_route53_zone.route53_zone ]` を設定する意図**:
 - ACM証明書の検証方法が "DNS" に設定されている場合、ACMはRoute53を使用してドメインの所有を確認します。そのため、
 ACM証明書を作成する前に、関連するRoute53ゾーンが存在している必要があります。
-- この `depends_on` の設定により、`aws_route53_zone.portfolio_route53_zone_tf` リソースが正常に作成され
+- この `depends_on` の設定により、`aws_route53_zone.route53_zone` リソースが正常に作成され
 た後でのみ、`aws_acm_certificate` リソースの作成を開始します。これにより、Route53ゾーンの作成が完了していない
 状態でACM証明書の作成が開始されることを防ぐことができます。
 ------------------------------------------------------------------------------------------------

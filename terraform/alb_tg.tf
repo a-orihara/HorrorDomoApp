@@ -44,7 +44,7 @@ resource "aws_lb_target_group" "alb_tg" {
 # ---------------------------------------------
 # frontend_alb_tg
 # ---------------------------------------------
-resource "aws_lb_target_group" "portfolio_frontend_alb_tg_tf" {
+resource "aws_lb_target_group" "frontend_alb_tg" {
   deregistration_delay          = "300"
   load_balancing_algorithm_type = "round_robin"
   name                          = "portfolio-frontend-alb-tg"

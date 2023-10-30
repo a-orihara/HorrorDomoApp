@@ -125,7 +125,7 @@ resource "aws_lb_listener" "frontend_alb_listener_http" {
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
     type             = "forward"
   }
   timeouts {}
@@ -142,7 +142,7 @@ resource "aws_lb_listener" "frontend_alb_listener_https" {
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
     type             = "forward"
   }
   timeouts {}

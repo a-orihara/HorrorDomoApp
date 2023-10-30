@@ -45,7 +45,8 @@ resource "aws_acm_certificate" "acm_cert" {
 # route53_record
 # ================================================================================================
 # 2 AWSのRoute53サービスでDNSレコードを作成・管理するためのリソース
-resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
+# resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
+resource "aws_route53_record" "acm_dns_resolve_record" {
   # fqdn    = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com"
   # 2.1 形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。
   for_each = {
@@ -71,7 +72,7 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
 # ACM証明書が正常に検証された（つまり使用可能な状態になった）ことを確認するリソース
 resource "aws_acm_certificate_validation" "portfolio_cert_valid_tf" {
   certificate_arn         = aws_acm_certificate.acm_cert.arn
-  validation_record_fqdns = [for record in aws_route53_record.portfolio_acm_dns_resolve_record_tf : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.acm_dns_resolve_record : record.fqdn]
 }
 
 /*
@@ -175,7 +176,7 @@ Terraformの `depends_on` は、リソースの作成順序を制御し、予期
 2
 terraform import aws_route53_record.<NAME> <ホストゾーンID>_<レコード名>_<レコードタイプ>
 実際の例：
-terraform import aws_route53_record.portfolio_acm_dns_resolve_record_tf Z05743042OK49Y65Q6CSP__862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com_CNAME
+terraform import aws_route53_record.acm_dns_resolve_record Z05743042OK49Y65Q6CSP__862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com_CNAME
 ------------------------------------------------------------------------------------------------
 . **route53.tfではなく、acm.tfに"aws_route53_record"を書く理由**:
 - `acm.tf` を削除する際に、それに関連するリソースが全て削除されるようにするためです。具体的には、ACM証明書とその

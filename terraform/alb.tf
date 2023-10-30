@@ -2,7 +2,7 @@
 # alb
 # ---------------------------------------------
 # 1
-resource "aws_lb" "portfolio_alb_tf" {
+resource "aws_lb" "alb" {
   desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-alb-741782418.ap-northeast-1.elb.amazonaws.com"
   drop_invalid_header_fields       = false
@@ -44,7 +44,7 @@ resource "aws_lb" "portfolio_alb_tf" {
 # ---------------------------------------------
 # 2
 resource "aws_lb_listener" "portfolio_alb_listener_http" {
-  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+  load_balancer_arn = aws_lb.alb.arn
   port              = 80
   protocol          = "HTTP"
   tags              = {}
@@ -59,7 +59,7 @@ resource "aws_lb_listener" "portfolio_alb_listener_http" {
 }
 
 resource "aws_lb_listener" "portfolio_alb_listener_https" {
-  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+  load_balancer_arn = aws_lb.alb.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"

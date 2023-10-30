@@ -132,7 +132,7 @@ resource "aws_lb_listener" "frontend_alb_listener_http" {
 }
 
 # albにhttpsのlistenerを設定することが、ざっくり言うとacm証明書をalbに取り付けている。
-resource "aws_lb_listener" "portfolio_frontend_alb_listener_https" {
+resource "aws_lb_listener" "frontend_alb_listener_https" {
   load_balancer_arn = aws_lb.frontend_alb.id
   port              = 443
   protocol          = "HTTPS"

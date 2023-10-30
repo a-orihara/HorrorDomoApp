@@ -16,7 +16,7 @@ resource "aws_lb" "portfolio_alb_tf" {
   load_balancer_type               = "application"
   name                             = "portfolio-alb"
   security_groups = [
-    aws_security_group.portfolio_alb_sg_tf.id,
+    aws_security_group.alb_sg.id,
   ]
   subnets = [
     aws_subnet.pub_subnet_a.id,

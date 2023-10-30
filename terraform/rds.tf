@@ -1,12 +1,13 @@
 # ================================================================================================
 # RDS subnet group
 # ================================================================================================
-resource "aws_db_subnet_group" "portfolio_rds_subnet_group" {
+# RDSのサブネットグループのリソース
+resource "aws_db_subnet_group" "rds_subnet_group" {
   description = "portfolio-rds-sg"
   name        = "portfolio-rds-sg"
   subnet_ids  = [
-      "subnet-030c2ad71163c3d8e",
-      "subnet-0eccc0ac6aad86dba",
+      aws_subnet.priv_subnet_a.id,
+      aws_subnet.priv_subnet_c.id,
   ]
   tags        = {}
   tags_all    = {}

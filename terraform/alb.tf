@@ -52,7 +52,7 @@ resource "aws_lb_listener" "alb_listener_http" {
   default_action {
     # エラーになるので一旦コメントアウト
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.alb_tg.arn
     type             = "forward"
   }
   timeouts {}
@@ -69,7 +69,7 @@ resource "aws_lb_listener" "alb_listener_https" {
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.alb_tg.arn
     type             = "forward"
   }
   timeouts {}

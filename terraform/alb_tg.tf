@@ -2,7 +2,7 @@
 # alb_tg
 # ---------------------------------------------
 # 1
-resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
+resource "aws_lb_target_group" "alb_tg" {
   # 1.1
   deregistration_delay = "300"
   # 1.2

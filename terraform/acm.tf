@@ -2,7 +2,7 @@
 # acm_cert
 # ================================================================================================
 # 1 acmの証明書のリソース
-resource "aws_acm_certificate" "portfolio_acm_cert" {
+resource "aws_acm_certificate" "acm_cert" {
   domain_name = var.domain
   # 1.1
   # domain_validation_options = [
@@ -37,7 +37,7 @@ resource "aws_acm_certificate" "portfolio_acm_cert" {
   }
   # 1.3 acmはroute53のレコードと依存関係にある
   depends_on = [
-    aws_route53_zone.portfolio_route53_zone_tf
+    aws_route53_zone.route53_zone
   ]
 }
 
@@ -45,12 +45,13 @@ resource "aws_acm_certificate" "portfolio_acm_cert" {
 # route53_record
 # ================================================================================================
 # 2 AWSのRoute53サービスでDNSレコードを作成・管理するためのリソース
-resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
+# resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
+resource "aws_route53_record" "acm_dns_resolve_record" {
   # fqdn    = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com"
   # 2.1 形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。
   for_each = {
     # 2.2 domain_validation_optionsの各要素dvoに対し、key:dvo.domain_name（文字列）、値（object）のmapを作成
-    for dvo in aws_acm_certificate.portfolio_acm_cert.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.acm_cert.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -62,7 +63,7 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
   records         = [each.value.record]
   ttl             = 300
   type            = each.value.type
-  zone_id         = aws_route53_zone.portfolio_route53_zone_tf.id
+  zone_id         = aws_route53_zone.route53_zone.id
 }
 
 # ================================================================================================
@@ -70,14 +71,16 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
 # ================================================================================================
 # ACM証明書が正常に検証された（つまり使用可能な状態になった）ことを確認するリソース
 resource "aws_acm_certificate_validation" "portfolio_cert_valid_tf" {
-  certificate_arn         = aws_acm_certificate.portfolio_acm_cert.arn
-  validation_record_fqdns = [for record in aws_route53_record.portfolio_acm_dns_resolve_record_tf : record.fqdn]
+  certificate_arn         = aws_acm_certificate.acm_cert.arn
+  validation_record_fqdns = [for record in aws_route53_record.acm_dns_resolve_record : record.fqdn]
 }
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================
 1
+acmのarnでimportする
+------------------------------------------------------------------------------------------------
 - **`aws_acm_certificate`**
 - `aws_acm_certificate`はAWS Certificate Manager(ACM)でSSL/TLS証明書を作成するためのリソースです。
 - このリソースが作成された後、関連する`aws_acm_certificate_validation`リソースで証明書の検証が行われます。
@@ -160,10 +163,10 @@ SSL/TLS証明書（HTTPS証明書）に含まれる代替のドメイン名（Su
 に検出できない依存関係を指定する場合に使用します。
 - `depends_on` の値は、依存するリソースのリストとして指定します。
 ------------------------------------------------------------------------------------------------
-. **`depends_on = [ aws_route53_zone.portfolio_route53_zone_tf ]` を設定する意図**:
+. **`depends_on = [ aws_route53_zone.route53_zone ]` を設定する意図**:
 - ACM証明書の検証方法が "DNS" に設定されている場合、ACMはRoute53を使用してドメインの所有を確認します。そのため、
 ACM証明書を作成する前に、関連するRoute53ゾーンが存在している必要があります。
-- この `depends_on` の設定により、`aws_route53_zone.portfolio_route53_zone_tf` リソースが正常に作成され
+- この `depends_on` の設定により、`aws_route53_zone.route53_zone` リソースが正常に作成され
 た後でのみ、`aws_acm_certificate` リソースの作成を開始します。これにより、Route53ゾーンの作成が完了していない
 状態でACM証明書の作成が開始されることを防ぐことができます。
 ------------------------------------------------------------------------------------------------
@@ -173,7 +176,7 @@ Terraformの `depends_on` は、リソースの作成順序を制御し、予期
 2
 terraform import aws_route53_record.<NAME> <ホストゾーンID>_<レコード名>_<レコードタイプ>
 実際の例：
-terraform import aws_route53_record.portfolio_acm_dns_resolve_record_tf Z05743042OK49Y65Q6CSP__862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com_CNAME
+terraform import aws_route53_record.acm_dns_resolve_record Z05743042OK49Y65Q6CSP__862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com_CNAME
 ------------------------------------------------------------------------------------------------
 . **route53.tfではなく、acm.tfに"aws_route53_record"を書く理由**:
 - `acm.tf` を削除する際に、それに関連するリソースが全て削除されるようにするためです。具体的には、ACM証明書とその

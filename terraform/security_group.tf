@@ -2,47 +2,47 @@
 # Security Group "pub"
 # ================================================================================================
 # 1 ここでは、セキュリティグループのルールを除外する(no ingress or egress rules)
-resource "aws_security_group" "portfolio_pub_sg_tf" {
+resource "aws_security_group" "pub_sg" {
   # 1.1
   description = "portfolio-pub-sg"
   name        = "portfolio-pub-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
 # Security Group "priv"
 # ================================================================================================
-resource "aws_security_group" "portfolio_priv_sg_tf" {
+resource "aws_security_group" "priv_sg" {
   description = "portfolio-priv-sg"
   name        = "portfolio-priv-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
 # Security Group "front"
 # ================================================================================================
-resource "aws_security_group" "portfolio_front_sg_tf" {
+resource "aws_security_group" "front_sg" {
   description = "portfolio-front-sg"
   name        = "portfolio-front-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
 # Security Group "alb-frontend"
 # ================================================================================================
-resource "aws_security_group" "portfolio_alb_frontend_sg_tf" {
+resource "aws_security_group" "alb_frontend_sg" {
   description = "portfolio-alb-frontend-sg"
   name        = "portfolio-alb-frontend-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 # ================================================================================================
 # Security Group "alb"
 # ================================================================================================
-resource "aws_security_group" "portfolio_alb_sg_tf" {
+resource "aws_security_group" "alb_sg" {
   description = "portfolio-alb-sg"
   name        = "portfolio-alb-sg"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
 }
 
 
@@ -73,8 +73,8 @@ TerraformのAWSセキュリティグループルールの`import`コマンドは
 terraform import aws_security_group_rule.portfolio-pub-sg-in-http-ipv4-tf sg-0264949bc0da0c58e_ingress_tcp_80_80_0.0.0.0/0
 
 いらないルールを消す
-terraform state rm 'aws_security_group.portfolio_pub_sg_tf.egress'
-terraform state rm 'aws_security_group.portfolio_pub_sg_tf.ingress'
+terraform state rm 'aws_security_group.pub_sg.egress'
+terraform state rm 'aws_security_group.pub_sg.ingress'
 
 ------------------------------------------------------------------------------------------------
 -

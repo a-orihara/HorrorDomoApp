@@ -2,7 +2,7 @@
 # alb
 # ---------------------------------------------
 # 1
-resource "aws_lb" "portfolio_alb_tf" {
+resource "aws_lb" "alb" {
   desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-alb-741782418.ap-northeast-1.elb.amazonaws.com"
   drop_invalid_header_fields       = false
@@ -16,11 +16,11 @@ resource "aws_lb" "portfolio_alb_tf" {
   load_balancer_type               = "application"
   name                             = "portfolio-alb"
   security_groups = [
-    aws_security_group.portfolio_alb_sg_tf.id,
+    aws_security_group.alb_sg.id,
   ]
   subnets = [
-    aws_subnet.portfolio_pub_subnet_a_tf.id,
-    aws_subnet.portfolio_pub_subnet_c_tf.id,
+    aws_subnet.pub_subnet_a.id,
+    aws_subnet.pub_subnet_c.id,
   ]
   tags     = {}
   tags_all = {}
@@ -31,10 +31,10 @@ resource "aws_lb" "portfolio_alb_tf" {
   #     enabled = false
   # }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
+    subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
+    subnet_id = aws_subnet.pub_subnet_c.id
   }
   timeouts {}
 }
@@ -43,8 +43,8 @@ resource "aws_lb" "portfolio_alb_tf" {
 # alb_listener
 # ---------------------------------------------
 # 2
-resource "aws_lb_listener" "portfolio_alb_listener_http" {
-  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+resource "aws_lb_listener" "alb_listener_http" {
+  load_balancer_arn = aws_lb.alb.arn
   port              = 80
   protocol          = "HTTP"
   tags              = {}
@@ -52,23 +52,24 @@ resource "aws_lb_listener" "portfolio_alb_listener_http" {
   default_action {
     # エラーになるので一旦コメントアウト
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.alb_tg.arn
     type             = "forward"
   }
   timeouts {}
 }
 
-resource "aws_lb_listener" "portfolio_alb_listener_https" {
-  load_balancer_arn = aws_lb.portfolio_alb_tf.arn
+resource "aws_lb_listener" "alb_listener_https" {
+  load_balancer_arn = aws_lb.alb.arn
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
+  certificate_arn   = aws_acm_certificate.acm_cert.arn
+  # certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
   tags              = {}
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.alb_tg.arn
     type             = "forward"
   }
   timeouts {}
@@ -77,7 +78,7 @@ resource "aws_lb_listener" "portfolio_alb_listener_https" {
 # ---------------------------------------------
 # frontend_alb
 # ---------------------------------------------
-resource "aws_lb" "portfolio_frontend_alb_tf" {
+resource "aws_lb" "frontend_alb" {
   desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-frontend-alb-1834571258.ap-northeast-1.elb.amazonaws.com"
   drop_invalid_header_fields       = false
@@ -91,11 +92,11 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   load_balancer_type               = "application"
   name                             = "portfolio-frontend-alb"
   security_groups = [
-    aws_security_group.portfolio_alb_frontend_sg_tf.id,
+    aws_security_group.alb_frontend_sg.id,
   ]
   subnets = [
-    aws_subnet.portfolio_pub_subnet_a_tf.id,
-    aws_subnet.portfolio_pub_subnet_c_tf.id,
+    aws_subnet.pub_subnet_a.id,
+    aws_subnet.pub_subnet_c.id,
   ]
   tags     = {}
   tags_all = {}
@@ -105,10 +106,10 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
   #     enabled = false
   # }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_a_tf.id
+    subnet_id = aws_subnet.pub_subnet_a.id
   }
   subnet_mapping {
-    subnet_id = aws_subnet.portfolio_pub_subnet_c_tf.id
+    subnet_id = aws_subnet.pub_subnet_c.id
   }
   timeouts {}
 }
@@ -116,32 +117,32 @@ resource "aws_lb" "portfolio_frontend_alb_tf" {
 # ---------------------------------------------
 # frontend_alb_listener
 # ---------------------------------------------
-resource "aws_lb_listener" "portfolio_frontend_alb_listener_http" {
-  load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
+resource "aws_lb_listener" "frontend_alb_listener_http" {
+  load_balancer_arn = aws_lb.frontend_alb.id
   port              = 80
   protocol          = "HTTP"
   tags              = {}
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
     type             = "forward"
   }
   timeouts {}
 }
 
 # albにhttpsのlistenerを設定することが、ざっくり言うとacm証明書をalbに取り付けている。
-resource "aws_lb_listener" "portfolio_frontend_alb_listener_https" {
-  load_balancer_arn = aws_lb.portfolio_frontend_alb_tf.id
+resource "aws_lb_listener" "frontend_alb_listener_https" {
+  load_balancer_arn = aws_lb.frontend_alb.id
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
+  certificate_arn   = aws_acm_certificate.acm_cert.arn
   tags              = {}
   tags_all          = {}
   default_action {
     # order            = 0
-    target_group_arn = aws_lb_target_group.portfolio_frontend_alb_tg_tf.arn
+    target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
     type             = "forward"
   }
   timeouts {}

@@ -2,7 +2,7 @@
 # alb_tg
 # ---------------------------------------------
 # 1
-resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
+resource "aws_lb_target_group" "alb_tg" {
   # 1.1
   deregistration_delay = "300"
   # 1.2
@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
   tags_all   = {}
   # 1.3
   target_type = "ip"
-  vpc_id      = aws_vpc.portfolio_vpc_tf.id
+  vpc_id      = aws_vpc.vpc.id
   # 1.4 ロードバランサーがターゲットの健康状態を監視するための設定
   health_check {
     enabled             = true
@@ -44,7 +44,7 @@ resource "aws_lb_target_group" "portfolio_alb_tg_tf" {
 # ---------------------------------------------
 # frontend_alb_tg
 # ---------------------------------------------
-resource "aws_lb_target_group" "portfolio_frontend_alb_tg_tf" {
+resource "aws_lb_target_group" "frontend_alb_tg" {
   deregistration_delay          = "300"
   load_balancing_algorithm_type = "round_robin"
   name                          = "portfolio-frontend-alb-tg"
@@ -55,7 +55,7 @@ resource "aws_lb_target_group" "portfolio_frontend_alb_tg_tf" {
   tags                          = {}
   tags_all                      = {}
   target_type                   = "ip"
-  vpc_id                        = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                        = aws_vpc.vpc.id
   health_check {
     enabled             = true
     healthy_threshold   = 5

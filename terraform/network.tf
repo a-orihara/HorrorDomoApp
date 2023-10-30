@@ -2,7 +2,7 @@
 # VPC
 # ---------------------------------------------
 # 1
-resource "aws_vpc" "portfolio_vpc_tf" {
+resource "aws_vpc" "vpc" {
   cidr_block                       = "10.0.0.0/16"
   assign_generated_ipv6_cidr_block = false
   # DNSサポートを有効（デフォルト）
@@ -23,11 +23,11 @@ resource "aws_vpc" "portfolio_vpc_tf" {
 # ---------------------------------------------
 # Public Subnet
 # ---------------------------------------------
-resource "aws_subnet" "portfolio_pub_subnet_a_tf" {
+resource "aws_subnet" "pub_subnet_a" {
   availability_zone = "ap-northeast-1a"
   cidr_block        = "10.0.1.0/24"
   # resource "aws_vpc"の"portfolio_vpc_tf"のid
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+  vpc_id = aws_vpc.vpc.id
   # インスタンス作成時にIPv6アドレスを割り当てるかどうか。
   assign_ipv6_address_on_creation = false
   # インスタンス起動時にパブリックIPを自動割り当てるかどうか。
@@ -37,10 +37,10 @@ resource "aws_subnet" "portfolio_pub_subnet_a_tf" {
   }
 }
 
-resource "aws_subnet" "portfolio_pub_subnet_c_tf" {
+resource "aws_subnet" "pub_subnet_c" {
   availability_zone               = "ap-northeast-1c"
   cidr_block                      = "10.0.3.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -51,10 +51,10 @@ resource "aws_subnet" "portfolio_pub_subnet_c_tf" {
 # ---------------------------------------------
 # Private Subnet
 # ---------------------------------------------
-resource "aws_subnet" "portfolio_priv_subnet_a_tf" {
+resource "aws_subnet" "priv_subnet_a" {
   availability_zone               = "ap-northeast-1a"
   cidr_block                      = "10.0.2.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -62,10 +62,10 @@ resource "aws_subnet" "portfolio_priv_subnet_a_tf" {
   }
 }
 
-resource "aws_subnet" "portfolio_priv_subnet_c_tf" {
+resource "aws_subnet" "priv_subnet_c" {
   availability_zone               = "ap-northeast-1c"
   cidr_block                      = "10.0.4.0/24"
-  vpc_id                          = aws_vpc.portfolio_vpc_tf.id
+  vpc_id                          = aws_vpc.vpc.id
   assign_ipv6_address_on_creation = false
   map_public_ip_on_launch         = false
   tags = {
@@ -76,63 +76,65 @@ resource "aws_subnet" "portfolio_priv_subnet_c_tf" {
 # ---------------------------------------------
 # Route Table(Pub)
 # ---------------------------------------------
-resource "aws_route_table" "portfolio_pub_rtb_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+# resource "aws_route_table" "portfolio_pub_rtb_tf" {
+
+resource "aws_route_table" "pub_rtb" {
+  vpc_id = aws_vpc.vpc.id
   # pubのrtbはigwで外部と接続
   route {
     # 全てのトラフィック（0.0.0.0/0）をigwへとルーティングします。
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.portfolio_igw_tf.id
+    gateway_id = aws_internet_gateway.igw.id
   }
   tags = {
     "Name" = "portfolio-pub-rtb"
   }
 }
 # 2 パブリック用rtbとパブリックsub-netとの関連付け
-resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_a_tf" {
-  route_table_id = aws_route_table.portfolio_pub_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_pub_subnet_a_tf.id
+resource "aws_route_table_association" "pub_rtb_assoc_pub_subnet_a" {
+  route_table_id = aws_route_table.pub_rtb.id
+  subnet_id      = aws_subnet.pub_subnet_a.id
 }
 
-resource "aws_route_table_association" "portfolio_pub_rtb_assoc_pub_subnet_c_tf" {
-  route_table_id = aws_route_table.portfolio_pub_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_pub_subnet_c_tf.id
+resource "aws_route_table_association" "pub_rtb_assoc_pub_subnet_c" {
+  route_table_id = aws_route_table.pub_rtb.id
+  subnet_id      = aws_subnet.pub_subnet_c.id
 }
 
 # ---------------------------------------------
 # 3 Route Table(Priv)
 # ---------------------------------------------
-resource "aws_route_table" "portfolio_priv_rtb_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+resource "aws_route_table" "priv_rtb" {
+  vpc_id = aws_vpc.vpc.id
   # privのrtbはigwで外部と接続はしない
   route = []
   tags = {
     Name = "portfolio-priv-rtb"
   }
 }
-resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_a_tf" {
-  route_table_id = aws_route_table.portfolio_priv_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_priv_subnet_a_tf.id
+resource "aws_route_table_association" "priv_rtb_assoc_priv_subnet_a" {
+  route_table_id = aws_route_table.priv_rtb.id
+  subnet_id      = aws_subnet.priv_subnet_a.id
 }
-resource "aws_route_table_association" "portfolio_priv_rtb_assoc_priv_subnet_c_tf" {
-  route_table_id = aws_route_table.portfolio_priv_rtb_tf.id
-  subnet_id      = aws_subnet.portfolio_priv_subnet_c_tf.id
+resource "aws_route_table_association" "priv_rtb_assoc_priv_subnet_c" {
+  route_table_id = aws_route_table.priv_rtb.id
+  subnet_id      = aws_subnet.priv_subnet_c.id
 }
 
 # ---------------------------------------------
 # 4 Internet Gateway
 # ---------------------------------------------
-resource "aws_internet_gateway" "portfolio_igw_tf" {
-  vpc_id = aws_vpc.portfolio_vpc_tf.id
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc.id
   tags = {
     "Name" = "portfolio-igw"
   }
 }
 # 4.1
-resource "aws_route" "portfolio_igw_aws_route_tf" {
-  route_table_id         = aws_route_table.portfolio_pub_rtb_tf.id
+resource "aws_route" "igw_aws_route" {
+  route_table_id         = aws_route_table.pub_rtb.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.portfolio_igw_tf.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 
@@ -182,7 +184,7 @@ resource "aws_route" "portfolio_igw_aws_route_tf" {
 定の形式である必要があります。この形式は「subnet ID/route table ID」または「gateway ID/route table ID」で
 す。
 ------------------------------------------------------------------------------------------------
-terraform import aws_route_table_association.portfolio_pub_subnet_a_rtb_assoc_tf subnet-xxxxxx/rtb-yyyyyy
+terraform import aws_route_table_association.pub_subnet_a_rtb_assoc subnet-xxxxxx/rtb-yyyyyy
 または
 terraform import aws_route_table_association.portfolio-pub-subnet-a-rtb-assoc-tf igw-xxxxxx/rtb-yyyyyy
 
@@ -201,8 +203,8 @@ igwの作成には、"aws_internet_gateway"と、"aws_route"の二つのresource
 ================================================================================================
 4.1
 resource "aws_route"をインポートするコマンド
-terraform import aws_route.portfolio_igw_aws_route_tf <pub-rtbのid>_<igwの送信先アドレス>
+terraform import aws_route" "igw_aws_route.igw.id <pub-rtbのid>_<igwの送信先アドレス>
 ------------------------------------------------------------------------------------------------
-terraform import aws_route.portfolio_igw_aws_route_tf rtb-0f399e773e2ee2cf7_0.0.0.0/0
+terraform import aws_route" "igw_aws_route.igw.id rtb-0f399e773e2ee2cf7_0.0.0.0/0
 */
 

@@ -30,6 +30,7 @@ resource "aws_db_instance" "mysql-rds-instance" {
   # 作成した"aws_db_subnet_group"を指定。idではなくnameを指定
   db_subnet_group_name                = aws_db_subnet_group.rds_subnet_group.name
   delete_automated_backups            = true
+  # 削除防止するか
   deletion_protection                 = true
   enabled_cloudwatch_logs_exports     = []
   engine                              = "mysql"
@@ -53,6 +54,7 @@ resource "aws_db_instance" "mysql-rds-instance" {
   port                                  = 3306
   publicly_accessible                   = false
   security_group_names                  = []
+  # 削除時のスナップショットをスキップするか
   skip_final_snapshot                   = true
   storage_encrypted                     = true
   storage_type                          = "standard"

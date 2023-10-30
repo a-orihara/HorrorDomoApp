@@ -46,7 +46,8 @@ resource "aws_security_group_rule" "pub_sg_out_all" {
   # アウトバウンドルール
   type = "egress"
 }
-resource "aws_security_group_rule" "portfolio_pub_sg_out_rds_tf" {
+# 2.1
+resource "aws_security_group_rule" "pub_sg_out_rds" {
   # 競合する為、cidr_blocksとsource_security_group_idと同時に設定しない
   # cidr_blocks              = []
   from_port = 3306
@@ -273,12 +274,18 @@ terraform import aws_security_group_rule.portfolio_front_sg_in_http_ipv6_tf sg-0
 - to_port: 80
 理由: このインバウンドルールはHTTP通信専用であり、HTTPはポート80を使用します。そのため、終点のポート番号も80に設
 定されます。
+
 ================================================================================================
 2
 アウトバウンドルール（デフォルトの設定）
 タイプ：すべてのトラフィック、プロトコル：すべて、ポート範囲：すべて、送信先 ：カスタム 0.0.0.0/0は、
 terraform import aws_security_group_rule.pub_sg_out_all sg-0264949bc0da0c58e_egress_all_0_65535_0.0.0.0/0
 で取り込み
+
+================================================================================================
+2.1
+実際の例：
+terraform import aws_security_group_rule.pub_sg_out_rds sg-0264949bc0da0c58e_egress_tcp_3306_3306_sg-0d7c0a2fc71b1dd46
 
 ================================================================================================
 3

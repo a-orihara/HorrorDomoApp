@@ -43,7 +43,8 @@ resource "aws_lb" "alb" {
 # alb_listener
 # ---------------------------------------------
 # 2
-resource "aws_lb_listener" "portfolio_alb_listener_http" {
+# resource "aws_lb_listener" "portfolio_alb_listener_http"
+resource "aws_lb_listener" "alb_listener_http" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 80
   protocol          = "HTTP"
@@ -58,7 +59,8 @@ resource "aws_lb_listener" "portfolio_alb_listener_http" {
   timeouts {}
 }
 
-resource "aws_lb_listener" "portfolio_alb_listener_https" {
+# resource "aws_lb_listener" "portfolio_alb_listener_https" {
+resource "aws_lb_listener" "alb_listener_https" {
   load_balancer_arn = aws_lb.alb.arn
   port              = 443
   protocol          = "HTTPS"

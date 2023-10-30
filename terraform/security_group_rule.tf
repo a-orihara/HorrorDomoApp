@@ -12,7 +12,7 @@ resource "aws_security_group_rule" "pub_sg_in_http_ipv4" {
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "portfolio_pub_sg_in_http_ipv6_tf" {
+resource "aws_security_group_rule" "pub_sg_in_http_ipv6" {
   cidr_blocks = []
   # 送信元ポートの設定
   from_port = 80

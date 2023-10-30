@@ -2,7 +2,7 @@
 # acm_cert
 # ================================================================================================
 # 1 acmの証明書のリソース
-resource "aws_acm_certificate" "portfolio_acm_cert" {
+resource "aws_acm_certificate" "acm_cert" {
   domain_name = var.domain
   # 1.1
   # domain_validation_options = [
@@ -50,7 +50,7 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
   # 2.1 形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。
   for_each = {
     # 2.2 domain_validation_optionsの各要素dvoに対し、key:dvo.domain_name（文字列）、値（object）のmapを作成
-    for dvo in aws_acm_certificate.portfolio_acm_cert.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.acm_cert.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -70,7 +70,7 @@ resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
 # ================================================================================================
 # ACM証明書が正常に検証された（つまり使用可能な状態になった）ことを確認するリソース
 resource "aws_acm_certificate_validation" "portfolio_cert_valid_tf" {
-  certificate_arn         = aws_acm_certificate.portfolio_acm_cert.arn
+  certificate_arn         = aws_acm_certificate.acm_cert.arn
   validation_record_fqdns = [for record in aws_route53_record.portfolio_acm_dns_resolve_record_tf : record.fqdn]
 }
 
@@ -78,6 +78,8 @@ resource "aws_acm_certificate_validation" "portfolio_cert_valid_tf" {
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================
 1
+acmのarnでimportする
+------------------------------------------------------------------------------------------------
 - **`aws_acm_certificate`**
 - `aws_acm_certificate`はAWS Certificate Manager(ACM)でSSL/TLS証明書を作成するためのリソースです。
 - このリソースが作成された後、関連する`aws_acm_certificate_validation`リソースで証明書の検証が行われます。

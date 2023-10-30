@@ -231,12 +231,12 @@ resource "aws_security_group_rule" "alb_sg_in_http_ipv6" {
   type              = "ingress"
 }
 
-resource "aws_security_group_rule" "portfolio_alb_sg_in_https_ipv6_tf" {
-  cidr_blocks = [
-    "0.0.0.0/0",
-  ]
+resource "aws_security_group_rule" "alb_sg_in_https_ipv6" {
+  cidr_blocks = []
   from_port         = 443
-  ipv6_cidr_blocks  = []
+  ipv6_cidr_blocks = [
+    "::/0",
+  ]
   protocol          = "tcp"
   security_group_id = aws_security_group.alb_sg.id
   to_port           = 443

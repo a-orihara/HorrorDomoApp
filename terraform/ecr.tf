@@ -20,6 +20,36 @@ resource "aws_ecr_repository" "nextjs-img-prod" {
     # 1.4
     timeouts {}
 }
+
+resource "aws_ecr_repository" "nginx-img-prod" {
+    image_tag_mutability = "MUTABLE"
+    name                 = "nginx-img-prod"
+    tags                 = {}
+    tags_all             = {}
+    encryption_configuration {
+        encryption_type = "AES256"
+    }
+    image_scanning_configuration {
+        scan_on_push = false
+    }
+    timeouts {}
+}
+
+resource "aws_ecr_repository" "rails-img-prod" {
+    image_tag_mutability = "MUTABLE"
+    name                 = "rails-img-prod"
+    tags                 = {}
+    tags_all             = {}
+    encryption_configuration {
+        encryption_type = "AES256"
+    }
+    image_scanning_configuration {
+        scan_on_push = false
+    }
+    timeouts {}
+}
+
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

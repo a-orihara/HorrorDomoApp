@@ -28,8 +28,8 @@ resource "aws_db_instance" "mysql-rds-instance" {
   copy_tags_to_snapshot      = true
   customer_owned_ip_enabled  = false
   # 作成した"aws_db_subnet_group"を指定。idではなくnameを指定
-  db_subnet_group_name                = aws_db_subnet_group.rds_subnet_group.name
-  delete_automated_backups            = true
+  db_subnet_group_name     = aws_db_subnet_group.rds_subnet_group.name
+  delete_automated_backups = true
   # 削除防止するか
   deletion_protection                 = true
   enabled_cloudwatch_logs_exports     = []
@@ -55,11 +55,11 @@ resource "aws_db_instance" "mysql-rds-instance" {
   publicly_accessible                   = false
   security_group_names                  = []
   # 削除時のスナップショットをスキップするか
-  skip_final_snapshot                   = true
-  storage_encrypted                     = true
-  storage_type                          = "standard"
-  tags                                  = {}
-  tags_all                              = {}
+  skip_final_snapshot = true
+  storage_encrypted   = true
+  storage_type        = "standard"
+  tags                = {}
+  tags_all            = {}
   # usernameはRDSインスタンスのではなく、RDSインスタンスで使用されるMySQLのユーザー名。
   username = var.mysql_db_username
   vpc_security_group_ids = [
@@ -73,6 +73,9 @@ resource "aws_db_instance" "mysql-rds-instance" {
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+RDS作成に必要なリソースは、resource "aws_db_instance"の他、サブネットグループ。
+必要であれば他にパラメーターグループ、オプショングループ。
+------------------------------------------------------------------------------------------------
 terraform import aws_db_subnet_group.<リソース名> <portfolio-rds-sg名>
 実際の例：
 terraform import aws_db_subnet_group.portfolio_rds_subnet_group portfolio-rds-sg

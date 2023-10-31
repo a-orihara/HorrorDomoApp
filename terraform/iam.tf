@@ -4,6 +4,8 @@
 
 # 1
 resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
+  # このロールに対するポリシーの設定
+  # assume_role_policy    = data.aws_iam_policy_document.iam_policy_document.json
   assume_role_policy = jsonencode(
     {
       Statement = [
@@ -19,10 +21,9 @@ resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
       Version = "2012-10-17"
     }
   )
-  create_date           = "2023-09-29T04:16:31Z"
   description           = "Allows ECS tasks to call AWS services on your behalf."
   force_detach_policies = false
-  id                    = "portfolio-ecsTaskExecutionRole"
+  # IAMロールにアタッチするAWS管理ポリシーのARN（Amazon Resource Name）のリストを指定します。
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonS3FullAccess",
     "arn:aws:iam::aws:policy/AmazonSSMFullAccess",
@@ -34,124 +35,143 @@ resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
   path                 = "/"
   tags                 = {}
   tags_all             = {}
-  unique_id            = "AROAUEHI34MWF3TPVA4OU"
-  inline_policy {}
+  # inline_policy {}
 }
 # ================================================================================================
 # IAM "aws_iam_policy_document"
 # ================================================================================================
-# 欄外 AmazonECSTaskExecutionRolePolicy
-data "aws_iam_policy_document" "ecs_task_execution_role_policy" {
-  # AmazonECSTaskExecutionRolePolicy
-  # version:IAMポリシードキュメントのバージョン
-  version = "2012-10-17"
-  # statement:IAMポリシー内の個別のアクション許可/拒否ルールを表します。
-  statement {
-    # sid:ポリシーステートメントのID（識別子）です。通常、識別のために使用される
-    sid = ""
-    #  statementの効果を指定。"Allow":指定されたアクションが許可、"Deny" :拒否
-    effect = "Allow"
-    # actions:AWSリソースに対する操作を表す
-    actions = [
-      "ecr:GetAuthorizationToken",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:BatchGetImage",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    # アクションが適用されるAWSリソースを指定します。"*" はすべてのリソースを意味
-    resources = ["*"]
-  }
-}
+# 2 欄外 AmazonECSTaskExecutionRolePolicy
+# data "aws_iam_policy_document" "iam_policy_document" {
+#   # AmazonECSTaskExecutionRolePolicy
+#   # version:IAMポリシードキュメントのバージョン
+#   version = "2012-10-17"
+#   # statement:IAMポリシー内の個別のアクション許可/拒否ルールを表します。
+#   statement {
+#     # sid:ポリシーステートメントのID（識別子）です。通常、識別のために使用される
+#     sid = ""
+#     #  statementの効果を指定。"Allow":指定されたアクションが許可、"Deny" :拒否
+#     effect = "Allow"
+#     # actions:AWSリソースに対する操作を表す
+#     actions = [
+#       "ecr:GetAuthorizationToken",
+#       "ecr:BatchCheckLayerAvailability",
+#       "ecr:GetDownloadUrlForLayer",
+#       "ecr:BatchGetImage",
+#       "logs:CreateLogStream",
+#       "logs:PutLogEvents"
+#     ]
+#     # アクションが適用されるAWSリソースを指定します。"*" はすべてのリソースを意味
+#     resources = ["*"]
+#   }
+#   # AmazonS3FullAccess
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "s3:*",
+#       "s3-object-lambda:*"
+#     ]
+#     resources = ["*"]
+#   }
+#   # AmazonSSMFullAccess
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "cloudwatch:PutMetricData",
+#       "ds:CreateComputer",
+#       "ds:DescribeDirectories",
+#       "ec2:DescribeInstanceStatus",
+#       "logs:*",
+#       "ssm:*",
+#       "ec2messages:*"
+#     ]
+#     resources = ["*"]
+#   }
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "iam:CreateServiceLinkedRole"
+#     ]
+#     resources = ["arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"]
+#     # 3 ステートメントの条件を指定。条件を満たす場合にのみステートメントが適用。
+#     condition {
+#       test     = "StringLike"
+#       variable = "iam:AWSServiceName"
+#       values = [
+#         "ssm.amazonaws.com"
+#       ]
+#     }
+#   }
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "iam:DeleteServiceLinkedRole",
+#       "iam:GetServiceLinkedRoleDeletionStatus"
+#     ]
+#     resources = ["arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"]
+#   }
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "ssmmessages:CreateControlChannel",
+#       "ssmmessages:CreateDataChannel",
+#       "ssmmessages:OpenControlChannel",
+#       "ssmmessages:OpenDataChannel"
+#     ]
+#     resources = ["*"]
+#   }
+#   # CloudWatchAgentServerPolicy
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "cloudwatch:PutMetricData",
+#       "ec2:DescribeVolumes",
+#       "ec2:DescribeTags",
+#       "logs:PutLogEvents",
+#       "logs:DescribeLogStreams",
+#       "logs:DescribeLogGroups",
+#       "logs:CreateLogStream",
+#       "logs:CreateLogGroup"
+#     ]
+#     resources = ["*"]
+#   }
+#   statement {
+#     effect = "Allow"
+#     actions = [
+#       "ssm:GetParameter"
+#     ]
+#     resources = ["arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"]
+#   }
+# }
 # ------------------------------------------------------------------------------------------------
 # AmazonS3FullAccess
-data "aws_iam_policy_document" "s3_full_access_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "s3:*",
-      "s3-object-lambda:*"
-    ]
-    resources = ["*"]
-  }
-}
+# data "aws_iam_policy_document" "s3_full_access_policy" {
+# }
 # ------------------------------------------------------------------------------------------------
 # AmazonSSMFullAccess
-data "aws_iam_policy_document" "ssm_full_access_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "cloudwatch:PutMetricData",
-      "ds:CreateComputer",
-      "ds:DescribeDirectories",
-      "ec2:DescribeInstanceStatus",
-      "logs:*",
-      "ssm:*",
-      "ec2messages:*"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:CreateServiceLinkedRole"
-    ]
-    resources = ["arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"]
-    # 2 ステートメントの条件を指定。条件を満たす場合にのみステートメントが適用。
-    condition {
-      test     = "StringLike"
-      variable = "iam:AWSServiceName"
-      values = [
-        "ssm.amazonaws.com"
-      ]
-    }
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:DeleteServiceLinkedRole",
-      "iam:GetServiceLinkedRoleDeletionStatus"
-    ]
-    resources = ["arn:aws:iam::*:role/aws-service-role/ssm.amazonaws.com/AWSServiceRoleForAmazonSSM*"]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssmmessages:CreateControlChannel",
-      "ssmmessages:CreateDataChannel",
-      "ssmmessages:OpenControlChannel",
-      "ssmmessages:OpenDataChannel"
-    ]
-    resources = ["*"]
-  }
-}
+# data "aws_iam_policy_document" "ssm_full_access_policy" {
+# }
 # ------------------------------------------------------------------------------------------------
 # CloudWatchAgentServerPolicy
-data "aws_iam_policy_document" "cloudwatch_agent_server_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "cloudwatch:PutMetricData",
-      "ec2:DescribeVolumes",
-      "ec2:DescribeTags",
-      "logs:PutLogEvents",
-      "logs:DescribeLogStreams",
-      "logs:DescribeLogGroups",
-      "logs:CreateLogStream",
-      "logs:CreateLogGroup"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssm:GetParameter"
-    ]
-    resources = ["arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"]
-  }
-}
+# data "aws_iam_policy_document" "cloudwatch_agent_server_policy" {
+# }
 
+# 4
+# resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+#   role       = "portfolio-ecsTaskExecutionRole"
+# }
+# resource "aws_iam_role_policy_attachment" "s3_full_access" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+#   role       = "portfolio-ecsTaskExecutionRole"
+# }
+# resource "aws_iam_role_policy_attachment" "ssm_full_access" {
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+#   role       = "portfolio-ecsTaskExecutionRole"
+# }
+# resource "aws_iam_role_policy_attachment" "cloudwatch_agent_server_policy" {
+#   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+#   role       = "portfolio-ecsTaskExecutionRole"
+# }
 
 
 
@@ -162,6 +182,15 @@ terraform import aws_iam_role.[リソース名] [IAMロール名]
 
 ================================================================================================
 2
+既存のaws_iam_role設定に基づいて、特にカスタムポリシーが必要ない場合は、data "aws_iam_policy_document"の設
+定は不要です。カスタムポリシーが必要な場合、これらの追加設定が必要になります。
+------------------------------------------------------------------------------------------------
+Terraformの `data` ブロックは、Terraformの設定ファイル内でデータソースを定義し、そのデータを取得して設定ファイ
+ル内で使用するために使用されます。データソースは、AWS、Azureなどのクラウドプロバイダーから情報を取得するのに役立ち
+ます。
+
+================================================================================================
+3
 元の形
 "Condition": {
                 "StringLike": {
@@ -185,6 +214,16 @@ terraform import aws_iam_role.[リソース名] [IAMロール名]
 - この`condition` ブロックは、IAMのサービス名が "ssm.amazonaws.com" である場合にのみ、
 "iam:CreateServiceLinkedRole" というアクションを許可します。これは、AWSのSimple Systems Manager（SSM）サ
 ービスに特化した設定です。
+
+================================================================================================
+4
+既存のaws_iam_role設定に基づいて、特にカスタムポリシーが必要ない場合は、"aws_iam_role_policy_attachment"の
+設定は不要です。カスタムポリシーが必要な場合、これらの追加設定が必要になります。
+------------------------------------------------------------------------------------------------
+terraform import aws_iam_role_policy_attachment.<name> <ロール名>/<ポリシーのarn>
+実際の例：
+terraform import aws_iam_role_policy_attachment.ecs_task_execution_role_policy portfolio-ecsTaskExecutionRole/arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 IAMロールの設定値の解説
@@ -231,4 +270,5 @@ IAMロールの設定値の解説
   }
 -------------------------------------------------------------------------------------------------
 説明: ステートメントが適用される条件を指定します。この例では、指定されたIP範囲からのアクセスのみ許可されます。
+
 */

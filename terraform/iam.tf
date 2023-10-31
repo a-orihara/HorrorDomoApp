@@ -5,22 +5,8 @@
 # 1
 resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
   # このロールに対するポリシーの設定
-  # assume_role_policy    = data.aws_iam_policy_document.iam_policy_document.json
-  assume_role_policy = jsonencode(
-    {
-      Statement = [
-        {
-          Action = "sts:AssumeRole"
-          Effect = "Allow"
-          Principal = {
-            Service = "ecs-tasks.amazonaws.com"
-          }
-          Sid = ""
-        },
-      ]
-      Version = "2012-10-17"
-    }
-  )
+  assume_role_policy = data.aws_iam_policy_document.iam_policy_document.json
+
   description           = "Allows ECS tasks to call AWS services on your behalf."
   force_detach_policies = false
   # IAMロールにアタッチするAWS管理ポリシーのARN（Amazon Resource Name）のリストを指定します。
@@ -40,6 +26,19 @@ resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
 # ================================================================================================
 # IAM "aws_iam_policy_document"
 # ================================================================================================
+# 1.1
+data "aws_iam_policy_document" "iam_policy_document" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
+  version = "2012-10-17"
+}
 # 2 欄外 AmazonECSTaskExecutionRolePolicy
 # data "aws_iam_policy_document" "iam_policy_document" {
 #   # AmazonECSTaskExecutionRolePolicy
@@ -179,6 +178,23 @@ resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 terraform import aws_iam_role.[リソース名] [IAMロール名]
+
+================================================================================================
+1.1
+下記の書き換え
+{
+      Statement = [
+        {
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
+          Principal = {
+            Service = "ecs-tasks.amazonaws.com"
+          }
+          Sid = ""
+        },
+      ]
+      Version = "2012-10-17"
+}
 
 ================================================================================================
 2

@@ -64,7 +64,7 @@ resource "aws_lb_listener" "alb_listener_https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = aws_acm_certificate.acm_cert.arn
-  # certificate_arn   = "arn:aws:acm:ap-northeast-1:283956208428:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
+  # certificate_arn   = "arn:aws:acm:ap-northeast-1:283:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
   tags     = {}
   tags_all = {}
   default_action {
@@ -100,8 +100,8 @@ resource "aws_lb" "frontend_alb" {
   ]
   tags     = {}
   tags_all = {}
-  # vpc_id                           = "vpc-0fd0788c8a372ee22"
-  # zone_id                          = "Z14GRHDCWA56QT"
+  # vpc_id                           = "vpc-0fd"
+  # zone_id                          = "Z14"
   # access_logs {
   #     enabled = false
   # }

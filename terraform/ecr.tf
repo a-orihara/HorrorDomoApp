@@ -2,51 +2,51 @@
 # ECR "aws_ecr_repository"
 # ================================================================================================
 # 1
-resource "aws_ecr_repository" "nextjs-img-prod" {
-    # 1.1
-    image_tag_mutability = "MUTABLE"
-    # ECRリポジトリの名前
-    name                 = "nextjs-img-prod"
-    tags                 = {}
-    tags_all             = {}
-    # 1.2
-    encryption_configuration {
-        encryption_type = "AES256"
-    }
-    # 1.3
-    image_scanning_configuration {
-        scan_on_push = false
-    }
-    # 1.4
-    timeouts {}
+resource "aws_ecr_repository" "nextjs_img_prod" {
+  # 1.1
+  image_tag_mutability = "MUTABLE"
+  # ECRリポジトリの名前
+  name     = "nextjs-img-prod"
+  tags     = {}
+  tags_all = {}
+  # 1.2
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+  # 1.3
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+  # 1.4
+  timeouts {}
 }
 
-resource "aws_ecr_repository" "nginx-img-prod" {
-    image_tag_mutability = "MUTABLE"
-    name                 = "nginx-img-prod"
-    tags                 = {}
-    tags_all             = {}
-    encryption_configuration {
-        encryption_type = "AES256"
-    }
-    image_scanning_configuration {
-        scan_on_push = false
-    }
-    timeouts {}
+resource "aws_ecr_repository" "nginx_img_prod" {
+  image_tag_mutability = "MUTABLE"
+  name                 = "nginx-img-prod"
+  tags                 = {}
+  tags_all             = {}
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+  timeouts {}
 }
 
-resource "aws_ecr_repository" "rails-img-prod" {
-    image_tag_mutability = "MUTABLE"
-    name                 = "rails-img-prod"
-    tags                 = {}
-    tags_all             = {}
-    encryption_configuration {
-        encryption_type = "AES256"
-    }
-    image_scanning_configuration {
-        scan_on_push = false
-    }
-    timeouts {}
+resource "aws_ecr_repository" "rails_img_prod" {
+  image_tag_mutability = "MUTABLE"
+  name                 = "rails-img-prod"
+  tags                 = {}
+  tags_all             = {}
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+  timeouts {}
 }
 
 

@@ -260,7 +260,122 @@ resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
 # ECS "aws_ecs_service"
 # ================================================================================================
 # 3
-resource "aws_ecs_service" "fargate_service" {}
+resource "aws_ecs_service" "fargate_service" {
+  # ECSクラスターの識別子を指定
+  cluster = aws_ecs_cluster.ecs-on-fargate-cluster.id
+  # サービスのデプロイ時に利用可能なタスクの最大数のパーセンテージを指定
+  deployment_maximum_percent = 200
+  # サービスのデプロイ中に最低限健康な状態である必要があるタスクの最小パーセンテージを指定
+  deployment_minimum_healthy_percent = 100
+  # サービスで実行するタスクの希望する数を指定
+  desired_count = 1
+  # ECSによって管理されるタグが有効かを指定
+  enable_ecs_managed_tags = true
+  # EC2インスタンス用のExecute Commandが有効かを指定
+  enable_execute_command = true
+  # 健康チェックの許容期間を秒単位で指定
+  health_check_grace_period_seconds = 0
+  # サービスが使用するIAMロールの名前を指定
+  iam_role = "aws-service-role"
+  # サービスが使用する起動タイプを指定
+  launch_type = "FARGATE"
+  # サービスの名前を指定
+  name = "portfolio-fargate-service"
+  # サービスが使用するFargateプラットフォームのバージョンを指定
+  platform_version = "1.4.0"
+  # ECSサービスがタグを伝播する方法を指定
+  # propagate_tags                     = "NONE"
+  # タスクのスケジューリング戦略を指定。"REPLICA"：タスクの数を指定されたレプリカ数に保つことを意味。
+  scheduling_strategy = "REPLICA"
+  # サービスに関連付けるタグを指定
+  tags     = {}
+  tags_all = {}
+  # サービスで使用するタスク定義のARNを指定
+  task_definition = aws_ecs_task_definition.fargate_task_definition.arn
+  # デプロイメントのサーキットブレーカーの設定
+  deployment_circuit_breaker {
+    # サーキットブレーカーが有効でデプロイが失敗した場合にロールバックが行われるように設定
+    enable   = true
+    rollback = true
+  }
+  # デプロイメントのコントローラーのタイプを指定
+  deployment_controller {
+    type = "ECS"
+  }
+  # サービスに関連付けるロードバランサーの設定
+  load_balancer {
+    # ロードバランサーに関連付けるコンテナの名前
+    container_name = "nginx-fargate-ctr"
+    # コンテナが受け付けるポート
+    container_port = 80
+    # ターゲットグループのARN
+    target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-alb-tg/b691fd6684554ef8"
+  }
+  # サービスのネットワーク構成を指定
+  network_configuration {
+    # コンテナにパブリックIPアドレスを割り当てるかどうかの指定
+    assign_public_ip = true
+    # セキュリティグループのIDのリスト
+    security_groups = [
+      aws_security_group.pub_sg.id,
+    ]
+    # サービスが配置されるサブネットのIDのリスト
+    subnets = [
+      aws_subnet.pub_subnet_a.id,
+      aws_subnet.pub_subnet_c.id,
+    ]
+  }
+  # タイムアウトの設定を指定
+  timeouts {}
+}
+
+resource "aws_ecs_service" "fargate_service_frontend" {
+  cluster                            = aws_ecs_cluster.ecs-on-fargate-cluster.id
+  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 100
+  desired_count                      = 1
+  enable_ecs_managed_tags            = true
+  enable_execute_command             = false
+  health_check_grace_period_seconds  = 0
+  iam_role                           = "aws-service-role"
+  launch_type                        = "FARGATE"
+  name                               = "portfolio-fargate-service-frontend"
+  platform_version                   = "LATEST"
+  # propagate_tags                     = "NONE"
+  scheduling_strategy = "REPLICA"
+  tags                = {}
+  tags_all            = {}
+  task_definition     = aws_ecs_task_definition.fargate_task_definition_frontend.arn
+
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  load_balancer {
+    container_name   = "nextjs-fargate-ctr"
+    container_port   = 80
+    target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-frontend-alb-tg/0e4fdfc60b41a86f"
+  }
+
+  network_configuration {
+    assign_public_ip = true
+    security_groups = [
+      aws_security_group.front_sg.id,
+    ]
+    subnets = [
+      aws_subnet.pub_subnet_a.id,
+      aws_subnet.pub_subnet_c.id,
+    ]
+  }
+
+  timeouts {}
+}
+
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -313,4 +428,7 @@ terraform import aws_ecs_task_definition.fargate_task_definition arn:aws:ecs:ap-
 
 ================================================================================================
 3
+terraform import aws_ecs_service.<name> <cluster name>/<service name>
+実際の例：
+terraform import aws_ecs_service.fargate_service portfolio-ecs-on-fargate-cluster/portfolio-fargate-service
 */

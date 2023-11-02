@@ -48,7 +48,7 @@ resource "aws_acm_certificate" "acm_cert" {
 # resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
 resource "aws_route53_record" "acm_dns_resolve_record" {
   # fqdn    = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com"
-  # 2.1 形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。
+  # 2.1 メタ引数。形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。
   for_each = {
     # 2.2 domain_validation_optionsの各要素dvoに対し、key:dvo.domain_name（文字列）、値（object）のmapを作成
     for dvo in aws_acm_certificate.acm_cert.domain_validation_options : dvo.domain_name => {

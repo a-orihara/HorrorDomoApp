@@ -1,7 +1,8 @@
-# ---------------------------------------------
-# alb
-# ---------------------------------------------
-# 1
+# ================================================================================================
+# ALB "aws_lb"
+# ================================================================================================
+# ------------------------------------------------------------------------------------------------
+# 1 alb
 resource "aws_lb" "alb" {
   desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-alb-741782418.ap-northeast-1.elb.amazonaws.com"
@@ -39,45 +40,8 @@ resource "aws_lb" "alb" {
   timeouts {}
 }
 
-# ---------------------------------------------
-# alb_listener
-# ---------------------------------------------
-# 2
-resource "aws_lb_listener" "alb_listener_http" {
-  load_balancer_arn = aws_lb.alb.arn
-  port              = 80
-  protocol          = "HTTP"
-  tags              = {}
-  tags_all          = {}
-  default_action {
-    # エラーになるので一旦コメントアウト
-    # order            = 0
-    target_group_arn = aws_lb_target_group.alb_tg.arn
-    type             = "forward"
-  }
-  timeouts {}
-}
-
-resource "aws_lb_listener" "alb_listener_https" {
-  load_balancer_arn = aws_lb.alb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = aws_acm_certificate.acm_cert.arn
-  # certificate_arn   = "arn:aws:acm:ap-northeast-1:283:certificate/218fb7a9-efb2-4a7a-a18d-1748db66fa8c"
-  tags     = {}
-  tags_all = {}
-  default_action {
-    # order            = 0
-    target_group_arn = aws_lb_target_group.alb_tg.arn
-    type             = "forward"
-  }
-  timeouts {}
-}
-
-# ---------------------------------------------
+# ------------------------------------------------------------------------------------------------
 # frontend_alb
-# ---------------------------------------------
 resource "aws_lb" "frontend_alb" {
   desync_mitigation_mode = "defensive"
   # dns_name                         = "portfolio-frontend-alb-1834571258.ap-northeast-1.elb.amazonaws.com"
@@ -113,10 +77,43 @@ resource "aws_lb" "frontend_alb" {
   }
   timeouts {}
 }
+# ================================================================================================
+# ALB "alb_listener"
+# ================================================================================================
+# 2
+resource "aws_lb_listener" "alb_listener_http" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 80
+  protocol          = "HTTP"
+  tags              = {}
+  tags_all          = {}
+  default_action {
+    # エラーになるので一旦コメントアウト
+    # order            = 0
+    target_group_arn = aws_lb_target_group.alb_tg.arn
+    type             = "forward"
+  }
+  timeouts {}
+}
 
-# ---------------------------------------------
+resource "aws_lb_listener" "alb_listener_https" {
+  load_balancer_arn = aws_lb.alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = aws_acm_certificate.acm_cert.arn
+  tags              = {}
+  tags_all          = {}
+  default_action {
+    # order            = 0
+    target_group_arn = aws_lb_target_group.alb_tg.arn
+    type             = "forward"
+  }
+  timeouts {}
+}
+
+# ------------------------------------------------------------------------------------------------
 # frontend_alb_listener
-# ---------------------------------------------
 resource "aws_lb_listener" "frontend_alb_listener_http" {
   load_balancer_arn = aws_lb.frontend_alb.id
   port              = 80

@@ -1,7 +1,8 @@
 # ================================================================================================
 # ECS "aws_ecs_cluster"
 # ================================================================================================
-# 1
+# ------------------------------------------------------------------------------------------------
+# 1 "ecs-on-fargate-cluster"
 resource "aws_ecs_cluster" "ecs-on-fargate-cluster" {
   # 1.1
   capacity_providers = [
@@ -28,7 +29,8 @@ resource "aws_ecs_cluster" "ecs-on-fargate-cluster" {
 # ================================================================================================
 # ECS "aws_ecs_task_definition"
 # ================================================================================================
-# 2 rails、nginxのタスク定義
+# ------------------------------------------------------------------------------------------------
+# 2 "fargate_task_definition" rails、nginxのタスク定義
 resource "aws_ecs_task_definition" "fargate_task_definition" {
   # ECSタスク内で実行されるコンテナの設定。JSON形式。
   container_definitions = jsonencode(
@@ -201,6 +203,8 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
   }
 }
 
+# ------------------------------------------------------------------------------------------------
+# "fargate_task_definition_frontend"
 resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
   container_definitions = jsonencode(
     [
@@ -259,7 +263,8 @@ resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
 # ================================================================================================
 # ECS "aws_ecs_service"
 # ================================================================================================
-# 3
+# ------------------------------------------------------------------------------------------------
+# 3 "fargate_service"
 resource "aws_ecs_service" "fargate_service" {
   # ECSクラスターの識別子を指定
   cluster = aws_ecs_cluster.ecs-on-fargate-cluster.id
@@ -308,8 +313,8 @@ resource "aws_ecs_service" "fargate_service" {
     container_name = "nginx-fargate-ctr"
     # コンテナが受け付けるポート
     container_port = 80
-    # ターゲットグループのARN
-    target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-alb-tg/b691fd6684554ef8"
+    # ターゲットグループのARN。ここで設定した場合、aws_lb_target_group_attachmentの設定は不要。
+    target_group_arn = aws_lb_target_group.alb_tg.arn
   }
   # サービスのネットワーク構成を指定
   network_configuration {
@@ -328,7 +333,8 @@ resource "aws_ecs_service" "fargate_service" {
   # タイムアウトの設定を指定
   timeouts {}
 }
-
+# ------------------------------------------------------------------------------------------------
+# "fargate_service_frontend"
 resource "aws_ecs_service" "fargate_service_frontend" {
   cluster                            = aws_ecs_cluster.ecs-on-fargate-cluster.id
   deployment_maximum_percent         = 200
@@ -346,22 +352,18 @@ resource "aws_ecs_service" "fargate_service_frontend" {
   tags                = {}
   tags_all            = {}
   task_definition     = aws_ecs_task_definition.fargate_task_definition_frontend.arn
-
   deployment_circuit_breaker {
     enable   = true
     rollback = true
   }
-
   deployment_controller {
     type = "ECS"
   }
-
   load_balancer {
     container_name   = "nextjs-fargate-ctr"
     container_port   = 80
-    target_group_arn = "arn:aws:elasticloadbalancing:ap-northeast-1:283956208428:targetgroup/portfolio-frontend-alb-tg/0e4fdfc60b41a86f"
+    target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
   }
-
   network_configuration {
     assign_public_ip = true
     security_groups = [
@@ -372,7 +374,6 @@ resource "aws_ecs_service" "fargate_service_frontend" {
       aws_subnet.pub_subnet_c.id,
     ]
   }
-
   timeouts {}
 }
 

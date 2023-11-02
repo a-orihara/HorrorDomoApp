@@ -1,49 +1,63 @@
-# ---------------------------------------------
-# alb_tg
-# ---------------------------------------------
-# 1
+# ================================================================================================
+# ALB_TG "aws_lb_target_group"
+# ================================================================================================
+# ------------------------------------------------------------------------------------------------
+# 1 alb_tg
 resource "aws_lb_target_group" "alb_tg" {
   # 1.1
   deregistration_delay = "300"
   # 1.2
   load_balancing_algorithm_type = "round_robin"
-  name                          = "portfolio-alb-tg"
-  port                          = 80
-  protocol                      = "HTTP"
-  protocol_version              = "HTTP1"
+  # ターゲットグループの名前を指定
+  name = "portfolio-alb-tg"
+  # ターゲットグループが受け入れるトラフィックのポートを指定
+  port = 80
+  # ターゲットグループが使用するプロトコルを指定
+  protocol = "HTTP"
+  # ターゲットグループが使用するプロトコルのバージョンを指定
+  protocol_version = "HTTP1"
   # 新しいターゲットがトラフィックの対象となる際に、徐々にトラフィックを増やすための遅延時間
   slow_start = 0
   tags       = {}
   tags_all   = {}
   # 1.3
   target_type = "ip"
-  vpc_id      = aws_vpc.vpc.id
+  # ターゲットグループが属するVPCのIDを指定
+  vpc_id = aws_vpc.vpc.id
   # 1.4 ロードバランサーがターゲットの健康状態を監視するための設定
   health_check {
-    enabled             = true
-    healthy_threshold   = 5
-    interval            = 30
-    matcher             = "200"
-    path                = "/api/v1/health_check"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    timeout             = 5
+    # ヘルスチェックが有効か無効かを指定
+    enabled = true
+    # ターゲットが正常であると見なされるまでの連続した正常な応答の回数を指定
+    healthy_threshold = 5
+    # ヘルスチェックを実行する間隔（秒単位）を指定
+    interval = 30
+    # ヘルスチェックの応答と比較するステータスコードを指定
+    matcher = "200"
+    # ヘルスチェックリクエストのパスを指定
+    path = "/api/v1/health_check"
+    # ヘルスチェックの対象となるポートを指定。 "traffic-port":ALBのトラフィックポートを使用。
+    port = "traffic-port"
+    # ヘルスチェックに使用するプロトコルを指定
+    protocol = "HTTP"
+    # ターゲットへのヘルスチェックリクエストのタイムアウト時間（秒単位）を指定
+    timeout = 5
+    # ターゲットが異常であると見なされるまでの連続した異常な応答の回数
     unhealthy_threshold = 2
   }
-  # 1.5
+  # 1.5 スティッキーセッション（スティッキーセッションCookie）の設定
   stickiness {
+    # スティッキーセッションCookieの有効期間を秒単位で指定
     cookie_duration = 86400
-    enabled         = false
-    type            = "lb_cookie"
+    #  スティッキーセッションが有効か無効かを指定。falseは無効です。
+    enabled = false
+    # スティッキーセッションのタイプを指定
+    type = "lb_cookie"
   }
 }
 
-# 2
-# resource "aws_lb_target_group_attachment" "portfolio_alb_tg_att_tf" {}
-
-# ---------------------------------------------
+# ------------------------------------------------------------------------------------------------
 # frontend_alb_tg
-# ---------------------------------------------
 resource "aws_lb_target_group" "frontend_alb_tg" {
   deregistration_delay          = "300"
   load_balancing_algorithm_type = "round_robin"
@@ -73,6 +87,13 @@ resource "aws_lb_target_group" "frontend_alb_tg" {
     type            = "lb_cookie"
   }
 }
+
+# ================================================================================================
+# ALB_TG "aws_lb_target_group_attachment"
+# ================================================================================================
+# 2
+# resource "aws_lb_target_group_attachment" "alb_tg_att" {
+# }
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -126,6 +147,20 @@ target_typeは、ターゲットグループに登録されるターゲットの
 
 ================================================================================================
 2
-terraform import aws_lb_target_group_attachment.<NAME> <TARGET_GROUP_ARN/TARGET_ID/AVAILABILITY_ZONE
-
+resource "aws_lb_target_group_attachment"は、importできない。
+------------------------------------------------------------------------------------------------
+`aws_lb_target_group_attachment` は、AWSのターゲットグループ（Target Group）に対するターゲットのアタッチメ
+ントを設定するTerraformのリソースです。ターゲットグループにターゲット（例えばEC2インスタンスやコンテナ）を関連付
+けるために使用されます。
+------------------------------------------------------------------------------------------------
+ecsサービスのload_balancer>target_group_arn で設定した場合、aws_lb_target_group_attachmentは不要。
+- ECS サービスはターゲットグループとの統合が組み込まれています。したがって、ECS サービスの `load_balancer` ブ
+ロック内で `target_group_arn` を指定することにより、ECS タスクが自動的に対応するターゲットグループに登録（また
+は登録解除）されます。
+- `aws_lb_target_group_attachment` は、ターゲット（例: EC2 インスタンス）を ALB/NLB のターゲットグループ
+に手動でアタッチするためのリソースです。
+- ECS サービスを使用する場合、ECS サービスがタスクのライフサイクルを管理するため、手動でターゲットをターゲットグ
+ループにアタッチする必要はありません。
+- したがって、ECS サービスとターゲットグループを使用している場合、`aws_lb_target_group_attachment` は不要で
+す。
 */

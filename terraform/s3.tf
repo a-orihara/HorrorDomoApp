@@ -52,12 +52,29 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_server_
 resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   # バケットのバージョニング設定を指定
-
   versioning_configuration {
     # バージョニングが有効か無効かを指定
     status = "Disabled"
   }
 }
+
+# ================================================================================================
+# S3 "aws_s3_bucket_public_access_block"
+# ================================================================================================
+# 5
+resource "aws_s3_bucket_public_access_block" "s3_bucket_public_access_block" {
+  # true:バケットレベルのACL（アクセス制御リスト）によるパブリックアクセスをブロック
+  block_public_acls = true
+  # true:バケットポリシーによるパブリックアクセスをブロック
+  block_public_policy = true
+  bucket              = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
+  #  true:バケット内のオブジェクトに関連するパブリックACL（アクセス制御リスト）を無視
+  ignore_public_acls = true
+  # true:アカウント内のすべてのS3バケットに対してパブリックアクセスを制限
+  restrict_public_buckets = true
+}
+
+# resource "aws_s3_bucket_policy" "test" {}
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -92,5 +109,11 @@ terraform import aws_s3_bucket_versioning.<name> <作成したs3のバケット�
 terraform import aws_s3_bucket_versioning.s3_bucket_versioning portfolio-rails-active-strage-s3-bucket
 ------------------------------------------------------------------------------------------------
 "aws_s3_bucket"でversioningが非推奨になり、こちらのリソースを定義するようになった。
+
+================================================================================================
+5
+terraform import aws_s3_bucket_public_access_block.<name> <作成したs3のバケット名>
+実際の例：
+terraform import aws_s3_bucket_public_access_block.s3_bucket_public_access_block portfolio-rails-active-strage-s3-bucket
 
 */

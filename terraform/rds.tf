@@ -20,77 +20,77 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 # 2 RDSインスタンスのリソース
 resource "aws_db_instance" "mysql-rds-instance" {
   # RDSインスタンスに割り当てられたストレージのサイズを指定。5GBを割り当て。
-  allocated_storage          = 5
+  allocated_storage = 5
   # 2.1 デフォルトはfalse（しかしrds削除時はtrueにする）
-  apply_immediately                     = false
+  apply_immediately = false
   # マイナーバージョンの自動アップグレードを有効
   auto_minor_version_upgrade = true
   # RDSインスタンスをデプロイする利用可能なゾーン（Availability Zone）を指定
-  availability_zone          = "ap-northeast-1a"
+  availability_zone = "ap-northeast-1a"
   # バックアップの保持期間を指定。7日間の保持期間を設定。
-  backup_retention_period    = 7
+  backup_retention_period = 7
   # バックアップの実行ウィンドウを指定。"13:13-13:43"の期間内にバックアップがスケジュール。
-  backup_window              = "13:13-13:43"
+  backup_window = "13:13-13:43"
   # RDSインスタンスに使用するCA証明書の識別子を指定
-  ca_cert_identifier         = "rds-ca-2019"
+  ca_cert_identifier = "rds-ca-2019"
   # インスタンスから作成されるスナップショットにタグをコピーするかどうかを指定
-  copy_tags_to_snapshot      = true
+  copy_tags_to_snapshot = true
   # カスタマー所有のIP（Customer-Owned IP）を有効にするかどうかを指定
-  customer_owned_ip_enabled  = false
+  customer_owned_ip_enabled = false
   # 作成した"aws_db_subnet_group"を指定。idではなくnameを指定
-  db_subnet_group_name     = aws_db_subnet_group.rds_subnet_group.name
+  db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
   # 自動バックアップを削除するかどうかを指定
   delete_automated_backups = true
   # インスタンスの削除防止を有効にするかどうかを指定（しかし削除時はfalseにする）
-  deletion_protection                 = true
+  deletion_protection = true
   # クラウドウォッチログエクスポートを有効にするログの種類のリスト
-  enabled_cloudwatch_logs_exports     = []
+  enabled_cloudwatch_logs_exports = []
   # データベースエンジンを指定
-  engine                              = "mysql"
+  engine = "mysql"
   # データベースエンジンのバージョンを指定
-  engine_version                      = "8.0.33"
+  engine_version = "8.0.33"
   # IAMデータベース認証を有効にするかどうかを指定
   iam_database_authentication_enabled = false
   # このidentifierがこのrdsインスタンスの名前。変数使用時はvar.を付ける。
-  identifier            = var.rds_instance_name
+  identifier = var.rds_instance_name
   # RDSインスタンスのインスタンスタイプを指定
-  instance_class        = "db.t3.micro"
+  instance_class = "db.t3.micro"
   # インスタンスのプロビジョンドIOPSを指定。0：プロビジョンドIOPSは割り当てなし
-  iops                  = 0
+  iops = 0
   # データベースのライセンスモデルを指定
-  license_model         = "general-public-license"
+  license_model = "general-public-license"
   # メンテナンスウィンドウを指定
-  maintenance_window    = "thu:19:58-thu:20:28"
+  maintenance_window = "thu:19:58-thu:20:28"
   # 最大割り当てストレージサイズを指定
   max_allocated_storage = 0
   # モニタリングインターバルを指定。 60秒を指定
-  monitoring_interval   = 60
+  monitoring_interval = 60
   # マルチAZ展開を有効にするかどうかを指定
-  multi_az              = false
+  multi_az = false
   # オプショングループの名前を指定
-  option_group_name     = "default:mysql-8-0"
+  option_group_name = "default:mysql-8-0"
   # 2.2
   # password                              = var.mysql_db_password
   # パラメータグループの名前を指定
-  parameter_group_name                  = "default.mysql8.0"
+  parameter_group_name = "default.mysql8.0"
   # パフォーマンスインサイトを有効にするかどうかを指定
-  performance_insights_enabled          = false
+  performance_insights_enabled = false
   #  パフォーマンスインサイトのデータの保持期間を指定
   performance_insights_retention_period = 0
   # データベースにアクセスするためのポート番号を指定
-  port                                  = 3306
+  port = 3306
   # インターネットからのアクセスを有効にするかどうかを指定
-  publicly_accessible                   = false
+  publicly_accessible = false
   # セキュリティグループの名前のリスト
-  security_group_names                  = []
+  security_group_names = []
   # 2.3 インスタンスを削除する際に最終スナップショットをスキップするかどうかを指定。（rds削除時はtrueにする）。
   skip_final_snapshot = true
   # ストレージの暗号化を有効にするかどうかを指定
-  storage_encrypted   = true
+  storage_encrypted = true
   # ストレージのタイプを指定
-  storage_type        = "standard"
-  tags                = {}
-  tags_all            = {}
+  storage_type = "standard"
+  tags         = {}
+  tags_all     = {}
   # RDSインスタンスのではなく、MySQLデータベースに接続するためのMySQLのユーザー名を指定
   username = var.mysql_db_username
   # インスタンスに関連付けるセキュリティグループのIDのリスト

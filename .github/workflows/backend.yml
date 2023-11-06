@@ -35,11 +35,12 @@ jobs:
           - 3306:3306
         # jobs.<job_id>.services.<service_name>.env:コンテナ内の環境変数を定義。
         env:
+          # 4.3
           MYSQL_ROOT_USER: root
           # MYSQL_ROOT_PASSWORDに空を設定できる用にするフラグ."yes"を設定することで空を設定することが可能。
           # MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_ROOT_PASSWORD: rootroot
-        # 4.3 jobs.<job_id>.services.<service_name>.options
+        # 4.4 jobs.<job_id>.services.<service_name>.options
         options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
     # 5 ステップ。jobs.<job_id>.services.steps:jobが実行するステップの定義
     steps:
@@ -121,7 +122,7 @@ jobs:
 # 1
 # 一般的にCI/CDでやることはビルドとテストとデプロイの3点です。
 # ------------------------------------------------------------------------------------------------
-# - CI/CDとは「Continuous Integration（継続的インテグレーション）」と、
+# - CI/CDとは「Continuous Integration（継続的インテグレーション「統合」）」と、
 # 「Continuous Deployment/Continuous Delivery（継続的デプロイメント/継続的デリバリー）」の略です。
 # ------------------------------------------------------------------------------------------------
 ### Continuous Integration（継続的インテグレーション）
@@ -263,6 +264,21 @@ jobs:
 
 # ================================================================================================
 # 4.3
+# - MYSQL_ROOT_PASSWORD: rootroot` は、仮想環境、特に GitHub Actions ワークフローで定義されている CI/CD パ
+# イプラインで使用します。
+# - この値は、リポジトリにアクセスできる人なら誰でも見ることができるので、本当のパスワードであってはいけません。
+# - いいえ。`.github/workflows/backend.yml` は、たとえ `MYSQL_ROOT_PASSWORD: rootroot` のような直接的な
+# 値が含まれていても、`.gitignore` に含めるべきではありません。
+# - ワークフローファイルはリポジトリの一部にしておく必要があります。そうすれば、GitHub Actions で CI/CD パイプラ
+# インを自動化できるようになります。
+# - しかし、**ワークフローファイルには機密情報を書かないようにしましょう**。データベースのパスワードのような機密情報
+# は、GitHub Secrets を使ってワークフローファイルで参照するようにしましょう。こうすることで、機密データを安全に保
+# つことができます。
+# - 非稼働環境やテスト環境では、`rootroot` のような単純なパスワードを使うのが比較的一般的です。その代わりに、
+# GitHub Secrets を使ったよりセキュアな方法を選びましょう。特にリポジトリが公開されている場合はなおさらです。
+
+# ================================================================================================
+# 4.4
 # jobs.<job_id>.services.<service_name>.ports:
 # ホストマシンからサービスコンテナにアクセスするポート番号を定義。
 

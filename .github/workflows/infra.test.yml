@@ -19,6 +19,7 @@ permissions:
 # envセクションはGitHub Actionsワークフロー内で使用される環境変数を設定するためのセクション
 env:
   TF_VERSION: 1.1.3
+  AWS_REGION: ap-northeast-1
 
 # 全てのjobに対するデフォルト動作を設定
 defaults:
@@ -38,6 +39,7 @@ jobs:
       - name: Cehckout repository
         # リポジトリのコードやファイルをワークフローの実行環境にチェックアウト（ダウンロード）するためのアクション
         uses: actions/checkout@v3
+
       - name: Setup terraform
         # terraformのセットアップをするアクション
         uses: hashicorp/setup-terraform@v2
@@ -45,6 +47,26 @@ jobs:
         with:
           # ${{}}:git hub actionの式。env.でgithubactionで設定した環境変数を利用可能
           terraform_version: ${{ env.TF_VERSION }}
+
+      # initの前にfmtを実行
+      - name: Terraform format
+        # 3
+        run: |
+          terraform fmt -check
+
+       # initにawsのキーが必要
+      - name: Configure AWS Credential
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          # このアクションに必須の引数 env.:git hub actionで設定した環境変数
+          aws-region: ${{ env.AWS_REGION }}
+          # roleのarnを使用 secrets.:git hub上で設定したsecretで作成した環境変数
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      
+      - name: Terraform init
+        # git hub actionのログは色がない為、no colorを設定
+        run: |
+          terraform init -no-color
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 2
@@ -70,3 +92,10 @@ jobs:
 # - `contents: この設定は、GitHub Actionsがリポジトリ内のファイルやディレクトリのコンテンツを読み取る権限を持つ
 # ことを示しています。
 # - 具体的には、Terraform設定ファイルやその他のリソースを読み取ってAWSの認証情報やデプロイに必要な情報を取得します。
+
+# ================================================================================================
+# 3
+# フォーマットの修正が入るファイルがあるかどうかをチェックできます。なお、修正の実行はしません。あくまでもチェック。
+# 実際にファイルの内容を変更するのではなく、フォーマットが正しくない場合にはそれを報告します。
+# ファイルがすでに正しいフォーマットであれば、0を返し、何も出力せずに終了します。
+# ファイルがフォーマットの規約に従っていなければ、それを標準出力に表示し、0以外の終了コードを返します。

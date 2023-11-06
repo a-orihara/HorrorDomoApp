@@ -54,7 +54,7 @@ jobs:
         run: |
           terraform fmt -check
 
-       # initにawsのキーが必要
+      # initにawsのキーが必要
       - name: Configure AWS Credential
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -62,11 +62,15 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           # roleのarnを使用 secrets.:git hub上で設定したsecretで作成した環境変数
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
-      
+
       - name: Terraform init
         # git hub actionのログは色がない為、no colorを設定
         run: |
           terraform init -no-color
+
+      - name: Terraform validate
+        run: |
+          terraform validate -no-color
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 2

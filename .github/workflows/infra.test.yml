@@ -1,0 +1,101 @@
+name: "infra test"
+
+on:
+  push:
+    branches:
+      - main
+    # paths:
+    #   - 10_infra/**
+    #   - .github/workflows/**
+  workflow_dispatch:
+
+# 2
+permissions:
+  # 2.1
+  id-token: write
+  # 2.2
+  contents: read
+
+# envセクションはGitHub Actionsワークフロー内で使用される環境変数を設定するためのセクション
+env:
+  TF_VERSION: 1.1.3
+  AWS_REGION: ap-northeast-1
+
+# 全てのjobに対するデフォルト動作を設定
+defaults:
+  run:
+    shell: bash
+    working-directory: ./terraform
+
+jobs:
+  # jobsのマップのキー（<job_id>）。すなわちid。jobs.<job_id>:rspec。<job_id>:名は重複不可。
+  preview:
+    # jobの名前（ = jobs<job_id>.name ）
+    name: Preview
+    # runs-on:jobが実行されるマシン。必須の設定。
+    runs-on: ubuntu-latest
+    steps:
+      # jobs.<job_id>.steps.name:ステップの名前。
+      - name: Cehckout repository
+        # リポジトリのコードやファイルをワークフローの実行環境にチェックアウト（ダウンロード）するためのアクション
+        uses: actions/checkout@v3
+
+      - name: Setup terraform
+        # terraformのセットアップをするアクション
+        uses: hashicorp/setup-terraform@v2
+        # アクションの引数
+        with:
+          # ${{}}:git hub actionの式。env.でgithubactionで設定した環境変数を利用可能
+          terraform_version: ${{ env.TF_VERSION }}
+
+      # initの前にfmtを実行
+      - name: Terraform format
+        # 3
+        run: |
+          terraform fmt -check
+
+       # initにawsのキーが必要
+      - name: Configure AWS Credential
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          # このアクションに必須の引数 env.:git hub actionで設定した環境変数
+          aws-region: ${{ env.AWS_REGION }}
+          # roleのarnを使用 secrets.:git hub上で設定したsecretで作成した環境変数
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      
+      - name: Terraform init
+        # git hub actionのログは色がない為、no colorを設定
+        run: |
+          terraform init -no-color
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 2
+# . **`permissions:` の解説**
+# - `permissions:` キーはGitHub Actions ワークフロー内で、ジョブが GitHub のリソースにアクセスする際に必要な
+# 権限レベルを設定するために使用されます。
+# - `permissions:` キーで指定された権限以外のアクションについては、そのワークフローは実行できません。
+# - `permissions:` キーを全く指定しない場合、ワークフローはリポジトリに設定されているデフォルトの権限レベルを継承
+# します。2021年4月以降に作成されたリポジトリでは、デフォルトの権限レベルは「読み取りと書き込みの権限」です。
+# - 各権限は、GitHub APIへのアクセスレベルを明示的に制限または許可するために詳細に設定することができます。セキュリ
+# ティのベストプラクティスとして、最小限の権限原則（Principle of Least Privilege）に従って、必要な操作に対して
+# のみ必要な権限を付与するべきです。
+
+# ================================================================================================
+# 2.1
+# - `id-token: write` は、id-tokenの書き換え許可。
+# - GitHub ActionsがOIDC（OpenID Connect）トークンを生成し、書き込む権限を持つことを示しています。OIDCトークン
+# はAWSの認証に使用され、AWSリソースへのアクセスを認証するために必要です。GitHub Actionsはこのトークンを生成し、
+# AWSに対して認証情報として提供します。
+
+# ================================================================================================
+# 2.2
+# - `contents: この設定は、GitHub Actionsがリポジトリ内のファイルやディレクトリのコンテンツを読み取る権限を持つ
+# ことを示しています。
+# - 具体的には、Terraform設定ファイルやその他のリソースを読み取ってAWSの認証情報やデプロイに必要な情報を取得します。
+
+# ================================================================================================
+# 3
+# フォーマットの修正が入るファイルがあるかどうかをチェックできます。なお、修正の実行はしません。あくまでもチェック。
+# 実際にファイルの内容を変更するのではなく、フォーマットが正しくない場合にはそれを報告します。
+# ファイルがすでに正しいフォーマットであれば、0を返し、何も出力せずに終了します。
+# ファイルがフォーマットの規約に従っていなければ、それを標準出力に表示し、0以外の終了コードを返します。

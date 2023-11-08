@@ -5,8 +5,6 @@
 resource "aws_s3_bucket" "rails_active_strage_s3_bucket" {
   # S3 バケットの名前を指定
   bucket = "portfolio-rails-active-strage-s3-bucket"
-  # バケットのホステッドゾーンIDを指定
-  hosted_zone_id = aws_route53_zone.route53_zone.id
   # オブジェクトロックが有効か無効かを指定
   object_lock_enabled = false
   tags                = {}

@@ -9,10 +9,6 @@ resource "aws_vpc" "vpc" {
   enable_dns_support = true
   # DNSホスト名のサポートを無効（デフォルト）
   enable_dns_hostnames = false
-  # EC2-Classicとのリンクを無効（デフォルト）
-  enable_classiclink = false
-  # ClassicLink DNS サポートを無効（デフォルト）
-  enable_classiclink_dns_support = false
   # 1.1 インスタンスのテナンシー設定
   instance_tenancy = "default"
   tags = {

@@ -30,11 +30,17 @@ resource "aws_s3_bucket" "horror_domo_app_tfstate_s3" {
 # S3 "aws_s3_bucket_request_payment_configuration""
 # ================================================================================================
 # 2 リクエストを支払うエンティティを指定。"BucketOwner":バケットの所有者がリクエストを支払います。
-resource "aws_s3_bucket_request_payment_configuration" "s3_bucket_request_payment_configuration" {
+resource "aws_s3_bucket_request_payment_configuration" "rails_active_strage_s3_bucket_payment" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   payer  = "BucketOwner"
 }
 
+# ------------------------------------------------------------------------------------------------
+# "horror_domo_app_tfstate_s3_bucket_payment"
+resource "aws_s3_bucket_request_payment_configuration" "horror_domo_app_tfstate_s3_bucket_payment" {
+  bucket = "horror-domo-app-tfstate-s3"
+  payer  = "BucketOwner"
+}
 # ================================================================================================
 # S3 "aws_s3_bucket_server_side_encryption_configuration"
 # ================================================================================================

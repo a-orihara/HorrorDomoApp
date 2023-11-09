@@ -44,7 +44,7 @@ resource "aws_s3_bucket_request_payment_configuration" "portfolio_tfstate_s3_buc
 # ================================================================================================
 # S3 "aws_s3_bucket_server_side_encryption_configuration"
 # ================================================================================================
-# 3 サーバーサイドの暗号化設定を指定。
+# 3 "rails_active_strage_s3_bucket_sse" サーバーサイドの暗号化設定を指定。
 resource "aws_s3_bucket_server_side_encryption_configuration" "rails_active_strage_s3_bucket_sse" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   # 暗号化設定のルールを指定
@@ -59,6 +59,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "rails_active_stra
   }
 }
 # ------------------------------------------------------------------------------------------------
+# "portfolio_tfstate_s3_bucket_sse"
 resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_tfstate_s3_bucket_sse" {
   bucket = aws_s3_bucket.portfolio_tfstate_s3_bucket.bucket
   rule {
@@ -73,7 +74,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_tfstate
 # S3 "aws_s3_bucket_versioning"
 # ================================================================================================
 # 4
-resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {
+resource "aws_s3_bucket_versioning" "rails_active_strage_s3_bucket_versioning" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   # バケットのバージョニング設定を指定
   versioning_configuration {
@@ -81,6 +82,9 @@ resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {
     status = "Disabled"
   }
 }
+
+
+# resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {}
 
 # ================================================================================================
 # S3 "aws_s3_bucket_public_access_block"

@@ -18,8 +18,8 @@ resource "aws_s3_bucket" "rails_active_strage_s3_bucket" {
 
 # ------------------------------------------------------------------------------------------------
 # "horror_domo_app_tfstate_s3"
-resource "aws_s3_bucket" "horror_domo_app_tfstate_s3" {
-  bucket              = "horror-domo-app-tfstate-s3"
+resource "aws_s3_bucket" "portfolio_tfstate_s3_bucket" {
+  bucket              = "portfolio-tfstate-s3-bucket"
   object_lock_enabled = false
   tags                = {}
   tags_all            = {}
@@ -36,8 +36,8 @@ resource "aws_s3_bucket_request_payment_configuration" "rails_active_strage_s3_b
 }
 # ------------------------------------------------------------------------------------------------
 # "horror_domo_app_tfstate_s3_bucket_payment"
-resource "aws_s3_bucket_request_payment_configuration" "horror_domo_app_tfstate_s3_bucket_payment" {
-  bucket = "horror-domo-app-tfstate-s3"
+resource "aws_s3_bucket_request_payment_configuration" "portfolio_tfstate_s3_bucket_payment" {
+  bucket = "portfolio-tfstate-s3-bucket"
   payer  = "BucketOwner"
 }
 
@@ -59,8 +59,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "rails_active_stra
   }
 }
 # ------------------------------------------------------------------------------------------------
-resource "aws_s3_bucket_server_side_encryption_configuration" "horror_domo_app_tfstate_s3_bucket_sse" {
-  bucket = aws_s3_bucket.horror_domo_app_tfstate_s3.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_tfstate_s3_bucket_sse" {
+  bucket = aws_s3_bucket.portfolio_tfstate_s3_bucket.bucket
   rule {
     bucket_key_enabled = true
     apply_server_side_encryption_by_default {

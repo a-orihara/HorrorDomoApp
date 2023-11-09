@@ -94,7 +94,7 @@ resource "aws_s3_bucket_versioning" "portfolio_tfstate_s3_bucket_versioning" {
 # S3 "aws_s3_bucket_public_access_block"
 # ================================================================================================
 # 5
-resource "aws_s3_bucket_public_access_block" "s3_bucket_public_access_block" {
+resource "aws_s3_bucket_public_access_block" "rails_active_strage_s3_bucket_public_access_block" {
   # true:バケットレベルのACL（アクセス制御リスト）によるパブリックアクセスをブロック
   block_public_acls = true
   # true:バケットポリシーによるパブリックアクセスをブロック
@@ -103,6 +103,14 @@ resource "aws_s3_bucket_public_access_block" "s3_bucket_public_access_block" {
   #  true:バケット内のオブジェクトに関連するパブリックACL（アクセス制御リスト）を無視
   ignore_public_acls = true
   # true:アカウント内のすべてのS3バケットに対してパブリックアクセスを制限
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_public_access_block" "portfolio_tfstate_s3_bucket_public_access_block" {
+  block_public_acls       = true
+  block_public_policy     = true
+  bucket                  = aws_s3_bucket.portfolio_tfstate_s3_bucket.bucket
+  ignore_public_acls      = true
   restrict_public_buckets = true
 }
 

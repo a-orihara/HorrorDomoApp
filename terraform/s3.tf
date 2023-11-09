@@ -82,10 +82,14 @@ resource "aws_s3_bucket_versioning" "rails_active_strage_s3_bucket_versioning" {
     status = "Disabled"
   }
 }
-
-
-# resource "aws_s3_bucket_versioning" "s3_bucket_versioning" {}
-
+# ------------------------------------------------------------------------------------------------
+# "portfolio_tfstate_s3_bucket_versioning"
+resource "aws_s3_bucket_versioning" "portfolio_tfstate_s3_bucket_versioning" {
+  bucket = aws_s3_bucket.portfolio_tfstate_s3_bucket.bucket
+  versioning_configuration {
+    status = "Disabled"
+  }
+}
 # ================================================================================================
 # S3 "aws_s3_bucket_public_access_block"
 # ================================================================================================

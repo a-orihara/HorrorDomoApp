@@ -18,7 +18,7 @@ terraform {
   # 1.4
   backend "s3" {
     # 1.5
-    bucket = "horror-domo-app-tfstate-s3" # 仮の値を入れています
+    bucket = "portfolio-tfstate-s3-bucket" # 仮の値を入れています
     # 1.6
     key = "terraform.tfstate"
     # 1.7

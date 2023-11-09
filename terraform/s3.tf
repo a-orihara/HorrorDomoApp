@@ -34,18 +34,18 @@ resource "aws_s3_bucket_request_payment_configuration" "rails_active_strage_s3_b
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   payer  = "BucketOwner"
 }
-
 # ------------------------------------------------------------------------------------------------
 # "horror_domo_app_tfstate_s3_bucket_payment"
 resource "aws_s3_bucket_request_payment_configuration" "horror_domo_app_tfstate_s3_bucket_payment" {
   bucket = "horror-domo-app-tfstate-s3"
   payer  = "BucketOwner"
 }
+
 # ================================================================================================
 # S3 "aws_s3_bucket_server_side_encryption_configuration"
 # ================================================================================================
 # 3 サーバーサイドの暗号化設定を指定。
-resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_server_side_encryption_configuration" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "rails_active_strage_s3_bucket_sse" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   # 暗号化設定のルールを指定
   rule {
@@ -54,6 +54,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_server_
     # デフォルトのサーバーサイド暗号化設定を適用。オブジェクトがアップロードされるときに自動的に適用される。
     apply_server_side_encryption_by_default {
       # サーバーサイド暗号化のアルゴリズムを指定
+      sse_algorithm = "AES256"
+    }
+  }
+}
+# ------------------------------------------------------------------------------------------------
+resource "aws_s3_bucket_server_side_encryption_configuration" "horror_domo_app_tfstate_s3_bucket_sse" {
+  bucket = aws_s3_bucket.horror_domo_app_tfstate_s3.bucket
+  rule {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
   }

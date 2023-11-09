@@ -16,6 +16,16 @@ resource "aws_s3_bucket" "rails_active_strage_s3_bucket" {
   # }
 }
 
+# ------------------------------------------------------------------------------------------------
+# "horror_domo_app_tfstate_s3"
+resource "aws_s3_bucket" "horror_domo_app_tfstate_s3" {
+  bucket              = "horror-domo-app-tfstate-s3"
+  object_lock_enabled = false
+  tags                = {}
+  tags_all            = {}
+}
+
+
 # ================================================================================================
 # S3 "aws_s3_bucket_request_payment_configuration""
 # ================================================================================================

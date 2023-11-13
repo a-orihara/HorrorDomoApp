@@ -6,13 +6,15 @@
 # terraformブロック：Terraformの構成と要件を指定
 terraform {
   # 1.1
-  required_version = ">=1.3.10"
+  # required_version = ">=1.3.10"
+  required_version = "= 1.3.10"
   required_providers {
     aws = {
       # 1.2
       source = "hashicorp/aws"
       # 1.3
-      version = "~> 5.20.1"
+      # version = "~> 5.20.1"
+      version = "= 5.20.1"
     }
   }
   # 1.4

@@ -9,11 +9,6 @@ resource "aws_s3_bucket" "rails_active_strage_s3_bucket" {
   object_lock_enabled = false
   tags                = {}
   tags_all            = {}
-  # versioning {
-  #   enabled = false
-  #   # バージョニングが有効で、オブジェクトの削除に多要素認証（MFA）が必要かどうかを指定
-  #   mfa_delete = false
-  # }
 }
 
 # ------------------------------------------------------------------------------------------------
@@ -25,7 +20,6 @@ resource "aws_s3_bucket" "portfolio_tfstate_s3_bucket" {
   tags_all            = {}
 }
 
-
 # ================================================================================================
 # S3 "aws_s3_bucket_request_payment_configuration""
 # ================================================================================================
@@ -34,6 +28,7 @@ resource "aws_s3_bucket_request_payment_configuration" "rails_active_strage_s3_b
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   payer  = "BucketOwner"
 }
+
 # ------------------------------------------------------------------------------------------------
 # "horror_domo_app_tfstate_s3_bucket_payment"
 resource "aws_s3_bucket_request_payment_configuration" "portfolio_tfstate_s3_bucket_payment" {
@@ -58,6 +53,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "rails_active_stra
     }
   }
 }
+
 # ------------------------------------------------------------------------------------------------
 # "portfolio_tfstate_s3_bucket_sse"
 resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_tfstate_s3_bucket_sse" {
@@ -82,6 +78,7 @@ resource "aws_s3_bucket_versioning" "rails_active_strage_s3_bucket_versioning" {
     status = "Disabled"
   }
 }
+
 # ------------------------------------------------------------------------------------------------
 # "portfolio_tfstate_s3_bucket_versioning"
 resource "aws_s3_bucket_versioning" "portfolio_tfstate_s3_bucket_versioning" {
@@ -90,6 +87,7 @@ resource "aws_s3_bucket_versioning" "portfolio_tfstate_s3_bucket_versioning" {
     status = "Disabled"
   }
 }
+
 # ================================================================================================
 # S3 "aws_s3_bucket_public_access_block"
 # ================================================================================================
@@ -106,6 +104,8 @@ resource "aws_s3_bucket_public_access_block" "rails_active_strage_s3_bucket_publ
   restrict_public_buckets = true
 }
 
+# ------------------------------------------------------------------------------------------------
+# "portfolio_tfstate_s3_bucket_public_access_block"
 resource "aws_s3_bucket_public_access_block" "portfolio_tfstate_s3_bucket_public_access_block" {
   block_public_acls       = true
   block_public_policy     = true

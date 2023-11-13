@@ -1,0 +1,67 @@
+name: "slack-notify-test"
+
+on:
+  # 手動実行のみ
+  workflow_dispatch:
+
+jobs:
+  # jobsのマップのキー（<job_id>）。すなわちid。jobs.<job_id>:rspec。
+  notify:
+    # jobの名前（ = jobs<job_id>.name ）
+    name: slack-notify-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: slack-notify
+        # 外部アクションを指定
+        # Slackへの通知の為、指定されたSlackチャンネルにメッセージを送信する機能を提供。
+        uses: slackapi/slack-github-action@v1.22.0
+        # jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
+        with:
+          # slackのチャンネルIDを指定
+          channel-id: "C06574M0PK8"
+          # 1 YAMLファイル内で|は、複数行にわたる文字列を表すために使用されます。
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#0068B7",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Message Header",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "Hello World :ghost:"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          # slacアプリ作成の際に一緒に作成したbot_token
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 1
+# . `with`の`payload`キーの解説:
+# - `payload`キーは、GitHub ActionsのワークフローでSlack通知をカスタマイズするために使用されます。
+# - このキーは、Slackへ送信されるメッセージの内容とフォーマットをJSON形式で定義します。
+# - ここで定義された内容は、Slack APIによって解釈され、指定されたチャンネルにメッセージが送信されます。
+# ------------------------------------------------------------------------------------------------
+# . `with`の`payload`キーに設定する内容:
+# - 以下の例では、Slackメッセージにアタッチメントが含まれており、そのフォーマットが指定されています。
+# - アタッチメントには色(`color`)、ヘッダー(`header`)、セクション(`section`)が含まれています。
+# - ヘッダーには「Message Header」というテキストが、セクションには「Hello World :ghost:」というMarkdown形式
+# のテキストが含まれています。
+# - この設定により、指定したフォーマットでSlackチャンネルにメッセージが投稿されます。
+# ------------------------------------------------------------------------------------------------
+# . attachmentsは、Slackメッセージに追加される構造化されたデータブロックです。
+# これにより、Slackメッセージ内で複数のセクションや要素をカスタマイズして表示することができます。

@@ -3,12 +3,7 @@
 # ================================================================================================
 # ------------------------------------------------------------------------------------------------
 # 1 "ecs-on-fargate-cluster"
-resource "aws_ecs_cluster" "ecs-on-fargate-cluster" {
-  # 1.1
-  capacity_providers = [
-    "FARGATE",
-    "FARGATE_SPOT",
-  ]
+resource "aws_ecs_cluster" "ecs-on_fargate_cluster" {
   # ECSクラスターの名前を指定
   name     = "portfolio-ecs-on-fargate-cluster"
   tags     = {}
@@ -267,7 +262,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
 # 3 "fargate_service"
 resource "aws_ecs_service" "fargate_service" {
   # ECSクラスターの識別子を指定
-  cluster = aws_ecs_cluster.ecs-on-fargate-cluster.id
+  cluster = aws_ecs_cluster.ecs-on_fargate_cluster.id
   # サービスのデプロイ時に利用可能なタスクの最大数のパーセンテージを指定
   deployment_maximum_percent = 200
   # サービスのデプロイ中に最低限健康な状態である必要があるタスクの最小パーセンテージを指定
@@ -336,7 +331,7 @@ resource "aws_ecs_service" "fargate_service" {
 # ------------------------------------------------------------------------------------------------
 # "fargate_service_frontend"
 resource "aws_ecs_service" "fargate_service_frontend" {
-  cluster                            = aws_ecs_cluster.ecs-on-fargate-cluster.id
+  cluster                            = aws_ecs_cluster.ecs-on_fargate_cluster.id
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
   desired_count                      = 1
@@ -392,10 +387,6 @@ terraform import aws_ecs_cluster.ecs-on-fargate-cluster portfolio-ecs-on-fargate
 
 ================================================================================================
 1.1
-- `capacity_providers`: この設定は、ECSクラスターが使用するキャパシティプロバイダーを指定します。キャパシティ
-プロバイダーは、ECSタスクを実行するためのリソースを提供する方法を定義します。提供されたコードでは "FARGATE" と
-"FARGATE_SPOT" の2つのキャパシティプロバイダーが指定されています。これらはAWS FargateおよびFargate Spotキャ
-パシティプロバイダーを示しており、ECSタスクがFargate上で実行されることを意味します。
 
 ================================================================================================
 1.2

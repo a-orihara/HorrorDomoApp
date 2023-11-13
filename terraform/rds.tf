@@ -81,8 +81,6 @@ resource "aws_db_instance" "mysql-rds-instance" {
   port = 3306
   # インターネットからのアクセスを有効にするかどうかを指定
   publicly_accessible = false
-  # セキュリティグループの名前のリスト
-  security_group_names = []
   # 2.3 インスタンスを削除する際に最終スナップショットをスキップするかどうかを指定。（rds削除時はtrueにする）。
   skip_final_snapshot = true
   # ストレージの暗号化を有効にするかどうかを指定

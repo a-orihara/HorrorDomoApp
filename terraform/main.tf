@@ -20,7 +20,7 @@ terraform {
   # 1.4
   backend "s3" {
     # 1.5
-    bucket = "portfolio-tfstate-s3-bucket" # 仮の値を入れています
+    bucket = "portfolio-tfstate-s3-bucket"
     # 1.6
     key = "terraform.tfstate"
     # 1.7

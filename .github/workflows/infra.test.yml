@@ -20,6 +20,8 @@ permissions:
 env:
   TF_VERSION: 1.3.10
   AWS_REGION: ap-northeast-1
+  DOMAIN: "horror-domo-app.com"
+  RDS_INSTANCE_NAME: "portfolio-mysql-rds-instance"
 
 # 全てのjobに対するデフォルト動作を設定
 defaults:
@@ -34,6 +36,9 @@ jobs:
     name: Preview
     # runs-on:jobが実行されるマシン。必須の設定。
     runs-on: ubuntu-latest
+    # 2.3
+    outputs:
+      TF_PLAN_EXITCODE: ${{ steps.plan.outputs.exitcode }}
     steps:
       # jobs.<job_id>.steps.name:ステップの名前。
       - name: Cehckout repository
@@ -54,13 +59,13 @@ jobs:
         run: |
           terraform fmt -check
 
-      # initにawsのキーが必要
+      # 4 initにawsのキーが必要
       - name: Configure AWS Credential
         uses: aws-actions/configure-aws-credentials@v1
         with:
           # このアクションに必須の引数 env.:git hub actionで設定した環境変数
           aws-region: ${{ env.AWS_REGION }}
-          # roleのarnを使用 secrets.:git hub上で設定したsecretで作成した環境変数
+          # githubaction上でawsリソースを操作する為のroleのarnを使用。secrets.:gitのsecretで作成した環境変数
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
 
       - name: Terraform init
@@ -72,18 +77,62 @@ jobs:
         run: |
           terraform validate -no-color
 
-      # - name: Terraform plan
-      #   id: plan
-      #   # 4.1
-      #   run: |
-      #     terraform plan \
-      #       -var 'project=${{ env.TF_PROJECT }}' \
-      #       -var 'environment=${{ env.TF_ENVIRONMENT }}' \
-      #       -var 'username=${{ secrets.MYSQL_USERNAME }}' \
-      #       -var 'password=${{ secrets.MYSQL_PASSWORD }}' \
-      #       -input=false \
-      #       -no-color \
-      #       -detailed-exitcode
+      - name: Terraform plan
+        # 4.1 terraform planが失敗してもSlack Notifyを実行支えるため
+        continue-on-error: true
+        # 4.2 この[Terraform plan]の結果をアウトプットする為にIDを指定
+        id: plan
+        # 4.3 Terraformでは、変数名にアンダースコア（_）を使用することは一般的
+        run: |
+          terraform plan \
+            -var 'domain=${{ env.DOMAIN }}' \
+            -var 'rails_master_key=${{ secrets.RAILS_MASTER_KEY }}' \
+            -var 'mysql_db_username=${{ secrets.MYSQL_DB_USERNAME }}' \
+            -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
+            -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
+            -input=false \
+            -no-color \
+            -detailed-exitcode
+
+      - name: Slack Notify
+        # 5
+        if: steps.plan.outputs.exitcode == 2
+        # Slackへの通知の為、指定されたSlackチャンネルにメッセージを送信する機能を提供。
+        uses: slackapi/slack-github-action@v1.22.0
+        # jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
+        with:
+          # slackのチャンネルIDを指定
+          channel-id: "C06574M0PK8"
+          # 5.1 YAMLファイル内で|は、複数行にわたる文字列を表すために使用されます。
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#0068B7",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Request for approve - 承認依頼 -",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          # slacアプリ作成の際に一緒に作成したbot_token
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 2
@@ -111,6 +160,23 @@ jobs:
 # - 具体的には、Terraform設定ファイルやその他のリソースを読み取ってAWSの認証情報やデプロイに必要な情報を取得します。
 
 # ================================================================================================
+# 2.3
+# . `outputs: TF_PLAN_EXITCODE: ${{ steps.plan.outputs.exitcode }}`:
+# - `outputs`は、ジョブの実行結果を外部に公開するために使用されます。
+# - この行では、`Terraform plan`ステップ（`id: plan`によって識別）の出力（`exitcode`）を`TF_PLAN_EXITCODE`
+# という名前でジョブの出力として設定しています。
+# - 終了コードをジョブの出力として保存し、後のステップで使用できるようにします。
+# ------------------------------------------------------------------------------------------------
+# - `steps.plan`: これはGitHub Actionsのワークフロー内で定義されたステップを指します。`Terraform plan`のステ
+# ップが`plan`というIDで識別されています。
+# - `.outputs`: ステップの出力を指します。GitHub Actionsでは、各ステップの実行結果として出力を生成します。
+# - `.exitcode`: これは`Terraform plan`ステップの実行終了時に得られる終了コード（exit code）を表します。終了コ
+# ードはステップの成功または失敗を示す数値です。
+# - 具体的には、steps.plan.outputs.exitcode`に終了コードが保存されます。この終了コードを使用して、後続のステッ
+# プ（例えば、特定の条件下でSlackに通知を送るなど）で条件分岐を行うことができます。例えば、変更が必要な場合（終了コー
+# ドが2の場合）に特定のアクション（例えばSlackへの通知）を実行することができます。
+
+# ================================================================================================
 # 3
 # フォーマットの修正が入るファイルがあるかどうかをチェックできます。なお、修正の実行はしません。あくまでもチェック。
 # 実際にファイルの内容を変更するのではなく、フォーマットが正しくない場合にはそれを報告します。
@@ -118,7 +184,49 @@ jobs:
 # ファイルがフォーマットの規約に従っていなければ、それを標準出力に表示し、0以外の終了コードを返します。
 
 # ================================================================================================
+# 4
+# `Configure AWS Credential`ステップの必要性について
+# - Terraformを使用してAWSリソースを管理する際、AWSの認証情報（クレデンシャル）が必要です。
+# - GitHub ActionsのワークフローでAWSリソースを操作するには、AWSへの認証が必須です。
+# - `Configure AWS Credential`ステップは、AWSアクションズが提供する`configure-aws-credentials`アクションを
+# 使用しています。このアクションは、AWSへの認証情報を設定する役割を果たします。
+# - このステップでは、指定されたAWSリージョン(`aws-region`)とIAMロール(`role-to-assume`)を使用して、
+# GitHub ActionsランナーにAWSクレデンシャルを提供します。
+# - IAMロールを使用することで、必要な権限を持つ一時的なクレデンシャルを取得し、セキュリティを確保しつつAWSリソースに
+# アクセスできます。
+# - Terraformの操作（`init`、`validate`、`plan`など）に必要なAWSリソースへのアクセスを確保するため、このステッ
+# プが不可欠です。
+
+# ================================================================================================
 # 4.1
+# `continue-on-error: true`
+# GitHub Actionsワークフローのジョブ内で特定のステップでエラーが発生した場合でも、ワークフローの実行を中断せずに、
+# ワークフローの実行を続行する設定。
+
+# ================================================================================================
+# 4.2
+# . `id: plan`:
+# - このIDは、特定のステップ（この場合は`Terraform plan`ステップ）に一意の識別子を割り当てるために使用されます。
+# - `id`を設定することで、そのステップの出力を他のステップで参照することができます。ここでは`Terraform plan`ステ
+# ップの実行結果を後のステップで使用するために`plan`というIDを割り当てています。
+
+# ================================================================================================
+# 4.3
+# . **`-var 'domain=${{ env.DOMAIN }}'`の文法**:
+# - この文法は、Terraformにおいてコマンドライン(terraform planに)変数を指定するオプションです。
+# - `-var`オプションは、Terraformの`plan`や`apply`コマンドで変数を設定するために使用されます。
+# - `'domain=${{ env.DOMAIN }}'`は、`domain`という名前のTerraform変数にGitHub Actionsの環境変数`DOMAIN`
+# の値を割り当てます。
+# - `${{ env.DOMAIN }}`はGitHub Actionsの構文で、`env`コンテキストの`DOMAIN`環境変数の値を参照しています。
+# - ここでの`DOMAIN`は、ワークフローの`env`セクションで定義されている`"horror-domo-app.com"`が代入されます。
+# ------------------------------------------------------------------------------------------------
+# 2. **`-var`の解説**:
+# - `terraform plan`コマンドの`-var`オプションは、Terraformにおいて外部から変数を渡すために使用されます。
+# - このオプションにより、スクリプトやCI/CDパイプラインなどの外部プロセスから、Terraformの実行環境に特定の変数値を
+# 注入することができます。
+# - 通常、`-var`オプションは`-var '変数名=値'`の形式で使用され、ここで指定された変数名と値は、Terraformの実行中
+# に利用可能となります。
+# ------------------------------------------------------------------------------------------------
 # -input=false:
 # terraform planの際、ユーザーからの手動入力を受けるかどうかを制御します。デフォルトでは-input=trueです
 # 変数の設定がある場合、値が割り当てられていない変数の値をプロンプトでユーザーに尋ねます。
@@ -140,3 +248,43 @@ jobs:
 # 合に -detailed-exitcode を利用します。例えば、変更がある場合のみ Terraform Apply ステップを実行するような条
 # 件を設定することができます。
 # - ciの場合、2の場合だけ承認を取って後続を実施するようにする
+
+# ================================================================================================
+# 5.
+# `if: steps.plan.outputs.exitcode == 2`
+# - `if`: このキーワードは、GitHub Actionsのワークフロー内で条件分岐を行うために使用されます。指定された条件が真
+# （true）の場合にのみ、後続のステップが実行されます。
+# - `steps.plan.outputs.exitcode`: これは、`Terraform plan`ステップ（`id: plan`で識別）の実行後に生成され
+# る出力である終了コード（exit code）を指します。終了コードはステップの成功、失敗、または変更の必要性などを示す数値
+# です。
+# - `== 2`: この式は、`Terraform plan`の終了コードが2であるかどうかを評価します。Terraformでは、終了コード2は
+# 実行計画に変更が含まれていることを意味します（つまり、実際にリソースの状態が変更される操作が必要であることを示してい
+# ます）。
+# - `Terraform plan`ステップが変更を必要とする結果（終了コードが2）を返した場合にのみ、後続の`Slack Notify`ステ
+# ップを実行するように設定しています。これにより、変更が必要な場合に限り、通知がSlackに送信されるようになります。
+
+# ================================================================================================
+# 5.1
+# . `with`の`payload`キーの解説:
+# - `payload`キーは、GitHub ActionsのワークフローでSlack通知をカスタマイズするために使用されます。
+# - このキーは、Slackへ送信されるメッセージの内容とフォーマットをJSON形式で定義します。
+# - ここで定義された内容は、Slack APIによって解釈され、指定されたチャンネルにメッセージが送信されます。
+# ------------------------------------------------------------------------------------------------
+# . `with`の`payload`キーに設定する内容:
+# - 以下の例では、Slackメッセージにアタッチメントが含まれており、そのフォーマットが指定されています。
+# - アタッチメントには色(`color`)、ヘッダー(`header`)、セクション(`section`)が含まれています。
+# - ヘッダーには「Message Header」というテキストが、セクションには「Hello World :ghost:」というMarkdown形式
+# のテキストが含まれています。
+# - この設定により、指定したフォーマットでSlackチャンネルにメッセージが投稿されます。
+# ------------------------------------------------------------------------------------------------
+# . attachmentsは、Slackメッセージに追加される構造化されたデータブロックです。
+# これにより、Slackメッセージ内で複数のセクションや要素をカスタマイズして表示することができます。
+# ------------------------------------------------------------------------------------------------
+# `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`
+# - `github.server_url`: GitHubのサーバーURLを指します。通常は`https://github.com`です。
+# - `github.repository`: 現在のリポジトリの名前を示します。例えば`user/repository`の形式になります。
+# - `github.run_id`: 現在実行中のGitHub Actionsワークフローの一意のIDを表します。
+# これらを組み合わせることで、現在実行中のGitHub Actionsワークフローの具体的な実行ページのURLが生成されます。
+# つまり、この式はGitHub上での現在のワークフロー実行の詳細ページへのリンクを生成しています。このリンクは、
+# GitHub Actionsが実行された際にSlack通知を送るために使用されており、通知内でクリックすると直接そのワークフローの
+# 実行詳細ページにアクセスできるようになっています。

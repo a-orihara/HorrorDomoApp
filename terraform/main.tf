@@ -35,7 +35,7 @@ terraform {
 provider "aws" {
   # 2.1 jsonとは違い、:ではなく、基本的に=でつなぐ
   # profile = "portfolio-terraform-aws-profile"
-  region  = "ap-northeast-1"
+  region = "ap-northeast-1"
 }
 
 # ---------------------------------------------
@@ -50,7 +50,7 @@ provider "aws" {
 #   type = string
 # }
 
-# variable ブロックは、Terraformの設定ファイルで変数を定義。変数名：domain、型はstring
+# variable ブロック:Terraformの設定ファイルで変数を定義。変数名：domain、型はstring
 variable "domain" {
   type = string
 }

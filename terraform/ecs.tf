@@ -276,7 +276,7 @@ resource "aws_ecs_service" "fargate_service" {
   # 健康チェックの許容期間を秒単位で指定
   health_check_grace_period_seconds = 0
   # サービスが使用するIAMロールの名前を指定
-  iam_role = "aws-service-role"
+  # iam_role = "aws-service-role"
   # サービスが使用する起動タイプを指定
   launch_type = "FARGATE"
   # サービスの名前を指定
@@ -338,10 +338,10 @@ resource "aws_ecs_service" "fargate_service_frontend" {
   enable_ecs_managed_tags            = true
   enable_execute_command             = false
   health_check_grace_period_seconds  = 0
-  iam_role                           = "aws-service-role"
-  launch_type                        = "FARGATE"
-  name                               = "portfolio-fargate-service-frontend"
-  platform_version                   = "LATEST"
+  # iam_role                           = "aws-service-role"
+  launch_type      = "FARGATE"
+  name             = "portfolio-fargate-service-frontend"
+  platform_version = "LATEST"
   # propagate_tags                     = "NONE"
   scheduling_strategy = "REPLICA"
   tags                = {}

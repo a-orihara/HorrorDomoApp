@@ -96,7 +96,7 @@ jobs:
             -no-color \
             -detailed-exitcode
 
-      - name: Slack Notify
+      - name: Slack Notify terraform plan
         # 5
         if: steps.plan.outputs.exitcode == 2
         # Slackへの通知の為、指定されたSlackチャンネルにメッセージを送信する機能を提供。
@@ -171,8 +171,9 @@ jobs:
           terraform init -no-color
 
       - name: Terraform apply
+        # 6.4 apply結果が知りたいので、このstepの結果をidを使って参照出来るようにする
         id: apply
-        # 6.4
+        # 6.5
         run: |
           terraform apply \
             -var 'domain=${{ env.DOMAIN }}' \
@@ -183,6 +184,46 @@ jobs:
             -input=false \
             -no-color \
             -auto-approve
+
+      - name: Slack Notify terraform apply
+        # 7.1 成功、失敗でも必ずstepを実行したい場合に付ける
+        if: always()
+        # Slackへの通知の為、指定されたSlackチャンネルにメッセージを送信する機能を提供。
+        uses: slackapi/slack-github-action@v1.22.0
+        # jobs.<job_id>.steps.with:アクションのパラメータをキー、バリューで定義
+        with:
+          # slackのチャンネルIDを指定
+          channel-id: "C06574M0PK8"
+          # YAMLファイル内で|は、複数行にわたる文字列を表すために使用されます。
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#0068B7",
+                  "blocks": [
+                    {
+                      "type": "header",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Runner Finished - ${{ steps.apply.outcome }} -",
+                        "emoji": true
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          # slacアプリ作成の際に一緒に作成したbot_token
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
 
 
 
@@ -458,8 +499,27 @@ jobs:
 
 # ================================================================================================
 # 6.4
+# . **`id: apply`での参照可能性**:
+# - GitHub Actionsのワークフロー内で、`id`をステップに割り当てると、そのステップの実行結果や出力を後続のワークフロ
+# ー内の他のステップやジョブで参照で参照できるようになります。これは、ステップの出力（例：実行ログ）や結果（成功したか
+# 失敗したか）を取得するのに役立ちます。
+# ------------------------------------------------------------------------------------------------
+# . **`outcome`とは**:
+# - `outcome`はGitHub Actionsの特定のステップやジョブの実行結果を示す内部変数です。`outcome`は、そのステップが
+# 成功したか失敗したかを表します。通常、`success`、`failure`、`cancelled`などの値を取ることができます。
+# - ステップの`id`を使用して`outcome`を参照することにより、以降のステップやジョブでそのステップの実行結果に基づいた
+# 条件分岐や処理を行うことが可能になります。
+
+# ================================================================================================
+# 6.5
 # -auto-approve
 # このフラグは、この手動承認のステップをスキップし、変更を自動的に承認して適用するために使用されます。
 # - GitHub Actionsのワークフローでは、対話的な入力（例えば、yesの入力）が可能ではありません。そのため、Terraform
 # の自動化された適用（例えばCI/CDパイプライン内での使用）では、-auto-approveフラグが重要になります。これにより、プ
 # ランの自動承認と適用が可能となり、ワークフローが途中で停止することなく完了できます。
+
+# ================================================================================================
+# 7.1
+# `if: always()`機能は、特定のステップやジョブが前のステップの結果に関わらず実行されるようにするために使用されます。
+# これは、特定のクリーンアップ操作や通知（例えば、ビルドの成功や失敗をSlackに通知する）など、条件に関係なく実行したい
+# タスクに非常に役立ちます。

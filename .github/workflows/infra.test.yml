@@ -116,7 +116,7 @@ jobs:
                       "type": "header",
                       "text": {
                         "type": "plain_text",
-                        "text": "Request for approve - 承認依頼 -",
+                        "text": "Request for approve - portfolioのdeployの承認依頼 -",
                         "emoji": true
                       }
                     },
@@ -169,6 +169,20 @@ jobs:
       - name: Terraform init
         run: |
           terraform init -no-color
+
+      - name: Terraform apply
+        id: apply
+        # 6.4
+        run: |
+          terraform apply \
+            -var 'domain=${{ env.DOMAIN }}' \
+            -var 'rails_master_key=${{ secrets.RAILS_MASTER_KEY }}' \
+            -var 'mysql_db_username=${{ secrets.MYSQL_DB_USERNAME }}' \
+            -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
+            -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
+            -input=false \
+            -no-color \
+            -auto-approve
 
 
 
@@ -441,3 +455,11 @@ jobs:
 # . **`environment: production`の文法**:
 # - `environment: production`は、GitHub Actionsワークフローの特定のジョブが本番環境（production）に対して実
 # 行されることを示します。
+
+# ================================================================================================
+# 6.4
+# -auto-approve
+# このフラグは、この手動承認のステップをスキップし、変更を自動的に承認して適用するために使用されます。
+# - GitHub Actionsのワークフローでは、対話的な入力（例えば、yesの入力）が可能ではありません。そのため、Terraform
+# の自動化された適用（例えばCI/CDパイプライン内での使用）では、-auto-approveフラグが重要になります。これにより、プ
+# ランの自動承認と適用が可能となり、ワークフローが途中で停止することなく完了できます。

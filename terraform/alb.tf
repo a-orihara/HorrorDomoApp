@@ -31,12 +31,12 @@ resource "aws_lb" "alb" {
   # access_logs {
   #     enabled = false
   # }
-  subnet_mapping {
-    subnet_id = aws_subnet.pub_subnet_a.id
-  }
-  subnet_mapping {
-    subnet_id = aws_subnet.pub_subnet_c.id
-  }
+  # subnet_mapping {
+  #   subnet_id = aws_subnet.pub_subnet_a.id
+  # }
+  # subnet_mapping {
+  #   subnet_id = aws_subnet.pub_subnet_c.id
+  # }
   timeouts {}
 }
 
@@ -69,12 +69,12 @@ resource "aws_lb" "frontend_alb" {
   # access_logs {
   #     enabled = false
   # }
-  subnet_mapping {
-    subnet_id = aws_subnet.pub_subnet_a.id
-  }
-  subnet_mapping {
-    subnet_id = aws_subnet.pub_subnet_c.id
-  }
+  # subnet_mapping {
+  #   subnet_id = aws_subnet.pub_subnet_a.id
+  # }
+  # subnet_mapping {
+  #   subnet_id = aws_subnet.pub_subnet_c.id
+  # }
   timeouts {}
 }
 # ================================================================================================

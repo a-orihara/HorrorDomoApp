@@ -327,6 +327,10 @@ resource "aws_ecs_service" "fargate_service" {
   }
   # タイムアウトの設定を指定
   timeouts {}
+  depends_on = [
+    aws_lb.alb,
+    aws_lb_target_group.alb_tg
+  ]
 }
 # ------------------------------------------------------------------------------------------------
 # "fargate_service_frontend"
@@ -370,6 +374,10 @@ resource "aws_ecs_service" "fargate_service_frontend" {
     ]
   }
   timeouts {}
+  depends_on = [
+    aws_lb.frontend_alb,
+    aws_lb_target_group.frontend_alb_tg
+  ]
 }
 
 

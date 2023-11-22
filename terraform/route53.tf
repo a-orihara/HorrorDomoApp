@@ -14,32 +14,25 @@ resource "aws_route53_zone" "route53_zone" {
 # ================================================================================================
 # Route53 "aws_route53_record"
 # ================================================================================================
-# 1
+# 1 フロント用のalbのAレコード（ALBのDNSに対して独自ドメインの付与）のリソース。Aレコードの解説は下記。
 resource "aws_route53_record" "route53_record_a" {
-  # fqdn                             = "horror-domo-app.com"
-  # id                               = "Z05743042OK49Y65Q6CSP_horror-domo-app.com_A"
-  # multivalue_answer_routing_policy = false
   # Route 53レコードの名前（DNSレコードに対応する完全修飾ドメイン名（FQDN））を指定
   name = var.domain
-  # records                          = []
-  # ttl                              = 0
   # 1.0 DNSレコードのタイプを指定。Aレコード:ドメイン名をIPv4アドレスにマッピングするために使用
   type = "A"
   # レコードが属するRoute 53 ホストゾーンのIDを指定。resource "aws_route53_zone"のidを指定
   zone_id = aws_route53_zone.route53_zone.id
-
   # 1.1
   alias {
     # 1.2 ヘルスチェックをするかどうか
     evaluate_target_health = true
-    # name                   = "dualstack.portfolio-frontend-alb-1834571258.ap-northeast-1.elb.amazonaws.com"
     # エイリアスターゲットのDNS名を指定。resource "aws_lb"で作成したalbのdns_nameを指定
     name = aws_lb.frontend_alb.dns_name
-    # zone_id                = "Z14GRHDCWA56QT"
     #  エイリアスターゲットのホストゾーンのIDを指定。resource "aws_lb"で作成したalbのzone_idを指定
     zone_id = aws_lb.frontend_alb.zone_id
   }
 }
+# ------------------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "route53_record_ns" {
   name = var.domain
@@ -58,6 +51,7 @@ resource "aws_route53_record" "route53_record_ns" {
   zone_id = aws_route53_zone.route53_zone.id
 }
 
+# ------------------------------------------------------------------------------------------------
 resource "aws_route53_record" "route53_record_soa" {
   name = var.domain
   # 3.1
@@ -70,9 +64,18 @@ resource "aws_route53_record" "route53_record_soa" {
   type    = "SOA"
   zone_id = aws_route53_zone.route53_zone.id
 }
-
 # ------------------------------------------------------------------------------------------------
-
+# バックエンド用のalbへのAレコード
+resource "aws_route53_record" "route53_record_backend_a" {
+  name    = "backend.horror-domo-app.com"
+  type    = "A"
+  zone_id = aws_route53_zone.route53_zone.id
+  alias {
+    evaluate_target_health = true
+    name                   = aws_lb.alb.dns_name
+    zone_id                = aws_lb.alb.zone_id
+  }
+}
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -85,6 +88,12 @@ terraform import aws_route53_record.route53_record_a Z05743042OK49Y65Q6CSP_horro
 
 ================================================================================================
 1.0
+ALBのDNSに対して独自ドメインの付与
+- ALBのDNSとは、AWSのALBが提供する一意のDNS名のことです。これは、ALBを作成した時に自動的にALBに割り当てられる。
+- DNSサービスはAWSのRoute 53が提供していますが、ALBに割り当てられたDNS名はRoute 53で管理することができます。
+- つまり、独自ドメインを使用する場合は、Route 53でDNSのAレコードを設定し、その独自ドメインがALBのDNS名に解決する
+ようにします。これにより、ユーザーは独自ドメインを通じてALBにアクセスできるようになります。
+------------------------------------------------------------------------------------------------
 . **Aレコードとは？**
 - Aレコード（Address Record）は、DNSの基本的なタイプの一つで、ドメイン名をIPv4アドレスにマッピングするために使
 用されます。これにより、ドメイン名（例：www.example.com）をブラウザに入力すると、Aレコードがそのドメイン名を対応
@@ -160,8 +169,9 @@ ttl（Time To Live）: この値は、DNSレコードがキャッシュされる
 
 ================================================================================================
 2.3
-作成したパブリックホストゾーンごとに、Amazon Route 53 はネームサーバー (NS) レコードと Start of Authority
-(SOA) レコードを自動的に作成します。これらのレコードを変更する必要はほとんどありません。
+作成したパブリックホストゾーン（インターネット上で公開し、誰でもアクセス可能な状態にすること）ごとに、
+Amazon Route 53 はネームサーバー (NS) レコードと Start of Authority(SOA) レコードを自動的に作成します。こ
+れらのレコードを変更する必要はほとんどありません。
 ------------------------------------------------------------------------------------------------
 . **NSレコードとは？**
 - NSレコードは、あるドメインに対するDNS情報を管理しているネームサーバー（Name Server）を指定するために使用される
@@ -210,6 +220,12 @@ SOAレコード（Start of Authority Record）は、DNS（ドメインネーム�
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 *
+================================================================================================
+NS、SOAレコードはパブリックホスとゾーンでドメイン取得でAWSにて自動作成、CNAMEレコードはACMのDNS検証で作成、Aレコ
+ードはALBへの独自ドメイン付与（AWSのALBと独自のドメイン名の関連付け。アプリのトラフィックをALBを介してルーティン
+グできるようにする）で作成。
+- CNAMEレコードは`acm.tf`にて作成。
+================================================================================================
 リクエストの流れ
 =======================================================================
 以下は、AWSでドメインを取得し、ACMで証明書を発行し、ALBを使用してFargateのタスクにリクエストを転送する一般的なアクセスフローの具体例です：

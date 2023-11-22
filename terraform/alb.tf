@@ -25,18 +25,6 @@ resource "aws_lb" "alb" {
   ]
   tags     = {}
   tags_all = {}
-  # このコンフィギュレーションを適用した結果に基づいて自動的に決定されます。
-  # vpc_id   = aws_vpc.portfolio_vpc_tf.id
-  # zone_id  = "Z14GRHDCWA56QT"
-  # access_logs {
-  #     enabled = false
-  # }
-  # subnet_mapping {
-  #   subnet_id = aws_subnet.pub_subnet_a.id
-  # }
-  # subnet_mapping {
-  #   subnet_id = aws_subnet.pub_subnet_c.id
-  # }
   timeouts {}
 }
 
@@ -64,17 +52,6 @@ resource "aws_lb" "frontend_alb" {
   ]
   tags     = {}
   tags_all = {}
-  # vpc_id                           = "vpc-0fd"
-  # zone_id                          = "Z14"
-  # access_logs {
-  #     enabled = false
-  # }
-  # subnet_mapping {
-  #   subnet_id = aws_subnet.pub_subnet_a.id
-  # }
-  # subnet_mapping {
-  #   subnet_id = aws_subnet.pub_subnet_c.id
-  # }
   timeouts {}
 }
 # ================================================================================================

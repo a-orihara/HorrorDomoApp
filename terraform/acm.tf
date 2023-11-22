@@ -4,7 +4,7 @@
 # 1 acmの証明書のリソース。新しいSSL/TLS証明書をリクエストするために使用されます。
 resource "aws_acm_certificate" "acm_cert" {
   domain_name = var.domain
-  # 1.1
+  # 1.1 CNAMEのレコード情報
   # domain_validation_options = [
   #   {
   #     domain_name           = "*.horror-domo-app.com"
@@ -44,8 +44,7 @@ resource "aws_acm_certificate" "acm_cert" {
 # ================================================================================================
 # ACM "aws_route53_record"
 # ================================================================================================
-# 2 AWSのRoute53サービスでDNSレコードを作成・管理するためのリソース
-# resource "aws_route53_record" "portfolio_acm_dns_resolve_record_tf" {
+# 2 AWSのRoute53サービスでDNSレコードを作成・管理するためのリソース。CNAMEレコード
 resource "aws_route53_record" "acm_dns_resolve_record" {
   # fqdn    = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com"
   # 2.1 メタ引数。形式[for_each = map型]。forで作成されたmap（dvo.domain_nameをキー、その値がオブジェクト）を指定。

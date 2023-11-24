@@ -53,8 +53,8 @@ module ApiApp
       # 許可されるCORSリクエストについての設定
       allow do
         # すべてのオリジンからのリクエストを許可
-        origins '*'
-        # origins Settings.front_domain
+        # origins '*'
+        origins Settings.front_domain
         # すべてのリソースに対するCORSポリシーを指定
         resource '*',
                   # すべてのヘッダーを許可

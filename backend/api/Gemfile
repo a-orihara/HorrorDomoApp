@@ -24,7 +24,7 @@ gem 'rack-cors'
 # 下記追加 --------------------------------------
 # 環境変数を読み込む
 gem 'dotenv-rails'
-# 環境毎の設定管理を行う。dotenv-railsの後に入れないとエラーになる。
+# 環境毎の設定管理（環境変数の管理）を行う。dotenv-railsの後に入れないとエラーになる。
 gem 'config'
 gem 'devise'
 gem 'devise_token_auth'

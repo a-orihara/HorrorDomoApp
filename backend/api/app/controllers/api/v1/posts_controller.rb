@@ -78,7 +78,7 @@ class Api::V1::PostsController < ApplicationController
     # puts "ここよposts: #{posts}"
     total_posts = Post.where("title LIKE ?", "%#{query}%").count
     posts_with_likes_info = posts.map do |post|
-          # likedは真偽値
+          # 12 likedは真偽値
           liked = current_api_v1_user.already_liked?(post)
           # そのpostのlikes数を取得
           likes_count = post.likes.count
@@ -454,4 +454,14 @@ contentのエラーが一つの場合でも、join(', ')メソッドは有用で
 合にはActiveRecord::RecordNotFoundエラーを発生させます。
 一方、find_byメソッドは該当するデータが見つからない場合にはnilを返します。そのため、find_byメソッドを使用して該
 当するデータがない場合に適切なレスポンスを返すことができます。
+
+================================================================================================
+12
+devise では、認証情報に基づいて判断されたユーザーに関する便利なメソッドを提供しています。
+current_user: サインインユーザーのuserレコードを取得する
+このメソッドはコントローラーの中から呼び出すことができるのですが、devise_token_auth の仕様として、これらメソッド
+がこの名前のまま利用できるのは、/controllersディレクトリ直下のコントローラーのみとなります。
+今回コントローラーを実装していくディレクトリは/controllers/api/v1となりますので、この配下のコントローラーで上記
+メソッドを使用するときは、以下のような書き方をしなくてはなりません。
+current_api_v1_user
 =end

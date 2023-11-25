@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # letter_opener_web（開発環境で送信したメールを確認するgem）用のルーティング
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   namespace :api do
     namespace :v1 do
       # 1 api/v1/auth

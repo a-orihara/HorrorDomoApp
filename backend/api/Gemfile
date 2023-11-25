@@ -53,6 +53,8 @@ group :development, :test do
   gem 'pry-rails'
   # [Can't escape from eval with next]エラーの解消
   gem 'pry-nav'
+  # 開発環境でメール送信をテストする
+  gem "letter_opener_web"
 end
 
 group :development do

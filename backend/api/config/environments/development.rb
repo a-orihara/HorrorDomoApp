@@ -39,7 +39,8 @@ Rails.application.configure do
   # 5.1 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # メールの送信元アドレスを設定
-  config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+  # config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+  config.action_mailer.default_options = { from: "no-replay@example.com" }
   # メールの送信方法をSMTP（Simple Mail Transfer Protocol）に設定
   config.action_mailer.delivery_method = :smtp
   # 4 SMTPの設定

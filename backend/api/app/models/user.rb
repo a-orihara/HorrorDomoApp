@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   # deviseやincludeなどのマクロスタイルの呼び出しは先頭に配置
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
   # 4
   include DeviseTokenAuth::Concerns::User
 

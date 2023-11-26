@@ -36,13 +36,15 @@ Rails.application.configure do
   # [メーラーが送れなくとも気にしない。デフォ：false]
   # 5 メールの送信エラーが発生した際に例外（エラー）を発生させるかどうかを指定
   config.action_mailer.raise_delivery_errors = true
-  # 5.1 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # メールの送信元アドレスを設定
   # config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
   config.action_mailer.default_options = { from: "no-replay@example.com" }
+  # 5.1 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # 5.2
+  config.action_mailer.delivery_method = :letter_opener_web
   # メールの送信方法をSMTP（Simple Mail Transfer Protocol）に設定
-  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.delivery_method = :smtp
   # 4 SMTPの設定
   config.action_mailer.smtp_settings = {
     # SMTPサーバーのアドレスを指定。
@@ -162,4 +164,17 @@ Action Mailerは、Ruby on Rails に標準で組み込まれているメール�
 メール関連の処理を簡単に行えるように設計されています。モデル、ビュー、コントローラ（MVC）の原則に従い、メール送信の
 ためのロジックをカプセル化します。
 
+================================================================================================
+5.2
+config.action_mailer.delivery_method = :letter_opener_web
+. **機能と目的**:
+- この設定は、Railsアプリケーションでのメール送信方法を指定します。
+- `:letter_opener_web`を指定することで、開発環境において実際にメールサーバーを使用することなく、メールの送信を
+シミュレートできます。
+. **Letter Opener Webの役割**:
+- Letter Opener Webは、開発環境でメールを送信する際に、それらをWebブラウザで簡単にプレビューするツールです。
+- メールは実際には送信されず、代わりにWebインターフェース上で表示されます。
+- この設定により、`ActionMailer`を使ってメールを送信する際、送信されたメールはローカルのWebページとして保存され
+、ブラウザで直接見ることができます。
+- 開発者はメールサーバーを設定することなく、メール送信の結果を即座に確認できます。
 =end

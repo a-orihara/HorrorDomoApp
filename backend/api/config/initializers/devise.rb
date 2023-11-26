@@ -27,9 +27,9 @@ Devise.setup do |config|
 # Devise::Mailerに表示されるメールアドレスを設定します、
 # デフォルトの "from "パラメータを持つ独自のメーラークラスを使用する場合は、上書きされることに注意してください。]
   # 2
-  config.mailer_sender = ENV['EMAIL_ADDRESS']
+  # config.mailer_sender = ENV['EMAIL_ADDRESS']
   # [電子メールの送信を担当するクラスを設定する。]
-  config.mailer = 'Devise::Mailer'
+  # config.mailer = 'Devise::Mailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'

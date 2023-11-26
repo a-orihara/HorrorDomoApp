@@ -40,8 +40,8 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
   # ↓デモ用の設定
   # config.action_mailer.default_options = { from: "no-replay@example.com" }
-  # 5.1 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # 5.1 開発環境でメール内で生成されるURLがlocalhost:3010となるように指定
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3010 }
   # 5.2
   # メールの送信方法をSMTP（Simple Mail Transfer Protocol）に設定
   config.action_mailer.delivery_method = :smtp
@@ -158,8 +158,8 @@ ActionMailerを使用してメールを送信する際、リンクやURLを生�
 す。
 hostとportの指定により、メール内で使用されるURLのベース部分が設定されます。
 ------------------------------------------------------------------------------------------------
-{ host: 'localhost', port: 3000 }
-railsコンテナが3000で待ち受けているので、3000を指定。ホスト側の3010ではない。
+{ host: 'localhost', port: 3010 }
+ホスト側の3010がrailsコンテナが3000で待ち受けるので、3010を指定。
 ------------------------------------------------------------------------------------------------
 Action Mailerは、Ruby on Rails に標準で組み込まれているメールの送信機能です。
 例えばメールマガジンを一括メール送信など、メールの作成、送信、テンプレート管理などを担当し、Railsアプリケーションで

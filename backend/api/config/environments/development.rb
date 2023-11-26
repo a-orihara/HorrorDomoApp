@@ -37,14 +37,16 @@ Rails.application.configure do
   # 5 メールの送信エラーが発生した際に例外（エラー）を発生させるかどうかを指定
   config.action_mailer.raise_delivery_errors = true
   # メールの送信元アドレスを設定
-  # config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
-  config.action_mailer.default_options = { from: "no-replay@example.com" }
+  config.action_mailer.default_options = { from: ENV['EMAIL_ADDRESS'] }
+  # ↓デモ用の設定
+  # config.action_mailer.default_options = { from: "no-replay@example.com" }
   # 5.1 開発環境でメール内で生成されるURLがlocalhost:3000となるように指定
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # 5.2
-  config.action_mailer.delivery_method = :letter_opener_web
   # メールの送信方法をSMTP（Simple Mail Transfer Protocol）に設定
-  # config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :smtp
+  # ↓デモ用の設定
+  # config.action_mailer.delivery_method = :letter_opener_web
   # 4 SMTPの設定
   config.action_mailer.smtp_settings = {
     # SMTPサーバーのアドレスを指定。

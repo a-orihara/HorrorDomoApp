@@ -62,6 +62,16 @@ RSpec.describe User, type: :model do
     end
   end
 
+  # describe 'ユーザー確認' do
+  #   context 'ユーザーが確認されていない場合' do
+  #     it 'ログインを許可しないこと' do
+  #       user = build(:user, confirmed_at: nil)
+  #       # Add your logic to check the user cannot log in
+  #       # This might vary based on how your application handles unconfirmed users
+  #     end
+  #   end
+  # end
+
   describe 'Postとの関連性' do
     let(:user) { create(:user) }
 

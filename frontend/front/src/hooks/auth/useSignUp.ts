@@ -13,6 +13,8 @@ const useSignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  // サインアップ認証用のmailのリンク先のURL
+  const confirmSuccessUrl = "http://localhost:3001/signin";
   const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
@@ -25,6 +27,7 @@ const useSignUp = () => {
       email: email,
       password: password,
       passwordConfirmation: passwordConfirmation,
+      confirmSuccessUrl: confirmSuccessUrl,
     };
     try {
       // 5

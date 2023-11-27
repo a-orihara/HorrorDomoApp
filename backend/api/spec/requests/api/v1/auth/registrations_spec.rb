@@ -11,7 +11,8 @@ RSpec.describe 'Api::V1::Auth::Registrations', type: :request do
           name: 'Test User',
           email: 'test@example.com',
           password: 'password',
-          password_confirmation: 'password'
+          password_confirmation: 'password',
+          confirm_success_url: 'https://google.com'
         }
       end
 

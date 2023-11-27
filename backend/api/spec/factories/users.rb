@@ -5,6 +5,8 @@ FactoryBot.define do
     email { Faker::Internet.unique.email }
     password { 'testtest' }
     password_confirmation { 'testtest' }
+    # mail認証
+    confirmed_at { Time.now }
   end
 end
 

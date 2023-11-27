@@ -9,6 +9,7 @@ export type SignUpParams = {
   email: string;
   password: string;
   passwordConfirmation: string;
+  confirmSuccessUrl: string;
 };
 
 // サインイン用の型定義

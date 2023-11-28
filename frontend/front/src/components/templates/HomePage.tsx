@@ -34,11 +34,12 @@ const HomePage = () => {
             <Sidebar></Sidebar>
           </div>
           <div className=' lg:w-96'>
-            {showWelcomeMessage && (
+            {/* 実装中：ファーストサインイン時のwelcomeメッセージ */}
+            {/* {showWelcomeMessage && (
               <h1 className='bg-basic-pink text-2xl text-white'>
                 ようこそ！, {currentUser?.name}さん! 登録が完了しました!
               </h1>
-            )}
+            )} */}
             {/* toggleFeed:FeedAreaとLikedPostAreaの表示切替の関数。 */}
             <UserInfo
               user={currentUser}

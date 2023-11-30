@@ -1,4 +1,4 @@
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signUp } from '../../api/auth';
@@ -15,7 +15,7 @@ const useSignUp = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   // サインアップ認証用のmailのリンク先のURL
   const confirmSuccessUrl = "http://localhost:3001/signin";
-  const { setIsSignedIn, setCurrentUser } = useAuthContext();
+  // const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------

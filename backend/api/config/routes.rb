@@ -8,6 +8,10 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations',
         sessions: 'api/v1/auth/sessions',
       }
+      # 6
+      namespace :user do
+        resource :confirmations, only: [:update]
+      end
       # 3
       root 'home_pages#home'
       # api/v1/authenticated_users
@@ -399,6 +403,13 @@ IDを含まないことが特徴です。つまり、`delete :destroy, on: :coll
 るため、`member`ルートを用いて設定することが一般的です。ただし、`like`の`id`が不要な場合や、特定のユーザーが特定
 の投稿に対して1つの`like`しか持てないようなシステムの場合、`user_id`と`post_id`から`like`を特定する
 `collection`ルートを利用する設計もあります。
+
+================================================================================================
+6
+フロントエンドからのmail認証専用のroute
+------------------------------------------------------------------------------------------------
+
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識
 @          @@          @@          @@          @@          @@          @@          @@          @

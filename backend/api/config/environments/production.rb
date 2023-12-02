@@ -69,10 +69,10 @@ Rails.application.configure do
     port: 587,
     domain: "gmail.com",
     # 1.2 1.3 1.4
-    user_name: Rails.application.credentials.production.gmail.user_name,
-    password: Rails.application.credentials.production.gmail.password,
-    authentication: "plain",
-    enable_starttls_auto: true,
+    user_name: Rails.application.credentials[:production][:gmail][:user_name],
+    password: Rails.application.credentials[:production][:gmail][:password],
+  #   authentication: "plain",
+  #   enable_starttls_auto: true,
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.

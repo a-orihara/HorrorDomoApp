@@ -1,4 +1,3 @@
-# class Api::V1::User::ConfirmationsController < Api::V1::BaseController
 class Api::V1::User::ConfirmationsController < ApplicationController
   # 1.1
   def update

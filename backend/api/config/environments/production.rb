@@ -68,7 +68,7 @@ Rails.application.configure do
     address: "smtp.gmail.com",
     port: 587,
     domain: "gmail.com",
-    # 1.2 1.3 1.4
+    # 1.2 1.3 1.4 Rails.application.credentials.production[:gmail][:user_name]でも可
     user_name: Rails.application.credentials[:production][:gmail][:user_name],
     password: Rails.application.credentials[:production][:gmail][:password],
   #   authentication: "plain",

@@ -71,8 +71,8 @@ Rails.application.configure do
     # 1.2 1.3 1.4 Rails.application.credentials.production[:gmail][:user_name]でも可
     user_name: Rails.application.credentials[:production][:gmail][:user_name],
     password: Rails.application.credentials[:production][:gmail][:password],
-  #   authentication: "plain",
-  #   enable_starttls_auto: true,
+    authentication: "plain",
+    enable_starttls_auto: true,
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.

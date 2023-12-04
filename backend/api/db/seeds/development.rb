@@ -29,7 +29,7 @@ user1 = User.create!(
   # profile: Faker::Lorem.sentence(word_count: 20),
   profile: profiles.sample,
   # 1.1
-  confirmed_at: Time.now
+  confirmed_at: Time.current
 )
 
 user2 = User.create!(
@@ -38,7 +38,7 @@ user2 = User.create!(
   password: 'kokoko',
   password_confirmation: 'kokoko',
   profile: profiles.sample,
-  confirmed_at: Time.now
+  confirmed_at: Time.current
 )
 
 model_users = [user1, user2]
@@ -75,7 +75,7 @@ image_paths = %w[
                 password:              password,
                 password_confirmation: password,
                 profile: profile,
-                confirmed_at: Time.now)
+                confirmed_at: Time.current)
   # 3 画像のパスの配列からランダムに1つ選択
   image_path = Rails.root.join(image_paths.sample)
   # 4 その画像をユーザーのavatarに添付

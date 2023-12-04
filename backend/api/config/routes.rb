@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       }
       # 6
       namespace :user do
+        # コントローラーを書かない書き方
         resource :confirmations, only: [:update]
       end
       # 3

@@ -65,6 +65,8 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
+    addressable (2.8.5)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     aws-eventstream (1.2.0)
     aws-partitions (1.835.0)
@@ -105,6 +107,7 @@ GEM
       warden (~> 1.2.3)
     devise-i18n (1.11.0)
       devise (>= 4.9.0)
+    devise-i18n-views (0.3.7)
     devise_token_auth (1.2.1)
       bcrypt (~> 3.0)
       devise (> 3.5.2, < 5)
@@ -182,6 +185,15 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
+    launchy (2.5.2)
+      addressable (~> 2.8)
+    letter_opener (1.8.1)
+      launchy (>= 2.2, < 3)
+    letter_opener_web (2.0.0)
+      actionmailer (>= 5.2)
+      letter_opener (~> 1.7)
+      railties (>= 5.2)
+      rexml
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -229,6 +241,7 @@ GEM
       pry (>= 0.9.10, < 0.15)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
+    public_suffix (5.0.4)
     puma (5.6.5)
       nio4r (~> 2.0)
     racc (1.6.2)
@@ -374,12 +387,14 @@ DEPENDENCIES
   config
   devise
   devise-i18n
+  devise-i18n-views
   devise_token_auth
   dotenv-rails
   factory_bot_rails
   faker
   image_processing (~> 1.2)
   kaminari
+  letter_opener_web
   listen (~> 3.3)
   mysql2 (~> 0.5)
   pry-byebug

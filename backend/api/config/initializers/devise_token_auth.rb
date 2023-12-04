@@ -5,6 +5,9 @@ DeviseTokenAuth.setup do |config|
   # client is responsible for keeping track of the changing tokens. Change
   # this to false to prevent the Authorization header from changing after
   # each request.
+  # [デフォルトでは、認可ヘッダはリクエスト毎に変更されます。
+  #   変更されたトークンを追跡するのはクライアントの責任です。
+  #   リクエストのたびに Authorization ヘッダが変更されないようにするには、これを false に変更します。]
   config.change_headers_on_each_request = false
 
   # By default, users will need to re-authenticate after 2 weeks. This setting

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # letter_opener_web（開発環境で送信したメールを確認するgem）用のルーティング
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
   namespace :api do
     namespace :v1 do
       # 1 api/v1/auth
@@ -6,6 +8,11 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations',
         sessions: 'api/v1/auth/sessions',
       }
+      # 6
+      namespace :user do
+        # コントローラーを書かない書き方
+        resource :confirmations, only: [:update]
+      end
       # 3
       root 'home_pages#home'
       # api/v1/authenticated_users
@@ -397,6 +404,21 @@ IDを含まないことが特徴です。つまり、`delete :destroy, on: :coll
 るため、`member`ルートを用いて設定することが一般的です。ただし、`like`の`id`が不要な場合や、特定のユーザーが特定
 の投稿に対して1つの`like`しか持てないようなシステムの場合、`user_id`と`post_id`から`like`を特定する
 `collection`ルートを利用する設計もあります。
+
+================================================================================================
+6
+フロントエンドからのmail認証専用のroute
+------------------------------------------------------------------------------------------------
+resource メソッドは、単にパスを生成するためのメソッドです。
+------------------------------------------------------------------------------------------------
+resource :confirmations, only: [:update]は、confirmationsコントローラーのupdateアクションに対応するルー
+トを設定します。この設定はPATCHメソッドを使用し、/user/confirmationsのURLに対応します。
+------------------------------------------------------------------------------------------------
+通常、resources（複数形）を使用すると、該当リソースのCRUD（Create, Read, Update, Delete）全てのルートが生成
+されます。しかし、resource（単数形）を使用すると、特定の単一リソース（ここではユーザーの確認）に関連するルートのみ
+を生成します。この場合、only: [:update]により、updateアクションに対応するルートのみが生成されます。ユーザーの確
+認状態を更新するためのルートを意味します。
+
 @          @@          @@          @@          @@          @@          @@          @@          @
 基本知識
 @          @@          @@          @@          @@          @@          @@          @@          @

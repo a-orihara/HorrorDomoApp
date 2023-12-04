@@ -28,6 +28,8 @@ user1 = User.create!(
   # 1
   # profile: Faker::Lorem.sentence(word_count: 20),
   profile: profiles.sample,
+  # 1.1
+  confirmed_at: Time.current
 )
 
 user2 = User.create!(
@@ -36,6 +38,7 @@ user2 = User.create!(
   password: 'kokoko',
   password_confirmation: 'kokoko',
   profile: profiles.sample,
+  confirmed_at: Time.current
 )
 
 model_users = [user1, user2]
@@ -71,7 +74,8 @@ image_paths = %w[
                 email: email,
                 password:              password,
                 password_confirmation: password,
-                profile: profile)
+                profile: profile,
+                confirmed_at: Time.current)
   # 3 画像のパスの配列からランダムに1つ選択
   image_path = Rails.root.join(image_paths.sample)
   # 4 その画像をユーザーのavatarに添付
@@ -121,6 +125,15 @@ sentence(word_count: 5)は、5つの単語からなるランダムな文を生�
 (word_count: 5)
 word_countというキーを持つハッシュが引数として渡されています。word_countは生成する文の単語数を指定するためのオ
 プションです。値として5が指定されているため、5つの単語からなる文が生成されます。
+
+================================================================================================
+1.1
+:confirmable モジュールを使用すると、ユーザーがアカウントを有効化するためにメールアドレスの確認が必要になります。
+そのため、シードデータでユーザーを作成する際に、それぞれのユーザーを手動で確認（または自動で確認）するコードを追加す
+る必要があります。
+------------------------------------------------------------------------------------------------
+confirmed_at: Time.now を追加しています。これにより、シードデータで作成されるユーザーはすでにメールアドレスが確
+認された状態（すなわちアカウントが有効化された状態）で作成されます。
 
 ================================================================================================
 2

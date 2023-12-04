@@ -60,6 +60,20 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "api_app_production"
 
   config.action_mailer.perform_caching = false
+  # 1.1 メールの送信元アドレスを設定
+  config.action_mailer.default_options = { from: "no-reply@horror-domo-app.com" }
+  config.action_mailer.default_url_options = { host: "https://horror-domo-app.com" }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "gmail.com",
+    # 1.2 1.3 1.4 Rails.application.credentials.production[:gmail][:user_name]でも可
+    user_name: Rails.application.credentials[:production][:gmail][:user_name],
+    password: Rails.application.credentials[:production][:gmail][:password],
+    authentication: "plain",
+    enable_starttls_auto: true,
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -115,3 +129,61 @@ Rails.application.configure do
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1.1
+このメールアドレスは通常、自動生成されるメールからの返信を受け付けないことを示すために "no-reply" という名前が含
+まれています。
+返信を避ける: "no-reply" という名前からも分かるように、このメールアドレスは通常、ユーザーからの返信メールを受け付
+けないことを意味します。アプリケーションが送信したメールは、通常の問い合わせやサポートリクエストに対するものではなく
+、情報提供や通知のために使用されることが多いためです。
+
+================================================================================================
+1.2
+user_name: Rails.application.credentials.production.gmail.user_name,
+credentialsファイルのproductionキー（本番環境）のgmail.user_nameを取得。user_nameキーにgmailのアドレスを格
+納している
+
+================================================================================================
+1.3
+. **credentialsに直接アプリパスワードを書いてもいいの？**
+- Railsの`credentials`機能を使用する場合、秘密情報（例えばアプリパスワード）を安全に保存することができます。これ
+らの情報は暗号化されたファイル（`credentials.yml.enc`）に保存されるため、GitHubにpushしても安全です。秘密情報
+は、`credentials:edit`コマンドを使って編集することができ、この時に使用する`master.key`はリポジトリに含めないよ
+うにする必要があります。
+------------------------------------------------------------------------------------------------
+. **Railsの`/config/credentials.yml.enc`はどういう役割があるの？**
+- `credentials.yml.enc`はRailsアプリケーションの秘密情報（例えばAPIキー、データベースパスワード、外部サービス
+の認証情報など）を安全に保存するための暗号化されたファイルです。このファイルは`rails credentials:edit`コマンド
+で編集でき、内容は`Rails.application.credentials`を通じてアクセス可能です。これにより、秘密情報をコードベース
+から分離し、セキュリティを強化できます。
+------------------------------------------------------------------------------------------------
+. **`credentials.yml.enc`の`.enc`の意味は？**
+- `.enc`は「encrypted」（暗号化された）の略です。これは、ファイルの内容が暗号化されていることを示しています。暗
+号化されたファイルは、対応する`master.key`がなければ内容を読み取ることはできません。このため、`master.key`は秘
+密にしておく必要があり、特に公開リポジトリには含めないようにします。
+
+================================================================================================
+1.4
+docker-compose -f docker-compose.dev.yml run --rm api EDITOR="vi" rails credentials:edit
+------------------------------------------------------------------------------------------------
+backend/api/config/credentials.yml.enc
+
+production:
+  .
+  .
+  gmail:
+    user_name: xxxxxxxxx@gmail.com
+    password: xxxxxxxxxxxxxxxxxxxx
+------------------------------------------------------------------------------------------------
+production: gmail: について
+* production: gmail: の部分は、Railsのcredentialsファイル内で特定の環境（この場合は本番環境）に特有の設定を
+行うための構造です。ここで設定されるgmailキーは、GmailのSMTPサーバーを使用するためのユーザー名（メールアドレス）
+とパスワードを格納するために使用されます。
+* credentialsファイルは、環境ごとに異なる秘密情報（例えばAPIキー、メールアドレス、パスワードなど）を安全に保存す
+るための暗号化されたファイルです。このファイル内で設定されるキーと値は、アプリケーションのコード内で安全に参照する
+ことができます。
+* このように書く意図は、本番環境特有のメール設定を分離し、秘密情報をコードベースから分離して安全に管理することです。
+この場合、Gmailのユーザー名とパスワードは、本番環境でのみ使用され、開発やテスト環境では使用されません。
+=end

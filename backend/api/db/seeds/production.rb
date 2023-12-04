@@ -15,6 +15,8 @@ user1 = User.create!(
   password_confirmation: 'momomo',
   admin: true,
   profile: profiles.sample,
+  # 1.1
+  confirmed_at: Time.current
 )
 
 user2 = User.create!(
@@ -23,6 +25,7 @@ user2 = User.create!(
   password: 'kokoko',
   password_confirmation: 'kokoko',
   profile: profiles.sample,
+  confirmed_at: Time.current
 )
 
 model_users = [user1, user2]
@@ -64,7 +67,8 @@ image_paths = %w[
                 email: email,
                 password:              password,
                 password_confirmation: password,
-                profile: profile)
+                profile: profile,
+                confirmed_at: Time.current)
   image_path = Rails.root.join(image_paths.sample)
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
   20.times do
@@ -90,3 +94,32 @@ allusers.each do |user|
     user.likes.create!(post_id: post.id)
   end
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1.1
+. **Time.now vs Time.current**：
+- Time.now`： これはシステムのローカルタイムゾーンに基づいた現在時刻を返します。システムのタイムゾーンがRailsア
+プリケーションと同じゾーンに設定されていない場合、不整合が発生する可能性があります。
+- Time.current`： これはRailsアプリケーションで設定されているタイムゾーンを尊重するRailsメソッドです。アプリケ
+ーションの設定で `config.time_zone = 'Tokyo'` を設定すると、`Time.current` は常に東京のタイムゾーンの時刻を
+返します。
+------------------------------------------------------------------------------------------------
+. **Railsのタイムゾーン設定**：
+- config/application.rb`で`config.time_zone = 'Tokyo'`を設定すると、Railsに対して、時間に関連するすべて
+の操作に東京のタイムゾーンを使うように指示することになります。これにより、データベースに保存されるすべてのタイムスタ
+ンプがこのタイムゾーンと一致するようになります。
+------------------------------------------------------------------------------------------------
+. **なぜうまくいったのか**：
+- 最初に`confirmed_at： Time.now`を使用していた場合、タイムスタンプは異なるタイムゾーン（システムのローカルタイ
+ムゾーン）で設定されていた可能性が高く、時差によってはユーザーが確認されたと認識されない可能性がありました。
+- そこで、`confirmed_at： Time.current`に変更し、Railsのタイムゾーンを東京に設定すると、確認に使用されるタイ
+ムスタンプはアプリケーションの設定タイムゾーンと一致するようになりました。この一貫性により、seed直後のユーザが確認
+されたと正しく認識されるようになりました。
+------------------------------------------------------------------------------------------------
+. **ベストプラクティス
+- Railsアプリケーションでは、特にタイムゾーンを扱う場合、一般に`Time.now`よりも`Time.current`を使うのがよい習
+慣です。
+- Railsアプリケーションで特定のタイムゾーンを設定することは、特にアプリケーションのユーザが異なるタイムゾーンにい
+る場合や、サーバのタイムゾーンがターゲットとするユーザと異なる場合に、不整合を避けるために非常に重要です。
+=end

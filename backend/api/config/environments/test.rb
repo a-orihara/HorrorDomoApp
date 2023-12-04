@@ -42,8 +42,10 @@ Rails.application.configure do
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
+  # [Action Mailerに実世界にメールを配信しないように指示する。
+  #   test 配送メソッドは送信されたメールを 配列に蓄積します。]
   config.action_mailer.delivery_method = :test
-
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3010 }
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

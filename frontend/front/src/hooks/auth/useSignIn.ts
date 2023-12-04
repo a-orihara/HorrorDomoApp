@@ -47,8 +47,11 @@ export const useSignIn = () => {
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
+        // 実装中：first-loginをtrueにすることで、初回ログイン時にwelcome-messageを表示する。
+        // localStorage.setItem('firstTimeLogin', 'true');
         setTimeout(() => {
-          router.push(`/users/${res.data.data.id}`);
+          // router.push(`/users/${res.data.data.id}`);
+          router.push(`/`);
         }, 1000);
       } else {
         setAlertSeverity('error');

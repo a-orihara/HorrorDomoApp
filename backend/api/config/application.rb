@@ -29,7 +29,7 @@ module ApiApp
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = 'Tokyo'
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
@@ -52,9 +52,9 @@ module ApiApp
     config.middleware.insert_before 0, Rack::Cors do
       # 許可されるCORSリクエストについての設定
       allow do
-        # すべてのオリジンからのリクエストを許可
+        # origins '*'すべてのオリジンからのリクエストを許可（なぜかrspecだと使えないため）
+        # origins Settings.front_domain || '*'
         origins '*'
-        # origins Settings.front_domain
         # すべてのリソースに対するCORSポリシーを指定
         resource '*',
                   # すべてのヘッダーを許可

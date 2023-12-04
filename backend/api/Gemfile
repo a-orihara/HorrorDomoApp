@@ -24,12 +24,15 @@ gem 'rack-cors'
 # 下記追加 --------------------------------------
 # 環境変数を読み込む
 gem 'dotenv-rails'
-# 環境毎の設定管理を行う。dotenv-railsの後に入れないとエラーになる。
+# 環境毎の設定管理（環境変数の管理）を行う。dotenv-railsの後に入れないとエラーになる。
 gem 'config'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'rails-i18n' # 日本語化
-gem 'devise-i18n' # deviseの日本語化
+# Deviseで使用される様々なメッセージやエラー文を翻訳する
+gem 'devise-i18n'
+# Deviseのビューファイル（ログインフォームやパスワードリセットフォームなど）を翻訳する。
+gem 'devise-i18n-views'
 gem 'kaminari' # ページネーション
 gem 'active_storage_validations' # active_starageのバリデーション設定
 # [アクティブストレージのバリアントを使用する]
@@ -53,6 +56,8 @@ group :development, :test do
   gem 'pry-rails'
   # [Can't escape from eval with next]エラーの解消
   gem 'pry-nav'
+  # 開発環境でメール送信をテストする
+  gem "letter_opener_web"
 end
 
 group :development do
@@ -77,7 +82,6 @@ end
 group :test do
   gem 'shoulda-matchers'
 end
-
 
 group :production do
   # productionモード（S3）向けのビルドの時のみ、S3関連 gem を追加でインストール

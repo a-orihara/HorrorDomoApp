@@ -57,15 +57,15 @@ Metrics:
   Enabled: false
 
 # 日本語でのコメントを許可
-AsciiComments:
+Layout/AsciiComments:
   Enabled: false
 
 # クラスのコメント必須を無視
-Documentation:
+Style/Documentation:
   Enabled: false
 
 # モジュール名::クラス名の定義を許可(コントローラ等のモジュールをネストしての宣言)
-ClassAndModuleChildren:
+Style/ClassAndModuleChildren:
   Enabled: false
 
 # 文字リテラルのイミュータブル宣言を無視（freezeになるのはRuby3以降）

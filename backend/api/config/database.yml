@@ -1,4 +1,6 @@
 # 1
+# db:リセット
+# rails db:drop && rails db:create && rails db:migrate && rails db:seed
 
 # MySQL. Versions 5.5.8 and up are supported.
 #

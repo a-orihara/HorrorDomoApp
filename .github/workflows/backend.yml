@@ -9,6 +9,10 @@ name: Run Rspec and Rubocop
 on:
   push:
 
+# envセクションはGitHub Actionsワークフロー内で使用される環境変数を設定するためのセクション
+env:
+  EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+
 # 3.1 ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:
   # jobsのマップのキー（<job_id>）。jobs.<job_id>:rspec。<job_id>:名は重複不可。

@@ -44,6 +44,7 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   # [Action Mailerに実世界にメールを配信しないように指示する。
   #   test 配送メソッドは送信されたメールを 配列に蓄積します。]
+  # 1.1
   config.action_mailer.delivery_method = :test
   config.action_mailer.default_url_options = { host: 'localhost', port: 3010 }
   # Print deprecation notices to the stderr.
@@ -61,3 +62,17 @@ Rails.application.configure do
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 end
+
+=begin
+@          @@          @@          @@          @@          @@          @@          @@          @
+1.1
+テスト環境でのメールの送信シミュレーション設定は、`backend/api/config/environments/test.rb` ファイル内の以
+下の部分で行われています：
+```
+config.action_mailer.delivery_method = :test
+```
+この行は、Action Mailerの配送方法を `:test` に設定します。これにより、実際にメールサーバーにメールを送信する代
+わりに、送信されたメールが `ActionMailer::Base.deliveries` 配列に蓄積されます。この配列にメールが追加されるこ
+とにより、実際にメールが送信されたかどうかのテストが可能になります。実際のSMTPサーバーへの接続は発生せず、メール送
+信のプロセスがシミュレートされるのみです。
+=end

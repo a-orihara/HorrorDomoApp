@@ -28,7 +28,8 @@ gem 'dotenv-rails'
 gem 'config'
 gem 'devise'
 gem 'devise_token_auth'
-gem 'rails-i18n' # 日本語化
+# 「アイ・ワン・エイト・エヌ」と読みます。これは「国際化（Internationalization）」の略語
+gem 'rails-i18n'
 # Deviseで使用される様々なメッセージやエラー文を翻訳する
 gem 'devise-i18n'
 # Deviseのビューファイル（ログインフォームやパスワードリセットフォームなど）を翻訳する。
@@ -80,6 +81,7 @@ end
 
 # 下記追加 --------------------------------------
 group :test do
+  # RSpec内で使用できるライブラリで、複雑なテストをワンライナーで書くことができるマッチャ
   gem 'shoulda-matchers'
 end
 

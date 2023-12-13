@@ -29,7 +29,7 @@ add_index
 :micropostsと[:user_id, :created_at]の2つの引数
 :micropostsはインデックスを追加するテーブルを指定します。
 [:user_id, :created_at]はインデックスを作成するフィールドを指定します。user_id と created_at の両方を1つの
-配列に含めている。う することで Active Record は、両方のキーを同時に扱う複合キーインデックス
+配列に含めている。こうすることで Active Record は、両方のキーを同時に扱う複合キーインデックス
 (Multiple Key Index)作成します。
 ------------------------------------------------------------------------------------------------
 micropostsテーブルにuser_idとcreated_atの組み合わせのインデックスが作成されます。

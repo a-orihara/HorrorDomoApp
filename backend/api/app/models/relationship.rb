@@ -14,14 +14,15 @@ belongs_to :follower, class_name: "User"
 followerという名前（任意）のクラスに所属しているが、そのクラスの実体はUserクラスという意味。
 ------------------------------------------------------------------------------------------------
 belongs_to :follower, class_name: "User"
-class_name: "User"を書いているのは、belongs_to :followerにすると、railsはデフォルトでfollowerクラスを探し
-に行くから。実際にはRelationshipは、外部キーfollower_idにより、userモデルにbelong_toしている。
-
+class_name: "User"を書いているのは、これを書かないとrailsは外部キーはuser_idであるとして探すから。
+belongs_to :followerにすると、railsはデフォルトの挙動ででfollowerクラスを探しに行く。実際にはRelationshipは
+、外部キーfollower_idにより、userモデルにbelong_toしているから、follower_idをrailsが探すようにこのように書く。
+------------------------------------------------------------------------------------------------
 postだとこういう書き方
 belongs_to :user
 これはpostはuserに属し、railsはデフォルトで、外部キーはuser_idであるとして探す。
-
-ちなみにuser側は公のような記載に
+------------------------------------------------------------------------------------------------
+ちなみにuser側はこのような記載に
 has_many :active_relationships, class_name: "Relationship",
                                 foreign_key: "follower_id",
 has_many :active_relationships の関連性を示す際に、foreign_key: "follower_id" を指定することで、
@@ -38,7 +39,6 @@ follower
 ================================================================================================
 2
 belongs_to :followed, class_name: "User"
-`followed`
 `followed` の使用例は以下の通りです：
 - `relationship.followed`：`relationship` オブジェクトがフォローしているユーザー（followed）を取得します。
 - `relationship.followed.email`：`relationship` オブジェクトがフォローしているユーザーのメールアドレスを取

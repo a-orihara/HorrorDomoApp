@@ -1,5 +1,5 @@
 class Api::V1::RelationshipsController < ApplicationController
-  # 1
+  # 1 サインインしているかの確認
   before_action :authenticate_api_v1_user!
 
   # 2

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       # 1 api/v1/auth
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        # 作成した'api/v1/auth/registrations'とdevise_token_authのregistrationsを紐付け
         registrations: 'api/v1/auth/registrations',
         sessions: 'api/v1/auth/sessions',
       }
@@ -75,7 +76,7 @@ end
 1
 mount_devise_token_auth_for
 deviseのdevise_forに相当
-
+------------------------------------------------------------------------------------------------
 'User'
 DeviseのUserモデルに対する設定
 at: 'auth'
@@ -84,11 +85,11 @@ controllers:
 devise_token_authで使用するコントローラーを指定します。
 registrations: 'api/v1/auth/registrations'
 ユーザーの登録に関する registrationsコントローラーを api/v1/auth/registrations_controller.rb に設定します。
-
+------------------------------------------------------------------------------------------------
 mount_devise_token_auth_for 'User', at: 'auth', controllers: { registrations: 'api/v1/auth/registrations' }
 という設定は、DeviseTokenAuthライブラリのモジュールを指定したモデル（この場合は'User'）とパス（'auth'）にマウン
 トする設定です。ここでは特にregistrationsコントローラーについてカスタムのコントローラーを指定しています。
-
+------------------------------------------------------------------------------------------------
 mount_devise_token_auth_for 'User':
 mount_devise_token_auth_forはDeviseTokenAuthの全てのルーティングを設定します。この場合、'User'モデルに対し
 て設定しています。つまり、DeviseTokenAuthの認証機能を'User'モデルで使用するためのルーティングを作成します。
@@ -99,7 +100,21 @@ controllers: { registrations: 'api/v1/auth/registrations' }:
 controllersオプションは、DeviseTokenAuthのデフォルトのコントローラーをカスタムのコントローラーにオーバーライド
 します。この場合、registrationsコントローラー（ユーザーの登録に関する処理を担当）をカスタムの
 'api/v1/auth/registrations'コントローラーにオーバーライドしています。
-
+------------------------------------------------------------------------------------------------
+- `mount_devise_token_auth_for 'User', at: 'auth'`の意味:
+- このコードは、Devise Token Authのルーティングをアプリケーションにマウントするために使用されます。
+- `'User'`モデル用にDevise Token Authのルーティングを設定しており、認証機能を'User'モデルに結び付けています。
+- `at: 'auth'`オプションは、Devise Token Authのルーティングをアプリケーションの`'auth'`パスにマウントすること
+を意味します。これにより、`'auth'`というパスがDevise Token Auth関連の機能のURLのプレフィクスになります。
+------------------------------------------------------------------------------------------------
+- `controllers: { registrations: 'api/v1/auth/registrations' }`の意味:
+- このオプションは、Devise Token Authが提供するデフォルトのコントローラーを、カスタムのコントローラーでオーバー
+ライドするために使用されます。
+- ここでは、Devise Token Authの`registrations`コントローラーを`'api/v1/auth/registrations'`にオーバーラ
+イドしています。これにより、ユーザー登録に関する処理がこのカスタムコントローラーで行われるようになります。
+------------------------------------------------------------------------------------------------
+総じて、これらの設定により、Devise Token Authの認証機能が`'User'`モデルと連携し、URLプレフィクス`'auth'`を介してアクセスされ、ユーザー登録の処理がカスタムコントローラー`'api/v1/auth/registrations'`で行われるようになります。これは、認証システムのカスタマイズと整理を容易にするための一般的な設定です。
+------------------------------------------------------------------------------------------------
 この設定全体をまとめると、「'User'モデルのためのDeviseTokenAuthの認証機能を、'auth'というパスで利用し、その際
 のユーザー登録に関する処理はカスタムの'api/v1/auth/registrations'コントローラーで行う」という意味になります。
 

@@ -1,7 +1,7 @@
-# 1
-# db:リセット
+# db:リセットコマンド
 # rails db:drop && rails db:create && rails db:migrate && rails db:seed
 
+# 1
 # MySQL. Versions 5.5.8 and up are supported.
 #
 # Install the MySQL driver
@@ -16,8 +16,9 @@
 
 # 2
 default: &default
+  # 2.1
   adapter: mysql2
-  # 文字コード
+  # 2.2 文字コード
   encoding: utf8mb4
   # 3
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -26,8 +27,7 @@ default: &default
 #  デフォルトでは、開発環境のdbを参照する。
 development:
   <<: *default
-  # database:データベース名。api-app:このアプリの名前。
-  # api_app_developmentという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
+  # 3.3
   database: api_app_development
   # db接続に使用するユーザの名前。<初期の設定>／username: root
   username: user_dev
@@ -69,8 +69,6 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 
-# productionの設定においては、database、username、passwordはベタ書きせずに、環境変数で保存する。
-# .envに保存するので、gitプッシュされない。
 production:
   <<: *default
   database: api_app_production
@@ -125,7 +123,16 @@ production:
 # 本番環境ではDockerコンテナを使用せず、RDSを使用している為、個別の設定をしている。
 
 # ================================================================================================
+# 3.3
+# database:データベース名。api-app:このアプリの名前。
+# api_app_developmentという名前のDBが自動でMysqlコンテナの中に作成（初期設定）
+
+# ================================================================================================
 # 4
+# productionの設定においては、database、username、passwordはベタ書きせずに、環境変数で保存する。
+# ------------------------------------------------------------------------------------------------
+# .envに保存するので、gitプッシュされない。もしくはawsのコンテナの場合はrdsのurl情報を書く。
+# ------------------------------------------------------------------------------------------------
 # . `<%= ENV['MYSQL_USER'] %>`の意味とメソッドについて:
 # - ERB (Embedded RuBy)テンプレートの構文で、中のRubyコードを評価して結果を出力します。
 # - `ENV`はRubyの環境変数を取得するためのHash-likeオブジェクトで、この場合は`'MYSQL_USER'`というキーで指定され

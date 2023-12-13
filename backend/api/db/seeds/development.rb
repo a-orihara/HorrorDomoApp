@@ -78,11 +78,12 @@ image_paths = %w[
                 confirmed_at: Time.current)
   # 3 画像のパスの配列からランダムに1つ選択
   image_path = Rails.root.join(image_paths.sample)
-  # 4 その画像をユーザーのavatarに添付
+  # 7 その画像をユーザーのavatarに添付
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
   20.times do
     content = contents.sample
-    title = titles.sample # タイトルの配列からランダムに選ぶ
+    # タイトルの配列からランダムに選ぶ
+    title = titles.sample
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
     user.posts.create!(content: content, title: title, created_at: created_at)
   end
@@ -214,10 +215,39 @@ backend/api/に置き換わる
 - メソッド: `YAML.load_file`メソッドはYAML形式のファイルを読み込むためのメソッド。
 - 戻り値: 読み込んだYAMLファイルの内容をRubyオブジェクトとして返す。
 - 引数: 読み込むYAMLファイルのパスを文字列またはPathnameオブジェクトで指定。
-
+------------------------------------------------------------------------------------------------
 . `(profiles_path)['profiles']`の意味
 - `profiles_path`: この変数はYAMLファイルのパスを保持している。
 - `['profiles']`: YAMLファイル内の`profiles`キーに対応する値を取り出すための記法。
 - 指しているもの: `profiles`キーの値（YAMLファイル内における）を取得している。YAMLファイルの構造に応じた値が取
 り出される。ハッシュのキーから値を取り出しているため、profilesはハッシュとなります。
+
+================================================================================================
+7
+`user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path),
+content_type: 'image/png')`の各部分の解説:
+. `io`:
+- `io`は、Input/Outputストリームを指します。ここでは`File.open(image_path)`によって開かれたファイルのストリ
+ームを表します。
+- `File.open(image_path)`は、指定されたパス（`image_path`）にあるファイルを開き、その内容を読み込むために使
+われます。このファイルストリームは、`user.avatar.attach`メソッドに画像データとして渡されます。
+------------------------------------------------------------------------------------------------
+. `filename:`:
+- `filename`は、添付されるファイルの名前を指定するために使用されます。
+- `File.basename(image_path)`は、ファイルのフルパスからファイル名のみを抽出します。例えば、パスが
+`app/assets/images/man1.png`であれば、`man1.png`というファイル名を取得します。
+------------------------------------------------------------------------------------------------
+. `File.open`:
+- `File.open`は、指定されたパスにあるファイルを開くために使用されるRubyのメソッドです。
+- このメソッドはファイルの内容に対する読み込み（または書き込み）アクセスを提供し、ここでは画像ファイルを読み込むた
+めに使われています。
+------------------------------------------------------------------------------------------------
+. `File.basename`:
+- `File.basename`は、ファイルパスからファイル名を抽出するRubyのメソッドです。
+- このメソッドはフルパスからファイル名部分のみを取り出すために使われ、拡張子を含む完全なファイル名を返します。
+------------------------------------------------------------------------------------------------
+このコードは、`user`オブジェクトの`avatar`属性に画像ファイルを添付するために使用されています。ファイルの内容は、
+`io`を通して読み込まれ、`filename`でファイル名が指定され、`content_type`でそのファイルの種類
+（この場合は`'image/png'`）が指定されています。これにより、画像がユーザーのアバターとしてActive Storageを使っ
+て適切に保存されます。
 =end

@@ -7,7 +7,7 @@ RUN apt-get update -qq \
   && rm -rf /var/lib/apt/lists/* \
   && npm install --global yarn
 
-# 作業ディレクトリはその後のDockerfile内でのRUN,COPYなどのあらゆる命令の起点となるカレントディレクトリ。
+# 作業ディレクトリはその後のDockerfile内でのRUN,COPYなどのあらゆる命令の起点となる、Dockerコンテナ内でのカレントディレクトリ。
 WORKDIR /api-app
 #COPY(コピー)はローカル側のファイルをdockerイメージ側の指定したディレクトリにコピーする
 COPY Gemfile /api-app/Gemfile
@@ -15,7 +15,7 @@ COPY Gemfile.lock /api-app/Gemfile.lock
 # RUN mkdir -p /api-app/tmp/sockets
 # Gemfileに記載されたGem(初回時はrailsが記載)をインストールする。再ビルド時にbundle installするために記載。
 RUN bundle install
-# COPY . /api-app
+# COPY . /api-appは、docker-compose.dev.ymlでバウンドされているのでいらない
 # コンテナ起動時に毎回実行されるスクリプトを追加する。/usr/bin/はコンテナのLinuxベースのディレクトリ。
 COPY entrypoint.sh /usr/bin/
 # 1.1 entrypoint.shの権限(+x:すべてのユーザーに実行権限を追加)を変更
@@ -37,6 +37,9 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 # 管理するコマンド
 # apt-get update:インストール可能なパッケージの一覧の更新
 # -qq:quietモードで実行。ログを極力表示させない。エラー以外を表示しないオプション
+# リポジトリの情報を最新の状態に保ち、インストールやアップデートされるパッケージが最新バージョンであることを確認する
+# ために使用される。
+# Dockerコンテナ内での利用では、コンテナビルド時に最新のパッケージ情報を取得し、依存関係を正しく解決するために重要。
 # ------------------------------------------------------------------------------------------------
 # Railsの起動に必要となるnodejsとnpmをインストールする。常にyesの-y指定。
 # apt-get install -y nodejs npm
@@ -44,23 +47,19 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 # rm -rf:ディレクトリを強制削除。aptのキャッシュを削除し容量を小さくする
 # rm -rf /var/lib/apt/lists/* \
 # ------------------------------------------------------------------------------------------------
-# なぜnodejs、npm、yarnをインストールするのですか？これらはRailsに必要なのでしょうか？
-# JavaScriptランタイム： Node.jsはJavaScriptランタイムとして機能します。Railsアプリケーションのアセットをコンパ
-# イルする際に必要になることがよくあります。アセットパイプラインに関連する多くの機能にはJavaScriptランタイムが必要で
-# す。
 # パッケージ管理: npmはNode.jsのパッケージマネージャです。npmをインストールするのは、yarnをインストールするための
 # 前提条件だからです。
 # Yarn：これもパッケージマネージャのひとつで、JavaScriptパッケージを管理するために最近のRailsアプリケーションでよ
 # く使われています。
-# これらは必要か: アプリケーションによります。Rails APIを構築していてフロントエンドのコードがない場合、厳密に言えば
-# これらは必要ないかもしれません。しかし、インストールしておくことで、将来の開発のための柔軟性を高めることができます。
 # ------------------------------------------------------------------------------------------------
 # 理由
-# Railsは、特にWebpackerのような機能の導入により、JavaScriptをエコシステムに統合する方向に進んでいます。
-# より汎用的なRailsイメージに後からフロントエンドのロジックを追加する可能性がある場合、Node.js、npm、Yarnを含める
-# のは良い判断です。
-# また、Dockerfileにデフォルトでこれらを含めることで、これらの機能が必要になったときにDockerfileを後でカスタマイ
-# ズする必要がなくなります。
+# Rails 6はWebpackerを標準でサポートしており、JavaScriptの管理にNode.jsとnpm（またはYarn）が必要。
+# APIモードであっても、アセットパイプライン（JavaScriptやCSSなどのフロントエンドアセットの管理）にNode.jsが必要に
+# なる場合がある。
+# 特に、Rails 6ではWebpackerが標準で組み込まれているため、JavaScriptのパッケージ管理やビルドプロセスにNode.jsと
+# npmが用いられる。
+# ただし、完全にAPIのみを提供し、フロントエンドアセットを使用しない場合は、Node.jsとnpmは不要になることもある（詳細
+# 不明）。
 
 # ================================================================================================
 # 1.1
@@ -112,15 +111,31 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 # - `command: bash -c "rm -f tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"` は、
 # `docker-compose up`が実行された際に、`api`サービスに対して実行されます。
 # - この`command`は`Dockerfile`の`CMD`をオーバーライドします。
+# - docker-compose runは特定のコマンドを実行し、docker-compose.ymlのcommandは無視される。
+# docker-compose upはdocker-compose.ymlのcommandを実行する。
 # ------------------------------------------------------------------------------------------------
 # 根拠:
-# - Dockerfileの`CMD`はデフォルトのコマンドですが、docker-composeや`docker run`で指定された`command`によっ
+# - Dockerfileの`CMD`はデフォルトのコマンドですが、docker-compose upや`docker run`で指定された`command`によっ
 # てオーバーライドされます。
 # - `ENTRYPOINT`はコンテナが起動する際に最初に実行される点で、一種のイニシャライザとして機能します。
 # ------------------------------------------------------------------------------------------------
 # 総合すると、起動の順番は以下の通りです。
 # 1. `ENTRYPOINT ["entrypoint.sh"]` が実行され、古い`server.pid`が削除されます。
-# 2. docker-composeの`command`が実行されます。このとき、新たに`rails s -p 3000 -b '0.0.0.0'`が呼び出されます。
+# 2. docker-composeの`command`が実行されます。このとき、新たに`rails s -p 3000 -b '0.0.0.0'`が呼び出されま
+# す。
+# ------------------------------------------------------------------------------------------------
+### `docker-compose -f docker-compose.dev.yml run --rm api` コマンドを実行した場合の起動順序
+# . **entrypoint.shの実行**:
+# - コマンドが実行されると、まず`entrypoint.sh`が実行されます。これは`Dockerfile`で
+# `ENTRYPOINT ["entrypoint.sh"]`として指定されているためです。
+# - `entrypoint.sh`内の`rm -f /api-app/tmp/pids/server.pid`コマンドが実行され、古い`server.pid`ファイル
+# が削除されます。
+# . **指定されたコマンドの実行**:
+# - `docker-compose run`コマンドは、`docker-compose.yml`ファイル内の`command`を無視し、代わりにコマンドライ
+# ンで指定されたコマンドを実行します。
+# - この場合、`docker-compose -f docker-compose.dev.yml run --rm api`には追加のコマンドが指定されていない
+# ため、`Dockerfile`内の`CMD ["rails", "server", "-b", "0.0.0.0"]`が実行されます。
+
 # ------------------------------------------------------------------------------------------------
 ### docker-compose -f docker-compose.dev.yml run --rm api rails db:seedを実行したとき
 # 1. `entrypoint.sh` が実行される。この中で `/api-app/tmp/pids/server.pid` が削除される。
@@ -140,6 +155,10 @@ CMD ["rails", "server", "-b", "0.0.0.0"]
 # 3
 # bindオプションで0.0.0.0を指定。0.0.0.0は全てのアドレスという意味。由まり、どのIP Addressからも
 # railsサーバーに接続可能という意味。
+# Dockerコンテナ内でRailsアプリケーションを実行する場合、このオプションを使うことで、コンテナ外からのリクエスト（例
+# えばホストマシンや他のコンテナからのリクエスト）を受け入れることができます。
+# デフォルトでは、Railsサーバーはlocalhost（127.0.0.1）でのみリスニングするため、コンテナ外からはアクセスできませ
+# ん。0.0.0.0を使用することで、これを外部アクセス可能にすることができます。
 # ------------------------------------------------------------------------------------------------
 # CMD
 # CMDは完成したイメージからコンテナを作成するときに実行されます。つまりdocker runの時に実行されます。

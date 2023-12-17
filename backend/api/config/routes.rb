@@ -18,9 +18,9 @@ Rails.application.routes.draw do
       root 'home_pages#home'
       # api/v1/authenticated_users
       resources :authenticated_users, only: %i[index]
-      # api/v1/users
+      # 2 api/v1/users userについてはindex,showメソッドのみ作成
       resources :users, only: %i[index show] do
-        # 2
+        # 2.1
         member do
           get :following,
               :followers,
@@ -113,11 +113,9 @@ controllersオプションは、DeviseTokenAuthのデフォルトのコントロ
 - ここでは、Devise Token Authの`registrations`コントローラーを`'api/v1/auth/registrations'`にオーバーラ
 イドしています。これにより、ユーザー登録に関する処理がこのカスタムコントローラーで行われるようになります。
 ------------------------------------------------------------------------------------------------
-総じて、これらの設定により、Devise Token Authの認証機能が`'User'`モデルと連携し、URLプレフィクス`'auth'`を介してアクセスされ、ユーザー登録の処理がカスタムコントローラー`'api/v1/auth/registrations'`で行われるようになります。これは、認証システムのカスタマイズと整理を容易にするための一般的な設定です。
-------------------------------------------------------------------------------------------------
-この設定全体をまとめると、「'User'モデルのためのDeviseTokenAuthの認証機能を、'auth'というパスで利用し、その際
-のユーザー登録に関する処理はカスタムの'api/v1/auth/registrations'コントローラーで行う」という意味になります。
-
+総じて、これらの設定により、Devise Token Authの認証機能が`'User'`モデルと連携し、URLプレフィクス`'auth'`を介
+してアクセスされ、ユーザー登録の処理がカスタムコントローラー`'api/v1/auth/registrations'`で行われるようになり
+ます。
 ------------------------------------------------------------------------------------------------
 作成されるコントローラー（DeviseTokenAuth内で定義）
 DeviseTokenAuth::SessionsController
@@ -156,14 +154,6 @@ api_v1_auth_validate_token      GET    /api/v1/auth/validate_token(.:format)    
 ------------------------------------------------------------------------------------------------
 api_v1_authenticated_users      GET    /api/v1/authenticated_users(.:format)    api/v1/authenticated_users#index
 ------------------------------------------------------------------------------------------------
-api_v1_todos                    GET    /api/v1/todos(.:format)                  api/v1/todos#index
-                                POST   /api/v1/todos(.:format)                  api/v1/todos#create
-api_v1_todo                     GET    /api/v1/todos/:id(.:format)              api/v1/todos#show
-                                PATCH  /api/v1/todos/:id(.:format)              api/v1/todos#update
-                                PUT    /api/v1/todos/:id(.:format)              api/v1/todos#update
-                                DELETE /api/v1/todos/:id(.:format)              api/v1/todos#destroy
-
-------------------------------------------------------------------------------------------------
 api_v1_users                    GET    /api/v1/users(.:format)                  api/v1/users#index
 api_v1_user                     GET    /api/v1/users/:id(.:format)              api/v1/users#show
 
@@ -171,7 +161,6 @@ api_v1_user                     GET    /api/v1/users/:id(.:format)              
 api_v1_admin_user               DELETE /api/v1/admin/users/:id(.:format)        api/v1/admin/users#destroy
 
 ------------------------------------------------------------------------------------------------
-
 active_storage/blobs/redirect#show
 
 rails_blob_representation       GET    /rails/active_storage/representations/redirect/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations/redirect#show
@@ -207,9 +196,6 @@ confirmations: Devise::ConfirmationsController -> users/confirmations
 unlocks: Devise::UnlocksController -> users/unlocks
 
 ------------------------------------------------------------------------------------------------
-devise_forとmount_devise_token_auth_forは、それぞれDeviseとDevise Token Auth認証システム用のルートを生
-成するために使用されます。これらのシステムはどちらもRailsアプリケーションの認証ソリューションを提供します。
-
 DeviseとDevice Token Authの認証システム用のルートを生成するために使用されます。Devise Token Authを使用する
 場合、サーバーはセッション状態を保持せず、代わりにクライアントから送信されたトークンに依存して各リクエストを認証し
 ます。
@@ -226,7 +212,6 @@ registrations#create アクションは、ユーザー登録（サインアッ�
 ユーザーオブジェクトを検証して、指定された情報が正しく、モデルのバリデーションに合格することを確認します。
 検証に合格した場合、新しいユーザーをデータベースに保存します。
 devise_token_auth では、ユーザー登録時にユーザーが作成されるだけでなく、アクセストークンも生成されます。
-
 ------------------------------------------------------------------------------------------------
 devise_forの結果
 
@@ -235,7 +220,6 @@ devise_forの結果
 new_user_session GET            /users/sign_in(.:format)        devise/sessions#new
 user_session POST               /users/sign_in(.:format)        devise/sessions#create
 destroy_user_session DELETE     /users/sign_out(.:format)       devise/sessions#destroy
-
 ------------------------------------------------------------------------------------------------
 パスワード関連
 # パスワードページ
@@ -246,7 +230,6 @@ edit_user_password GET          /users/password/edit(.:format)  devise/passwords
 user_password PATCH             /users/password(.:format)       devise/passwords#update
               PUT               /users/password(.:format)       devise/passwords#update
               POST              /users/password(.:format)       devise/passwords#create
-
 ------------------------------------------------------------------------------------------------
 サインアップ関連
 
@@ -259,7 +242,6 @@ user_registration PATCH         /users(.:format)                devise/registrat
                   PUT           /users(.:format)                devise/registrations#update
                   DELETE        /users(.:format)                devise/registrations#destroy
                   POST          /users(.:format)
-
 ------------------------------------------------------------------------------------------------
 devise_for :usersで自動的に生成されるURLヘルパーメソッド
 
@@ -278,7 +260,6 @@ user_path                          # ユーザー情報を表示するGETリク�
 new_user_password_path            # パスワードリセット画面を表示するGETリクエスト用のパス
 edit_user_password_path           # パスワード再設定画面を表示するGETリクエスト用のパス
 user_password_path                # パスワード再設定処理を行うPUTリクエスト用のパス
-
 ================================================================================================
 postのルート
 
@@ -304,9 +285,22 @@ api_v1_post GET    /api/v1/posts/:id(.:format)  api/v1/posts#show
 
 ================================================================================================
 2
+. `%i`の解説:
+- `%i` はRubyのリテラル表記の一つで、シンボルの配列を簡単に書木、読みやすくするために使います。
+- 例えば、`%i[index show]` は `[:index, :show]` と同じ意味です。
+------------------------------------------------------------------------------------------------
+. `resources :users, only: %i[index show] do` の全体の解説:
+- `resources` はRailsのルーティングでCRUD操作に必要なルートを自動で生成するメソッドです。
+- `:users` はこのルーティングが適用されるリソース（ここではUserモデル）を指します。
+- `only: %i[index show]` は、生成するルートの種類を制限します。ここでは、`:index`（ユーザー一覧ページ）と、
+`:show`（特定のユーザーの詳細ページ）のルートのみを生成します。
+- `do ... end` はブロックを表し、この中に追加のルーティングを定義できます（例: メンバールート）。
+
+================================================================================================
+2.1
 `member`
 Railsのルーティングで使用されるメソッドで、`resources`ブロック内で使用されます。
-これは、そのリソースの特定のメンバー(つまり、特定のIDを持つレコード)に対する追加のルートを定義します。
+これは、そのリソース（user）の特定のメンバー(つまり、特定のIDを持つレコード)に対する追加のルートを定義します。
 `member`はブロックとして引数を取り、そのブロック内でHTTP動詞メソッド(`get`, `post`, `patch`, `put`,
 `delete`)を使用してルートを定義します。
 今回のケースでは、`:following`と`:followers`という名前の`get`リクエストを受け取るルートが定義されています。
@@ -338,13 +332,10 @@ GET api/v1/users/:id/is_following
 - `member do ... end` ブロック内でこれらが定義されているため、それらのパスは特定のユーザー(つまり`:id`パラメー
 ターを含む)に対してのみアクセス可能となります。
 ------------------------------------------------------------------------------------------------
-. `:following`, `:followers`, `:is_following`の仕組みについて
-- `:following`, `:followers`, `:is_following` はシンボルとして渡され、それぞれ対応するコントローラのアクショ
-ンとして解釈されます。それらのシンボルは自動的に文字列に変換され、アクションメソッド名として解釈されます。
--Railsのルーティングには"resources"というメソッドが存在し、このメソッドに対して特定のシンボルを渡すと、それに基づ
-いた7つの基本的なルーティング (index, new, create, show, edit, update, destroy) を自動的に生成します。
--それぞれのシンボルがアクション名として解釈されるのは、ルーティングを設定する際に、対応するコントローラのアクションと
-して指定されるからです。その際、指定されたアクションに対応するパスが自動的に生成されます。
+- `:following`, `:followers`, `:is_following` はシンボルとして渡され、それぞれ対応するコントローラのアクシ
+ョンとして解釈されます。それらのシンボルは自動的に文字列に変換され、アクションメソッド名として解釈されます。
+- Railsのルーティングには"resources"というメソッドが存在し、このメソッドに対して特定のシンボルを渡すと、それに基
+づいた7つの基本的なルーティング (index, new, create, show, edit, update, destroy) を自動的に生成します。
 ------------------------------------------------------------------------------------------------
 . `get 'likes/:post_id', to: 'likes#liked'`の引数について
 - `'likes/:post_id'`は、HTTP GETリクエストが送られるパスを表しています。この場合、`:post_id`は動的セグメント

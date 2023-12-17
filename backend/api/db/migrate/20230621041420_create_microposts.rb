@@ -3,6 +3,7 @@ class CreateMicroposts < ActiveRecord::Migration[6.1]
   def change
     create_table :microposts do |t|
       t.text :content
+      # 1.1
       t.references :user, null: false, foreign_key: true
 
       t.timestamps
@@ -20,7 +21,14 @@ t.references :user, null: false(デフォ), foreign_key: trueを自動作成
 user:references（references型）は、Micropostモデルに対してuserという関連を作成するためのオプションです。
 user:referencesを指定することで、Micropostモデルに自動的にインデックスと外部キー参照付きの user_id カラムが
 追加されます。
+規約に則った場合、つまり{モデル名_id}がそのまま使える場合に限り、user:referencesが使える。
 されます。belongs_to :userがモデルクラスに追加されます。
+
+================================================================================================
+1.1
+`t.references`は外部キーとしての関連付けを設定するために使われる。規約に則った場合、つまり{モデル名_id}がそのま
+ま使える場合に限り、user:referencesが使える。
+
 ================================================================================================
 2
 add_index

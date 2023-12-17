@@ -1,6 +1,6 @@
 # 1
 class Post < ApplicationRecord
-  # 2 postは一人のuserに属するので単数形で書く
+  # 2 postは一人のuserに属するので単数形で書く。自動で外部キーuser_idとなる
   belongs_to :user
   has_many :likes, dependent: :destroy
   # 説明はUserモデルの16を参照

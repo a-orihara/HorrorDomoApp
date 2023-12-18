@@ -37,4 +37,5 @@ unique.emailメソッドは、重複しないランダムなメールアドレ�
 1.1
 Time.current は Rails が提供するメソッドで、アプリケーションのタイムゾーン設定（config.time_zone）に従った現
 在時刻を返します。
+現在の設定、config.time_zone = 'Tokyo'
 =end

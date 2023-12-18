@@ -367,8 +367,11 @@ inverse_of::follower`と`inverse_of::followed`をアソシエーションに設�
 合、Railsはその変更を関連付けられた`Relationship`オブジェクトに反映させることができます。
 
 2. **便利なメソッド:**。
-   - あなたが挙げたメソッド (`has_many :following, through: :active_relationships, source: :followed` と `has_many :followers, through: :passive_relationships, source: :follower`) は確かに便利なメソッドです。これらは `User` モデルを通して、フォロワーやフォローしているユーザーのコレクションに直接アクセスする簡単な方法を提供します。
-   - これらのメソッドは `invers
+- あなたが挙げたメソッド (`has_many :following, through: :active_relationships, source: :followed`
+  と `has_many :followers, through: :passive_relationships, source: :follower`) は確かに便利なメソッ
+  ドです。これらは `User` モデルを通して、フォロワーやフォローしているユーザーのコレクションに直接アクセスする簡単
+  な方法を提供します。
+- これらのメソッドは `invers
 ------------------------------------------------------------------------------------------------
 - **自動認識の限界**: `ActiveRecord` は、`belongs_to` と `has_many` の基本的な関連付けは自動的に認識するが、
 `foreign_key` や `class_name` といったカスタムオプションが使用されている場合は、関連付けを自動的に認識しない。

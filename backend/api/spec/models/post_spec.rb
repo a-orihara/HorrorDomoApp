@@ -3,31 +3,31 @@ require 'rails_helper'
 RSpec.describe Post, type: :model do
   # 1 let(:user) { FactoryBot.create(:user) }の省略形
   let(:user) { create(:user) }
-  # 2
+  # 2 上段で作成したuserを使用
   let(:post) { create(:post, user: user) }
 
   it '有効であること' do
     expect(post).to be_valid
   end
 
-  it 'user_idがない場合は、無効であること' do
-    post.user_id = nil
-    expect(post).not_to be_valid
+  it 'user_idが設定されていない場合は無効であること' do
+    expect(post).to validate_presence_of(:user_id)
   end
 
-  it 'コンテンツの長さが200文字以内なら有効であること' do
-    post.content = 'a' * 200
-    expect(post).to be_valid
+  it 'コンテンツの長さが200文字を超える場合は無効' do
+    expect(post).to validate_length_of(:content).is_at_most(200)
   end
 
-  it "空（ブランク）なら無効であること" do
-    post.content = "   "
-    expect(post).not_to be_valid
+  it "コンテンツが空の場合は無効であること" do
+    expect(post).to validate_presence_of(:content)
   end
 
-  it '201文字以上なら無効であること' do
-    post.content = 'a' * 201
-    expect(post).not_to be_valid
+  it 'タイトルの長さが20文字を超える場合は無効であること' do
+    expect(post).to validate_length_of(:title).is_at_most(20)
+  end
+
+  it "タイトルが空の場合は無効であること" do
+    expect(post).to validate_presence_of(:title)
   end
 
   it '並び順は投稿の新しい順になっていること' do
@@ -35,21 +35,6 @@ RSpec.describe Post, type: :model do
     most_recent_post = create(:post, user: user, created_at: Time.zone.now)
     # 3
     expect(most_recent_post).to eq described_class.first
-  end
-
-  it 'タイトルの長さが20文字以内なら有効であること' do
-    post.title = 'a' * 20
-    expect(post).to be_valid
-  end
-
-  it "タイトルが空（ブランク）なら無効であること" do
-    post.title = "   "
-    expect(post).not_to be_valid
-  end
-
-  it 'タイトルが21文字以上なら無効であること' do
-    post.title = 'a' * 21
-    expect(post).not_to be_valid
   end
 
   describe '関連付け' do

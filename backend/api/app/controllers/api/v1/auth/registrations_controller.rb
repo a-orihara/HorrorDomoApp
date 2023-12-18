@@ -6,17 +6,28 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   # （デフォ:コメントアウト）
   # before_action :configure_account_update_params, only: [:update]
 
+  # rubocop:disable Lint/UselessMethodDefinition
+  # 2.1 DeviseTokenAuth::RegistrationsControllerのcreateメソッドを明示的に表示
   def create
-    logger.info "createが発火:DeviseTokenAuth::RegistrationsController"
+    # 2.2
     super
   end
+  # rubocop:enable Lint/UselessMethodDefinition
 
-  # 6
   def update
-    logger.info "updateが発火:DeviseTokenAuth::RegistrationsController"
-    avatar_url = generate_avatar_url(@resource)
+    # 6.1 @resourceはアップデート前のuser情報
+    logger.info "@resourceの内容: #{@resource.inspect}"
+    # 6.2 6.3 ユーザー情報を更新
     @resource.assign_attributes(account_update_params)
+    # 更新後の@resourceの内容をログに出力
+    logger.info "アップデート後の@resourceの内容: #{@resource.inspect}"
+    # 更新後のavatarのURLを生成
+    avatar_url = generate_avatar_url(@resource)
+    logger.info "更新後のavatar_urlの内容: #{avatar_url}"
+    # 6.4 最終的な@avatar_urlに設定
     @avatar_url = avatar_url
+    logger.info "最終的な@avatar_urlの内容: #{@avatar_url.inspect}"
+    # 親クラスのupdateメソッドを呼び出し
     super
   end
 
@@ -36,12 +47,23 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
 
     # updateの戻り値を定義する
     def render_update_success
-      render json: {
+      # 更新成功時のJSONレスポンス。レスポンスをログで確認するために変数を設定
+      response = {
         status: 'success',
         message: I18n.t('devise.registrations.updated'),
         data: resource_data,
         avatar_url: @avatar_url
       }
+      # ここで最終的なレスポンスをログで確認
+      logger.info "最終的なupdateレスポンス: #{response.inspect}"
+      # 実際にレスポンスを返す
+      render json: response
+      # render json: {
+      #   status: 'success',
+      #   message: I18n.t('devise.registrations.updated'),
+      #   data: resource_data,
+      #   avatar_url: @avatar_url
+      # }
     end
 end
 
@@ -57,6 +79,29 @@ sign_up_paramsメソッドを定義しています。params.permitで許可す�
 、Deviseの設定においても、ユーザー登録に必要なカラムを指定する設定が一般的です。
 
 ================================================================================================
+2.1
+.`rubocop:disable Lint/UselessMethodDefinition`
+- この行は、直後のコードに対して `Lint/UselessMethodDefinition` という特定のRubocop警告を無視するように指
+示します。これにより、Rubocopはこのルールに基づく警告を出さなくなります。
+.`rubocop:enable Lint/UselessMethodDefinition`
+- この行は、無効化された警告を再び有効にするためのものです。これにより、以降のコードに対しては通常通り
+`Lint/UselessMethodDefinition` ルールが適用されます。
+------------------------------------------------------------------------------------------------
+- この使い方は、コードの特定の部分に対してRubocopの一部のルールを一時的に無視したい場合に便利です。ただし、この機
+能を頻繁に使用するとコードの品質が低下する可能性があるため、慎重に使用することが推奨されます。
+
+================================================================================================
+2.2
+. **`auth/registrations_controller.rb`の`super`についての解説**：
+- `super`キーワードは、継承されたクラス（この場合は`DeviseTokenAuth::RegistrationsController`）の同名のメ
+ソッド（この場合は`create`）を呼び出します。
+- `super`を使用することで、`DeviseTokenAuth::RegistrationsController`に定義されている`create`アクション
+の挙動をそのまま利用しつつ、必要に応じて追加のロジックを`Api::V1::Auth::RegistrationsController`内で実装す
+ることができます。
+- このアプローチは、既存のDeviseTokenAuthの機能を活用しながら、アプリケーション固有の要件やカスタマイズを組み込
+む際に有用です。例えば、ユーザー作成後に特定のログを出力したい場合などに使用できます。
+
+================================================================================================
 4
 before_action
 バックエンドのupdate(その他あればedit)に、ユーザーにログインを要求する before_actionを設定。
@@ -66,8 +111,6 @@ before_action :logged_in_user, only: [:index, :edit, :update, :destroy,
 before_action :correct_user,   only: [:edit, :update]
 ------------------------------------------------------------------------------------------------
 devise_token_authではデフォルトで、devise_token_auth/registrations_controller.rbに、
-before_action :set_user_by_token, only: [:destroy, :update]
-------------------------------------------------------------------------------------------------
 [devise_token_auth/registrations_controller.rb]
 before_action :set_user_by_token, only: [:destroy, :update]
 before_action :validate_sign_up_params, only: :create
@@ -75,13 +118,13 @@ before_action :validate_account_update_params, only: :update
 skip_after_action :update_auth_header, only: [:create, :destroy]
 ------------------------------------------------------------------------------------------------
 *set_user_by_token
-devise_token_authが提供するトークンベースの認証機能を利用し、リクエストから渡されたトークンに紐づくユーザーが存
-在するかどうかを確認します。失敗した場合はnilを返します。
-これはトークン認証を行い、リクエストを行ったユーザーが誰かを確認し、そのユーザーの情報を操作するために用いられます。
+リクエストから渡されたトークンに紐づくユーザーが存在するかどうかを確認します。失敗した場合はnilを返します。
+これはトークン認証を行い、リクエストを行ったユーザーが存在するか、誰かを確認し、そのユーザーの情報を操作するために用
+いられます。
 ------------------------------------------------------------------------------------------------
 before_action :set_user_by_tokenは、
 railsのbefore_action :logged_in_userとbefore_action :correct_userの両方の役割を持っていると言える。
-before_action :logged_in_userは、ユーザーがログインしていることを確認するためのメソッドです。
+before_action :logged_in_userは、ユーザーがログインしていることを確認するメソッド。
 before_action :correct_userは、特定のアクション（例えば、ユーザープロフィールの編集やアップデート）が実行される
 前に、正しいユーザー（アクションを実行しようとしているユーザーが対象のユーザーであること）であることを確認するメソッ
 ドです。
@@ -92,9 +135,23 @@ before_action :set_user_by_tokenは、Devise Token Authにおいて、トーク�
 意味: 認証ヘッダーの更新
 挙動: レスポンスのHTTPヘッダーに新しい認証情報（アクセストークンとクライアントID）を設定します。ユーザーがログイン
 またはアカウント情報を更新するたびに新しいアクセストークンが生成され、それをヘッダーに設定します。
-意図: これにより、次回のリクエスト時には新しいアクセストークンを用いることで、セッションを保持します。
+意図: これにより、次回のリクエスト時には新しいアクセストークンを用います。
 createとdestroyアクション後には実行されません。これは、createアクションの場合、ユーザーの登録直後は自動的にログ
 インしない、または、destroyアクションの場合、ユーザーのアカウント削除後は認証情報を更新する必要がないためです。
+- ユーザーの情報（例えば、プロフィール情報）を更新する際には、新しいアクセストークンが生成され、レスポンスヘッダー
+に設定されます。
+------------------------------------------------------------------------------------------------
+. **`auth/registrations_controller.rb`に特定の`before_action`を書かない理由について**：
+- `application_controller.rb`に`configure_permitted_parameters`メソッドがある場合、これは全てのDevise
+コントローラーに影響を及ぼします。したがって、`auth/registrations_controller.rb`に個別の`before_action`を
+書く必要がなくなります。
+- `configure_permitted_parameters`メソッドにより、サインアップやアカウント更新時に追加で許可したいパラメータ
+ーを定義しています。これは、Deviseの標準的なパラメーター（例：email、password）以外のカスタムフィールド（例：
+name, profile, avatar）を許可するために使用されます。
+- 逆に、`application_controller.rb`に`configure_permitted_parameters`がない場合、
+`auth/registrations_controller.rb`に`before_action :configure_sign_up_params, only: [:create]`と
+`before_action :configure_account_update_params, only: [:update]`を書いて、サインアップやアカウント更
+新時のパラメーターを適切に設定する必要があります。
 
 ================================================================================================
 5
@@ -110,12 +167,12 @@ I18nのtメソッドを使って、Deviseの国際化ファイルからdevise.re
 18nは、多言語化に便利なライブラリで、デフォルトでRailsに組み込まれています。
 tメソッドは、指定されたキーに対応する翻訳を取得し、ローカライズされた文字列を返します。この例では、新しいアカウント
 が作成されたときに表示されるメッセージを取得するために使用されています。
-
+------------------------------------------------------------------------------------------------
 Deviseの国際化ファイルとは、Deviseで使用されるエラーメッセージや成功メッセージなどのテキストを、複数の言語に翻訳
 するためのファイルです。ファイル名は"devise.{ロケール名}.yml"です。
 devise.registrations.signed_upに対応するメッセージは、"devise.{ロケール名}.yml"ファイルの中の、
 "registrations"セクション内にある"signed_up"というキーに対応するメッセージです。
-
+------------------------------------------------------------------------------------------------
 locales/devise.en.ymlとlocales/devise.ja.yml2つのファイルがある場合、英語の場合はlocales/devise.en.yml
 に定義された"devise.registrations.signed_up"に対応するメッセージが取得される。
 日本語の場合はlocales/devise.ja.ymlに定義された"devise.registrations.signed_up"に対応するメッセージが取得
@@ -153,7 +210,8 @@ locales/devise.en.ymlとlocales/devise.ja.yml2つのファイルがある場合�
 }
 
 ================================================================================================
-6
+6.1
+logger.info "@resourceの内容: #{ @resource.inspect }"
 @resource
 Devise Token Authで使用される変数で、現在認証されているユーザー（つまり、現在のセッションに対応するユーザー）を
 参照します。この時点でここにフロントから更新用で渡したパラメーターはまだ反映されていません。
@@ -162,38 +220,71 @@ Devise Token Authで使用される変数で、現在認証されているユー
 @resource（現在のユーザー）の属性に対して更新パラメータを設定（ただしまだ保存はしていない）しています。
 そのため、@resourceは更新される可能性のある属性（パラメータ）を持つユーザーのインスタンスとなります。
 ------------------------------------------------------------------------------------------------
-rails tutorialでは、ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能です。
-*before_actionのlogged_in_user、correct_user。
-DeviseTokenAuth::RegistrationsControllerのupdateにはデフォルトで、
-before_action :set_user_by_token, only: [:destroy, :update]
-が設定されている。
-そのため、「ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能」という設定がデフォル
-トで設定されているため、特に自分で実装不要です。
+DeviseTokenAuthではユーザーを操作する際に@resourceという変数名を慣例的に使用しています。
+DeviseTokenAuth::RegistrationsController内では、ユーザーを操作するインスタンス変数として@resourceが定義さ
+れています。
+
+================================================================================================
+6.2
+logger はRailsアプリケーションで利用できるロギングツールで、.info メソッドを使用して情報を記録します。
 ------------------------------------------------------------------------------------------------
-この `before_action` は、`update` や `destroy` アクションを実行する前に `set_user_by_token` メソッドを
-呼び出します。これは、リクエストヘッダに送られた認証トークンをもとに現在の認証ユーザを見つけます。
-このメソッドは、トークンが有効な場合は `@resource` インスタンス変数に認証済みユーザーを設定し、トークンが無効な場
-合はエラーを返します。
-したがって、`update`アクションでは、アクションの実行時に `@resource` が既に認証済みユーザに設定、限定されている。
-つまり、`update`アクションは認証済みユーザーの `@resource` を使って更新を行うので、現在の認証済みユーザーのみが
-自分を更新できることになります。
+account_update_params
+.`account_update_params`の中身は、ユーザーがアカウント情報を更新する際に許可されたパラメータを決定する。この設
+定は`ApplicationController`内の`configure_permitted_parameters`メソッドにて定義されている。
+- `configure_permitted_parameters`メソッドでは、`devise_parameter_sanitizer`を使って、どのパラメータが
+許可されるかを指定する。
+- ここでは、`:account_update`アクションに対して、`:name`、`:profile`、`:avatar`の3つのパラメータが許可され
+ている。
+- これは、ユーザーがアカウント情報を更新する際に、これら3つのフィールドのみを変更できることを意味する。
 ------------------------------------------------------------------------------------------------
+実際のaccount_update_paramsの中身
+
+{"email"=>"momo@momo.com", "name"=>"momo", "profile"=>"でわっせ", "avatar"=>*画像に関する情報}
+
+================================================================================================
+6.3
 @resource.assign_attributes(account_update_params)
 assign_attributes
 Ruby on RailsのActiveRecordモデルに存在するメソッドで、引数に取ったハッシュのキーと値を元に、対応するモデルの属
 性を一括で設定します。ただし、このメソッドは値の設定だけを行い、データベースへの保存は行いません。
 ------------------------------------------------------------------------------------------------
-account_update_params
-DeviseTokenAuthのRegistrationsControllerに定義されているprivateメソッド。
-DeviseTokenAuth::RegistrationsControllerが親クラスになっているので、親クラスで定義されたpublic及び
-protectedメソッドは子クラスから参照・実行可能です。
-特定のモデル（この場合はユーザーモデル）の更新に使用するパラメータを返すメソッドです。
-configure_permitted_parametersで設定したパラメータを含む、リクエストから取得したパラメータ（更新を許可されたパ
-ラメータのみを抽出したハッシュ）が、account_update_paramsメソッドの返り値になります。
-DeviseやDevise Token Authによって自動的に提供され、その中でパラメータのフィルタリングや必要なバリデーションも行
-われます。
+rails tutorialでは、ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能です。
+*before_actionのlogged_in_user、correct_user。
+DeviseTokenAuth::RegistrationsControllerのupdateにはデフォルトで、
+before_action :set_user_by_token, only: [:destroy, :update]が設定されている。
+そのため、「ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能」という設定がデフォル
+トで設定されているため、特に自分で実装不要です。
 ------------------------------------------------------------------------------------------------
-DeviseTokenAuthではユーザーを操作する際に@resourceという変数名を慣例的に使用しています。
-DeviseTokenAuth::RegistrationsController内では、ユーザーを操作するインスタンス変数として@resourceが定義さ
-れています。
+`set_user_by_token` メソッドを呼び出します。これは、リクエストヘッダに送られた認証トークンをもとに現在の認証ユー
+ザを見つけます。
+このメソッドは、トークンが有効な場合は `@resource` インスタンス変数に認証済みユーザーを設定し、トークンが無効な場
+合はエラーを返します。
+したがって、`update`アクションでは、アクションの実行時に `@resource` が既に認証済みユーザに設定、限定されている。
+つまり、`update`アクションは認証済みユーザーの `@resource` を使って更新を行うので、現在の認証済みユーザーのみが
+自分を更新できることになります。
+
+================================================================================================
+6.4
+`avatar_url = generate_avatar_url(@resource)`の挙動について解説する。
+. **`generate_avatar_url`メソッドの概要**
+- このメソッドは、`ApplicationController`に定義されている。
+- 引数`user`にユーザーオブジェクトを受け取り、そのユーザーのアバター画像のURLを生成する。
+- メソッド内では、まずユーザーがアバター画像をアップロードしているかどうかをチェックする（`user.avatar.attached?`）。
+------------------------------------------------------------------------------------------------
+. **アバター画像がある場合の処理**
+- ユーザーがアバター画像をアップロードしている場合（`if user.avatar.attached?`）、画像のサイズを調整し
+（`resize: "150x150^"`）、中央を基準にクロッピングする（`gravity: "center", crop: "150x150+0+0"`）。
+- その後、`rails_representation_url`を使用して、処理された画像のURLを生成する。このURLはフルパスで返される
+（`only_path: false`）。
+------------------------------------------------------------------------------------------------
+. **`generate_avatar_url`メソッドの呼び出し**
+- `Api::V1::Auth::RegistrationsController`の`update`アクション内で、
+`avatar_url = generate_avatar_url(@resource)`が呼び出される。
+- ここで`@resource`は現在のユーザーオブジェクトを指し、このユーザーのアバター画像URLを取得するために使用される。
+------------------------------------------------------------------------------------------------
+. **使用意図**
+- ユーザーがプロフィールを更新する際（例えば、アバター画像を変更したとき）、新しいアバター画像のURLを生成して、それ
+をフロントエンドに返すことが目的。
+- フロントエンド側では、このURLを使用してユーザーのアバター画像を表示することができる。
+
 =end

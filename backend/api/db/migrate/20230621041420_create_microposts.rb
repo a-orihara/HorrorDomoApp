@@ -3,6 +3,7 @@ class CreateMicroposts < ActiveRecord::Migration[6.1]
   def change
     create_table :microposts do |t|
       t.text :content
+      # 1.1
       t.references :user, null: false, foreign_key: true
 
       t.timestamps
@@ -20,7 +21,14 @@ t.references :user, null: false(デフォ), foreign_key: trueを自動作成
 user:references（references型）は、Micropostモデルに対してuserという関連を作成するためのオプションです。
 user:referencesを指定することで、Micropostモデルに自動的にインデックスと外部キー参照付きの user_id カラムが
 追加されます。
+規約に則った場合、つまり{モデル名_id}がそのまま使える場合に限り、user:referencesが使える。
 されます。belongs_to :userがモデルクラスに追加されます。
+
+================================================================================================
+1.1
+`t.references`は外部キーとしての関連付けを設定するために使われる。規約に則った場合、つまり{モデル名_id}がそのま
+ま使える場合に限り、user:referencesが使える。
+
 ================================================================================================
 2
 add_index
@@ -29,7 +37,7 @@ add_index
 :micropostsと[:user_id, :created_at]の2つの引数
 :micropostsはインデックスを追加するテーブルを指定します。
 [:user_id, :created_at]はインデックスを作成するフィールドを指定します。user_id と created_at の両方を1つの
-配列に含めている。う することで Active Record は、両方のキーを同時に扱う複合キーインデックス
+配列に含めている。こうすることで Active Record は、両方のキーを同時に扱う複合キーインデックス
 (Multiple Key Index)作成します。
 ------------------------------------------------------------------------------------------------
 micropostsテーブルにuser_idとcreated_atの組み合わせのインデックスが作成されます。

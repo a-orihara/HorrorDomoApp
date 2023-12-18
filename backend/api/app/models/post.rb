@@ -1,9 +1,9 @@
 # 1
 class Post < ApplicationRecord
-  # 2 postは一人のuserに属するので単数形で書く
+  # 2 postは一人のuserに属するので単数形で書く。自動で外部キーuser_idとなる
   belongs_to :user
   has_many :likes, dependent: :destroy
-  # 説明はUserモデルの16を参照
+  # 説明はUserモデルの16を参照 投稿にいいねしたユーザーのリストを取得
   has_many :liked_users, through: :likes, source: :user
   # 3 { self.order(created_at: :desc) }のselfが省略されている
   default_scope -> { order(created_at: :desc) }
@@ -57,6 +57,7 @@ belongs_to :user の記述により、自動的に関連する外部キーとし
 この場合、Post モデルのテーブルには user_id カラムが存在する必要があります。なので、マイグレーションファイルに、
 foreign_key: trueのオプションを追加しています。
 一般的には、belongs_to を記述しているモデル側にforeign_key（外部キー）の指定を行います。
+
 ================================================================================================
 3
 ラムダ式(Stabby lambda)

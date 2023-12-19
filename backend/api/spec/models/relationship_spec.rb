@@ -1,35 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe Relationship, type: :model do
+  # 1
   let(:follower) { create(:user) }
   let(:followed) { create(:user) }
+  # 作成したuser同士でフォロー
   let(:relationship) { create(:relationship, follower_id: follower.id, followed_id: followed.id) }
 
   describe 'バリデーション' do
-    context 'follower_idとfollowed_idが存在する場合' do
-      it '有効であること' do
-        expect(relationship).to be_valid
-      end
+    it '有効であること' do
+      expect(relationship).to be_valid
     end
 
-    context 'follower_idが存在しない場合' do
-      before do
-        relationship.follower_id = nil
-      end
-
-      it '無効であること' do
-        expect(relationship).not_to be_valid
-      end
+    it 'follower_idがなければ無効' do
+      expect(relationship).to validate_presence_of(:follower_id)
     end
 
-    context 'followed_idが存在しない場合' do
-      before do
-        relationship.followed_id = nil
-      end
-
-      it '無効であること' do
-        expect(relationship).not_to be_valid
-      end
+    it 'followed_idがなければ無効' do
+      expect(relationship).to validate_presence_of(:followed_id)
     end
   end
 end

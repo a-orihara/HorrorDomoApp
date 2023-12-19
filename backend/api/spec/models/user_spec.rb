@@ -76,6 +76,7 @@ RSpec.describe User, type: :model do
   describe 'Postとの関連性' do
     # 8.1
     let(:user) { create(:user) }
+
     # 8.2
     it '投稿したユーザが削除された場合、そのユーザのpostも削除されること' do
       create(:post, user: user)

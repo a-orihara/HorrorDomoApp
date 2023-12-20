@@ -10,17 +10,18 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
         # POST /api/v1/auth/sign_in: api/v1/auth/sessions#create
         post api_v1_user_session_path, params: {
           email: user.email,
+          # factorybotのuserのpasswordは'testtest'で作成されている
           password: 'testtest'
         }
       end
 
       it '成功ステータスを返すこと' do
-        # 1 success: 200 OKが返ってくることを確認
+        # 1.1 success: 200 OKが返ってくることを確認
         expect(response).to have_http_status(:success)
       end
 
       it '成功メッセージを返すこと' do
-        # deviseの日本語化ファイルに設定したメッセージが返ってくることを確認
+        # 1.2 deviseの日本語化ファイルに設定したメッセージが返ってくることを確認
         expect(response.parsed_body['message']).to eq I18n.t('devise.sessions.signed_in')
       end
     end
@@ -29,6 +30,7 @@ RSpec.describe 'Api::V1::Auth::Sessions', type: :request do
       before do
         post api_v1_user_session_path, params: {
           email: user.email,
+          # factorybotのuserのpasswordは'testtest'で作成されている
           password: 'wrongpassword'
         }
       end
@@ -81,10 +83,30 @@ end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
 :success はHTTPステータスコードであり、一般的には200 OKを表します。
+================================================================================================
+
+================================================================================================
+1.2
+`response.parsed_body`の`parsed_body`は、Railsのテスト環境で使用されるメソッドで、レスポンスボディ（通常はJ
+SON形式の文字列）をRubyのハッシュにパースする機能を持っている。
+- `response`オブジェクトは、HTTPリクエスト（この場合はPOSTやDELETEなど）の後に得られるレスポンスを表す。
+- このレスポンスにはヘッダーやステータスコードの他に、ボディ（body）が含まれている。ボディは通常、JSON形式の文字
+列でサーバーから返される。
+- `parsed_body`メソッドは、このJSON形式のレスポンスボディをRubyのハッシュに変換する。これにより、テストコード
+内でレスポンスの内容を簡単にアクセスしやすく解析できるようになる。
+- `response.parsed_body['message']`は、レスポンスボディのJSONオブジェクトから`message`キーに関連する値を
+取り出す。
+------------------------------------------------------------------------------------------------
+`response.parsed_body['message']`でレスポンスボディをハッシュに変換してテストする理由
+. **Rubyでの操作の容易さ**：Rubyはハッシュを処理するのに非常に適している。JSON形式の文字列よりもハッシュを操作す
+る方が、Rubyでのテストコード記述が簡単で直感的になる。
+. **一貫性のあるアプローチ**：APIのレスポンスをハッシュに統一して扱うことで、異なるテストケース間で一貫性を保つこ
+とができる。これにより、テストスイート全体の保守性が向上する。
+
 ================================================================================================
 2
 :unauthorized はHTTPステータスコードであり、401 Unauthorizedを表します。
-================================================================================================
+
 =end

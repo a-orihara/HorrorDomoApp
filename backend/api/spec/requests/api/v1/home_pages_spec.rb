@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::HomePages', type: :request do
   let(:user) { create(:user) }
-  let(:headers) { request_login_user(user) }
+  let(:headers) { create_auth_token_headers(user) }
   let(:followed_user) { create(:user) }
   # ここに書かない。letは遅延評価
   # let(:post) { create(:post, user: followed_user) }

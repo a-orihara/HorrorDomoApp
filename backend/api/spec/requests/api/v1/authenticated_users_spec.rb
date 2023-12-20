@@ -1,5 +1,4 @@
 # backend/api/spec/requests/api/v1/authenticated_users_spec.rb
-
 require 'rails_helper'
 
 RSpec.describe "Api::V1::AuthenticatedUsers", type: :request do
@@ -9,8 +8,8 @@ RSpec.describe "Api::V1::AuthenticatedUsers", type: :request do
   describe "GET /index" do
     context 'ユーザーが認証されている場合' do
       before do
-        # 1
-        auth_headers = user.create_new_auth_token
+        # 1.1 ユーザー認証ヘッダーを設定 create_auth_token_headers
+        auth_headers = create_auth_token_headers(user)
         get api_v1_authenticated_users_path, headers: auth_headers
       end
 
@@ -40,12 +39,9 @@ end
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-*user.create_new_auth_tokenがここで使える理由
-create_new_auth_tokenメソッドは、devise_token_auth gemによって提供されます。
-UserモデルにはDeviseTokenAuth::Concerns::Userが含まれており、Userモデルにトークン認証機能を追加しています。
-このConcernsを含めることで、create_new_auth_tokenメソッドがUserインスタンスで利用可能になり、ユーザー用の新し
-い認証トークンを生成できるようになります。
-
+ユーザー認証ヘッダーを設定
+create_auth_token_headersは、ユーザーに新しい認証トークンを生成し、それをHTTPヘッダーとして返す。
+------------------------------------------------------------------------------------------------
 *create_new_auth_token
 ユーザーの新しい認証トークン（access-token、client、uid）セットを生成します。
 これらのトークンは、その後のAPIリクエストでユーザーを認証するために使用されます。

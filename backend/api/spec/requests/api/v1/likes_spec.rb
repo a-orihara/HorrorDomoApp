@@ -4,7 +4,7 @@ RSpec.describe "Api::V1::Likes", type: :request do
   let(:user) { create(:user) }
   let(:post) { create(:post) }
   let(:like) { create(:like, user: user, post: post) }
-  let(:headers) { request_login_user(user) }
+  let(:headers) { create_auth_token_headers(user) }
 
   # POST api/v1/posts/:post_id/likes #create
   # describe "POST /create" do

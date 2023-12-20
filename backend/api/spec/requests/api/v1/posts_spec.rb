@@ -8,9 +8,9 @@ RSpec.describe "Api::V1::Posts", type: :request do
   # テスト投稿を作成
   # let(:post)だと、postが被っているのが原因なのか、createアクションのテストでエラーになる
   let(:test_post) { create(:post, user: user) }
-  # 認証用のヘッダー情報を取得。request_login_userはspec/support/test_macros.rbで定義
+  # 認証用のヘッダー情報を取得。create_auth_token_headersはspec/support/test_macros.rbで定義
   # 戻り値はトークンを設定したheaderハッシュ、それをauth_headersに代入
-  let(:auth_headers) { request_login_user(user) }
+  let(:auth_headers) { create_auth_token_headers(user) }
 
   #  1 indexアクションのテスト 投稿の数が正しいかを確認します。
   describe 'GET /api/v1/posts' do
@@ -83,7 +83,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
 
     context 'ユーザーが投稿者でない場合' do
       let(:other_user) { create(:user) }
-      let(:other_auth_headers) { request_login_user(other_user) }
+      let(:other_auth_headers) { create_auth_token_headers(other_user) }
 
       it '404 Not Foundを返すこと' do
         # delete api_v1_post_path(post.id), headers: other_auth_headers
@@ -130,7 +130,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
     let(:post1) { create(:post, title: 'Hello', user: user) }
     let(:post2) { create(:post, title: 'World', user: user) }
     let(:post3) { create(:post, title: 'Hello World', user: user) }
-    let(:auth_headers) { request_login_user(user) }
+    let(:auth_headers) { create_auth_token_headers(user) }
 
     context '検索クエリが一致する場合' do
       # 5

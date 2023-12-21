@@ -145,7 +145,6 @@ RSpec.describe "Api::V1::Posts", type: :request do
   end
 end
 
-
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

@@ -102,4 +102,3 @@ Rspecの全体的な設定を記述するファイル
 spec/rails_helper.rb
 Rails特有の設定を記述するファイル
 =end
-

@@ -57,7 +57,7 @@ Metrics:
   Enabled: false
 
 # 日本語でのコメントを許可
-Layout/AsciiComments:
+Style/AsciiComments:
   Enabled: false
 
 # クラスのコメント必須を無視

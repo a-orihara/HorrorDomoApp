@@ -1,186 +1,21 @@
 # backend/api/spec/requests/api/v1/posts_spec.rb
 # require 'rails_helper'
-
-# テスト名："Api::V1::Posts"
-# RSpec.describe "Api::V1::Posts", type: :request do
-#   # テストユーザーを作成
-#   let(:user) { create(:user) }
-#   # テスト投稿を作成
-#   # let(:post)だと、postが被っているのが原因なのか、createアクションのテストでエラーになる
-#   let(:test_post) { create(:post, user: user) }
-#   # 認証用のヘッダー情報を取得。戻り値はトークンを設定したheaderハッシュ、それをauth_headersに代入
-#   let(:auth_headers) { create_auth_token_headers(user) }
-
-#   #  1 indexアクションのテスト 投稿の数が正しいかを確認します。
-#   describe 'GET /api/v1/posts' do
-#     before do
-#       # 2.1
-#       create_list(:post, 10, user: user)
-#       get api_v1_posts_path, headers: auth_headers
-#     end
-
-#     it '200 OKを返すこと' do
-#       expect(response).to have_http_status(200)
-#     end
-
-#     # 2.2
-#     it '正しい数の投稿データがJSONとして返ること' do
-#       json = response.parsed_body
-#       expect(json).to have_key('status')
-#       expect(json['status']).to eq '200'
-#       expect(json).to have_key('total_posts')
-#       expect(json['total_posts']).to eq 10
-#     end
-#   end
-
-#   # 3 createアクションのテスト
-#   describe 'POST /api/v1/posts' do
-#     context '有効なパラメータの場合' do
-#       it 'タイトルと内容が正しく設定されている場合、201 Createdを返すこと' do
-#         post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'テストタイトル' } }, headers: auth_headers
-#         expect(response).to have_http_status(201)
-#       end
-
-#       it 'タイトルが20文字以下であること' do
-#         post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'a' * 20 } }, headers: auth_headers
-#         expect(response).to have_http_status(201)
-#       end
-#     end
-
-#     context '無効なパラメータの場合' do
-#       it '422 Unprocessable Entityを返すこと' do
-#         post api_v1_posts_path, params: { post: { content: '' } }, headers: auth_headers
-#         expect(response).to have_http_status(422)
-#       end
-
-#       it 'タイトルが空の場合、422 Unprocessable Entityを返すこと' do
-#         post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: '' } }, headers: auth_headers
-#         expect(response).to have_http_status(422)
-#       end
-
-#       it 'タイトルが21文字以上の場合、422 Unprocessable Entityを返すこと' do
-#         post api_v1_posts_path, params: { post: { content: 'テスト投稿', title: 'a' * 21 } }, headers: auth_headers
-#         expect(response).to have_http_status(422)
-#       end
-#     end
-
-#     context 'サインインしていないユーザーの場合' do
-#       it '401 Unauthorizedを返すこと' do
-#         # headers:なし
-#         post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }
-#         expect(response).to have_http_status(401)
-#       end
-#     end
-#   end
-
-#   # 4 destroyアクションのテスト
-#   describe 'DELETE /api/v1/posts/:id' do
-#     context 'ユーザーが投稿者本人の場合' do
-#       it '200 OKを返すこと' do
-#         # delete api_v1_post_path(post.id), headers: auth_headers
-#         delete api_v1_post_path(test_post.id), headers: auth_headers
-#         expect(response).to have_http_status(200)
-#       end
-#     end
-
-#     context 'ユーザーが投稿者本人ではない場合' do
-#       let(:other_user) { create(:user) }
-#       let(:other_auth_headers) { create_auth_token_headers(other_user) }
-
-#       it '404 Not Foundを返すこと' do
-#         # delete api_v1_post_path(post.id), headers: other_auth_headers
-#         delete api_v1_post_path(test_post.id), headers: other_auth_headers
-#         expect(response).to have_http_status(404)
-#       end
-#     end
-
-#     context 'サインインしていないユーザーの場合' do
-#       it '401 Unauthorizedを返すこと' do
-#         delete api_v1_post_path(test_post.id)
-#         expect(response).to have_http_status(401)
-#       end
-#     end
-#   end
-
-#   # showアクションのテスト
-#   describe 'GET /api/v1/posts/:id' do
-#     context '投稿が存在する場合' do
-#       before { get api_v1_post_path(test_post.id), headers: auth_headers }
-
-#       it '200 OKを返すこと' do
-#         expect(response).to have_http_status(200)
-#       end
-
-#       it 'リクエストした投稿の情報が正しく返ること' do
-#         # json = JSON.parse(response.body)だとRubocopの警告が出るので、response.parsed_bodyを使う
-#         json = response.parsed_body
-#         expect(json['data']['id']).to eq test_post.id
-#         expect(json['data']['content']).to eq test_post.content
-#       end
-#     end
-
-#     context '投稿が存在しない場合' do
-#       it '投稿が存在しない場合、404 NotFoundを返すこと' do
-#         get api_v1_post_path(test_post.id + 1), headers: auth_headers
-#         expect(response).to have_http_status(404)
-#       end
-#     end
-#   end
-
-
-
-#   describe 'GET /api/v1/posts/search' do
-#     let(:user) { create(:user) }
-#     let(:post1) { create(:post, title: 'Hello', user: user) }
-#     let(:post2) { create(:post, title: 'World', user: user) }
-#     let(:post3) { create(:post, title: 'Hello World', user: user) }
-#     let(:auth_headers) { create_auth_token_headers(user) }
-
-#     context '検索クエリが一致する場合' do
-#       # 5
-#       before do
-#         post1
-#         post2
-#         post3
-#         get '/api/v1/posts/search', params: { query: 'Hello' }, headers: auth_headers
-#       end
-
-#       it '200 OKを返すこと' do
-#         expect(response).to have_http_status(200)
-#       end
-
-#       it '一致する投稿が返されること' do
-#         json = response.parsed_body
-#         puts "Debugging: #{json['data'].inspect}"
-#         expect(json['data'].length).to eq(2)
-#       end
-#     end
-
-#     context '検索クエリが一致しない場合' do
-#       before { get '/api/v1/posts/search', params: { query: 'NotPresent' }, headers: auth_headers }
-
-#       it '200 OKと空の配列を返すこと' do
-#         expect(response).to have_http_status(200)
-#         json = response.parsed_body
-#         expect(json['data']).to be_empty
-#       end
-#     end
-#   end
-# end
-
 require 'rails_helper'
 
+# テスト名："Api::V1::Posts"
 RSpec.describe "Api::V1::Posts", type: :request do
+  # テストユーザーを作成
   let(:user) { create(:user) }
+  # テスト投稿を作成
+  # let(:post)だと、postが被っているのが原因なのか、createアクションのテストでエラーになる
   let(:test_post) { create(:post, user: user) }
+  # 認証用のヘッダー情報を取得。戻り値はトークンを設定したheaderハッシュ、それをauth_headersに代入
   let(:auth_headers) { create_auth_token_headers(user) }
 
-  before do
-    login_user(user)
-  end
-
+  #  1 indexアクションのテスト 投稿の数が正しいかを確認します。
   describe 'GET /api/v1/posts' do
     before do
+      # 2.1
       create_list(:post, 10, user: user)
       get api_v1_posts_path, headers: auth_headers
     end
@@ -189,15 +24,14 @@ RSpec.describe "Api::V1::Posts", type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it 'JSONとして正しい数の投稿データが返される' do
+    # 2.2
+    it '正しい数の投稿データがJSONで返る' do
       json = response.parsed_body
-      expect(json).to have_key('status')
-      expect(json['status']).to eq '200'
-      expect(json).to have_key('total_posts')
-      expect(json['total_posts']).to eq 10
+      expect(json).to include('status' => '200', 'total_posts' => 10)
     end
   end
 
+  # 3 createアクションのテスト
   describe 'POST /api/v1/posts' do
     let(:post_params) { { post: { content: 'テスト投稿', title: 'テストタイトル' } } }
 
@@ -215,23 +49,25 @@ RSpec.describe "Api::V1::Posts", type: :request do
       end
     end
 
-    context 'サインインしていないユーザーの場合' do
+    context 'サインインしていない場合' do
       it '401 Unauthorizedを返す' do
+        # headers:なし
         post api_v1_posts_path, params: { post: { content: 'テスト投稿' } }
         expect(response).to have_http_status(401)
       end
     end
   end
 
+  # 4 destroyアクションのテスト
   describe 'DELETE /api/v1/posts/:id' do
-    context 'ユーザーが投稿者の場合' do
+    context 'ユーザーが投稿者本人の場合' do
       it '200 OKを返す' do
         delete api_v1_post_path(test_post.id), headers: auth_headers
         expect(response).to have_http_status(200)
       end
     end
 
-    context 'ユーザーが投稿者でない場合' do
+    context 'ユーザーが投稿者本人でない場合' do
       let(:other_user) { create(:user) }
       let(:other_auth_headers) { create_auth_token_headers(other_user) }
 
@@ -241,7 +77,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
       end
     end
 
-    context 'サインインしていないユーザーの場合' do
+    context 'サインインしていない場合' do
       it '401 Unauthorizedを返す' do
         delete api_v1_post_path(test_post.id)
         expect(response).to have_http_status(401)
@@ -249,6 +85,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
     end
   end
 
+  # showアクションのテスト
   describe 'GET /api/v1/posts/:id' do
     context '投稿が存在する場合' do
       before { get api_v1_post_path(test_post.id), headers: auth_headers }
@@ -257,10 +94,10 @@ RSpec.describe "Api::V1::Posts", type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it 'リクエストした投稿の情報が正しく返される' do
+      it 'リクエストした投稿の情報を正しく返す' do
+        # json = JSON.parse(response.body)だとRubocopの警告が出るので、response.parsed_bodyを使う
         json = response.parsed_body
-        expect(json['data']['id']).to eq test_post.id
-        expect(json['data']['content']).to eq test_post.content
+        expect(json['data']).to include('id' => test_post.id, 'content' => test_post.content)
       end
     end
 
@@ -278,6 +115,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
     let(:post3) { create(:post, title: 'Hello World', user: user) }
 
     context '検索クエリが一致する場合' do
+      # 5
       before do
         post1
         post2
@@ -289,7 +127,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
         expect(response).to have_http_status(200)
       end
 
-      it '一致する投稿が返される' do
+      it '一致する投稿を返す' do
         json = response.parsed_body
         expect(json['data'].length).to eq(2)
       end
@@ -306,6 +144,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
     end
   end
 end
+
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -367,6 +206,4 @@ DELETE /api/v1/posts/:idでは、ログインユーザーが投稿者本人で�
 , `post2`, `post3` に対して `let` を使用すると、コード内で呼び出されるまでは `post1`, `post2`, `post3` が
 作成されないことになります。そのため、それらを `before` ブロックに追加することで、テストに必要な状態を確保しながら
 強制的に作成することができます。
-- before` ブロックはテスト環境のセットアップに役立つため、RSpec のテストには欠かせません。このブロックがどのよう
-に動作するかを知ることで、より破綻の少ないテストを書くことができます。
 =end

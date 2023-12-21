@@ -2,37 +2,30 @@ require 'rails_helper'
 
 # api/v1/usersコントローラのテスト
 RSpec.describe "Api::V1::Users", type: :request do
-  # テストユーザーを作成
   let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+  # 1.1
+  let(:auth_headers) { user.create_new_auth_token }
 
-  # indexアクションのテスト
   describe 'GET /api/v1/users' do
-    # 1
     before do
-      # ユーザー認証を行う
-      auth_headers = user.create_new_auth_token
+      # 1.2 userを10個作成
       create_list(:user, 10)
       # getメソッドにヘッダー情報を追加して、indexアクションを実行
       get api_v1_users_path, headers: auth_headers
     end
 
     # 3
-    it '200 OKを返すこと' do
-      # response.statusが200であることを確認
+    it '200 OKを返す' do
       expect(response).to have_http_status(200)
     end
 
     # 2
-    it '正しい数のユーザーデータがJSONとして返ること' do
+    it '正しい数のユーザーデータがJSONで返る' do
       # json = JSON.parse(response.body)と同じ意味。JSON形式をRubyのハッシュに変換。
       json = response.parsed_body
       # json['users']には、ユーザーの配列が格納されている
       expect(json['users'].length).to eq 10
-    end
-
-    it '総ユーザー数が正しく返ること' do
-      # json = JSON.parse(response.body)
-      json = response.parsed_body
       # テストの前処理で作成した10のユーザーに加え、認証用に作成したユーザーがカウントされているので11に
       expect(json['total_users']).to eq 11
     end
@@ -41,27 +34,21 @@ RSpec.describe "Api::V1::Users", type: :request do
   # showアクションのテスト
   describe 'GET /api/v1/users/:id' do
     context '存在するユーザーのIDを指定した場合' do
-      before do
-        get api_v1_user_path(user.id)
-      end
+      before { get api_v1_user_path(user.id) }
 
-      it '200 OKを返すこと' do
+      it '200 OKを返す' do
         expect(response).to have_http_status(200)
       end
 
-      it '指定したユーザーの名前が取得できること' do
+      it '指定したユーザーの情報が取得できる' do
         json = response.parsed_body
         expect(json['name']).to eq user.name
-      end
-
-      it '指定したユーザーのメールアドレスが取得できること' do
-        json = response.parsed_body
         expect(json['email']).to eq user.email
       end
     end
 
     context '存在しないユーザーのIDを指定した場合' do
-      it 'エラーが発生すること' do
+      it 'エラーが発生する' do
         # 4
         expect { get api_v1_user_path(0) }.to raise_error(ActiveRecord::RecordNotFound)
       end
@@ -70,20 +57,17 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # following:フォロー中のユーザー取得のテスト
   describe 'GET /api/v1/users/:id/following' do
-    let(:user) { create(:user) }
-    let(:other_user) { create(:user) }
-
     before do
       user.follow(other_user)
       # getメソッドにヘッダー情報を追加して、followingアクションを実行
-      get following_api_v1_user_path(user.id), headers: user.create_new_auth_token
+      get following_api_v1_user_path(user.id), headers: auth_headers
     end
 
-    it '200 OKを返すこと' do
+    it '200 OKを返す' do
       expect(response).to have_http_status(200)
     end
 
-    it 'フォロー中のユーザーが取得できること' do
+    it 'フォロー中のユーザーが取得できる' do
       json = response.parsed_body
       expect(json['following'].length).to eq 1
       expect(json['following'][0]['id']).to eq other_user.id
@@ -92,20 +76,17 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # followers:フォロワー取得のテスト
   describe 'GET /api/v1/users/:id/followers' do
-    let(:user) { create(:user) }
-    let(:other_user) { create(:user) }
-
     before do
       other_user.follow(user)
       # getメソッドにヘッダー情報を追加して、followersアクションを実行
-      get followers_api_v1_user_path(user.id), headers: user.create_new_auth_token
+      get followers_api_v1_user_path(user.id), headers: auth_headers
     end
 
-    it '200 OKを返すこと' do
+    it '200 OKを返す' do
       expect(response).to have_http_status(200)
     end
 
-    it 'フォロワーが取得できること' do
+    it 'フォロワーが取得できる' do
       json = response.parsed_body
       expect(json['followers'].length).to eq 1
       expect(json['followers'][0]['id']).to eq other_user.id
@@ -114,20 +95,17 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # is_following:フォロー確認のテスト
   describe 'GET /api/v1/users/:id/is_following' do
-    let(:user) { create(:user) }
-    let(:other_user) { create(:user) }
-
     before do
       user.follow(other_user)
       # getメソッドにヘッダー情報を追加して、is_followingアクションを実行
-      get is_following_api_v1_user_path(user.id), params: { other_id: other_user.id }, headers: user.create_new_auth_token
+      get is_following_api_v1_user_path(user.id), params: { other_id: other_user.id }, headers: auth_headers
     end
 
-    it '200 OKを返すこと' do
+    it '200 OKを返す' do
       expect(response).to have_http_status(200)
     end
 
-    it 'フォロー確認が取得できること' do
+    it 'フォロー確認が取得できる' do
       json = response.parsed_body
       expect(json['is_following']).to be true
     end
@@ -135,25 +113,28 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # total_likes_countアクションのテスト
   describe 'GET /api/v1/users/:id/total_likes_count' do
-    let(:user) { create(:user) }
-    let(:auth_headers) { user.create_new_auth_token }
-
     context '存在するユーザーのIDを指定した場合' do
       before do
+        # いくつかのいいねを作成する
+        create_list(:like, 5, user: user)
         get "/api/v1/users/#{user.id}/total_likes_count", headers: auth_headers
       end
 
-      it '200 OKを返すこと' do
+      it '200 OKを返す' do
         expect(response).to have_http_status(200)
+      end
+
+      it '正しい総いいね数を返すこと' do
+        json = response.parsed_body
+        expect(json['total_liked_counts']).to eq 5
       end
     end
 
     context '存在しないユーザーのIDを指定した場合' do
-      before do
-        get "/api/v1/users/0/total_likes_count", headers: auth_headers # 認証情報を追加
-      end
+      # idが0を指定
+      before { get "/api/v1/users/0/total_likes_count", headers: auth_headers }
 
-      it '404 Not Foundを返すこと' do
+      it '404 Not Foundを返す' do
         expect(response).to have_http_status(404)
       end
     end
@@ -161,25 +142,35 @@ RSpec.describe "Api::V1::Users", type: :request do
 
   # all_likesアクションのテスト
   describe 'GET /api/v1/users/:id/all_likes' do
-    let(:user) { create(:user) }
-    let(:auth_headers) { user.create_new_auth_token }
+    let(:post1) { create(:post) }
+    let(:post2) { create(:post) }
+
+    before do
+      user.likes.create(post: post1)
+      user.likes.create(post: post2)
+      get "/api/v1/users/#{user.id}/all_likes", headers: auth_headers
+    end
 
     context '存在するユーザーのIDを指定した場合' do
-      before do
-        get "/api/v1/users/#{user.id}/all_likes", headers: auth_headers
+      it '200 OKを返す' do
+        expect(response).to have_http_status(200)
       end
 
-      it '200 OKを返すこと' do
-        expect(response).to have_http_status(200)
+      it 'ユーザーがいいねした投稿のリストが返されること' do
+        json = response.parsed_body
+        expect(json['liked_posts'].length).to eq 2
+      end
+
+      it '正しいいいねの総数が返されること' do
+        json = response.parsed_body
+        expect(json['total_liked_counts']).to eq 2
       end
     end
 
     context '存在しないユーザーのIDを指定した場合' do
-      before do
-        get "/api/v1/users/0/all_likes", headers: auth_headers # 認証情報を追加
-      end
+      before { get "/api/v1/users/0/all_likes", headers: auth_headers }
 
-      it '404 Not Foundを返すこと' do
+      it '404 Not Foundを返す' do
         expect(response).to have_http_status(404)
       end
     end
@@ -188,7 +179,7 @@ end
 
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
 auth_headers
 変数。この変数は、ユーザーの認証に関する情報を格納します。後続のリクエストで使用されるヘッダー情報を提供します。
 ------------------------------------------------------------------------------------------------
@@ -198,7 +189,9 @@ user
 create_new_auth_token
 Devise Token Authのメソッド。ユーザーオブジェクトに関連する認証トークンを生成し、それを含む認証ヘッダー情報を返
 します。
-------------------------------------------------------------------------------------------------
+
+================================================================================================
+1.2
 create_list
 RSpecのメソッドです。指定されたファクトリで指定された数のオブジェクトを作成します。引数:user, 10は、:userという
 ファクトリを使用して10個のユーザーオブジェクトを作成することを指定しています。
@@ -268,5 +261,4 @@ RSpecのマッチャで、テスト中に特定のエラーが発生すること
 ActiveRecord::RecordNotFound
 Railsがデータベースからレコードを見つけられなかったときに発生する例外です。ここでは、存在しないユーザーID（この場
 合は0）を指定してGETリクエストを送った時にこの例外が発生することを期待しています。
-================================================================================================
 =end

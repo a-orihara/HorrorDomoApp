@@ -5,7 +5,7 @@ RSpec.describe "Api::V1::Relationships", type: :request do
   let(:user) { create(:user) }
   let(:other_user) { create(:user) }
   # 1
-  let(:headers) { request_login_user(user) }
+  let(:headers) { create_auth_token_headers(user) }
 
   # POST api/v1/relationships #create
   describe "POST /create" do
@@ -40,6 +40,6 @@ end
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
-request_login_user(user)
-認証用のヘッダー情報を取得。request_login_userはspec/support/test_macros.rbで定義
+create_auth_token_headers(user)
+認証用のヘッダー情報を取得。create_auth_token_headersはspec/support/test_macros.rbで定義
 =end

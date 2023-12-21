@@ -3,7 +3,7 @@ module TestMacros
   # 2.1 Deviseを使用してユーザーをログインさせる。
   def login_user(user = FactoryBot.create(:user))
     # 2.2 requestオブジェクトのenv.devise.mappingにuserモデルのマッピングを設定
-    @request.env['devise.mapping'] = Devise.mappings[:user]
+    # @request.env['devise.mapping'] = Devise.mappings[:user]
     # 2.3 sign_inメソッドはDeviseのヘルパーメソッド。ログイン処理を行う。
     sign_in user
   end

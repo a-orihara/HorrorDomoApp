@@ -8,7 +8,7 @@ RSpec.describe "Api::V1::AuthenticatedUsers", type: :request do
   describe "GET /index" do
     context 'ユーザーが認証されている場合' do
       before do
-        # 1.1 ユーザー認証ヘッダーを設定 create_auth_token_headers
+        # 1.1 ユーザー認証ヘッダーを設定
         auth_headers = create_auth_token_headers(user)
         get api_v1_authenticated_users_path, headers: auth_headers
       end

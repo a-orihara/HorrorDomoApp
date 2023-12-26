@@ -32,7 +32,6 @@ export const signOut = () => {
 export const getAuthenticatedUser = () => {
   // トークンがない場合は何もしない
   if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
-  // console.log('getAuthenticatedUserが呼ばれた');
   return client.get('/authenticated_users', {
     headers: {
       'access-token': Cookies.get('_access_token'),
@@ -41,65 +40,11 @@ export const getAuthenticatedUser = () => {
     },
   });
 };
-// admin:
-// allowPasswordChange:
-// avatarUrl:
-// createdAt:
-// email:
-// id:
-// name:
-// profile:
-// provider: 'email';
-// uid: 'koko@koko.com';
-// updatedAt:
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================
 1
-Devise Token Authでのユーザー登録の挙動
-
-1.ユーザーがPOSTリクエストを送信する。リクエストボディには、name、email、password、password_confirmationの
-情報が含まれている。
-2.RegistrationsControllerのcreateメソッドが呼び出される。
-3.ユーザーが提供した情報が検証される。メールアドレスが正しい形式かどうか、パスワードが必要な長さかどうかなどが確認
-される。また、ユーザーが提供した情報が既に登録されていないかどうかも確認される。
-4.パスワードがハッシュ化され、DBに保存（カラム名は "encrypted_password）。
-5.トークンが生成される。トークンがDBに保存。
-.トークンにはaccess-token、client、uid、およびexpiryです。またtoken-typeは、認証に使用されるトークンの種類
-を示す情報で通常 "Bearer" として設定されます。これは Devise Token Auth のデフォルト動作です。
-
-.Devise Token Authでは、トークンはtokensというカラムに保存されます。このカラムは、ユーザーのidと紐づいています。
-"access-token"、"client"、"uid"は、この "tokens" カラムの中にハッシュ形式で格納されます。
-{
-  "client_id_1": {
-    "access-token": "access_token_1",
-    "client": "client_id_1",
-    "expiry": "expiry_timestamp_1",
-    "uid": "user@example.com"
-  },
-  "client_id_2": {
-    "access-token": "access_token_2",
-    "client": "client_id_2",
-    "expiry": "expiry_timestamp_2",
-    "uid": "user@example.com"
-  }
-}
-
-------------------------------------------------------------------------------------------------
-ユーザー情報
-サインアップしたユーザーの情報が含まれます。例えば、name, emailなどが含まれます。
-
-トークン情報
-サインアップに成功した場合、サーバーは新しいトークンを生成します。このトークンは、ユーザーがサーバーに認証要求を送
-信するたびに、リクエストヘッダーに含める必要があります。
-
-クライアント情報
-クライアント情報には、uid、clientという2つの値が含まれます。uidは、ユーザーがサインアップ時に提供したemailアド
-レスと同じ値です。
-clientは、ユーザーが認証要求を送信するたびに変更される一意のIDです。OAuth2.0の認可サーバーから発行されるクライア
-ント識別子。ユーザーがアプリケーションにアクセスするために必要な認証情報の一つです。
-
-------------------------------------------------------------------------------------------------
 devise_token_authのregistrations#createの挙動
 
 1.createアクションは、新しいユーザーの登録処理を実行します。
@@ -119,10 +64,38 @@ access-token、client、uidが含まれます。
 このcreateアクションにより、新規ユーザー登録が適切に実行され、その結果の影響がアプリケーション全体に及びます。新
 規登録によって、ユーザーがアプリケーションの機能を利用できるようになり、ユーザーエクスペリエンスが向上します。また、
 登録後の自動ログインによって、ユーザーはすぐにアプリケーションを使用することができます。
+------------------------------------------------------------------------------------------------
+.Devise Token Authでは、トークンはtokensというカラムに保存されます。このカラムは、ユーザーのidと紐づいています。
+"access-token"、"client"、"uid"は、この "tokens" カラムの中にハッシュ形式で格納されます。
+{
+  "client_id_1": {
+    "access-token": "access_token_1",
+    "client": "client_id_1",
+    "expiry": "expiry_timestamp_1",
+    "uid": "user@example.com"
+  },
+  "client_id_2": {
+    "access-token": "access_token_2",
+    "client": "client_id_2",
+    "expiry": "expiry_timestamp_2",
+    "uid": "user@example.com"
+  }
+}
+------------------------------------------------------------------------------------------------
+ユーザー情報
+サインアップしたユーザーの情報が含まれます。例えば、name, emailなどが含まれます。
 
+トークン情報
+サインアップに成功した場合、サーバーは新しいトークンを生成します。このトークンは、ユーザーがサーバーに認証要求を送
+信するたびに、リクエストヘッダーに含める必要があります。
+
+クライアント情報
+クライアント情報には、uid、clientという2つの値が含まれます。uidは、ユーザーがサインアップ時に提供したemailアド
+レスと同じ値です。
+clientは、ユーザーが認証要求を送信するたびに変更される一意のIDです。OAuth2.0の認可サーバーから発行されるクライア
+ント識別子。client値は、ユーザーが異なるデバイスやブラウザからアクセスした場合に新しく生成されることが多い。
 ------------------------------------------------------------------------------------------------
 実際のres
-
 このresは、
 {data: {…}, status: 200, statusText: 'OK', headers: AxiosHeaders(以下略...)}
 このresのdataオブジェクトの中にさらにstatusのキー、値とdataオブジェクトがある。
@@ -131,16 +104,14 @@ access-token、client、uidが含まれます。
 {data: {allowPasswordChange:false, createdAt:"2023-04-08T03:21:18.624Z", email: "koko@momo.com",
 id: 4, image: null, name: "koko", provider: "email", uid: "koko@momo.com",
 updatedAt: "2023-04-08T03:21:18.734Z"}}
-
 ------------------------------------------------------------------------------------------------
 さらにCookieがセットされて帰ってきており、
 Cookie:
 _access_token=-TytLB7ijMdEVE-L7fTvDg;
 _client=T0JHkn5sIWxbp9pOtzJhow;
 _uid=koko@momo.com
-
 ------------------------------------------------------------------------------------------------
-主なレスポンスヘッダー
+devise_token_authのregistrations#createの主なレスポンスヘッダー
 
 access-control-allow-methods: GET, POST, OPTIONS, DELETE, PUT
 CORSの設定で、許可されているHTTPメソッドを示す。
@@ -154,13 +125,19 @@ CORSの設定で、クライアントに公開するレスポンスヘッダを�
 access-control-max-age: 7200
 CORSの設定で、許可されているリクエストをキャッシュする時間を示す。
 
-access-token: 6X54pSSjgNB4LNzkKpQc1Q
+access-token: 6X54pSS（略）/ユーザーの認証に使用される具体的なトークンの値
 認証トークンの一種であるaccess-tokenの値を示す。
 
-authorization: Bearer eyJhY2Nlc3MtdG9rZW4iOiI2WDU0cFNTamdOQjRMTnprS3BRYzFRIiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6Im95MGdxcV8zdlRJOFVURktiaXhxb1EiLCJleHBpcnkiOiIxNjgyMTM2NjY3IiwidWlkIjoibW9tb0Btb21vLmNvbSJ9
-認証ヘッダの一種であるauthorizationの値を示す。
+authorization: Bearer eyJhY2Nlc3MtdG9（略）/HTTPリクエストの認証ヘッダー
+.認証ヘッダの一種であるauthorizationの値を示す。このヘッダーは認証スキーム（この場合はBearer）と実際のトークン
+（access-token）を組み合わせて使用
+.HTTPリクエストには、そのリクエストが正当なユーザーから送られていることを証明するための認証情報を含める必要があり
+ます。authorizationヘッダーはこの目的で使われ、リクエストが認証されていることを示すためにHTTPリクエストに付加さ
+れます。authorizationヘッダーは「Bearer」という認証スキームと、そのスキームに従って生成された具体的な認証トーク
+ン（access-token）を組み合わせた形でHTTPリクエストに含まれます。これにより、リクエストを送信したクライアントが正
+当に認証されていることをサーバーに伝えることができます。
 
-client: oy0gqq_3vTI8UTFKbixqoQ
+client: oy0gqq_3vTI（略）/ユーザーが使用しているクライアント（例えばブラウザやモバイル）を特定するためのID
 認証トークンの一種であるclientの値を示す。
 
 Content-Type: application/json; charset=utf-8
@@ -174,9 +151,6 @@ token-type: Bearer
 
 uid: momo@momo.com
 認証ヘッダの一種であるuidの値を示す。
-------------------------------------------------------------------------------------------------
-型定義
-
 ================================================================================================
 2
 devise_token_authのsessions#createの挙動
@@ -192,9 +166,6 @@ devise_token_authのsessions#createの挙動
 8.レスポンスには、ユーザーの情報、トークン、クライアント情報が含まれます。
 
 この create アクションにより、ユーザーがアプリケーションにログインし、認証が必要な機能を利用できるようになります。
-ログインが成功すると、ユーザーエクスペリエンスが向上し、アプリケーションの利用が促進されます。また、トークンを使用
-した認証方式により、セキュリティが向上し、ユーザーの信頼性が確保されます。
-
 ------------------------------------------------------------------------------------------------
 実際のres
 
@@ -233,31 +204,75 @@ devise_token_authのsessions#destroyの挙動
 返り値は、初めのif分で終わる場合は、戻り値は undefined になります。
 JavaScriptでは、return文がない場合、return文があっても、何もreturnしない場合、関数の戻り値は自動的に
 undefinedとなります。
-
 ------------------------------------------------------------------------------------------------
 アクセストークン、クライアント情報、ユーザーIDが存在しない場合、true を返します。
 いずれかが true の場合、全体の式は true になります。if (...) return;: 式が true の場合、関数はここで終了し、
 以降の処理は実行されません。
-
+------------------------------------------------------------------------------------------------
+. `||`の意味と具体例：
+JavaScriptにおける `||` は論理OR演算子です。この演算子は、左側のオペランド（値）がfalsy（falseと同等の値、例え
+ば`false`, `0`, `''`, `null`, `undefined`, `NaN`）である場合に、右側のオペランドを評価します。もし左側のオ
+ペランドがtruthy（trueと同等の値）であれば、右側のオペランドは評価されず、左側のオペランドの値が結果として返されま
+す。
+具体例：
+```
+let a = false || 'Hello'; // aは'Hello'になる
+let b = true || 'World';  // bはtrueになる
+```
+`a`の例では、最初のオペランド（`false`）はfalsyなので、次のオペランド（`'Hello'`）が評価され、`'Hello'`が`a`
+に代入されます。`b`の例では、最初のオペランド（`true`）はtruthyなので、それが直接`b`に代入され、二番目のオペラン
+ド（`'World'`）は無視されます。
+------------------------------------------------------------------------------------------------
+. アクセストークン、クライアント情報、ユーザーIDのいずれかが存在しない場合（たとえば
+`Cookies.get('_access_token')`が`undefined`、`Cookies.get('_client')`が`"client123"`、
+`Cookies.get('_uid')`が`"user@example.com"`の場合）：
+- `!Cookies.get('_access_token')`は`!undefined`、つまり`true`になります。
+- `!Cookies.get('_client')`は`!true`、つまり`false`になります。
+- `!Cookies.get('_uid')`も同様に`false`になります。
+この場合、`true || false || false`は`true`に評価されるので、`true`だとif文の中身（`return;`）が実行され、
+関数は何も返さずに終了します。
+------------------------------------------------------------------------------------------------
+. すべての値が存在する場合（たとえばすべての`Cookies.get()`関数が有効な値を返す場合）：
+- すべての`!Cookies.get()`は`false`になります。
+この場合、`false || false || false`は`false`に評価されるので、if文の中身は実行されず、関数はその後の
+`return client.get(...)`を実行します。
+------------------------------------------------------------------------------------------------
+. `!`を使用して反転させる理由は、この条件式が「トークンが存在しない場合に特定の処理をする」というロジックを表現し
+ているからです。
+. `!`を使用しない場合の書き方は、条件式を「トークンが存在する場合に処理を続行する」という形に書き換えることです。
+```javascript
+export const getAuthenticatedUser = () => {
+  // トークンがすべて存在する場合のみ処理を続行
+  if (Cookies.get('_access_token') && Cookies.get('_client') && Cookies.get('_uid')) {
+```
+この書き方では、`if`文の中で全てのトークンが全て存在する場合のみ`client.get(...)`を実行します。
+これは`!`を使用した場合と同じ結果を達成しますが、ロジックが異なるため、理解しやすいかどうかは個々の読み手に依存。
+------------------------------------------------------------------------------------------------
 if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
 をする意図は、必要な認証情報（アクセストークン、クライアント、ユーザーID）がすべて存在しているかどうかをチェックし
 ています。これらの値のいずれかが存在しない場合、関数は早期に終了（return;）して、認証済みユーザーの情報を取得しよ
 うとしないようにします。これは、不要なAPIリクエストを回避し、アプリケーションのパフォーマンスを向上させるための一
 般的な方法です。
-
 ------------------------------------------------------------------------------------------------
 Devise Token Authでは、認証済みのユーザー情報を取得するためにcurrent_userメソッドを使用します。
 current_userメソッドを使うためには、まずトークン認証を行う必要があります。トークン認証を行うことで、サーバーは認
 証済みのユーザーであることを確認します。
-Devise Token Authでは、トークン認証を使用してAPIのリクエストを保護することが推奨されています。つまり、APIサー
-バーのあらゆるメソッド（アクション）において、トークン認証が必要になります。認証されていない場合は、リクエストに失
-敗して認証エラーが返されます。
-
-================================================================================================
+------------------------------------------------------------------------------------------------
+admin:
+allowPasswordChange:
+avatarUrl:
+createdAt:
+email:
+id:
+name:
+profile:
+provider: 'email';
+uid: 'koko@koko.com';
+updatedAt:
 
 @          @@          @@          @@          @@          @@          @@          @@          @
 
-作成されるルート
+作成されたルート
 [registrations: 'auth/registrations']にマウントされた結果
 
 Prefix Verb                     URI Pattern                                     Controller#Action

@@ -1,15 +1,16 @@
 import axios, { AxiosInstance } from 'axios'; // eslint-disable-line import/named
 import applyCaseMiddleware from 'axios-case-converter';
 
-// 1
+// 1 HTTPヘッダーをキャメルケースに変換するのを無視
 const options = {
   ignoreHeaders: true,
 };
 
-// 2
+// 2 axiosインスタンスにaxios-case-converterを適用
 const client: AxiosInstance = applyCaseMiddleware(
+  // axiosインスタンスに通信時に共通して適用する設定を定義
   axios.create({
-    // 3 下記の書き方で開発、本番の別々のurlを設定できる
+    // 3 下記の書き方で開発、本番の別々のurlを設定
     baseURL: `${process.env.NEXT_PUBLIC_API_URL}`,
     timeout: 5000,
   }),
@@ -40,6 +41,17 @@ ignoreHeaders: trueは、HTTPヘッダーをキャメルケースに変換する
 
 ================================================================================================
 2
+. `AxiosInstance`とは型名。
+`AxiosInstance`は、axiosライブラリにおいてカスタマイズされたHTTPリクエストを行うためのオブジェクトを表す型です。
+axiosはHTTPリクエストを送信するためのJavaScriptライブラリで、`AxiosInstance`はこのライブラリが提供する一種の
+インターフェイスです。
+このインスタンスを使用することで、特定の設定（ベースURL、タイムアウト時間、ヘッダーなど）を持つaxiosリクエストを簡
+単に再利用できます。例えば、
+- `axios.create()`は新しい`AxiosInstance`を作成します。この関数はaxiosの設定をカスタマイズするための引数を受
+け取ります（例: `baseURL`や`timeout`）。
+- `applyCaseMiddleware`はこのインスタンスにミドルウェアを適用し、HTTPリクエストやレスポンスのデータ形式を変換し
+ます。ここでは、ヘッダーをキャメルケースに変換しないように設定しています。
+------------------------------------------------------------------------------------------------
 client.post('/auth/sign_in', params);になる。
 使わないとこう、
 axios.post('http://localhost:3000/api/v1/auth/sign_in', params, {
@@ -57,21 +69,18 @@ const params = {
 };
 
 response.dataは次のようになる：
-    {
-      first_name: 'John',
-      last_name: 'Doe',
-      email: 'johndoe@example.com',
-    }
+  {
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'johndoe@example.com',
+  }
 ------------------------------------------------------------------------------------------------
 axiosのインスタンスを作成することで、通信時に共通して適用する設定を定義したり、複数のサーバーとの通信を行う場合に
 区別するための名前を付けたりすることができます。
-
 .axios.create
 axiosインスタンスを作成
-
 .baseURL
 HTTPリクエストのURLのベースとなるURLを設定することができる。
-
 .timeout
 Axiosで設定できるリクエストのタイムアウト時間を指定するオプションです。ここで指定されたミリ秒数が経過すると、リク
 エストはキャンセルされます。
@@ -102,10 +111,6 @@ process.envに読み込むことが可能です。
 - 環境変数は、セキュリティ情報や設定値など、アプリケーションの動作に影響を与える重要な情報を外部から設定する手段と
 して利用されます。`process.env`を使用することで、アプリケーションの動作を簡単にカスタマイズできるため、柔軟な設定
 管理が可能です。
-------------------------------------------------------------------------------------------------
-- `process.env`はNode.jsで提供されるグローバルオブジェクトで、環境変数を管理します。
-- `.env.local` ファイル内の変数はNext.jsが起動する際に`process.env`に格納されます。
-- この`process.env`を通してサーバーサイドのコードで環境変数にアクセス可能。
 ------------------------------------------------------------------------------------------------
 - APIのエンドポイントなどのURLはフロントエンドからアクセス可能な場合が多いです。このような情報を環境変数として設定
 したい場合、`NEXT_PUBLIC_`接頭辞を使用します。

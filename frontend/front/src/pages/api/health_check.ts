@@ -8,7 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // 4
   res.setHeader('Content-Type', 'application/json')
   // 5
-  res.end(JSON.stringify({ status: 'frontendからbackendへのhealthCheck：ok' }))
+  res.end(JSON.stringify({ status: 'frontendからbackendへのhealthCheck:ok' }))
 }
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -43,6 +43,15 @@ pages/apiフォルダ内にあるすべてのファイルは /api/* にマッピ
 
 ================================================================================================
 2
+関数名は任意。
+------------------------------------------------------------------------------------------------
+. この関数はレスポンスとしてHTTPステータスコード200を返し、`Content-Type`を`application/json`に設定し、
+JSON形式のデータ`{ status: 'frontendからbackendへのhealthCheck:ok' }`を返すよう設定している。
+. `/api/health_check`にアクセスすると、Next.jsのAPIルーティングによりこの関数が発火する。Next.jsでは
+`pages/api`ディレクトリ内のファイルがAPIルートとして扱われ、ファイル名がURLのパスに対応する。この場合、
+`health_check.ts`が`/api/health_check`のエンドポイントであるため、そこにアクセスすると`handler`関数が実行
+される。
+------------------------------------------------------------------------------------------------
 API Routes では作成した関数は必ず export する必要があります。
 handler 関数では引数に req(Request の略), res(Response の略)が入り json で”John Doe”を JSON で戻してい
 ることがわかります。status メソッドで HTTP ステータスコードの 200 を設定しています。
@@ -89,8 +98,8 @@ handler 関数では引数に req(Request の略), res(Response の略)が入り
 - `res.end`には引数を渡すこともでき、その場合その引数はレスポンスボディとして送信されます。この例では、JSON形式の
 `{ status: 'ok' }`が引数として渡されています。
 - このメソッドが呼び出されると、そのHTTPトランザクションは完了し、次のトランザクションが開始されます。
-`res.end`を呼び出さないと、HTTPレスポンスがクライアントに送信されず、接続がタイムアウトする可能性があります。したがって、`res.end`は各API呼び出しの最後に呼び出す必要があります。
-
+`res.end`を呼び出さないと、HTTPレスポンスがクライアントに送信されず、接続がタイムアウトする可能性があります。した
+がって、`res.end`は各API呼び出しの最後に呼び出す必要があります。
 
 ------------------------------------------------------------------------------------------------
 

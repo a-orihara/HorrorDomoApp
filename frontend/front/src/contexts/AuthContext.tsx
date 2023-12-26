@@ -2,24 +2,30 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
 import { User } from '../types/user';
 // ================================================================================================
+
+// AuthProviderコンポーネントの引数の型
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
-// 1 下記のkeyを持つオブジェクト型を作成
+// 1.1 下記のkeyを持つオブジェクトのAuthContextPropsという名前の型を作成
 type AuthContextProps = {
   loading: boolean;
+  // 1.2
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isSignedIn: boolean;
   setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
   currentUser: User | undefined;
   setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  // 1.3
   handleGetCurrentUser: () => Promise<void>;
 };
 
+// 1.4 AuthContextを作成。AuthContext.Providerが受け取るvalueプロパティの型を間接的に指定
 export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 // @          @@          @@          @@          @@          @@          @@          @@          @
+// AuthContextのプロパティ、AuthContext.Providerを返すAuthProviderコンポーネント
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 3
   // ローディング中かどうかの状態を管理するステート
@@ -30,21 +36,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
   // ------------------------------------------------------------------------------------------------
 
-  // 2 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
+  // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
     // console.log('handleGetCurrentUserが発火');
     try {
-      // 現在のサインインユーザーのユーザー情報を取得
+      // 2.1 現在のサインインユーザーのユーザー情報を取得
       const res = await getAuthenticatedUser();
       // console.log(`getAuthenticatedUserのres.data:${JSON.stringify(res?.data)}`);
-      // サインインしていたら、
+      // 2.2 サインインしていたら。[if (res && res.data.isLogin === true)]と同じ意味
       if (res?.data.isLogin === true) {
-        // if (res && res.data.isLogin === true) {
         // サインイン状態に変更
         setIsSignedIn(true);
         // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
-        // console.log(`handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
+        console.log(`？？handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
       } else {
         console.log('handleGetCurrentUser:ノーcurrent user');
       }
@@ -54,18 +59,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     setLoading(false);
   };
-  // console.log(`AuthProviderが呼ばれた。カレント:${JSON.stringify(currentUser)}`);
 
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
     handleGetCurrentUser();
-    // console.log('AuthContext-useEffect-handleGetCurrentUserが発火');
+    console.log('◆AuthContext-useEffect-handleGetCurrentUserが発火◆');
   }, []);
 
   // ================================================================================================
-  // 5
   return (
-    // サインしているか、現在のユーザー、現在のユーザーの取得する処理、ローディング
+    // 5 サインしているか、現在のユーザー、現在のユーザーを取得する処理、ローディング
     <AuthContext.Provider
       value={{
         loading,
@@ -81,6 +84,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     </AuthContext.Provider>
   );
 };
+
+// useAuthContext関数を作成
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -92,10 +97,10 @@ export const useAuthContext = () => {
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
 Context用のコンポーネント作成の為、AuthContext.js というファイルを作成
 1.createContext();でAuthContextというコンテキストオブジェクトを作成
-AuthContextのProviderコンポーネントに渡す値（useState）を設定
+AuthContextのプロパティのProviderコンポーネントに渡す値（useState）を設定
 2.AuthContextのProviderコンポーネントでラップされた、AuthProviderコンポーネントを作成
 ------------------------------------------------------------------------------------------------
 Contextオブジェクトの作成はcreateContextで行います。
@@ -123,61 +128,69 @@ let str = anyNum as string;
 て、変数strに代入しています。
 TypeScriptの型アサーションの一種である「as」は、開発者が明示的に型を規定するためのものです。asを使用することで、変
 数や式の型を、開発者が事前に定義することができます。
-------------------------------------------------------------------------------------------------
-createContext の初期値として空オブジェクトを設定することで、AuthContext が作成される際に、特定の値がまだ設定
-されていなくても、コンテキストが適切に機能するようになります。
 
-asの利用意図:
-as キーワードは、TypeScript の型アサーション（Type Assertion）を行うために使用されます。これにより、開発者が
-型推論を上書きして、特定の型であることを明示できます。
-
-このような型定義をする利用意図:
-型定義をすることで、コンテキストが提供するプロパティと関数に対して型安全性が保証されます。これにより、開発者が誤っ
-た型の値を使用したり、存在しないプロパティや関数にアクセスしようとすることを防ぐことができます。
-
-asで規定した型以外のプロパティは使えない？
-はい、as で指定した型以外のプロパティは、TypeScript が型チェックを行う際に、エラーが発生するため、使用すること
-ができません。
-
-これはどういう時に見られる一般的な設定？
-これは、React のコンテキストを使用してアプリケーションの状態管理を行い、その状態を型安全に管理したい場合によく見
-られる設定です。TypeScript と組み合わせることで、状態管理に関連するバグのリスクを軽減できます。
-------------------------------------------------------------------------------------------------
-currentUserをundefinedにすることで、現在のユーザーが存在しない状態を表現します。nullにする場合、あたかも値が存
-在しているように見えることがありますが、undefinedであれば、値が存在しないことを明示的に示すことができます。
-
-例えば、ユーザーがログインしていない場合、currentUserはundefinedとなります。また、ログアウト後もcurrentUserは
-undefinedのままになります。nullを使う場合、ログアウト後にcurrentUserがnullになっていると、何かしらのユーザーが
-存在しているように見えてしまいます。しかし、undefinedを使うことで、値が存在しないことを明示的に示すことができます。
-
-nullを使う場合、ユーザーが存在しない状態を表現することはできますが、undefinedを使う場合、より明示的に値が存在しな
-いことを示すことができます。nullは値が存在しないことを示すために使われる場合が多いですが、undefinedは未定義の値で
-あることを示すためにも使われます。
-
-JavaScriptでは、nullはオブジェクトが存在しないことを示すために使われますが、null自体はオブジェクトであるため、何
-かしらの値が存在しているように見えてしまうことがあります。一方、undefinedは未定義の値であるため、何も存在していな
-いことを明示的に示すことができます。
 ================================================================================================
-2
+1.2
+. `React.Dispatch<React.SetStateAction<boolean>>`の意味:
+- `React.Dispatch<React.SetStateAction<boolean>>`は、Reactのステート（状態）を更新する関数の型を表してい
+る。
+- `React.Dispatch`は、何かアクション（この場合はステートの更新）を引き起こす関数を示す。
+- `React.SetStateAction<boolean>`は、そのアクションがboolean型（真か偽か）の値を扱うことを意味する。
+- つまり、この型は「boolean型の値でステートを更新する関数」を表している。
+
+================================================================================================
+1.3
+. `handleGetCurrentUser: () => Promise<void>;`の`Promise<void>`の意味:
+- `Promise<void>`は、非同期処理を行う関数の型を表している。`Promise`は、非同期処理（すぐに結果が出ない処理、例
+えばサーバーからデータを取得する処理など）を扱う際に使われる。
+- `<void>`は、この非同期処理が特に値を返さない（つまり、結果として何も返さない）ことを意味する。
+- したがって、`handleGetCurrentUser: () => Promise<void>;`は「非同期処理を行うが、その処理が終わった後に特に何も返さない関数」という意味になる。この場合、おそらくユーザー情報を取得し、ステートを更新するが、その関数自体は値を返さない。
+
+================================================================================================
+1.4
+この型定義は、AuthContext.Providerコンポーネントが受け取るvalueプロパティの型を間接的に指定しています。つまり、
+AuthContext.ProviderのvalueにはAuthContextProps型のデータを渡すことができるということです。
+------------------------------------------------------------------------------------------------
+`currentUser`を`undefined`に設定する理由は以下の通りだ。
+. **未定義の状態を明示するため**:
+- `currentUser`が`undefined`の場合、現在のユーザーが存在しない、すなわちログインしていない状態を明確に示す。
+- `null`ではなく`undefined`を使用することで、「まだ何も設定されていない」または「ユーザーが未認証」であることを
+より明確に伝えられる。
+------------------------------------------------------------------------------------------------
+. **ログイン状態の明確化**:
+- ユーザーがログインしていない時、`currentUser`は`undefined`になる。これは、ログイン前やログアウト後の状態を
+表す。
+- `null`を使用すると、値があるかのような誤解を招く可能性があるが、`undefined`を使うことで「値がまだ設定されてい
+ない」または「ユーザー情報が存在しない」という状態をはっきりさせる。
+------------------------------------------------------------------------------------------------
+. **nullとundefinedの意味の違い**:
+- `null`は一般的に「値が存在しない」を意味し、オブジェクトが「空」であることを示す。
+- `undefined`は値が「未定義」であることを示し、変数がまだ値を持っていない状態を表す。
+- JavaScriptでは`null`はオブジェクト型を持つが、`undefined`は独自の型を持つ。これにより、`undefined`を使う
+ことで「何も設定されていない」という状態がより明確になる。
+
+================================================================================================
+2.1
 getAuthenticatedUser()の返り値はユーザー情報か、undefinedです。
 その場合、elseが実行さconsole.log("No current user")で終了。
 tryで例外が発生すればcatchが実行される。
-------------------------------------------------------------------------------------------------
+
+================================================================================================
+2.1
 if (res?.data.isLogin === true)
 res?.data`の`?`は、オプショナルチェーニング演算子。もし `res` が `undefined` ならば、エラーを投げる代わりに
 `res?.data` は `undefined` を返します。これは、実行時エラーを防ぐのに役立つ。
 もし `res` が `undefined` で、オプショナルチェーニングの演算子?を使わずに `res.data` にアクセスしようとすると、
 JSは `undefined` のプロパティ `data` にアクセスできない、という `TypeError` を投げます。
-
+------------------------------------------------------------------------------------------------
 res?.data.isLogin === true の式では、以下の処理が行われます。
-1.res が undefined の場合、オプショナルチェイニングによって式全体が undefined になります。
-2.res が undefined でない場合、res.data.isLogin の値が取得されます。
-3.res.data.isLogin が true であれば、res?.data.isLogin === true の式全体が true になります。それ以外の
+.res が undefined の場合、オプショナルチェイニングによって式全体が undefined になります。
+.res が undefined でない場合、res.data.isLogin の値が取得されます。
+.res.data.isLogin が true であれば、res?.data.isLogin === true の式全体が true になります。それ以外の
 場合は、false になります。
-
+------------------------------------------------------------------------------------------------
 オプショナルチェイニングを使用することで、res の値が undefined の場合でも、エラーが発生せず、安全にプロパティに
-アクセスできるようになります。
-オプショナルチェイニングを使用すると、エラーが発生せずにundefinedを返します。
+アクセスできるようになります。エラーが発生せずにundefinedを返します。
 
 ================================================================================================
 3
@@ -228,11 +241,17 @@ useEffectフックは、currentUserの状態が更新されたときに、この
 らかの変数を指定すると、その変数が変更されたときに`useEffect`内のコードが再度実行されます。
 今回のケースでは、認証済みのユーザー情報を取得する`handleGetCurrentUser`関数はコンポーネントがマウントされた時
 に一度だけ実行すればよいので、依存配列を空にするのが適切です。
+------------------------------------------------------------------------------------------------
+- `AuthContext.tsx` の `useEffect` には依存変数が設定されていないが、問題なく動作していることが確認できる。
+- これは、`useSignIn` フック内で `handleGetCurrentUser` が実行されているため、ユーザーがサインインするたびに
+ユーザー情報が更新される。
+- このため、`AuthContext.tsx` の `useEffect` で `currentUser` を依存変数として設定する必要は特にない。
+`handleGetCurrentUser` はサインイン時に別途実行されるため、状態は適切に管理されていると考えられる。
 
 ================================================================================================
 5
-AuthContextの初期値は空のオブジェクト{}ですが、AuthProviderコンポーネントでvalueプロパティに値を設定していま
-す。valueプロパティに渡すオブジェクトのプロパティは、
+AuthProviderコンポーネントでvalueプロパティに値を設定しています。
+valueプロパティに渡すオブジェクトのプロパティは、
 loading、setLoading、isSignedIn、setIsSignedIn、currentUser、setCurrentUserの6つです。
 変数名valueは任意の名前です。
 
@@ -247,15 +266,15 @@ AuthProviderのプロパティが返されます。
 Reactでは、Contextは、ツリーの各レベルに明示的にpropを渡すことなく、コンポーネント間で値を共有する方法を提供しま
 す。アプリケーションの `AuthProvider` コンポーネントは、 `AuthContext.Provider` を使用してこれらの値を提供し
 ます。
-
+------------------------------------------------------------------------------------------------
 AuthContext.Provider` の子コンポーネント： AuthContext.Provider` 内でレンダリングされるすべてのコンポーネン
 トは、このプロバイダの子とみなされます。これらの子プロバイダーだけが `AuthContext.Provider` が提供する値に直接
 アクセスすることができます。
-
+------------------------------------------------------------------------------------------------
 useAuthContext` フック： このカスタムフックは、基本的に `useContext(AuthContext)` のラッパーとして作成され
 ます。このフックは、`AuthContext.Provider` の子プロパティの中で使用すると、現在のコンテキスト値
 (`AuthContext.Provider` の value prop) を返します。
-
+------------------------------------------------------------------------------------------------
 `AuthContext.Provider` の子ではないコンポーネントで使用しようとすると、 `useContext(AuthContext)` は
 `undefined` を返します。
 

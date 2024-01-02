@@ -35,8 +35,9 @@ export const useSignIn = () => {
       password: password,
     };
     try {
+      // 2.3
       const res = await signIn(params);
-      // console.log(`サインインのres${JSON.stringify(res.data)}`);
+      console.log(`◆サインインのres${JSON.stringify(res)}`);
       // サインインに成功すると、currentUserの情報が返る
       if (res.status === 200) {
         // ログインに成功したら、Cookieにアクセストークン、クライアント、uidを保存
@@ -62,11 +63,14 @@ export const useSignIn = () => {
           router.push(`/`);
         }, 1000);
       } else {
-        setAlertSeverity('error');
-        setAlertMessage(`${res.data.errors[0]}`);
-        setAlertOpen(true);
+        console.log("else作動")
+        console.log(`サインイン失敗${JSON.stringify(res)}`)
+        // setAlertSeverity('error');
+        // setAlertMessage(`${res.data.errors[0]}`);
+        // setAlertOpen(true);
       }
     } catch (err: any) {
+      console.log("catch作動")
       setAlertSeverity('error');
       // エラーはresと省略するとエラーになる
       setAlertMessage(`${err.response.data.errors}`);
@@ -170,6 +174,13 @@ handleResponse(response2); // 処理中のデータタイプはnumber
 通常、HTMLフォームがサブミットされると、ページが再読み込みされたり、新しいページに移動したりします。Reactでは、フ
 ォームのデータをJavaScriptで処理し、その結果をハンドリングすることが一般的です。`e.preventDefault();`は、この
 標準的なフォーム送信をキャンセルし、代わりに`handleSignIn`関数で定義されたカスタム処理を行うために使用されます。
-------------------------------------------------------------------------------------------------
 
+================================================================================================
+2.3
+useSignIn** における `res` オブジェクト：
+- `AxiosResponse` オブジェクトの `data` プロパティである `res.data` を直接ロギングして使用しています。この
+`data` には、Rails バックエンドからの実際のレスポンスペイロードが格納されています。
+------------------------------------------------------------------------------------------------
+- レスポンスの処理 res.headers`と `res.data`からアクセストークンやユーザー情報などの必要な情報を抽出します。こ
+れは、ログイン成功後に認証やユーザーデータを処理する必要があるアプリケーションでの典型的な使用方法です。
 */

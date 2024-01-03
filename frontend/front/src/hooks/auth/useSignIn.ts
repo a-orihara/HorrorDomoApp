@@ -7,7 +7,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useFollowContext } from '../../contexts/FollowContext';
 import { usePostContext } from '../../contexts/PostContext';
 import { SignInParams } from '../../types/user';
-
+import { AxiosError } from 'axios';
 // ================================================================================================
 // 1.1
 export const useSignIn = () => {
@@ -38,7 +38,7 @@ export const useSignIn = () => {
       // 2.3
       const res = await signIn(params);
       console.log(`◆サインインのres${JSON.stringify(res)}`);
-      // サインインに成功すると、currentUserの情報が返る
+      // 2.4 サインインに成功すると、currentUserの情報が返る
       if (res.status === 200) {
         // ログインに成功したら、Cookieにアクセストークン、クライアント、uidを保存
         Cookies.set('_access_token', res.headers['access-token']);
@@ -69,15 +69,27 @@ export const useSignIn = () => {
         // setAlertMessage(`${res.data.errors[0]}`);
         // setAlertOpen(true);
       }
-    } catch (err: any) {
+    // } catch (err: any) {
+    } catch (err:any) {
+      // if (err instanceof AxiosError) {
       console.log("catch作動")
       console.log(`◆サインインのerr${JSON.stringify(err)}`);
+      console.log(`◆サインインのerr.response${JSON.stringify(err.response)}`);
       setAlertSeverity('error');
-      // エラーはresと省略するとエラーになる
-      setAlertMessage(`${err.response.data.errors}`);
-      // setAlertMessage(`${err.response}`);
+      // 2.5 resと省略するとresposeオブジェクトが拾えずにエラーになる
+      if (err.response) {
+        // 2.6 サーバーのレスポンスからエラーメッセージを抽出する
+        const errorMessage = err.response.data.errors
+          ? err.response.data.errors.join(', ')
+          : '不明なエラーが発生しました';
+        setAlertMessage(errorMessage);
+      } else {
+        // 応答がない場合のエラー・メッセージ
+        setAlertMessage('サーバーへの接続に失敗しました。後で再試行してください');
+      }
       setAlertOpen(true);
     }
+    // }
   };
 
   // ================================================================================================
@@ -184,4 +196,40 @@ useSignIn** における `res` オブジェクト：
 ------------------------------------------------------------------------------------------------
 - レスポンスの処理 res.headers`と `res.data`からアクセストークンやユーザー情報などの必要な情報を抽出します。こ
 れは、ログイン成功後に認証やユーザーデータを処理する必要があるアプリケーションでの典型的な使用方法です。
+
+================================================================================================
+2.4
+- axiosはHTTPエラーが発生した場合、自動的に例外をスローするため、ステータスコードによるエラーハンドリングも必要あ
+りません。
+- Axios は HTTP エラーが発生すると自動的に例外をスローします。Axiosは、2xxの範囲外のステータスコードを持つすべ
+ての応答をエラーとして扱います。この動作は、AxiosがHTTPリクエストとレスポンスを処理する方法の基本です。
+- エラーがスローされると、Axiosは、サーバーが応答を送信する場合、ステータスコード、データ、ヘッダーなど、応答の詳
+細を含むエラーオブジェクトを提供します。
+
+================================================================================================
+2.5
+- axiosはHTTPエラーが発生した場合、自動的に例外をスローするため、ステータスコードによるエラーハンドリングも必要あ
+りません。
+- devise token authはサインインに失敗すると、デフォで401を返す。バックエンドが非2xxステータスコードで応答する
+と、Axiosはエラーをスローします。`err.response`をチェックし、利用可能であればサーバーが提供するエラーメッセージ
+を抽出することで、フロントエンドがこれらのエラーを正しく処理します。
+- エラーが発生したがサーバーからの応答がない場合（ネットワークの問題など）を考慮し、`err.responseオブジェクト`が
+あるかどうかをチェック。ある場合はサーバーからのレスポンスに関連するエラーがあることを示す。
+- Devise Token Authは通常、エラーメッセージを特定の形式（`errors`キーの下にあるメッセージの配列のような形式）
+で送信します。この修正ではそれを考慮し、必要に応じて複数のメッセージを1つの文字列に結合します。
+
+================================================================================================
+2.6
+- 三項演算子はif-else文をコンパクトにしたようなものです。三項演算子は条件をチェックし、条件が真なら1つの値を返し、
+条件が偽なら別の値を返します。これは `condition ? valueIfTrue : valueIfFalse` と記述します。
+- err.response.data.errors`が存在するかどうかをチェックしている。
+- 真の場合の値 err.response.data.errors.join(', ')`を返します。
+- エラーが複数存在する場合、カンマで区切って1つの文字列にまとめます。これは、サーバーがエラーメッセージの配列を送信
+し、それらを1行で表示したい場合に便利。
+- err.response.data.errors`にエラーがない場合(nullまたはundefinedの場合)(False**の場合)、[不明なエラーが
+発生しました。]を表示。このデフォルトのメッセージが使用されます。これは、エラーに特定のメッセージがない場合の予備。
+------------------------------------------------------------------------------------------------
+`err.response.data.errors.join(', ')`を使用しても、配列に値が一つしかない場合には余計なカンマは付きません。
+------------------------------------------------------------------------------------------------
+サーバーが特定のエラーメッセージを提供する場合は、それを表示します。そうでない場合は、一般的なエラーメッセージを表示
 */

@@ -71,6 +71,7 @@ export const useSignIn = () => {
       }
     } catch (err: any) {
       console.log("catch作動")
+      console.log(`◆サインインのerr${JSON.stringify(err)}`);
       setAlertSeverity('error');
       // エラーはresと省略するとエラーになる
       setAlertMessage(`${err.response.data.errors}`);

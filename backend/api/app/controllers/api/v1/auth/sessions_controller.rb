@@ -12,7 +12,6 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
     # 3.1 サインイン成功時に許可するパラメーターを設定
     def render_create_success
       # 3.2
-      # data: resource_data(resource_json: @resource.token_validation_response)
       render json: {
         # successプロパティで真偽値を返す
         success: true,
@@ -24,7 +23,7 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
       }, status: :ok
     end
 
-    # 5.1サインイン失敗時のメソッド
+    # 5.1サインイン失敗時のメソッド。明示的に記載。
     def render_create_error_bad_credentials
       logger.error "サインイン失敗:発火してます！"
       # 5.2 render_errorはそのメソッドの中でrender json:している
@@ -256,7 +255,7 @@ end
 . **resource_data(resource_json: @resource.token_validation_response)`**の戻り値：
 - この行の戻り値は `resource_data` メソッドの出力である `response_data` ハッシュである。
 - このハッシュは `@resource` からのトークン検証のレスポンスを JSON で表現したものである。
-- さらに、`json_api?`メソッドが `true` を返した場合、ハッシュには `@resource` のパラメータ化されたクラス名を 
+- さらに、`json_api?`メソッドが `true` を返した場合、ハッシュには `@resource` のパラメータ化されたクラス名を
 `'type'` キーとして格納する。
 - このメソッドはサインインに成功したときに必要なトークン検証情報を含むレスポンスをクライアントに返す
 ------------------------------------------------------------------------------------------------

@@ -17,34 +17,44 @@ const MailConfirmation: NextPage = () => {
       return;
     }
 
-    // 3.1
-    if (router.query['confirmation_token']) {
-      // バックエンドのURL
-      const url = process.env.NEXT_PUBLIC_API_URL + '/user/confirmations';
-      // 3.2
-      axios({ method: 'PATCH', url: url, data: router.query })
-        .then(() => {
+    const confirmEmail = async () => {
+      // 3.1
+      if (router.query['confirmation_token']) {
+        // バックエンドのURL
+        const url = process.env.NEXT_PUBLIC_API_URL + '/user/confirmations';
+        try{
+          // 3.2
+          await axios({ method: 'PATH', url: url, data: router.query });
           setAlertMessage('認証に成功しました');
           setAlertSeverity('success');
           setAlertOpen(true);
           router.push('/signin');
-        })
-        // 3.3
-        .catch((e: AxiosError<{ error: string }>) => {
-          console.log("カモン");
-          console.log(`ここ${e.message}`);
-          setAlertMessage('不正なアクセスです');
+          // 3.3
+        } catch (e) {
+          // Axiosエラーなら
+          if (e instanceof AxiosError) {
+            console.log(`Error: ${e.message}`);
+            // You can access e.response, e.request, etc.
+          } else {
+            // Handle non-Axios errors
+            console.log('不明なエラーが発生しました');
+          }
+          setAlertMessage('サーバーへの接続に失敗しました');
           setAlertSeverity('error');
           setAlertOpen(true);
           router.push('/');
-        });
-    } else {
-      console.log("カモン2");
-      setAlertMessage('不正なアクセスです');
-      setAlertSeverity('error');
-      setAlertOpen(true);
-      router.push('/');
-    }
+        }
+      } else {
+          // Axiosに関連しないエラーを処理
+          setAlertMessage('予期しないエラーが発生しました');
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          router.push('/');
+        };
+    };
+
+    confirmEmail();
+
   }, [router, setAlertMessage, setAlertSeverity, setAlertOpen]);
 
   return <></>;
@@ -82,9 +92,8 @@ export default MailConfirmation;
 読み込みが行われていないことを示します。
 ------------------------------------------------------------------------------------------------
 - `if (!router.isReady)` は、ルーターがまだ初期化されておらず、データの読み込みが行われていない場合に条件を満
-たすことを意味します。つまり、この条件はルーターが完全に動作可能でない場合に実行されるコードブロックを指定している。
-ルーターが初期化されていない状態とは、ページのURLやパス、クエリーパラメータなどの情報がまだ完全に読み込まれていない
-ことを指す。
+たすことを意味します。ルーターが初期化されていない状態とは、ページのURLやパス、クエリーパラメータなどの情報がまだ完
+全に読み込まれていないことを指す。
 ------------------------------------------------------------------------------------------------
 - 使用意図：このコードの目的は、ページコンポーネントが初期化される際に、ルーターが完全に初期化されるまで待機するこ
 とです。`router.isReady` が `true` でない場合、まだルーターが完全に準備されていないため、後続の処理（API呼び出
@@ -101,6 +110,11 @@ export default MailConfirmation;
 - `router.query['confirmation_token']` は、現在のURLのクエリーパラメータから `confirmation_token` とい
 うキーに関連付けられた値を取得します。
 - このコードの目的は、`confirmation_token` クエリーパラメータが存在するかどうかを確認することです。
+------------------------------------------------------------------------------------------------
+router.query['confirmation_token']
+queryはオブジェクト。ブラケット記法（`object['property']`）とドット記法（`object.property`）の両方が有効。
+クエリパラメータにアクセスする際にブラケット記法を使用するのは一般的なパターンであり、これらのパラメータは動的な性質
+を持つことが多いからです。router.query`のキーはURLのクエリー文字列によって決まります。
 
 ================================================================================================
 3.2

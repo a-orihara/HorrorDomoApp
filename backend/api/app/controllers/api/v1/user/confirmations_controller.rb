@@ -3,12 +3,12 @@ class Api::V1::User::ConfirmationsController < ApplicationController
   def update
     user = User.find_by(confirmation_token: params[:confirmation_token])
     # 1.2
-    return render json: { message: "User record is not found." }, status: :not_found if user.nil?
+    return render json: { message: "ユーザーレコードが見つかりません" }, status: :not_found if user.nil?
     # 1.3
-    return render json: { message: "User has already been confirmed." }, status: :bad_request if user.confirmed?
+    return render json: { message: "ユーザーはすでに確定しています" }, status: :bad_request if user.confirmed?
 
     user.update!(confirmed_at: Time.current)
-    render json: { message: "User confirmartion succeeded." }, status: :ok
+    render json: { message: "ユーザーアカウント認証に成功しました" }, status: :ok
   end
 end
 

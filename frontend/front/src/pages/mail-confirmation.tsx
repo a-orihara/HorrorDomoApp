@@ -1,4 +1,3 @@
-// frontend/front/src/pages/mailConfirmation.tsx
 import axios, { AxiosError } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -20,47 +19,64 @@ const MailConfirmation: NextPage = () => {
     const confirmEmail = async () => {
       // 3.1
       if (router.query['confirmation_token']) {
-        // バックエンドのURL
         const url = process.env.NEXT_PUBLIC_API_URL + '/user/confirmations';
-        try{
+        try {
           // 3.2
-          await axios({ method: 'PATH', url: url, data: router.query });
-          setAlertMessage('認証に成功しました');
-          setAlertSeverity('success');
-          setAlertOpen(true);
-          router.push('/signin');
-          // 3.3
-        } catch (e) {
-          // Axiosエラーなら
-          if (e instanceof AxiosError) {
-            console.log(`Error: ${e.message}`);
-            // You can access e.response, e.request, etc.
+          const res = await axios({ method: 'PATCH', url: url, data: router.query });
+          // user認証に成功したケース
+          if (res.status === 200) {
+            setAlertMessage(res.data.message);
+            setAlertSeverity('success');
+            setAlertOpen(true);
+            router.push('/signin');
+          // 200以外のエラーではないレスポンスのケース
           } else {
-            // Handle non-Axios errors
-            console.log('不明なエラーが発生しました');
+            setAlertSeverity('error');
+            setAlertMessage('認証に失敗しました');
+            setAlertOpen(true);
           }
-          setAlertMessage('サーバーへの接続に失敗しました');
-          setAlertSeverity('error');
-          setAlertOpen(true);
-          router.push('/');
+        // 3.3
+        } catch (err) {
+          console.log(`ここに${err}`);
+          if (err instanceof AxiosError) {
+            // userが見つからないケース
+            if (err.response?.status === 404) {
+              setAlertSeverity('error');
+              setAlertMessage(err.response.data.message);
+              setAlertOpen(true);
+              router.push('/');
+            // userが既に認証済みのケース
+            } else if (err.response?.status === 422) {
+              setAlertSeverity('error');
+              setAlertMessage(err.response.data.message);
+              setAlertOpen(true);
+              router.push('/');
+            // AxiosErrorの上記以外のケース
+            } else {
+              console.log(`ここだ${JSON.stringify( err.response)}`);
+              setAlertMessage('サーバーへの接続に失敗しました');
+              setAlertSeverity('error');
+              setAlertOpen(true);
+              router.push('/');
+            }
+          // AxiosError以外のケース
+          } else {
+            setAlertMessage('予期しないエラーが発生しました');
+            setAlertSeverity('error');
+            setAlertOpen(true);
+            router.push('/');
+          }
         }
-      } else {
-          // Axiosに関連しないエラーを処理
-          setAlertMessage('予期しないエラーが発生しました');
-          setAlertSeverity('error');
-          setAlertOpen(true);
-          router.push('/');
-        };
+      }
     };
-
     confirmEmail();
-
   }, [router, setAlertMessage, setAlertSeverity, setAlertOpen]);
 
   return <></>;
 };
 
 export default MailConfirmation;
+
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @

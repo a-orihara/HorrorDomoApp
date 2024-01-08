@@ -2,11 +2,13 @@ class Api::V1::User::ConfirmationsController < ApplicationController
   # 1.1
   def update
     user = User.find_by(confirmation_token: params[:confirmation_token])
-    # 1.2
-    return render json: { message: "ユーザーレコードが見つかりません" }, status: :not_found if user.nil?
-    # 1.3
-    return render json: { message: "ユーザーはすでに確定しています" }, status: :bad_request if user.confirmed?
+    logger.info "ここのuser!: #{user.inspect}"
+    # 1.2 404
+    return render json: { message: "ユーザーが見つかりません" }, status: :not_found if user.nil?
+    # 1.3 422
+    return render json: { message: "ユーザーはすでに認証されています" }, status: :unprocessable_entity if user.confirmed?
 
+    # 1.4
     user.update!(confirmed_at: Time.current)
     render json: { message: "ユーザーアカウント認証に成功しました" }, status: :ok
   end
@@ -36,4 +38,18 @@ end
 スコードを持つJSONレスポンスを返します。
 - 使用意図は、ユーザーが既に確認されている場合（つまり、アカウントがすでにアクティブである場合）に、重複した確認リ
 クエストを無効にし、クライアントに適切なフィードバックを提供することです。
+------------------------------------------------------------------------------------------------
+422のステータスコードは、クライアントからのリクエストが受け入れられず、サーバーがリクエストを処理できない場合に使用
+されます。具体的なケースとしては、リクエストが正当であるが、リソースの状態がリクエストに適合しない場合や、バリデーシ
+ョンエラーが発生した場合に適しています。
+
+================================================================================================
+1.4
+**Devise `confirmed_at` による `confirm` 認証:**.
+- Deviseでは、データベースの `confirmed_at` 属性にタイムスタンプ（日付と時刻）がある場合、ユーザーは確認された
+とみなされます。この属性はユーザー作成時のデフォルトではNULLです。
+- 確認プロセスでは、ユーザが確認リンクをクリックしてトークンが認証されると、`confirmed_at`属性に現在の日時が設定
+されます。
+- その時点から、ユーザーはDeviseによって確認されたとみなされます
+
 =end

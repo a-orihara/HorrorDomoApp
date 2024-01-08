@@ -7,13 +7,13 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { getErrorMessage } from '../../hooks/error';
 import { SignUpParams } from '../../types/user';
 // ================================================================================================
-// サインアップ処理。非同期通信なので、async awaitを使う。
+// 7.1 サインアップ処理。非同期通信なので、async awaitを使う。
 const useSignUp = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  // サインアップ認証用のmailのリンク先のURL
+  // 1.1 サインアップ認証用のmailのリンク先のURL（認証に成功した後にリダイレクトされるページの指定）
   const confirmSuccessUrl = "http://localhost:3001/signin";
   // const { setIsSignedIn, setCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
@@ -22,12 +22,13 @@ const useSignUp = () => {
   // サインアップ処理
   const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    // ここでparamsに値を入力
     const params: SignUpParams = {
       name: name,
       email: email,
       password: password,
       passwordConfirmation: passwordConfirmation,
-      // deviseでconfirmableを設定していれば、送付すればrails側で受け取って処理してくれる
+      // deviseでconfirmableを設定してればrails側で受け取って処理してくれる
       confirmSuccessUrl: confirmSuccessUrl,
     };
     try {
@@ -63,7 +64,7 @@ const useSignUp = () => {
     } catch (err: any) {
       console.error(err);
       setAlertSeverity('error');
-      setAlertMessage(getErrorMessage(err.res.data));
+      // setAlertMessage(getErrorMessage(err.res.data));
       setAlertOpen(true);
     }
   };
@@ -85,6 +86,17 @@ export default useSignUp;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
+1.1
+. **1.Railsの**config.action_mailer.default_url_options`：
+- railsから送信されるメール内で生成されるリンクのベースURLを定義します。
+- あなたの場合、`localhost`にポート `3010` が設定されています。
+. **React Frontend（`useSignUp`フック）の**confirmSuccessUrl`：
+- これは、ユーザーがメールの確認に成功した後にリダイレクトされるページを指定しています。
+- ユーザーがメール内の確認リンクをクリックして確認プロセスを完了した後、`localhost:3001`のサインインページに移動
+することを意味します。つまり、サインインを促します。
+------------------------------------------------------------------------------------------------
+簡単に言うと、1つ目(`config.action_mailer.default_url_options`)はメールの旅が始まる場所(メールリンクのベー
+スURL)で、2つ目(`confirmSuccessUrl`)は旅が終わる場所(ユーザーがメールで要求されたことを行った後の行き先)。
 ================================================================================================
 3
 devise_token_authを使用して認証を行う際に、通常は以下の3つのクッキーを設定するのが一般的です。
@@ -160,4 +172,59 @@ else文のブロック内が実行されます。これは何らかの理由で�
 - HTTPリクエスト自体は成功したが、サーバーがエラーステータスコード
 （例えば、404 Not Found、500 Internal Server Error等）を返した場合。ただし、axiosではエラーステータスコード
 を返すときもPromiseがrejectされ、catchブロックが実行されます。
+
+================================================================================================
+7.1
+http://localhost:3001/mail-confirmation?confirmation_token=eDzx5KmeRo_xhQmxy9Xs
+. **ユーザーがサインアップする。
+- ユーザーが値を入力してサインアップフォームが送信されると、`useSignUp.ts` の `handleSignUp` がトリガー。これ
+らの詳細情報がバックエンド (`auth` API の `signUp` 関数) に送信。
+- リクエストには `confirmSuccessUrl` が含まれており、メール確認後のリダイレクト先を Devise に伝えます。
+------------------------------------------------------------------------------------------------
+. **バックエンドがサインアップリクエストを受け取る:**。
+- Railsはリクエストを受け取り、`DeviseTokenAuth::RegistrationsController`を通して処理。
+- このプロセスの一環として、Deviseは確認トークンを生成し、確認リンクを含むメールをユーザーに送信します。このメール
+は、`http://localhost:3001/mail-confirmation?confirmation_token=<actual_token>`のようなURLに誘導する
+ように設定されています。ユーザーのアカウントは作成されますが、まだ認証されていません。
+------------------------------------------------------------------------------------------------
+. **フロントエンドは確認リンクを処理
+- ユーザーはメールを受信し、確認リンクをクリック。このリンクはユーザーをフロントの `mail-confirmation` ページに
+誘導。
+- フロントの `MailConfirmation` ページは URL から `confirmation_token` を取り出す。
+- railsの `Api::V1::User::ConfirmationsController` の `update` アクションに API リクエストを行い、ユー
+ザーのメールを確認する。
+------------------------------------------------------------------------------------------------
+. **ユーザー認証
+- ユーザが確認リンクをクリックすると、フロントエンドの `mail-confirmation` ページに誘導されます。
+- フロントエンドの `MailConfirmation` コンポーネントは URL から `confirmation_token` を取得し、ユーザのメ
+ールを確認するためにバックエンド（パス `/user/confirmations` ）に API リクエストを行います。
+- このデザインは、フロントエンド（ユーザーとのインタラクションを処理する）とバックエンド（データと認証ロジックを処
+理する）の間の懸念を分離します。
+- この設定は、バックエンドがデータ処理とビジネスロジックに集中する、最新のフルスタックアプリケーションアーキテクチ
+ャに沿ったものです。
+- config/environments/developmentの、`config.action_mailer.default_url_options`設定はメール確認リン
+クの生成には利用されません。
+------------------------------------------------------------------------------------------------
+**Devise `confirmed_at` による `confirm` 認証:**.
+- Deviseでは、データベースの `confirmed_at` 属性にタイムスタンプ（日付と時刻）がある場合、ユーザーは確認された
+とみなされます。この属性はユーザー作成時のデフォルトではNULLです。
+- 確認プロセスでは、ユーザが確認リンクをクリックしてトークンが認証されると、`confirmed_at`属性に現在の日時が設定
+されます。
+- その時点から、ユーザーはDeviseによって確認されたとみなされます
+------------------------------------------------------------------------------------------------
+＊ **devise_token_auth/confirmations_controller.rb` における `show` と `create` の役割:このアプリでは
+使用していない。
+- 通常、`show` はサーバサイドの確認フローで使用され、バックエンドが確認メールのリンクを直接処理します。フロントエ
+ンドが確認プロセスを管理しているので、このフローでは直接使用しません。
+- 関数 `create` は、ユーザが確認メールを再送するように要求した場合などに、確認の指示を再送するために使用します。
+これは最初のサインアップと確認のフローには含まれません。
+------------------------------------------------------------------------------------------------
+. これはバックエンドのみで処理する時の流れ。
+- ユーザーがメール内の確認リンクをクリックすると、railsにリクエストが送信。このリクエストは標準的な Devise のフロ
+ーに従って `DeviseTokenAuth::ConfirmationsController` の `show` アクションにルーティング。
+- show` アクションは、指定された確認トークンを持つユーザーを見つけ、そのレコードを更新することで、ユーザーのメール
+アドレスを確認します。
+- 確認が成功し、ユーザーが既にサインインしている場合は、新しいトークンを生成して `redirect_url` (この場合は、
+`http://localhost:3001/signin`) にリダイレクトします。ユーザーがサインインしていない場合は、単に
+`redirect_url` にリダイレクトします。
 */

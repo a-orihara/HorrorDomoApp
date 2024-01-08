@@ -1,10 +1,10 @@
 // import Cookies from 'js-cookie';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { signUp } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
-import { useAuthContext } from '../../contexts/AuthContext';
-import { getErrorMessage } from '../../hooks/error';
+// import { useAuthContext } from '../../contexts/AuthContext';
 import { SignUpParams } from '../../types/user';
 // ================================================================================================
 // 7.1 サインアップ処理。非同期通信なので、async awaitを使う。
@@ -34,11 +34,18 @@ const useSignUp = () => {
     try {
       // 5
       const res = await signUp(params);
-      console.log(`サインアップのres${JSON.stringify(res)}`);
-      alert("アカウント認証用のメールを送信しました！");
-      setTimeout(() => {
-          router.push('/');
-        }, 1000);
+      if (res.status === 200) {
+        console.log(`サインアップのres${JSON.stringify(res)}`);
+        alert("アカウント認証用のメールを送信しました！");
+        setTimeout(() => {
+            router.push('/');
+            }, 1000);
+      // 200以外のエラーではないレスポンスのケース
+      } else {
+        setAlertSeverity('error');
+        setAlertMessage('認証に失敗しました');
+        setAlertOpen(true);
+      }
       // if (res.status === 200) {
       //   // 3 Cookieにトークンをセット
       //   Cookies.set('_access_token', res.headers['access-token']);
@@ -61,11 +68,34 @@ const useSignUp = () => {
       //   setAlertOpen(true);
       // }
       // 6
-    } catch (err: any) {
-      console.error(err);
-      setAlertSeverity('error');
-      // setAlertMessage(getErrorMessage(err.res.data));
-      setAlertOpen(true);
+    } catch (err) {
+      // console.log(`ここに${err}`);
+      if (err instanceof AxiosError) {
+        // userが見つからないケース
+        if (err.response?.status === 422) {
+          console.log(`ここに422:${JSON.stringify(err.response.data.errors.fullMessages)}`);
+          // deviseのregistrationのerrorメッセージは下記の形式で取り出せる
+          const errorMessages = err.response.data.errors.fullMessages;
+          // errorMessagesは文字列の配列なので、連結する
+          const formattedErrorMessage = Array.isArray(errorMessages) ? errorMessages.join(', ') : errorMessages;
+          setAlertSeverity('error');
+          setAlertMessage(formattedErrorMessage);
+          setAlertOpen(true);
+          router.push('/');
+        // AxiosErrorの上記以外のケース
+        } else {
+          setAlertMessage('サーバーへの接続に失敗しました');
+          setAlertSeverity('error');
+          setAlertOpen(true);
+          router.push('/');
+        }
+      // AxiosError以外のケース
+      } else {
+        setAlertMessage('予期しないエラーが発生しました');
+        setAlertSeverity('error');
+        setAlertOpen(true);
+        router.push('/');
+      }
     }
   };
   // ------------------------------------------------------------------------------------------------

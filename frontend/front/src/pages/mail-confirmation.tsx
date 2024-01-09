@@ -1,4 +1,3 @@
-// frontend/front/src/pages/mailConfirmation.tsx
 import axios, { AxiosError } from 'axios';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -17,40 +16,67 @@ const MailConfirmation: NextPage = () => {
       return;
     }
 
-    // 3.1
-    if (router.query['confirmation_token']) {
-      // バックエンドのURL
-      const url = process.env.NEXT_PUBLIC_API_URL + '/user/confirmations';
-      // 3.2
-      axios({ method: 'PATCH', url: url, data: router.query })
-        .then(() => {
-          setAlertMessage('認証に成功しました');
-          setAlertSeverity('success');
-          setAlertOpen(true);
-          router.push('/signin');
-        })
+    const confirmEmail = async () => {
+      // 3.1
+      if (router.query['confirmation_token']) {
+        const url = process.env.NEXT_PUBLIC_API_URL + '/user/confirmations';
+        try {
+          // 3.2
+          const res = await axios({ method: 'PATCH', url: url, data: router.query });
+          // user認証に成功したケース
+          if (res.status === 200) {
+            setAlertMessage(res.data.message);
+            setAlertSeverity('success');
+            setAlertOpen(true);
+            router.push('/signin');
+          // 200以外のエラーではないレスポンスのケース
+          } else {
+            setAlertSeverity('error');
+            setAlertMessage('認証に失敗しました');
+            setAlertOpen(true);
+          }
         // 3.3
-        .catch((e: AxiosError<{ error: string }>) => {
-          console.log("カモン");
-          console.log(`ここ${e.message}`);
-          setAlertMessage('不正なアクセスです');
-          setAlertSeverity('error');
-          setAlertOpen(true);
-          router.push('/');
-        });
-    } else {
-      console.log("カモン2");
-      setAlertMessage('不正なアクセスです');
-      setAlertSeverity('error');
-      setAlertOpen(true);
-      router.push('/');
-    }
+        } catch (err) {
+          console.log(`ここに${err}`);
+          if (err instanceof AxiosError) {
+            // userが見つからないケース
+            if (err.response?.status === 404) {
+              setAlertSeverity('error');
+              setAlertMessage(err.response.data.message);
+              setAlertOpen(true);
+              router.push('/');
+            // userが既に認証済みのケース
+            } else if (err.response?.status === 422) {
+              setAlertSeverity('error');
+              setAlertMessage(err.response.data.message);
+              setAlertOpen(true);
+              router.push('/');
+            // AxiosErrorの上記以外のケース
+            } else {
+              console.log(`ここだ${JSON.stringify( err.response)}`);
+              setAlertMessage('サーバーへの接続に失敗しました');
+              setAlertSeverity('error');
+              setAlertOpen(true);
+              router.push('/');
+            }
+          // AxiosError以外のケース
+          } else {
+            setAlertMessage('予期しないエラーが発生しました');
+            setAlertSeverity('error');
+            setAlertOpen(true);
+            router.push('/');
+          }
+        }
+      }
+    };
+    confirmEmail();
   }, [router, setAlertMessage, setAlertSeverity, setAlertOpen]);
 
   return <></>;
 };
 
 export default MailConfirmation;
+
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
@@ -82,9 +108,8 @@ export default MailConfirmation;
 読み込みが行われていないことを示します。
 ------------------------------------------------------------------------------------------------
 - `if (!router.isReady)` は、ルーターがまだ初期化されておらず、データの読み込みが行われていない場合に条件を満
-たすことを意味します。つまり、この条件はルーターが完全に動作可能でない場合に実行されるコードブロックを指定している。
-ルーターが初期化されていない状態とは、ページのURLやパス、クエリーパラメータなどの情報がまだ完全に読み込まれていない
-ことを指す。
+たすことを意味します。ルーターが初期化されていない状態とは、ページのURLやパス、クエリーパラメータなどの情報がまだ完
+全に読み込まれていないことを指す。
 ------------------------------------------------------------------------------------------------
 - 使用意図：このコードの目的は、ページコンポーネントが初期化される際に、ルーターが完全に初期化されるまで待機するこ
 とです。`router.isReady` が `true` でない場合、まだルーターが完全に準備されていないため、後続の処理（API呼び出
@@ -101,6 +126,11 @@ export default MailConfirmation;
 - `router.query['confirmation_token']` は、現在のURLのクエリーパラメータから `confirmation_token` とい
 うキーに関連付けられた値を取得します。
 - このコードの目的は、`confirmation_token` クエリーパラメータが存在するかどうかを確認することです。
+------------------------------------------------------------------------------------------------
+router.query['confirmation_token']
+queryはオブジェクト。ブラケット記法（`object['property']`）とドット記法（`object.property`）の両方が有効。
+クエリパラメータにアクセスする際にブラケット記法を使用するのは一般的なパターンであり、これらのパラメータは動的な性質
+を持つことが多いからです。router.query`のキーはURLのクエリー文字列によって決まります。
 
 ================================================================================================
 3.2

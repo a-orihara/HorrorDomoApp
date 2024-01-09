@@ -1,6 +1,7 @@
 import React from 'react';
 
 type InputProps = React.ComponentProps<'input'> & {
+  // テキストボックスに初期表示されるテキスト
   placeholder?: string;
   className?: string;
 };

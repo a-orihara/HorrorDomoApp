@@ -140,9 +140,9 @@ rubyでは、サブクラス(子クラス)がスーパークラス(親クラス)
   "status": 200,
   "statusText": "OK",
   "headers": {
-    "access-token": "YDkxmhAsw57xr0eJ3b3vAw",
+    "access-token": "<トークンの値>",
     "cache-control": "max-age=0, private, must-revalidate",
-    "client": "0793NEPGltrXf0dcFXcqFQ",
+    "client": "<idの値>",
     "content-type": "application/json; charset=utf-8",
     "expiry": "1705039517",
     "token-type": "Bearer",

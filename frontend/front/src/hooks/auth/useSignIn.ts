@@ -71,30 +71,25 @@ export const useSignIn = () => {
       }
       // 3.1
     } catch (err:any) {
-      // console.log(`◆サインインのerr${JSON.stringify(err)}`);
-      // console.log(`◆サインインのerr.response${JSON.stringify(err.response)}`);
-      // 以降のcatch節に'error'を設定
-      setAlertSeverity('error');
       console.log("catch作動")
       console.log(`今の:${alertSeverity}`)
+      // 2.9 デフォルトメッセージを設定し、これをAxiosに関連しない、その他のエラーの際に表示
+      let errorMessage = '予期しないエラーが発生しました';
       // 2.5 Axiosエラーかチェック
       if (err instanceof AxiosError) {
         // 2.6 resと省略するとresposeオブジェクトが拾えずにエラーになる
         if (err.response) {
-          const errorMessage = err.response.data.errors
+          errorMessage = err.response.data.errors
           ? err.response.data.errors.join(', ')
           // 2.7
           : '不明なエラーが発生しました';
-        setAlertMessage(errorMessage);
         }else {
-        // 2.8 Axiosとは関係のないJavaScript他のエラーの場合
+        // 2.8 Axiosのレスポンスがない、JavaScript他のエラーの場合のメッセージ
         setAlertMessage('サーバーへの接続に失敗しました');
         }
-      } else {
-        // Axiosに関連しないエラーを処理
-        // 2.9
-        setAlertMessage('予期しないエラーが発生しました');
       }
+      setAlertSeverity('error');
+      setAlertMessage(errorMessage);
       // この位置でメッセージが決定された後にのみアラートが表示されることを保証。
       setAlertOpen(true);
       }

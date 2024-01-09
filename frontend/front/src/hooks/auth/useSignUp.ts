@@ -70,29 +70,22 @@ const useSignUp = () => {
       // }
       // 6
     } catch (err) {
-      // console.log(`ここに${err}`);
-      setAlertSeverity('error');
+      // デフォルトメッセージを設定し、これをAxios以外のその他エラーの際に表示
+      let errorMessage = '予期しないエラーが発生しました';
       if (err instanceof AxiosError) {
         // userが見つからないケース
         if (err.response?.status === 422) {
-          console.log(`ここに422:${JSON.stringify(err.response.data.errors.fullMessages)}`);
           // deviseのregistrationのerrorメッセージは下記の形式で取り出せる
           const errorMessages = err.response.data.errors.fullMessages;
           // errorMessagesは文字列の配列なので、連結する
-          const formattedErrorMessage = Array.isArray(errorMessages) ? errorMessages.join(', ') : errorMessages;
-          setAlertMessage(formattedErrorMessage);
-          // 追加入力できるように、このケースは/へ遷移しない
-          // router.push('/');
+          errorMessage = Array.isArray(errorMessages) ? errorMessages.join(', ') : errorMessages;
         // AxiosErrorの上記以外のケース
         } else {
           setAlertMessage('サーバーへの接続に失敗しました');
-          router.push('/');
         }
-      // AxiosError以外のケース
-      } else {
-        setAlertMessage('予期しないエラーが発生しました');
-        router.push('/');
       }
+      setAlertSeverity('error');
+      setAlertMessage(errorMessage);
       setAlertOpen(true);
     }
   };

@@ -16,6 +16,7 @@ const useSignUp = () => {
   // 1.1 サインアップ認証用のmailのリンク先のURL（認証に成功した後にリダイレクトされるページの指定）
   const confirmSuccessUrl = "http://localhost:3001/signin";
   // const { setIsSignedIn, setCurrentUser } = useAuthContext();
+  // 7.2
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
@@ -70,6 +71,7 @@ const useSignUp = () => {
       // 6
     } catch (err) {
       // console.log(`ここに${err}`);
+      setAlertSeverity('error');
       if (err instanceof AxiosError) {
         // userが見つからないケース
         if (err.response?.status === 422) {
@@ -78,24 +80,20 @@ const useSignUp = () => {
           const errorMessages = err.response.data.errors.fullMessages;
           // errorMessagesは文字列の配列なので、連結する
           const formattedErrorMessage = Array.isArray(errorMessages) ? errorMessages.join(', ') : errorMessages;
-          setAlertSeverity('error');
           setAlertMessage(formattedErrorMessage);
-          setAlertOpen(true);
-          router.push('/');
+          // 追加入力できるように、このケースは/へ遷移しない
+          // router.push('/');
         // AxiosErrorの上記以外のケース
         } else {
           setAlertMessage('サーバーへの接続に失敗しました');
-          setAlertSeverity('error');
-          setAlertOpen(true);
           router.push('/');
         }
       // AxiosError以外のケース
       } else {
         setAlertMessage('予期しないエラーが発生しました');
-        setAlertSeverity('error');
-        setAlertOpen(true);
         router.push('/');
       }
+      setAlertOpen(true);
     }
   };
   // ------------------------------------------------------------------------------------------------
@@ -257,4 +255,14 @@ http://localhost:3001/mail-confirmation?confirmation_token=eDzx5KmeRo_xhQmxy9Xs
 - 確認が成功し、ユーザーが既にサインインしている場合は、新しいトークンを生成して `redirect_url` (この場合は、
 `http://localhost:3001/signin`) にリダイレクトします。ユーザーがサインインしていない場合は、単に
 `redirect_url` にリダイレクトします。
+
+================================================================================================
+7.2
+. **アプリへの統合:**.
+- src/pages/_app.tsx`では、`AlertProvider`がアプリケーションコンポーネントをラップし、アプリ全体にアラートコ
+ンテキストを提供します。
+- このセットアップにより、アプリケーション全体でアラートの状態にアクセスできるようになり、どのコンポーネントでもこ
+の状態に変更があると、それに応じて`AlertMessage`モーダルが更新され、表示されるようになります。
+まとめると、`AlertContext` はアプリケーション全体でアラートの状態を管理する方法を提供し、`AlertMessage` コンポ
+ーネントはこの状態に基づいてモーダルをレンダリングする(表示する)責任を持ちます。
 */

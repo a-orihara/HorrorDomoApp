@@ -17,7 +17,7 @@ export const useSignIn = () => {
   // currentUserを取得する関数
   const { handleGetCurrentUser } = useAuthContext();
   // 1.3 アラートのメッセージ、表示状態、種類を管理
-  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+  const { alertSeverity, setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   // currentUserの投稿総数を取得する関数
   const { handleGetCurrentUserPostsCount } = usePostContext();
   // currentUserのfollowing数とfollowers数を取得する関数
@@ -71,10 +71,12 @@ export const useSignIn = () => {
       }
       // 3.1
     } catch (err:any) {
-      console.log("catch作動")
-      console.log(`◆サインインのerr${JSON.stringify(err)}`);
-      console.log(`◆サインインのerr.response${JSON.stringify(err.response)}`);
+      // console.log(`◆サインインのerr${JSON.stringify(err)}`);
+      // console.log(`◆サインインのerr.response${JSON.stringify(err.response)}`);
+      // 以降のcatch節に'error'を設定
       setAlertSeverity('error');
+      console.log("catch作動")
+      console.log(`今の:${alertSeverity}`)
       // 2.5 Axiosエラーかチェック
       if (err instanceof AxiosError) {
         // 2.6 resと省略するとresposeオブジェクトが拾えずにエラーになる
@@ -85,16 +87,16 @@ export const useSignIn = () => {
           : '不明なエラーが発生しました';
         setAlertMessage(errorMessage);
         }else {
-        // 2.8 Axiosとは関係のないJavaScriptのエラーの場合
+        // 2.8 Axiosとは関係のないJavaScript他のエラーの場合
         setAlertMessage('サーバーへの接続に失敗しました');
         }
       } else {
         // Axiosに関連しないエラーを処理
-        setAlertSeverity('error');
         // 2.9
         setAlertMessage('予期しないエラーが発生しました');
       }
-        setAlertOpen(true);
+      // この位置でメッセージが決定された後にのみアラートが表示されることを保証。
+      setAlertOpen(true);
       }
   };
 

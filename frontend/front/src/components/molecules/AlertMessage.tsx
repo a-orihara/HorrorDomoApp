@@ -1,7 +1,8 @@
+// 1.1
 import Modal from 'react-modal';
 import { useAlertContext } from '../../contexts/AlertContext';
 
-// 1
+// 1.2 モーダルの表示に関するコンポーネント
 const AlertMessage = () => {
   // AlertContextからalertOpen, setAlertOpen, alertSeverity, alertMessageを受け取る
   const { alertOpen, setAlertOpen, alertSeverity, alertMessage } = useAlertContext();
@@ -56,7 +57,19 @@ export default AlertMessage;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
+`Modal`コンポーネントは、`react-modal`ライブラリからインポートされる。これは、Reactで使われるモーダルウィンド
+ウ（ポップアップウィンドウ）を表示するためのコンポーネントである。
+------------------------------------------------------------------------------------------------
+- `isOpen`：モーダルが開かれるかどうかを制御するブーリアン（真偽値）。
+- `onRequestClose`：モーダルを閉じるための関数。この例では、`handleCloseAlertMessage`関数を使用している。
+- `className`：モーダルのスタイルをカスタマイズするためのクラス名。`backgroundColor`関数により、アラートの種
+類（`alertSeverity`）に応じた背景色が適用される。
+- `overlayClassName`：モーダルの背景（オーバーレイ）のスタイルをカスタマイズするためのクラス名。この例では、半
+透明の黒い背景が設定されている。
+
+================================================================================================
+1.2
 open プロパティは、表示状態を管理する真偽値を定義します。
 ------------------------------------------------------------------------------------------------
 setOpen プロパティは、表示状態を設定するための関数を定義します。

@@ -21,21 +21,22 @@ export const signOut = () => {
     // 3.2
     headers: {
       'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'client': Cookies.get('_client'),
+      'uid': Cookies.get('_uid'),
     },
   });
 };
 
 // 4 認証済みのユーザーを取得
 export const getAuthenticatedUser = () => {
-  // トークンがない場合は何もしない
+  // トークンがない（サインインしていない）場合は何もしない
   if (!Cookies.get('_access_token') || !Cookies.get('_client') || !Cookies.get('_uid')) return;
+  // railsのAuthenticatedUsersControllerへアクセス
   return client.get('/authenticated_users', {
     headers: {
       'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'client': Cookies.get('_client'),
+      'uid': Cookies.get('_uid'),
     },
   });
 };

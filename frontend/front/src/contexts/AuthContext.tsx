@@ -28,8 +28,7 @@ export const AuthContext = createContext<AuthContextProps | undefined>(undefined
 // @          @@          @@          @@          @@          @@          @@          @@          @
 // AuthContextのプロパティ、AuthContext.Providerを返すAuthProviderコンポーネント
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // 3
-  // ローディング中かどうかの状態を管理するステート
+  // 3 ローディング中（ローディング中ならtrue）かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
   // ログインしているかどうかの状態を管理するステート。初期値はfalse（サインインしていない）
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -54,7 +53,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setCurrentUser(res?.data.data);
         console.log(`？？handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
       } else {
-        console.log('handleGetCurrentUser:ノーcurrent user');
+        console.log('No current user');
       }
     } catch (err) {
       console.log(err);
@@ -67,7 +66,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   // 4 コンポーネントがマウントされたとき、認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   useEffect(() => {
     handleGetCurrentUser();
-    console.log('◆AuthContext-useEffect-handleGetCurrentUserが発火◆');
+    console.log('%cAuthContextのuseEffectが発火', 'color: red;');
   }, []);
 
   // ================================================================================================
@@ -94,7 +93,7 @@ export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
     // 6
-    throw new Error('useAuthContextはAuthProviderの子コンポーネントの内部でのみ使用する必要があります');
+    throw new Error('useAuthContextはAuthProviderの内部で使用する必要があります');
   }
   return context;
 };

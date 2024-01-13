@@ -26,10 +26,10 @@ export const PostProvider = ({ children }: PostProviderProps) => {
   const [postDetailByPostId, setPostDetailByPostId] = useState<Post>();
   const router = useRouter();
 
-  // サインイン中ユーザーのPost一覧を状態変数にセットする関数 #postのindex
+  // サインインユーザーのPost総数を状態変数にセットする関数 #postのindex
   const handleGetCurrentUserPostsCount = async () => {
     try {
-      // サインイン中ユーザーのPost一覧を取得する関数
+      // サインインユーザーのPostの投稿総数を取得する関数
       const data = await getCurrentUserPostsCount();
       if (data.data.status == 200) {
         setCurrentUserPostsCount(data.data.totalPosts);
@@ -47,13 +47,8 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         const res = await getPostDetailByUserId(postId);
         if (res.data.status == 200) {
           setPostDetailByPostId(res.data.data);
-        } else if (res.data.status == 404) {
-          alert('投稿を表示できません');
-          setTimeout(() => {
-            router.push(`/`);
-          }, 1000);
         } else {
-          console.log('handleGetPostDetailByPostId:ノーポスト');
+          console.log('投稿を表示できません');
         }
       } catch (err: any) {
         alert('投稿を表示できません');
@@ -89,7 +84,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
 export const usePostContext = () => {
   const context = useContext(PostContext);
   if (context === undefined) {
-    throw new Error('usePostContextはPostProvider内で使用しなければならない');
+    throw new Error('usePostContextはPostProviderの内部で使用する必要があります');
   }
   return context;
 };

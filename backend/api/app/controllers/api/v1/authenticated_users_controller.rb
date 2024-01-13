@@ -13,12 +13,10 @@ class Api::V1::AuthenticatedUsersController < ApplicationController
         is_login: true,
         # 3
         data: @user.as_json.merge(avatar_url: avatar_url)
-        # 200
-      }, status: :ok
+      }
     else
       # 404
       render json: { is_login: false, message: "ユーザーが存在しません" }
-      # render json: { is_login: false, message: "ユーザーが存在しません" }, status: :not_found
     end
   end
 

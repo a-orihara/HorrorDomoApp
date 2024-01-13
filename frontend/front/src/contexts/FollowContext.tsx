@@ -23,6 +23,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
 
   // 1 フォローしているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowingCountByUserId = useCallback(async (userId: number | undefined) => {
+    // userIdがなければ処理をしない
     if (!userId) return;
     try {
       const data = await getFollowingCountByUserId(userId);

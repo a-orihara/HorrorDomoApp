@@ -62,6 +62,7 @@ export const useSignOut = () => {
 };
 
 /*
+@          @@          @@          @@          @@          @@          @@          @@          @
 1.1
 . devise_token_authのsessions_controllerのdestroyの正しく作動させる為、フロントでクッキーにトークンをセッ
 トしてリクエスト。sessions_controller.rbのdestroyはDB側でそのサインインユーザーに紐づいたトークンを削除するだ

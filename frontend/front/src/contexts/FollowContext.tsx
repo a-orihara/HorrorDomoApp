@@ -34,7 +34,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       }
     } catch (err) {
       console.error(err);
-      alert('ユーザーが存在しません');
+      alert('ユーザーのフォロー数を取得出来ませんでした');
     }
   }, []);
 
@@ -50,7 +50,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       }
     } catch (err) {
       console.error(err);
-      alert('ユーザーが存在しません');
+      alert('ユーザーのフォロワー数を取得出来ませんでした');
     }
   }, []);
 

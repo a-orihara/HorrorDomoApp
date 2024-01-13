@@ -33,9 +33,11 @@ export const PostProvider = ({ children }: PostProviderProps) => {
       const data = await getCurrentUserPostsCount();
       if (data.data.status == 200) {
         setCurrentUserPostsCount(data.data.totalPosts);
+      } else {
+        console.log('ユーザーの投稿数を取得出来ませんでした');
       }
     } catch (err) {
-      console.error(err);
+      alert('ユーザーの投稿数を取得出来ませんでした');
     }
   };
 
@@ -50,7 +52,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         } else {
           console.log('投稿を表示できません');
         }
-      } catch (err: any) {
+      } catch (err) {
         alert('投稿を表示できません');
         setTimeout(() => {
           router.push(`/`);

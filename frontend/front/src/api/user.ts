@@ -81,7 +81,6 @@ pageとper_pageの2つのパラメーターが指定されています。これ�
 するために、Railsで使用されます。pageは、現在のページ番号を示し、per_pageは各ページに表示する項目の数を示します。
 ================================================================================================
 2
-updateAvatar に headers: { 'content-type': 'multipart/form-data' } を追加するかどうか。
 通常、FormData オブジェクトを使用してファイルを送信する場合、content-type ヘッダーに multipart/form-data を
 設定することが推奨されています。
 ただし、Axiosは、自動的に content-type ヘッダーを multipart/form-data に設定します。したがって、明示的に追加

@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { updateUser } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { AxiosError } from 'axios';
+
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
@@ -22,7 +24,7 @@ export const useUpdateUser = () => {
     formData.append('name', name);
     formData.append('email', email);
     formData.append('profile', profile || '');
-    // 1
+    // 1.1
     if (avatar) {
       formData.append('avatar', avatar);
       // formData.append('user[avatar]', avatar);
@@ -33,8 +35,7 @@ export const useUpdateUser = () => {
       const res = await updateUser(formData);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        // 更新後のユーザー情報をセット
-        // setCurrentUser(res.data.data);
+        // 1.2 更新後のユーザーを取得し直す
         handleGetCurrentUser();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
@@ -48,13 +49,23 @@ export const useUpdateUser = () => {
         setAlertOpen(true);
       }
     } catch (err: any) {
-      console.error(err);
-      setAlertSeverity('error');
-      if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
-        setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
-      } else {
-        setAlertMessage('An unexpected error occurred.');
+      // デフォルトメッセージを設定し、これをAxiosに関連しない、その他のエラーの際に表示
+      let errorMessage = '予期しないエラーが発生しました';
+      // Axiosエラーかチェック
+      if (err instanceof AxiosError) {
+        if (err.response) {
+          errorMessage = err.response.data.errors
+          ? err.response.data.errors.join(', ')
+          // Axiosエラーだが、特定のエラーメッセージがサーバー側で設定されていない等の場合を処理
+          : '不明なエラーが発生しました';
+        }else {
+        // Axiosのレスポンスがない、JavaScript他のエラーの場合のメッセージ
+        setAlertMessage('サーバーへの接続に失敗しました');
+        }
       }
+      setAlertSeverity('error');
+      setAlertMessage(errorMessage);
+      // この位置でメッセージが決定された後にのみアラートが表示されることを保証。
       setAlertOpen(true);
     }
   };
@@ -74,10 +85,17 @@ export const useUpdateUser = () => {
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
 [formData.append('avatar', avatar || '');]にすると、avatarがnullの場合に、
 ActiveSupport::MessageVerifier::InvalidSignatureのエラーが発生する。
 ActiveStorageのデータを扱う場合初期値はundefinedにする。
 空文字列だと、
 ActiveSupport::MessageVerifier::InvalidSignatureのエラーが出る。
+
+================================================================================================
+1.2
+handleUpdateUserでは、ユーザーを更新した直後に `handleGetCurrentUser()` が呼び出されます。これにより、
+`render_update_success` によって返された更新されたユーザデータを直接には、フロントエンド使用されてない。余分な
+サーバーリクエストが発生する可能性がありますが、データの一貫性を維持し、サーバーとクライアントの状態の不一致のリスク
+を減らすという利点があります。
 */

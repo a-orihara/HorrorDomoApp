@@ -81,7 +81,7 @@ export const useSignIn = () => {
         if (err.response) {
           errorMessage = err.response.data.errors
           ? err.response.data.errors.join(', ')
-          // 2.7
+          // 2.7 Axiosエラーだが、特定のエラーメッセージがサーバー側で設定されていない等の場合を処理
           : '不明なエラーが発生しました';
         }else {
         // 2.8 Axiosのレスポンスがない、JavaScript他のエラーの場合のメッセージ

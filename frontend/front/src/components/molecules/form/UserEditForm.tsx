@@ -9,8 +9,6 @@ import TextArea from '../../atoms/TextArea';
 const UserEditForm = () => {
   const { name, setName, email, setEmail, profile, setProfile, setAvatar, currentUser, handleUpdateUser } =
     useUpdateUser();
-  // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
-  // const router = useRouter();
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

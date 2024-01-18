@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { client } from './client';
 
-// 2 ユーザー情報を更新
+// 2.1 ユーザー情報を更新
 export const updateUser = (formData: any) => {
   return client.put('/auth', formData, {
     headers: {

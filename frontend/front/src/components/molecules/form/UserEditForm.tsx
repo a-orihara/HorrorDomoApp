@@ -4,13 +4,16 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import Label from '../../atoms/Label';
 import TextArea from '../../atoms/TextArea';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 // ================================================================================================
 const UserEditForm = () => {
-  const { name, setName, email, setEmail, profile, setProfile, setAvatar, currentUser, handleUpdateUser } =
+  const { name, setName, email, setEmail, profile, setProfile, setAvatar, handleUpdateUser } =
     useUpdateUser();
-
+  const { currentUser  } = useAuthContext();
+  // 3.1
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 3.2
     const file = e.target.files?.[0];
     if (file) {
       setAvatar(file);
@@ -23,6 +26,7 @@ const UserEditForm = () => {
       <h1 className='mt-4 flex h-16 items-center justify-center text-2xl font-semibold md:mt-8 md:text-4xl lg:mt-4'>
         Update your profile
       </h1>
+      {/* 2 */}
       <form className='mt-0 flex flex-1 flex-col md:mt-4 lg:mt-0' encType='multipart/form-data' method='post'>
         <div className='md:mt-4 lg:mt-0'>
           {/* 1 */}
@@ -81,6 +85,7 @@ const UserEditForm = () => {
             className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
             id='avatar'
             type='file'
+            // 4
             accept='image/*'
             onChange={handleAvatarChange}
           />
@@ -108,7 +113,7 @@ inputタグを関連付ける（対応するinput要素のid属性を指定）�
 
 ================================================================================================
 2
-encType
+encType 'multipart/form-data'
 HTMLの<form>要素の属性の1つです。この属性は、フォームデータのエンコーディングタイプを指定します。通常、フォームに
 テキストや数字のデータが含まれる場合には、デフォルトのエンコーディングタイプである、
 application/x-www-form-urlencodedが使用されます。しかし、フォームがファイルのアップロードを含む場合には、
@@ -117,171 +122,31 @@ encType を multipart/form-data に設定する必要があります。
 method='post'
 HTTPリクエストメソッドを指定する属性です。postメソッドは、データをリクエスト本体に含めて送信する際に使用されます。
 指定することで、フォームのデータのエンコーディング方法やデータの送信方法を明示的に指定することができます。
-@          @@          @@          @@          @@          @@          @@          @@          @
-Active_strage
-@          @@          @@          @@          @@          @@          @@          @@          @
-================================================================================================
-3
-const file = e.target.files && e.target.files[0];
-eは、Reactのイベントオブジェクトで、targetプロパティを通じてイベントが発生したDOMノードを参照できます。ファイル
-選択欄では、e.targetは<input type="file">要素を参照します。
-<input type="file">は、複数のファイルを選択できるので、e.target.filesはFileListオブジェクトを返します。&&
-演算子を使用することで、filesが存在する場合に限り、files[0]のような配列の要素を取得できます。これにより、ファイ
-ル選択欄が空の場合にエラーが発生することを防ぐことができます。
-最終的に、fileは選択されたファイルの配列の最初の要素になります。setAvatar関数を使用して、このファイルをReactの
-状態に保存しています。
 
-if (file) は、ファイルが選択された場合のみ、そのファイルを処理するために必要です。もしファイルが選択されていな
-い場合、file には undefined が入ります。それを setAvatar に渡してしまうと、null ではなく undefined がセッ
-トされることになります。そのため、後で avatar を使うときにエラーが発生してしまいます。
-また、
+
+================================================================================================
+3.1
+. handleAvatarChange` は、特に名前やプロフィールのようなテキストベースの入力に比べ、ファイルハンドリングの性質上
+必要
+- バイナリデータとテキストデータ**： アバター画像はバイナリデータであり、単純なテキストではありません。ファイルを扱
+うには、バイナリデータを扱う必要があり、テキストとは異なる方法で読み取り、処理する必要があります。
+- **特別なオブジェクト `File`**： JavaScriptでは、ファイルは `File` オブジェクトを使って扱われる。このオブジ
+ェクトにはファイルに関するメタデータ（名前、タイプ、サイズなど）とファイルの内容が格納されている。ユーザーがアップロ
+ードするファイルを選択すると、この `File` オブジェクトを取得して適切に処理する必要があります。対照的に、テキスト入
+力は単純な文字列であり、このレベルの処理は必要ありません。
+
+================================================================================================
+3.2
+const file = e.target.files?.[0];
+- target.filesには、選択されたファイルの情報が含まれています。複数のファイルが選択された場合には、配列としてファ
+イル情報が格納されます。
+- ?.は、オプショナルチェイニング演算子と呼ばれ、target.filesがundefinedの場合にはundefinedを返し、エラーを防
+止します。
+- [0]は、選択されたファイルのうち最初のファイルのみを取得するための記述。
 
 ================================================================================================
 4
-const file = e.target.files?.[0];
-target.filesには、選択されたファイルの情報が含まれています。複数のファイルが選択された場合には、配列としてファイ
-ル情報が格納されます。
-?.は、オプショナルチェイニング演算子と呼ばれ、target.filesがundefinedの場合にはundefinedを返し、エラーを防止
-します。
-[0]は、選択されたファイルのうち最初のファイルのみを取得するための記述。
-
-------------------------------------------------------------------------------------------------
-eは、Reactのイベントオブジェクトで、targetプロパティを通じてイベントが発生したDOMノードを参照できます。ファイル
-選択欄では、e.targetは<input type="file">要素を参照します。
-
-------------------------------------------------------------------------------------------------
-if (!file) return;
-!fileは、fileがundefinedやfalseの場合に真となり、returnで以降の処理を実行することなく、呼び出し元に戻る。
-
-------------------------------------------------------------------------------------------------
-onChange イベントは、ファイルを選択しなくても発生することがあります。例えば、ファイルダイアログをキャンセルした場
-合でも onChange イベントは発生します。しかし、e.target.files は空の配列になります。それを考慮してif (!file)
-を使うことで、不要なエラーを回避することができます。
-
-================================================================================================
-5
-
-`const formData = new FormData();`
-- ファイルをサーバに送信するために、フォームデータを作成するためのコードです。
-- `FormData`は、HTMLフォームからデータを収集し、それを送信するためのキーと値のペアを保持するJavaScriptオブジェ
-  クトです。
-- `const formData = new FormData();`と記述することで、空のフォームデータが作成されます。
-
-------------------------------------------------------------------------------------------------
-`formData.append('avatar', avatarFile!);`
-- フォームデータのオブジェクトにファイルデータを追加するためのコードです。
-- `formData.append()`は、キーと値のペアをフォームデータオブジェクトに追加するメソッドです。
-- 第1引数には、キーとして使用する文字列を指定します。
-- 第2引数には、フォームデータの値として追加するデータを指定します。ここでは、フォームから選択されたファイルデータで
-  ある`avatarFile`を指定しています。`!`を付けていることで、`avatarFile`が`null`または`undefined`でないこと
-  を保証しているため、TypeScriptのエラーが発生しないようにしています。`!`を付けてアクセスしています。
-
-------------------------------------------------------------------------------------------------
-!
-*TypeScriptの非nullアサーション演算子です。
-TypeScriptには、値がnullでないことを示すための、非nullアサーション演算子(Non-Null Assertion Operator) !
-という構文があります。
-!を変数名の後に付けることで、その変数がnullまたはundefinedではないことをTypeScriptに明示的に伝えることができま
-す。!を付けることで、TypeScriptはその変数がnullまたはundefinedでないことを保証し、実行時にエラーが発生しないよ
-うにします。つまりコンパイル時にエラーを出すことで、実行時のエラーを防ぐことができます。
-あくまで要素が存在していることが保証されている場合に使用します。
-
-*handleAvatarSubmit関数内でif (!file) return;という条件文があることで、avatarFileがnullまたはundefinedで
-ないことが保証されるようになっています。
-
-*document.getElementById('input')!.focus()
-! は、オペランドが非nullかつ非undefinedであることをassertするものです。これは、以下のように明示的にassertする
-ことを省略した書き方とも言えます。
-(document.getElementById('input') as HTMLElement).focus()
-「assertする」とは、プログラムの実行中に特定の条件が満たされていることをチェックすることで、その条件が間違っている
-場合にエラーを出すことを意味します。
-
-------------------------------------------------------------------------------------------------
-if (!avatarFile)
-handleAvatarChangeでfileが存在しない場合はreturnしているので、handleAvatarSubmitの中で再度
-if (!avatarFile)をチェックする必要は基本的にはありません。ただし、以下の理由でチェックを入れておくことも一定の意
-味があります。
-.万が一、handleAvatarChangeが正常に実行されなかった場合や、setAvatarFileがうまく動作しなかった場合に備える。
-.コードの可読性や保守性を向上させる。将来的にhandleAvatarChangeが変更された場合でも、handleAvatarSubmit内で
-nullチェックをしていれば、エラーが発生するリスクを減らすことができます。
-ただし、冗長に感じる場合や、他のバリデーションが適切に実装されている場合は、handleAvatarSubmit内のnullチェックを
-削除しても問題ありません。
-
-================================================================================================
-
-@          @@          @@          @@          @@          @@          @@          @@          @
-avatarを登録したときの実装コード
-@          @@          @@          @@          @@          @@          @@          @@          @
-const [avatarFile, setAvatarFile] = useState<File | null>(null);
-
-================================================================================================
-// 4
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarFile(file);
-  };
-
-================================================================================================
-5
-router.reload()
-現在のページを再読み込みする。例えば、特定のアクションが実行された後、現在のページを更新する必要がある場合に使用され
-ます。
-router.reload()を使用する場合は、ページのリロードに伴い、ユーザーが入力したデータやスクロール位置などの状態もすべ
-てリセットされることに注意が必要です。適切に扱ってください。
-
-================================================================================================
-@          @@          @@          @@          @@          @@          @@          @@          @
-avatar
-@          @@          @@          @@          @@          @@          @@          @@          @
-<form className='mt-11 flex flex-1 flex-col' encType='multipart/form-data' method='post'>
-        <div>
-          <Label className='m-auto w-2/5 pl-3 text-left text-lg md:text-2xl' htmlFor='avatar'>
-            Avatar:
-          </Label>
-          <Input
-            className='m-auto mb-2 mt-1 w-2/5'
-            id='avatar'
-            type='file'
-            name='avatar'
-            onChange={handleAvatarChange}
-          ></Input>
-        </div>
-
-        <div>
-          <Button
-            className='m-auto mt-3 bg-basic-yellow font-semibold hover:bg-hover-yellow'
-            onClick={handleAvatarSubmit}
-          >
-            Update Avatar
-          </Button>
-        </div>
-      </form>
-================================================================================================
-// 5
-  // ファイルを送信するためのフォームデータを作成し、選択されたファイルをフォームデータに追加する
-  const handleAvatarSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!avatarFile) {
-      setAlertSeverity('error');
-      setAlertMessage('ファイルが選択されていません。');
-      setAlertOpen(true);
-      return;
-    }
-    const formData = new FormData();
-    formData.append('avatar', avatarFile);
-    try {
-      const res = await updateAvatar(formData);
-      if (res.status === 200) {
-        setAlertSeverity('success');
-        setAlertMessage('ユーザーアバターの更新に成功しました！');
-        setAlertOpen(true);
-      }
-    } catch (err) {
-      setAlertSeverity('error');
-      setAlertMessage('ユーザーアバターの更新中にエラーが発生しました。');
-      setAlertOpen(true);
-    }
-  };
-
+HTML では、`input` 要素の `accept` 属性はサーバーが受け付ける（ファイルアップロードで送信できる）ファイルの種類
+を指定します。accept='image/*'`を `input` 要素で使用すると、ウェブブラウザに対して、ユーザが画像ファイルのみを
+選択してアップロードできるように指示します。
 */

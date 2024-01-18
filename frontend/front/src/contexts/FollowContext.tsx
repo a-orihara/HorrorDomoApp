@@ -23,16 +23,18 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
 
   // 1 フォローしているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowingCountByUserId = useCallback(async (userId: number | undefined) => {
+    // userIdがなければ処理をしない
     if (!userId) return;
     try {
       const data = await getFollowingCountByUserId(userId);
+      // 1.1
       if (data.status === 200) {
         const count: number = data.data.followingCount;
         setFollowingCount(count);
       }
     } catch (err) {
       console.error(err);
-      alert('ユーザーが存在しません');
+      alert('ユーザーのフォロー数を取得出来ませんでした');
     }
   }, []);
 
@@ -48,7 +50,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       }
     } catch (err) {
       console.error(err);
-      alert('ユーザーが存在しません');
+      alert('ユーザーのフォロワー数を取得出来ませんでした');
     }
   }, []);
 
@@ -89,4 +91,8 @@ export const useFollowContext = () => {
 性を保つことが可能です。
 そのため、カスタムフックを直接コンテキスト内で使用するよりも、コンテキスト内で直接ステート管理と更新処理を行う方が一
 般的です。
+
+================================================================================================
+1.1
+何でも成功、エラーの際にモーダルを表示を追加しない。モーダル表示の連続になる。
 */

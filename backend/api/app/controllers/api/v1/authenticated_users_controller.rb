@@ -1,10 +1,10 @@
 # 1
 class Api::V1::AuthenticatedUsersController < ApplicationController
 
-  # 2 ログイン済みのユーザーが存在するかをチェックし、存在する場合はそのユーザーの情報を返す
+  # 2 ログイン済みのユーザーが存在するかをチェックし、存在する場合はそのユーザーの情報を返す処理を自作
   def index
     logger.info "indexアクションが発火"
-    # current_api_v1_user:現在サインインしているUserまたは有効になっていなければnilを返す
+    # current_api_v1_user:現在サインインしているUser、または有効になっていなければnilを返す
     @user = current_api_v1_user
     # @userがnilの場合はエラー処理を行う
     if @user
@@ -15,6 +15,7 @@ class Api::V1::AuthenticatedUsersController < ApplicationController
         data: @user.as_json.merge(avatar_url: avatar_url)
       }
     else
+      # 404
       render json: { is_login: false, message: "ユーザーが存在しません" }
     end
   end

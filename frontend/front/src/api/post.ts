@@ -12,8 +12,8 @@ export const createPost = (params: CreatePostParams) => {
     {
       headers: {
         'access-token': Cookies.get('_access_token'),
-        client: Cookies.get('_client'),
-        uid: Cookies.get('_uid'),
+        'client': Cookies.get('_client'),
+        'uid': Cookies.get('_uid'),
       },
     }
   );
@@ -23,30 +23,31 @@ export const deletePost = (postId: number) => {
   return client.delete(`/posts/${postId}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'client': Cookies.get('_client'),
+      'uid': Cookies.get('_uid'),
     },
   });
 };
 
 // CurrentUserの投稿総数を取得する
 export const getCurrentUserPostsCount = () => {
+  // PostsControllerのindexへget
   return client.get('/posts', {
     headers: {
       'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'client': Cookies.get('_client'),
+      'uid': Cookies.get('_uid'),
     },
   });
 };
 
-// 指定したuserIdのpostの詳細を取得する関数/#show
+// 指定userIdのpostの詳細を取得する関数/#show
 export const getPostDetailByUserId = async (postId: number) => {
   return client.get(`/posts/${postId}`, {
     headers: {
       'access-token': Cookies.get('_access_token'),
-      client: Cookies.get('_client'),
-      uid: Cookies.get('_uid'),
+      'client': Cookies.get('_client'),
+      'uid': Cookies.get('_uid'),
     },
   });
 };

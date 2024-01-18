@@ -1,15 +1,16 @@
 // frontend/front/src/hooks/user/useUpdateUser.ts
-
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { updateUser } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { AxiosError } from 'axios';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
+  // 2.1
   const [avatar, setAvatar] = useState<File | null>(null);
   const { currentUser, handleGetCurrentUser } = useAuthContext();
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
@@ -17,15 +18,15 @@ export const useUpdateUser = () => {
 
   const handleUpdateUser = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    // 1.1
     const formData = new FormData();
-    // formData.append('user[name]', name);
+    // 1.2
     formData.append('name', name);
     formData.append('email', email);
     formData.append('profile', profile || '');
-    // 1
+    // 1.3
     if (avatar) {
       formData.append('avatar', avatar);
-      // formData.append('user[avatar]', avatar);
     }
     console.log(...formData.entries());
 
@@ -33,8 +34,7 @@ export const useUpdateUser = () => {
       const res = await updateUser(formData);
       if (res.status === 200) {
         console.log(`updateのres.data:${JSON.stringify(res.data)}`);
-        // 更新後のユーザー情報をセット
-        // setCurrentUser(res.data.data);
+        // 1.4 更新後のユーザーを取得し直す
         handleGetCurrentUser();
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
@@ -48,13 +48,23 @@ export const useUpdateUser = () => {
         setAlertOpen(true);
       }
     } catch (err: any) {
-      console.error(err);
-      setAlertSeverity('error');
-      if (err.response && err.response.data && err.response.data.errors && err.response.data.errors.fullMessages) {
-        setAlertMessage(`${err.response.data.errors.fullMessages[0]}`);
-      } else {
-        setAlertMessage('An unexpected error occurred.');
+      // デフォルトメッセージを設定し、これをAxiosに関連しない、その他のエラーの際に表示
+      let errorMessage = '予期しないエラーが発生しました';
+      // Axiosエラーかチェック
+      if (err instanceof AxiosError) {
+        if (err.response) {
+          errorMessage = err.response.data.errors
+          ? err.response.data.errors.join(', ')
+          // Axiosエラーだが、特定のエラーメッセージがサーバー側で設定されていない等の場合を処理
+          : '不明なエラーが発生しました';
+        }else {
+        // Axiosのレスポンスがない、JavaScript他のエラーの場合のメッセージ
+        setAlertMessage('サーバーへの接続に失敗しました');
+        }
       }
+      setAlertSeverity('error');
+      setAlertMessage(errorMessage);
+      // この位置でメッセージが決定された後にのみアラートが表示されることを保証。
       setAlertOpen(true);
     }
   };
@@ -74,10 +84,45 @@ export const useUpdateUser = () => {
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
-[formData.append('avatar', avatar || '');]にすると、avatarがnullの場合に、
-ActiveSupport::MessageVerifier::InvalidSignatureのエラーが発生する。
-ActiveStorageのデータを扱う場合初期値はundefinedにする。
-空文字列だと、
-ActiveSupport::MessageVerifier::InvalidSignatureのエラーが出る。
+1.1
+`const formData = new FormData();`
+- ファイルをサーバに送信するために、フォームデータを作成するためのコードです。
+- `FormData`は、HTMLフォームからデータを収集し、それを送信するためのキーと値のペアを保持するJavaScriptオブジェ
+クトです。
+- `const formData = new FormData();`と記述することで、空のフォームデータが作成されます。
+
+================================================================================================
+1.2
+`formData.append('name', name);`
+- フォームデータのオブジェクトにファイルデータを追加するためのコードです。
+- `formData.append()`は、キーと値のペアをフォームデータオブジェクトに追加するメソッドです。
+- 第1引数には、キーとして使用する文字列を指定します。
+- 第2引数には、フォームデータの値として追加するデータを指定します。
+
+================================================================================================
+1.3
+. **アバターだけが条件付きで処理される理由**：
+- 条件処理`if (avatar) {...}`が使われるのは、でファイル（画像など）を扱うのは、名前やプロフィールのような単純な
+テキストデータを扱うのとは異なるから。
+- ファイルデータ、特に画像は単なるテキストではありません。それらはバイナリデータであり、特別な取り扱いが必要です。
+このため、`FormData`にアバターファイルを追加する前に、アバターファイルが存在するかどうかのチェックが行われます。こ
+れはファイルをサーバに正しくアップロードするために必要です。
+- 一方、名前等は単純なテキストデータです。空でもテキストでも `FormData` に直接追加してサーバーに送信することがで
+きます。
+- さらに、一般的にファイルのアップロードを処理するには、ファイルが選択されているかどうかをチェックする必要がありま
+す。ファイルとして `null` や `undefined` をアップロードしようとすると、エラーや意図しない動作を引き起こす可能性
+があるから。
+
+================================================================================================
+1.4
+handleUpdateUserでは、ユーザーを更新した直後に `handleGetCurrentUser()` が呼び出されます。これにより、
+`render_update_success` によって返された更新されたユーザデータを直接には、フロントエンド使用されてない。余分な
+サーバーリクエストが発生する可能性がありますが、データの一貫性を維持し、サーバーとクライアントの状態の不一致のリスク
+を減らすという利点があります。
+
+================================================================================================
+2.1
+JavaScriptの `File` タイプはファイルを表します。画像、ドキュメント、その他のファイルタイプなど、どのような種類の
+ファイルでも構いません。File`オブジェクトは通常、ファイル名、サイズ、タイプ(例えば `image/jpeg`)、ファイルの内容
+のようなプロパティを含んでいます。
 */

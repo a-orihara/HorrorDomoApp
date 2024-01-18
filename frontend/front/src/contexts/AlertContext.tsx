@@ -54,7 +54,7 @@ export const useAlertContext = () => {
   // AlertContextの値がundefinedの場合にエラーをスローする
   if (context === undefined) {
     // 3.3
-    throw new Error('useAlertContextはAlertProviderの中で使用する必要があります。');
+    throw new Error('useAlertContextはAlertProviderの内部で使用する必要があります。');
   }
   // ================================================================================================
   return context;

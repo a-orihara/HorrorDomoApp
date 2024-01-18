@@ -17,17 +17,18 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
   def update
     # 6.1 @resourceはアップデート前のuser情報
     logger.info "@resourceの内容: #{@resource.inspect}"
-    # 6.2 6.3 ユーザー情報を更新
+    # 6.2 6.3 ユーザー情報を更新（`:name`、`:profile`、`:avatar`の3つのパラメータを許可）
     @resource.assign_attributes(account_update_params)
     # 更新後の@resourceの内容をログに出力
+    logger.info "account_update_paramsの中身: #{account_update_params.inspect}"
     logger.info "アップデート後の@resourceの内容: #{@resource.inspect}"
-    # 更新後のavatarのURLを生成
+    # 6.4 更新で渡された画像をリサイズし、そのリサイズされたavatarのURLを生成
     avatar_url = generate_avatar_url(@resource)
     logger.info "更新後のavatar_urlの内容: #{avatar_url}"
-    # 6.4 最終的な@avatar_urlに設定
+    # 6.5 最終的な@avatar_urlに設定
     @avatar_url = avatar_url
     logger.info "最終的な@avatar_urlの内容: #{@avatar_url.inspect}"
-    # 親クラスのupdateメソッドを呼び出し
+    # 6.6 親クラスのupdateメソッドを呼び出し
     super
   end
 
@@ -223,30 +224,47 @@ Devise Token Authで使用される変数で、現在認証されているユー
 DeviseTokenAuthではユーザーを操作する際に@resourceという変数名を慣例的に使用しています。
 DeviseTokenAuth::RegistrationsController内では、ユーザーを操作するインスタンス変数として@resourceが定義さ
 れています。
+------------------------------------------------------------------------------------------------
+実際の@resourceの内容（アップデート前のuser情報）*profile（更新）とavatr（新規追加）の場合
+#<User id: 1, provider: "email", uid: "momo@momo.com", allow_password_change: [FILTERED],
+name: "momo", email: "momo@momo.com", created_at: "2024-01-06 14:19:53.267464000 +0900",
+updated_at: "2024-01-14 15:00:54.710519000 +0900", admin: true, profile: "<更新前の文>">
 
 ================================================================================================
 6.2
 logger はRailsアプリケーションで利用できるロギングツールで、.info メソッドを使用して情報を記録します。
-------------------------------------------------------------------------------------------------
-account_update_params
-.`account_update_params`の中身は、ユーザーがアカウント情報を更新する際に許可されたパラメータを決定する。この設
-定は`ApplicationController`内の`configure_permitted_parameters`メソッドにて定義されている。
-- `configure_permitted_parameters`メソッドでは、`devise_parameter_sanitizer`を使って、どのパラメータが
-許可されるかを指定する。
-- ここでは、`:account_update`アクションに対して、`:name`、`:profile`、`:avatar`の3つのパラメータが許可され
-ている。
-- これは、ユーザーがアカウント情報を更新する際に、これら3つのフィールドのみを変更できることを意味する。
-------------------------------------------------------------------------------------------------
-実際のaccount_update_paramsの中身
-
-{"email"=>"momo@momo.com", "name"=>"momo", "profile"=>"でわっせ", "avatar"=>*画像に関する情報}
 
 ================================================================================================
 6.3
 @resource.assign_attributes(account_update_params)
 assign_attributes
-Ruby on RailsのActiveRecordモデルに存在するメソッドで、引数に取ったハッシュのキーと値を元に、対応するモデルの属
-性を一括で設定します。ただし、このメソッドは値の設定だけを行い、データベースへの保存は行いません。
+assignは日本語で割り当てる
+RailsのActiveRecordモデルに存在するメソッドで、引数に取ったハッシュのキーと値を元に、対応するモデルの属性を一括
+で設定。ただし、このメソッドは値の設定だけを行い、データベースへの保存は行いません。
+------------------------------------------------------------------------------------------------
+account_update_params
+.`account_update_params`の中身は、ユーザーがアカウント情報を更新する際に許可されたパラメータを決定する。この設
+定は`ApplicationController`内の`configure_permitted_parameters`メソッドにて定義。
+- `configure_permitted_parameters`メソッドでは、`devise_parameter_sanitizer`を使って、どのパラメータが
+許可されるかを指定する。
+- ここでは、`:account_update`アクションに対して、`:name`、`:profile`、`:avatar`の3つのパラメータが許可。
+- これは、ユーザーがアカウント情報を更新する際に、これら3つのフィールドのみを変更できることを意味する。
+------------------------------------------------------------------------------------------------
+account_update_paramsの中身（*profile（更新）とavatr（新規追加）の場合）:
+#<ActionController::Parameters {
+  "email"=>"momo@momo.com", "name"=>"momo", "profile"=>"<フロントから送られて来た更新後の文>",
+  "avatar"=>#<avatr情報の入ったオブジェクト>
+} permitted: true>
+* ActionController::Parameters`: RailsのHTTPリクエストのパラメータを管理・操作するクラス。
+* permitted: true: Railsのストロングパラメータで許可されたことを示す
+------------------------------------------------------------------------------------------------
+@resource.assign_attributes(account_update_params)の中身（アップデート後の@resourceの内容）
+#<User id: 1, provider: "email", uid: "momo@momo.com", allow_password_change: [FILTERED],
+name: "momota", email: "momo@momo.com", created_at: "2024-01-06 14:19:53.267464000 +0900",
+updated_at: "2024-01-14 15:00:54.710519000 +0900", admin: true, profile: "<フロントから送られて来た更新後の文>">
+* avatr（新規追加）の情報はまだ含まれていない。assign_attributes`だけではファイルのアップロードは扱えません。ユ
+ーザー情報の更新とファイルアップロードの処理は、2つの異なる処理です。前者はテキストベースの属性を更新し、後者はファ
+イルデータを処理する。後段で処理。
 ------------------------------------------------------------------------------------------------
 rails tutorialでは、ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能です。
 *before_actionのlogged_in_user、correct_user。
@@ -255,13 +273,12 @@ before_action :set_user_by_token, only: [:destroy, :update]が設定されてい
 そのため、「ユーザーのupdateアクションは、サインイン済みで、かつそのユーザー自身のみ実行可能」という設定がデフォル
 トで設定されているため、特に自分で実装不要です。
 ------------------------------------------------------------------------------------------------
-`set_user_by_token` メソッドを呼び出します。これは、リクエストヘッダに送られた認証トークンをもとに現在の認証ユー
-ザを見つけます。
+`set_user_by_token` :リクエストヘッダに送られた認証トークンをもとに現在の認証ユーザを見つけます。
 このメソッドは、トークンが有効な場合は `@resource` インスタンス変数に認証済みユーザーを設定し、トークンが無効な場
-合はエラーを返します。
+合はエラーを返す。
 したがって、`update`アクションでは、アクションの実行時に `@resource` が既に認証済みユーザに設定、限定されている。
 つまり、`update`アクションは認証済みユーザーの `@resource` を使って更新を行うので、現在の認証済みユーザーのみが
-自分を更新できることになります。
+自分を更新できることになる。
 
 ================================================================================================
 6.4
@@ -286,5 +303,24 @@ before_action :set_user_by_token, only: [:destroy, :update]が設定されてい
 - ユーザーがプロフィールを更新する際（例えば、アバター画像を変更したとき）、新しいアバター画像のURLを生成して、それ
 をフロントエンドに返すことが目的。
 - フロントエンド側では、このURLを使用してユーザーのアバター画像を表示することができる。
+------------------------------------------------------------------------------------------------
+最終的な@avatar_urlの内容: "http://localhost:3010/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBZ3ciLCJleHAiOm51bGwsInB1ciI6ImJsb2JfaWQifX0=--8e33bf229ab5cdf09c12a896f8dbcaa533232ffd/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaDdDVG9MWm05eWJXRjBTU0lJYW5CbkJqb0dSVlE2QzNKbGMybDZaVWtpRFRFMU1IZ3hOVEJlQmpzR1ZEb01aM0poZG1sMGVVa2lDMk5sYm5SbGNnWTdCbFE2Q1dOeWIzQkpJaEF4TlRCNE1UVXdLekFyTUFZN0JsUT0iLCJleHAiOm51bGwsInB1ciI6InZhcmlhdGlvbiJ9fQ==--5a7879e781efe9585fa988f34f0a2fd2a74b3cfe/momo.jpg"
 
+================================================================================================
+6.5
+インスタンス変数 (接頭辞に @ を含む) はクラス全体からアクセス可能です。つまり、`@avatar_url` はクラス内のどのメ
+ソッドでも使用することができます。これは `render_update_success` で `@avatar_url` がレスポンスに含まれる場
+合に重要です。
+
+================================================================================================
+6.6
+- `super` メソッドは、で@resourceを使用。@avatar_urlは使用していないが、`render_update_success`で使用。
+- `@` がない場合、 `avatar_url` はローカル変数になります。ローカル変数は定義されたメソッド内でのみアクセス可能
+です。これは `avatar_url` が定義されている `update` メソッド内でのみアクセス可能であることを意味します。
+- render_update_success`のような `RegistrationsController` クラスの他のメソッドは `avatar_url` にアク
+セスできません。
+------------------------------------------------------------------------------------------------
+ユーザー情報の更新とファイルアップロードの処理は、2つの異なる処理です。前者はテキストベースの属性を更新し、後者はフ
+ァイルデータを処理する。assign_attributes`だけではファイルのアップロードは扱えません。
+なぜなら、'b'は新しいアバターファイルを含む入力パラメータを表し、'a'
 =end

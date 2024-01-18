@@ -3,7 +3,7 @@ class Api::V1::PostsController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :correct_user, only: :destroy
 
-  # 2
+  # 2 指定useridの投稿pagenationか、currentuserの投稿総数を返す
   def index
     # 3
     page = params[:page] || 1
@@ -41,7 +41,7 @@ class Api::V1::PostsController < ApplicationController
   def show
     post = Post.find_by(id: params[:id])
     if post
-      render json: { status: 200, data: post }
+      render json: { status: '200', data: post }
     else
       render json: { status: '404', message: '投稿が見つかりません' }, status: :not_found
     end
@@ -103,12 +103,12 @@ class Api::V1::PostsController < ApplicationController
 
   private
 
-  # 10
+    # 10
     def post_params
       params.require(:post).permit(:content, :title)
     end
 
-    # 「現在のユーザーが操作しようとしている投稿が自分のものであるか（つまり、削除操作が許可されているか）」を確認
+    # 13 「現在のユーザーが操作しようとしている投稿が自分のものであるか（つまり、削除操作が許可されているか）」を確認
     def correct_user
       @post = current_api_v1_user.posts.find_by(id: params[:id])
       # ↓ rubocopにより、下記を1行に修正
@@ -135,7 +135,7 @@ Devise Token Authによって提供されるメソッドで、APIリクエスト
 ================================================================================================
 2
 送信apiからparams[:user_id]があれば、そのid指定userのページネーション用の投稿一覧（いいねの真偽値付き）を取得。
-なければcurrentUserのページネーション用の投稿一覧（いいねの真偽値付き）を取得。
+なければcurrentUserの投稿総数を返す。
 ------------------------------------------------------------------------------------------------
 /posts?user_id=${userId}で、rails側のpostコントローラーのindexアクション内の、if params[:user_id]が反応
 する仕組みは、HTTPリクエストが送られるときに、URLに含まれるクエリパラメータがRailsのparamsハッシュに自動的に追加
@@ -494,4 +494,12 @@ current_user: サインインユーザーのuserレコードを取得する
 今回コントローラーを実装していくディレクトリは/controllers/api/v1となりますので、この配下のコントローラーで上記
 メソッドを使用するときは、以下のような書き方をしなくてはなりません。
 current_api_v1_user
+
+================================================================================================
+13
+post` が `nil` でない場合（つまり、投稿が存在し、現在のユーザが所有している場合）、 `correct_user` メソッドは
+明示的に値を返しません。Rubyでは、明示的なreturn文がないということは、メソッドが最後に評価された式の値を返すことを
+意味します。しかし、この場合、メソッドの役割はデータを返すことよりも、権限を与えることにあります。
+postがあれば、メソッドは`destroy` アクションまでフローを継続させます。存在しない場合、メソッドはフローを停止して
+エラーレスポンスを返します。
 =end

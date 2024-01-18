@@ -7,7 +7,7 @@
 
 ## 使用技術
 - サーバーサイド：Rails(api)、Devise、Devise Token Auth、Kaminari、ActiveStorage、Rspec、Rubocop
-- フロントエンド：Next.js、TypeScript、TailwindCSS、Testing Library、Jest、ESLint、Prettier
+- フロントエンド：Next.js、TypeScript、TailwindCSS、Axios、React-Modal、React-Paginate、Testing Library、Jest、ESLint、Prettier
 - インフラ：AWS（VPC、Fargate、ECR、ALB、RDS、Route53、ACM、S３）、Nginx、Terraform
 - CI/CD: GitHub Actions
 - 開発環境：Docker、Docker Compose、VSCode、Git Hub

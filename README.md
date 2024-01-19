@@ -3,7 +3,7 @@
 
 好きなホラー映画の感想を投稿、閲覧、検索できます。
 
-レスポンシブ対応しているのでスマホからもご確認いただけます。
+レスポンシブ対応しているのでスマホからもご覧いただけます。
 
 ## 使用技術
 - サーバーサイド：Rails(api)、Devise、Devise Token Auth、Kaminari、ActiveStorage、Rspec、Rubocop

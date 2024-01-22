@@ -12,11 +12,10 @@ export const useUsersPagination = (itemsPerPage: number) => {
   const [totalUsersCount, setTotalUsersCount] = useState(0);
   // 現在のページ番号を保持するステート
   const [currentPage, setCurrentPage] = useState(0);
-  // AlertContextから、setAlertMessage, setAlertOpen, setAlertSeverityを受け取る。
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // ------------------------------------------------------------------------------------------------
-  // 3 ユーザー一覧を取得して、ステートに格納し、ページネーションを表示し、ページをクリックした時の処理を定義
+  // 3.1 ユーザー一覧を取得して、ステートに格納し、ページネーションを表示し、ページをクリックした時の処理を定義
   const handleGetUsers = useCallback(
     async (page: number) => {
       try {
@@ -26,10 +25,11 @@ export const useUsersPagination = (itemsPerPage: number) => {
         setUsers(res.data.users);
         // 総ユーザー数をステートに格納する
         setTotalUsersCount(res.data.totalUsers);
+        // 3.2
       } catch (err: any) {
         // userIndexのエラー処理
         setAlertSeverity('error');
-        setAlertMessage(`${err.response.data.errors[0]}`);
+        setAlertMessage("ユーザー情報を取得出来ませんでした");
         setAlertOpen(true);
         setTimeout(() => {
           router.push('/');
@@ -59,7 +59,7 @@ useState<User[]>() を使用して、users の型を User[] に設定します�
 格納されます。
 
 ================================================================================================
-3
+3.1
 useCallbackは、Reactのフックの一つであり、コンポーネント内で定義された関数をキャッシュするためのメモ化関数です。
 useCallbackを使用すると、同じ関数インスタンスを再生成せず、再利用することができ、パフォーマンスを改善することがで
 きます。
@@ -93,6 +93,16 @@ useCallback内でこれらの関数を利用している場合、それらは依
 useCallbackで作られた関数の動作が変わる可能性があるからです。
 
 ================================================================================================
+3.2
+バックエンドの `users_controller.rb` の `index` アクションにエラー処理がなくても、`useUsersPagination` フ
+ック内の `handleGetUsers` のエラー処理は発火して有効です。
+- バックエンドで問題が発生した場合 (サーバーエラーやデータベースエラーなど)、通常はエラーレスポンスを返します。エラ
+ーレスポンスには HTTP エラーのステータスコードなどが含まれます。
+- バックエンドがエラーに遭遇してエラーレスポンスを送り返すと、 `handleGetUsers` の `catch` ブロックが実行。
+- エラーだと、Axiosのプロミスは拒否されます。プロミスが拒否されると、コントロールは `catch` に移動する
+
+
+================================================================================================
 4
 [currentPage, handleGetUsers]
 依存配列にcurrentPageとhandleGetUsersを指定する理由
@@ -104,24 +114,22 @@ currentPage
 currentPageが変化すると、新しいページのユーザー一覧を取得する必要があります。そのため、currentPageが変化した時に
 handleGetUsersを実行します。
 ------------------------------------------------------------------------------------------------
-handleGetUsers
-handleGetUsers関数自体も依存配列に含まれています。これは、handleGetUsers関数でで使用されている変数のpage,
-itemsPerPageが変更される可能性があるためです。もし変更された場合、関数は変わりませんが、変数や値が変更されると、
-依存配列が変更されたとみなされ。useEffectフックは再度実行されます。
-この仕組みにより、最新のhandleGetUsers関数が適用され、期待通りの挙動を実現することができます。
-handleGetUsers関数で参照している変数や値が変更されると、依存配列が変更されたとみなされます。その結果、useEffect
-フックは再実行され、最新の値や状態を反映した処理が実行されます。
-handleGetUsersが再生成されると（useCallbackの依存配列の値[itemsPerPage]が変わった場合）、その新しいバージョン
-を使用してユーザー一覧を取得する必要があります。そのため、handleGetUsersが変化した時にも副作用関数を実行します。
-handleGetUsersが依存配列に含まれていないと、handleGetUsersが再生成された時に副作用関数が実行されないため、最新の
-handleGetUsersを使用してユーザー一覧を取得することができません。handleGetUsersが再生成されるたびに、useEffect
-内のコードが再実行され、最新のhandleGetUsersを使用してユーザーデータを取得し、ページを更新することが保証されます。
+**handleGetUsers関数とuseEffectフックの関係**
+- `handleGetUsers` 関数は、指定されたページのユーザー一覧を取得します。
+- この関数は `useCallback` フックによって定義されており、`itemsPerPage` が変更された場合にのみ再生成されます。
+- `useEffect` フックは、現在のページ (`currentPage`) が変更されるたびに `handleGetUsers` を実行します。ま
+た、`handleGetUsers` 自体が変更された場合にも実行されます。
+- `handleGetUsers` が変更された場合、`useEffect` フックが再実行されることで、常に最新の状態に基づいてユーザー
+一覧の取得が行われます。
+- このように、`useEffect` と `handleGetUsers` の関係を適切に設定することで、ページネーションの処理が正しく機
+能するようになっています。
 
 ================================================================================================
 5
 handlePageChange
 ページネーションのページがクリックされた時に実行され、クリックされたページ番号を受け取り、
 setCurrentPage関数を使用して現在のページ番号を更新します。
+クリックされたページ番号をは、react-paginateから持って来たReactPaginateコンポーネントとの関連で受け取ります。
 ------------------------------------------------------------------------------------------------
 (selectedItem: { selected: number })
 引数はselectedプロパティを持つオブジェクトです。selectedプロパティには、クリックされたページ番号が格納されます。
@@ -135,19 +143,17 @@ handlePageChange関数はこれらの値を変更しないので、useCallback�
 れます。
 ------------------------------------------------------------------------------------------------
 `selectedItemオブジェクト`は、`ReactPaginate` コンポーネントからページ遷移時に提供されます。
-
-1. `handlePageChange`は`ReactPaginate`コンポーネントの`onPageChange`プロパティに指定されたコールバック関数
+. `handlePageChange`は`ReactPaginate`コンポーネントの`onPageChange`プロパティに指定されたコールバック関数
 です。
-2. ユーザーがページネーションで新しいページを選択すると、`ReactPaginate`はこの`onPageChange`関数を自動的に呼び
+. ユーザーがページネーションで新しいページを選択すると、`ReactPaginate`はこの`onPageChange`関数を自動的に呼び
 出します。
-3. `ReactPaginate`は`onPageChange`関数を呼び出すとき、その引数として選択されたページの情報を含むオブジェクトを
+. `ReactPaginate`は`onPageChange`関数を呼び出すとき、その引数として選択されたページの情報を含むオブジェクトを
 渡します。このオブジェクトには`selected`という名前のプロパティがあり、これが新しく選択されたページの番号（0から始
 まる）です。
-4. したがって、`handlePageChange`関数が呼び出されると、その引数として`selected`プロパティを持つオブジェクト
+. したがって、`handlePageChange`関数が呼び出されると、その引数として`selected`プロパティを持つオブジェクト
 （`selectedItem`）が渡されます。
-5. `handlePageChange`関数内で、`setCurrentPage(selectedItem.selected)`という記述により、ステートの現在の
+. `handlePageChange`関数内で、`setCurrentPage(selectedItem.selected)`という記述により、ステートの現在の
 ページ番号が新しく選択されたページの番号に更新されます。
-
 以上の流れにより、ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
 
 @          @@          @@          @@          @@          @@          @@          @@          @

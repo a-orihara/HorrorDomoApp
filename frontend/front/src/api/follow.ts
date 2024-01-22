@@ -74,7 +74,7 @@ export const isFollowing = (userId: number, otherUserId: number) => {
   });
 };
 
-// ユーザーのフォロワーの総数を取得するAPI
+// ユーザーのフォロワーの総数を取得するAPI。rails側でgetFollowersByUserIdと同じ関数を発火させている
 export const getFollowersCountByUserId = (userId: number | undefined) => {
   return client.get(`/users/${userId}/followers`, {
     headers: {
@@ -85,7 +85,7 @@ export const getFollowersCountByUserId = (userId: number | undefined) => {
   });
 };
 
-// ユーザーのフォロワー情報を取得するAPI
+// ユーザーのフォロワー情報を取得するAPI。rails側でgetFollowersCountByUserIdと同じ関数を発火させている
 export const getFollowersByUserId = async (page: number, itemsPerPage: number, userId: number | undefined) => {
   // console.log(`getFollowingByUserIdの${userId}`);
   return client.get(`/users/${userId}/followers`, {

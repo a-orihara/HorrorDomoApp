@@ -42,7 +42,7 @@ const UserInfo = ({ user, postsCount, toggleFeed, showLikedPostArea }: UserInfoP
 
       <div className='flex flex-row justify-evenly lg:mb-4 lg:mt-4'>
         <FollowStats userId={user.id}></FollowStats>
-        {/* // toggleFeed:FeedとLikedPostAreaの表示切替を行う関数。 */}
+        {/* // toggleFeed:showLikedPostAreaの真偽値の反転（結果的にFeedとLikedPostAreaの表示切替）を行う関数。 */}
         <LikeStats userId={user.id} toggleFeed={toggleFeed} showLikedPostArea={showLikedPostArea}></LikeStats>
       </div>
 

@@ -28,6 +28,7 @@ const HomePage = () => {
 
   return (
     <div className='flex flex-1 flex-col'>
+      {/* サインインしていればサイドバーを表示 */}
       {isSignedIn && currentUser ? (
         <div className='flex h-full flex-col lg:flex-row'>
           <div className='h-12 w-full lg:h-full lg:w-48'>

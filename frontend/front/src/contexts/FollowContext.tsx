@@ -30,6 +30,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       // 1.1
       if (data.status === 200) {
         const count: number = data.data.followingCount;
+        console.log(`◆handleGetFollowingCountByUserIdの中身${JSON.stringify(data.data)}`);
         setFollowingCount(count);
       }
     } catch (err) {
@@ -84,7 +85,6 @@ export const useFollowContext = () => {
 貫性を保つためです。
 また、ステート更新処理が同一コンテキスト内にあることで、そのステートを利用するすべてのコンポーネントで一貫した処理を
 保証できます。
-
 カスタムフックはコンテキスト内で使用しても問題ありません。カスタムフックは、ロジックを再利用し、コンポーネントの内部
 を整理するためのツールです。
 ただし、特定のステートとその更新処理をコンテキスト内でまとめて管理する方が、関連するコンポーネント間でのデータの一貫

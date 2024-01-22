@@ -30,7 +30,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       // 1.1
       if (data.status === 200) {
         const count: number = data.data.followingCount;
-        console.log(`◆handleGetFollowingCountByUserIdの中身${JSON.stringify(data.data)}`);
+        // console.log(`◆handleGetFollowingCountByUserIdの中身${JSON.stringify(data.data)}`);
         setFollowingCount(count);
       }
     } catch (err) {

@@ -7,7 +7,6 @@ import TextArea from '../../atoms/TextArea';
 
 const PostForm: React.FC = () => {
   const { content, setContent, title, setTitle, handleCreatePost } = useCreatePost();
-  // const [title, setTitle] = useState('');
 
   return (
     <div className='flex flex-1 flex-col'>
@@ -58,5 +57,4 @@ export default PostForm;
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-
 */

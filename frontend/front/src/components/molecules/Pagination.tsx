@@ -20,7 +20,7 @@ const Pagination = ({ totalCount, itemsPerPage, handlePageChange }: PaginationPr
       // 2.2
       pageCount={Math.ceil(totalCount / itemsPerPage)}
       marginPagesDisplayed={1}
-      pageRangeDisplayed={1}
+      pageRangeDisplayed={2}
       onPageChange={handlePageChange}
       containerClassName={'pagination justify-around flex space-x-3 h-8 lg:h-12 md:text-2xl lg:text-xl text-base'}
       activeClassName={'active bg-basic-pink'}
@@ -49,14 +49,14 @@ handlePageChange: (data: { selected: number }) => void; は、新しいページ
 ReactPaginateのプロパティの解説
 - pageCount:
 ページの総数を表す数値。itemsPerPageで割った商をMath.ceilで切り上げたものを渡すことで、ページ数を算出しています
-- pageRangeDisplayed:
-このプロパティは、ページネーションコントロールの現在のページの周囲にいくつのページ番号が表示されるかを決定します。例
-えば、`pageRangeDisplayed`が2に設定されている場合、現在のページの前後に最大2つのページ番号が表示されます。つま
-り、あなたが5ページにいる場合、ページネーションには3、4、5、6、7ページが表示されます。
 - marginPagesDisplayed:
 このプロパティは、ページネーション・コントロールの最初と最後に表示するページ数を指定します。例えば、
 `marginPagesDisplayed`が1であれば、現在のページに関係なく、最初に1つ、最後に1つのページ番号が表示されます。その
 ため、長いページのリストでは、1 ... 4 5 6 ...10 のように表示されます。
+- pageRangeDisplayed:
+このプロパティは、ページネーションコントロールの現在のページの周囲にいくつのページ番号が表示されるかを決定します。例
+えば、`pageRangeDisplayed`が2に設定されている場合、現在のページの前後に最大2つのページ番号が表示されます。つま
+り、あなたが5ページにいる場合、ページネーションには3、4、5、6、7ページが表示されます。
 - onPageChange:
 ページが変更された際に呼び出されるコールバック関数。この関数には、新しいページ番号が引数として渡されます。
 - containerClassName:

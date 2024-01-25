@@ -24,10 +24,14 @@ export const useDeleteUser = () => {
         setAlertMessage('ユーザーの削除に失敗しました');
         setAlertOpen(true);
       }
-    } catch (err) {
-      console.error(err);
+    } catch (err:any) {
       setAlertSeverity('error');
-      setAlertMessage('ユーザーの削除に失敗しました');
+      // バックエンドの:set_user, :admin_userのエラーメッセージを処理
+      if (err.response && err.response.data && err.response.data.message) {
+        setAlertMessage(err.response.data.message);
+    } else {
+      setAlertMessage('ユーザーの削除に失敗しました。');
+    }
       setAlertOpen(true);
     }
   };

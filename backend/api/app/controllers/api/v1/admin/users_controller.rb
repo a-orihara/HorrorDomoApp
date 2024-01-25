@@ -19,7 +19,8 @@ class Api::V1::Admin::UsersController < ApplicationController
         render json: {
           status: 'error',
           message: 'ユーザーが見つかりません。'
-        }
+          # 404
+        }, status: :not_found
       end
     end
 

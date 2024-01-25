@@ -21,13 +21,13 @@ export const useDeleteUser = () => {
         }, 2000);
       } else {
         setAlertSeverity('error');
-        setAlertMessage(`else${res.data.errors.fullMessages[0]}`);
+        setAlertMessage('ユーザーの削除に失敗しました');
         setAlertOpen(true);
       }
     } catch (err) {
       console.error(err);
       setAlertSeverity('error');
-      setAlertMessage('ユーザーの削除に失敗しました。');
+      setAlertMessage('ユーザーの削除に失敗しました');
       setAlertOpen(true);
     }
   };

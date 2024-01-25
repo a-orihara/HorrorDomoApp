@@ -3,17 +3,17 @@ import Link from 'next/link';
 import { useAuthContext } from '../../../contexts/AuthContext';
 import { useDeleteUser } from '../../../hooks/user/useDeleteUser';
 import { User } from '../../../types/user';
-// 複雑？
 
 // ================================================================================================
 type UserListItemProps = {
   user: User;
 };
 // ================================================================================================
+// user:指定したページの指定した表示件数分のユーザー情報の内の一user
 const UserListItem = ({ user }: UserListItemProps) => {
   const { currentUser } = useAuthContext();
   const { handleDeleteUser } = useDeleteUser();
-  // 現在のユーザーが管理者で、かつ、現在のユーザーと表示中のユーザーが異なる場合にtrue
+  // 現在のユーザーが表示中のユーザーが異なる場合にtrue
   const isDifferentUser = currentUser?.id !== user.id;
   // 現在のユーザーが管理者の場合にtrue
   const isAdmin = currentUser?.admin;

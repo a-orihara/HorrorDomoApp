@@ -6,7 +6,7 @@ import { useUsersPagination } from '../../hooks/user/useUsersPagination';
 const Index = () => {
   // 1ぺージに表示するユーザー数
   const itemsPerPage = 10;
-  // 1 ユーザー一覧を取得して、ステートに格納し、ページをクリックした時の処理を定義したカスタムフック
+  // 1 users:指定したページの指定した表示件数分のユーザー情報。
   const { users, totalUsersCount, handlePageChange } = useUsersPagination(itemsPerPage);
 
   return (
@@ -28,6 +28,8 @@ export default Index;
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
+ユーザー一覧を取得して、ステートに格納し、ページをクリックした時の処理を定義したカスタムフック
+------------------------------------------------------------------------------------------------
 usersは、指定したページの指定した表示件数分のユーザーの配列。
 totalUsersは、総ユーザー数。
 handlePageChangeは、ページネーションのページ変更時に実行する関数で、新たに指定したページの指定した表示件数分のユ

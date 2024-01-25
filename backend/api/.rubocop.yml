@@ -166,6 +166,10 @@ Style/HashSyntax:
 RSpec/Rails/InferredSpecType:
   Enabled: false
 
+# Rspecの行数制限
+RSpec/ExampleLength:
+  Max: 7
+
 # このコピーは、ファイルパスの結合処理で `Rails.root.join` 節を使用する用途を識別するために使用されます。
 # これは、パスを結合する際に統一性を持たせるために使用されます。
 Rails/FilePath:

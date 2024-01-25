@@ -21,10 +21,11 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   // otherUserのLikedPostsの総数（otherUserのLikedPostsの集合は、otherUserにはFeedがないので不要）
   const [otherUserLikedPostsCount, setOtherUserLikedPostsCount] = useState<number | undefined>(undefined);
 
-  // currentUserのLikedPostsの総数を取得し、状態変数にセットする関数
+  // 2 currentUserのLikedPostsの総数を取得し、状態変数にセットする関数／useCallbackがなくても発火しまくらない
   const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
+    console.log("handleGetTotalLikesCountByCurrentUserId発火しまくり")
       // currentUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {
@@ -36,7 +37,7 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
     }
   }, []);
 
-  // otherUserのLikedPostsの総数を取得し、状態変数にセットする関数
+  // otherUserのLikedPostsの総数を取得し、状態変数にセットする関数／useCallbackがなくても発火しまくらない
   const handleGetTotalLikesCountByOtherUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
@@ -100,4 +101,13 @@ Next.jsやRailsアプリケーションでは、`[数値 | undefined]`のよう�
 ------------------------------------------------------------------------------------------------
 まとめると、コンテキストタイプで `undefined` を許可することは、特定の情報をまだ持っていないかもしれない状況に対処
 する方法です。これは、アプリがエラーを回避できるようにするための安全策です。
+
+================================================================================================
+2
+useCallbackについては、FollowContextを参照のこと。
+------------------------------------------------------------------------------------------------
+念の為、`useCallback`を付ける。
+`handleGetTotalLikesCountByCurrentUserId` が `useCallback` なしで複数の再レンダリングを引き起こすことは、
+挙動を確認したところ今のところないが、子コンポーネントの `useEffect` に依存するコンテキスト関数には `useCallback`
+を使用することが一般的に推奨されます。このアプローチは、Reactのパフォーマンス最適化のベストプラクティスに沿ったもの。
 */

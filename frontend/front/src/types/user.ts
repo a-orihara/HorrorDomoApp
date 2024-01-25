@@ -37,18 +37,24 @@ export type User = {
   email: string;
   name: string;
   allowPasswordChange: boolean;
+  // 1.1
   createdAt: Date;
   updatedAt: Date;
   admin: boolean;
   // profile を追加。型は string または null を許容。プロフィールを設定しない場合を考慮。
   profile: string | null;
-  // 1
+  // 1.2
   avatarUrl: string | null;
 };
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
-1
+1.1
+TypescriptのDate型は、日付と時刻の情報を表すデータ型です。この型は、特定の日付と時刻を示すために使用されます。例
+えば、ユーザーオブジェクトのcreatedAtやupdatedAtといった属性に使われています。
+
+================================================================================================
+1.2
 avatarUrl: string | null;
 型を string | null としています。これは、avatar_url が文字列（URL）であるか、アバターが添付されていない場合に
 は null であることを示しています。
@@ -60,15 +66,23 @@ Active Storageを使用してファイルをアップロードする場合、フ
 のではなく、ファイルの情報がActive Storageのactive_storage_attachmentsテーブルに保存され、Userオブジェクト
 のavatar属性には、active_storage_attachmentsテーブルのidが保存されます。そのため、avatar属性は、
 { url: string }だけでなく、nullも許容する必要があります。
-
-Active Storageは、ファイルの実体を直接モデルオブジェクトの属性に保存するのではなく、ファイルの情報を
-Active Storageのテーブル（active_storage_attachmentsテーブル）に保存します。このテーブルには、ファイルの情
-報（ファイル名、MIMEタイプ、ファイルサイズなど）とファイル自体が保存されます。
-そのため、モデルオブジェクトの属性（ここではavatar属性）に保存されるのは、active_storage_attachmentsテーブル
-のIDであり、実際のファイル情報は、Active Storageを使って取得する必要があります。そのため、avatar属性は、URLの
-形式でファイルを取得できる場合は{ url: string }として保存されますが、ファイルが存在しない場合やアタッチメントが
-削除された場合は、属性はnullとなります。したがって、avatar属性は{ url: string }だけでなく、nullも許容する必
-要があるということです。
+------------------------------------------------------------------------------------------------
+- Active StorageはRailsアプリのファイルアップロードを、ファイルの物理的な実体をモデルオブジェクトの属性に直接保
+存するのではなく、`active_storage_blobs`と`active_storage_attachments`という2つの別々のテーブルに保存する
+ことで管理します。
+- active_storage_blobs` テーブルには、ファイル名、MIME タイプ、サイズなどのメタデータと共に実際のファイルが保
+存される。
+- active_storage_attachments` テーブルはモデルオブジェクトとブロブの結合テーブルとして動作する。これはファイ
+ルの情報そのものを格納するのではなく、`active_storage_blobs`テーブルと関連するレコード（例えばUserモデル）へ
+の参照を保持します。
+------------------------------------------------------------------------------------------------
+- モデルオブジェクト（例えば、Userモデル）では、（`avatar`のような）file属性はファイルのデータや
+`active_storage_attachments`からのIDを格納しません。その代わりに、通常はActive Storageのメソッドを介して関
+連付けられたファイルのブロブへの参照となります。
+- アバターなどのファイルを取得するとき、Active StorageはファイルにアクセスするためのURLを提供し、このURLはフロ
+ントエンドやアプリケーションの他の場所で必要に応じて保存または使用することができます。
+- ファイルが存在しない場合、または添付ファイルが削除された場合、モデルのアバター属性（または `User` 型定義の
+`avatarUrl` のようなその表現）は null になり、ファイルが存在しないことを示します。
 
 ================================================================================================
 2

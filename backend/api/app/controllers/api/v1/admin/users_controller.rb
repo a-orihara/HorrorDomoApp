@@ -14,7 +14,7 @@ class Api::V1::Admin::UsersController < ApplicationController
 
     # Userモデルからidに対応するユーザーを検索し、変数userに代入する。
     def set_user
-      @user = User.find(params[:id])
+      @user = User.find_by(id: params[:id])
       unless @user
         render json: {
           status: 'error',

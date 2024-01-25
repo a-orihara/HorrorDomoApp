@@ -37,6 +37,20 @@ RSpec.describe 'Api::V1::Admin::Users', type: :request do
         expect(json['message']).to eq 'この操作は、管理者のみ行うことができます。'
       end
     end
+
+    context 'ユーザーが存在しない場合' do
+      it '見つからないメッセージを返す' do
+        # 存在しないIDを作成
+        non_existing_user_id = 10_000_000
+        # 存在しないユーザーを削除
+        delete api_v1_admin_user_path(non_existing_user_id), headers: headers
+        # ステータスコード 404 Not Found を期待
+        expect(response).to have_http_status(:not_found)
+        json = response.parsed_body
+        expect(json['status']).to eq 'error'
+        expect(json['message']).to eq 'ユーザーが見つかりません。'
+      end
+    end
   end
 end
 

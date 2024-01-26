@@ -13,9 +13,9 @@ type UserListItemProps = {
 const UserListItem = ({ user }: UserListItemProps) => {
   const { currentUser } = useAuthContext();
   const { handleDeleteUser } = useDeleteUser();
-  // 現在のユーザーが表示中のユーザーが異なる場合にtrue
+  // currentUserが表示中のユーザーが異なる場合にtrue
   const isDifferentUser = currentUser?.id !== user.id;
-  // 現在のユーザーが管理者の場合にtrue
+  // currentUserが管理者の場合にtrue
   const isAdmin = currentUser?.admin;
 
   // ================================================================================================

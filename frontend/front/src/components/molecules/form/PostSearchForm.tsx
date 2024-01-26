@@ -12,7 +12,7 @@ type PostSearchFormProps = {
 
 const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: PostSearchFormProps) => {
   // 入力語句を管理する状態
-  const [enterQuery, setEnterQueryQuery] = useState('');
+  const [enterQuery, setEnterQuery] = useState('');
 
   // formのinputでenterキーを押すと発火。検索アイコン以外でも発火するようにする。
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,7 +36,7 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
     // 検索語句を空
     setSearchQuery('');
     // 入力語句を空（戻るを押しても入力欄に語句が残ったままにしない為）
-    setEnterQueryQuery('');
+    setEnterQuery('');
   };
   console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
 
@@ -51,7 +51,7 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
               placeholder='映画のタイトルを入力'
               // 入力文字を格納
               value={enterQuery}
-              onChange={(e) => setEnterQueryQuery(e.target.value)}
+              onChange={(e) => setEnterQuery(e.target.value)}
             />
             {/* 検索アイコン */}
             <svg

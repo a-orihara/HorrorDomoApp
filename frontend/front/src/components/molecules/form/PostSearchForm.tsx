@@ -38,7 +38,7 @@ const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: P
     // 入力語句を空（戻るを押しても入力欄に語句が残ったままにしない為）
     setEnterQuery('');
   };
-  console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
+  // console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
 
   return (
     <div className='m-1 flex flex-row items-center'>

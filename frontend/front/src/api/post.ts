@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { CreatePostParams } from '../types/post';
+import { CreatePostParams, SearchPostParams } from '../types/post';
 import { client } from './client';
 
 // 2.1
@@ -85,13 +85,8 @@ export const getPostLikesCountByPostId = async (postId: number) => {
   });
 };
 
-type SearchParams = {
-  page: number;
-  itemsPerPage: number;
-  query: string;
-};
 // 4 axios.get メソッドは最大で2つの引数までしか受け取りません。第1引数はURL、第2引数はオプション（ヘッダー、パラメーターなど）です。
-export const getSearchedPosts = (params: SearchParams) => {
+export const getSearchedPosts = (params: SearchPostParams) => {
   return client.get('/posts/search', {
     params: {
       page: params.page + 1,
@@ -255,7 +250,7 @@ user_idは、indexアクション内で投稿を取得するユーザーを決�
 - 拡張性: 現在は`query`のみを検索パラメータとして送りますが、将来的に複数のパラメータ（例：ページ番号、ソートオプ
 ションなど）が必要になるかもしれません。オブジェクトを使用すると、後で簡単に新しいプロパティを追加できます。
 - 可読性: オブジェクト型を使うことで、どのパラメータが何を意味するのかが明確になり、コードの可読性が向上します。
-- TypeScriptの型安全性: `SearchParams` 型で明示的に型を定義しているので、間違った型のデータが渡されるとコンパ
+- TypeScriptの型安全性: `SearchPostParams` 型で明示的に型を定義しているので、間違った型のデータが渡されるとコンパ
 イルエラーが発生します。
 ------------------------------------------------------------------------------------------------
 引数をstring型のqueryに書き換える:
@@ -277,7 +272,7 @@ export const searchPosts = (query: string) => {
 ------------------------------------------------------------------------------------------------
 . **第2引数 オプション**:
 - **`params: { query: params.query }`**: `params` オプションで、検索クエリをサーバに送ります。
-`params.query`は、前の部分のコードで設定された`SearchParams`型のオブジェクトから取得されます。
+`params.query`は、前の部分のコードで設定された`SearchPostParams`型のオブジェクトから取得されます。
 - axios.getの第二引数で`params`プロパティを使うことで、URLのクエリパラメータを設定できます。そのため、この形式
 に合わせて`params`をオブジェクト型にしています。
 - axios.getでクエリパラメータを送る場合、この形式が一般的ですが、必ずしもこの形式でなければならないわけではありま

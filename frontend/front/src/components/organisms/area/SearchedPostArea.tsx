@@ -1,7 +1,5 @@
 import { useSearchedPostsPagination } from '../../../hooks/post/useSearchedPostsPagination';
 import PostListItem from '../../molecules/listItem/PostListItem';
-// import Pagination from '../../molecules/Pagination';
-// import FeedList from '../list/FeedList';
 import CommonPostArea from './CommonPostArea';
 
 type SearchedPostAreaProps = {

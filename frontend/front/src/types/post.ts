@@ -13,3 +13,9 @@ export type CreatePostParams = {
   title: string;
   content: string;
 };
+
+export type SearchPostParams = {
+  page: number;
+  itemsPerPage: number;
+  query: string;
+};

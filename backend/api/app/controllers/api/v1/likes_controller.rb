@@ -11,7 +11,8 @@ class Api::V1::LikesController < ApplicationController
     # 1.1
     like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
-      render json: { status: '201', data: like }, status: :ok
+      # render json: { status: '201', data: like }, status: :ok
+      render json: { status: '201' }, status: :ok
     else
       render json: { status: '422', message: like.errors.full_messages }, status: :unprocessable_entity
     end

@@ -12,7 +12,6 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
   const [searchedPostUsers, setSearchedPostUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
-  // const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
   // 4 指定したuserIdのユーザーの投稿一覧を取得、post一覧と全post数をステートに格納。
@@ -24,14 +23,12 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
         // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
         const res = await getSearchedPosts({ query, page, itemsPerPage });
         // 1 指定したuserIdのユーザーの、指定したページの1ページ当たりの表示件数分のpostsをセット
-        setSearchedPosts(res.data.data);
+        setSearchedPosts(res.data.posts);
         // 指定したuserIdのユーザーの投稿総数をセット
-        setSearchedTotalPostsCount(res.data.totalPosts);
+        setSearchedTotalPostsCount(res.data.totalPostsCount);
         setSearchedPostUsers(res.data.users);
       } catch (err: any) {
-        // setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.errors[0]}`);
-        // setAlertOpen(true);
+        console.log("投稿を取得出来ませんでした");
         setTimeout(() => {
           router.push('/');
         }, 2000);
@@ -40,6 +37,7 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
     [itemsPerPage, router, query]
   );
 
+  // useUsersPaginationの4を参照
   useEffect(() => {
     handleGetSearchedPosts(currentPage);
   }, [currentPage, handleGetSearchedPosts]);
@@ -88,20 +86,10 @@ handlePageChange関数はこれらの値を変更しないので、useCallback�
 れます。
 ------------------------------------------------------------------------------------------------
 `selectedItemオブジェクト`は、`ReactPaginate` コンポーネントからページ遷移時に提供されます。
-
-1. `handlePageChange`は`ReactPaginate`コンポーネントの`onPageChange`プロパティに指定されたコールバック関数
-です。
-2. ユーザーがページネーションで新しいページを選択すると、`ReactPaginate`はこの`onPageChange`関数を自動的に呼び
-出します。
-3. `ReactPaginate`は`onPageChange`関数を呼び出すとき、その引数として選択されたページの情報を含むオブジェクトを
+. `ReactPaginate`は`onPageChange`関数を呼び出すとき、その引数として選択されたページの情報を含むオブジェクトを
 渡します。このオブジェクトには`selected`という名前のプロパティがあり、これが新しく選択されたページの番号（0から始
 まる）です。
-4. したがって、`handlePageChange`関数が呼び出されると、その引数として`selected`プロパティを持つオブジェクト
-（`selectedItem`）が渡されます。
-5. `handlePageChange`関数内で、`setCurrentPage(selectedItem.selected)`という記述により、ステートの現在の
-ページ番号が新しく選択されたページの番号に更新されます。
 
-以上の流れにより、ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
 ================================================================================================
 4
 `handleGetPostListByUserId`の引数 `(page: number)` は、`ReactPaginate` コンポーネントから来ています。

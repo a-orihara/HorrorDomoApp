@@ -111,11 +111,19 @@ export const createLike = (postId: number) => {
 
 ================================================================================================
 2
-like_idはBD側で、user_id, post_idの組み合わせで一意になる（特定出来る）ように設定している為、引数にlike_idは
+like_idはRails側で、user_id, post_idの組み合わせで一意になる（特定出来る）ように設定している為、引数にlike_idは
 不要。
+def set_post
+    @post = Post.find(params[:post_id])
+end
+ここでpostを特定、
+def set_like
+  @like = @post.likes.find_by(user_id: current_api_v1_user.id)
+end
+その@postを使ってuser_id: current_api_v1_user.idのものが探せる
 ------------------------------------------------------------------------------------------------
 axiosのdeleteの引数の数と、その構造についての解説：
 - `axios.delete(url, [config])` の形式で利用されます。
-  - `url`：リクエストするURL
-  - `config`：オプションの設定。ヘッダーやパラメータなどを含むオブジェクト
+- `url`：リクエストするURL
+- `config`：オプションの設定。ヘッダーやパラメータなどを含むオブジェクト
 */

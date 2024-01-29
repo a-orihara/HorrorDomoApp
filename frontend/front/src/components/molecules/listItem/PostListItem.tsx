@@ -4,7 +4,7 @@ import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
-import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
+import UserAndPostLinks from '../UserAndPostLinks';
 import CommonListItem from './CommonListItem';
 
 // PostListItemPropsはkey名がpostで値にPost型を持つオブジェクト型;

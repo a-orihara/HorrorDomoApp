@@ -15,8 +15,7 @@ export const useCreateLike = () => {
       }
     } catch (err: any) {
       setAlertSeverity('error');
-      const message = err.response.message || err.response.data.errors[0];
-      setAlertMessage(message);
+      setAlertMessage(err.response.message);
       setAlertOpen(true);
     }
   };

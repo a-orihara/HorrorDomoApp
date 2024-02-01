@@ -4,7 +4,7 @@ import { useDeletePost } from '../../../hooks/post/useDeletePost';
 import { Post } from '../../../types/post';
 import { User } from '../../../types/user';
 import UserAvatar from '../../atoms/UserAvatar';
-import UserAndPostLinks from '../frontend/front/src/components/molecules/UserAndPostLinks';
+import UserAndPostLinks from '../UserAndPostLinks';
 import CommonListItem from './CommonListItem';
 
 // LikedPostListItemPropsはkey名がpostで値にLikedPost型を持つオブジェクト型;
@@ -13,7 +13,7 @@ type LikedPostListItemProps = {
   likedUser: User;
 };
 
-// 指定userIdのlikedPost, likedUser
+// 指定userIdのlikedPost, likedUser（投稿作成者）
 const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => {
   // currentUserと指定userIdが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
@@ -26,9 +26,9 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
         <UserAvatar avatarUrl={likedUser.avatarUrl} userId={likedUser.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={likedUser} post={likedPost}></UserAndPostLinks>
+          {/* ListItemの共通表示部分 */}
           <CommonListItem
             post={likedPost}
-            user={likedUser}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}
           />

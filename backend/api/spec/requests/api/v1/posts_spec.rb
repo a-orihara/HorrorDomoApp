@@ -129,7 +129,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
 
       it '一致する投稿を返す' do
         json = response.parsed_body
-        expect(json['data'].length).to eq(2)
+        expect(json['posts'].length).to eq(2)
       end
     end
 
@@ -139,7 +139,7 @@ RSpec.describe "Api::V1::Posts", type: :request do
       it '200 OKと空の配列を返す' do
         expect(response).to have_http_status(200)
         json = response.parsed_body
-        expect(json['data']).to be_empty
+        expect(json['posts']).to be_empty
       end
     end
   end

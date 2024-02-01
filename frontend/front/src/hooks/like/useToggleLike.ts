@@ -37,9 +37,7 @@ export const useToggleLike = (postId: number, liked: boolean) => {
       }
     } catch (err: any) {
       setAlertSeverity('error');
-      // authenticate_api_v1_user!のエラーレスポンスの形式:{err.response.data.errors[0]}
-      const message = err.response.message || err.response.data.errors[0];
-      setAlertMessage(message);
+      setAlertMessage(err.response.message);
       setAlertOpen(true);
     }
   };

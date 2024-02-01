@@ -6,11 +6,11 @@ import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
 
 type CommonListItemProps = {
   post: Post;
-  user: User;
   currentUser?: User;
   handleDeletePost: (postId: number) => void;
 };
 
+// ListItemの共通表示部分
 const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemProps) => {
   // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);
@@ -24,6 +24,7 @@ const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemP
     // 2
     setPostLikesCount((prevCount) => {
       if (prevCount === null) return null;
+      // trueなら+1、falseなら-1
       return liked ? prevCount - 1 : prevCount + 1;
     });
   };
@@ -37,7 +38,7 @@ const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemP
         {/* 1  */}
         <LikeButtonIcon postId={post.id} liked={post.liked} updatePostLikesCount={updatePostLikesCount} />
         <p className='ml-2 mr-4 text-base lg:text-lg'>{postLikesCount}</p>
-        {/* currentUserで条件を満たせば投稿を削除する */}
+        {/* currentUser自身の投稿であれば投稿を削除可能 */}
         {currentUser?.id === post.userId && (
           <a
             className='hover:cursor-pointer'

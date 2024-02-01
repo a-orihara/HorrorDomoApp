@@ -80,7 +80,7 @@ class Api::V1::PostsController < ApplicationController
     # 9.2 部分一致するレコードを取得
     posts = Post.where("title LIKE ?", "%#{query}%").page(page).per(per_page)
     # 部分一致するレコード総数を取得
-    total_posts = Post.where("title LIKE ?", "%#{query}%").count
+    total_posts_count = Post.where("title LIKE ?", "%#{query}%").count
     # 部分一致するレコードにlike情報を付与
     posts_with_likes_info = posts.map do |post|
           # 12 likedは真偽値
@@ -98,7 +98,8 @@ class Api::V1::PostsController < ApplicationController
           avatar_url = generate_avatar_url(user)
           user.as_json.merge(avatar_url: avatar_url)
     end
-    render json: { status: '200', data: posts_with_likes_info, total_posts: total_posts, users: users_with_avatar }, status: :ok
+    # 検索結果のpostとその総数、そのpostに紐づくuserを返す
+    render json: { status: '200', posts: posts_with_likes_info, total_posts_count: total_posts_count, users: users_with_avatar }, status: :ok
   end
 
   private

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Post } from '../../../../../../../types/post';
-import { User } from '../../../../../../../types/user';
+import { Post } from '../../types/post';
+import { User } from '../../types/user';
 
 type UserAndPostLinksProps = {
   user: User;

@@ -11,18 +11,20 @@ class Api::V1::LikesController < ApplicationController
     # 1.1
     like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
-      render json: { status: '201', data: like }, status: :ok
+      # render json: { status: '201', data: like }, status: :ok
+      render json: { status: '201' }, status: :ok
     else
-      render json: { status: '422', message: like.errors.full_messages }, status: :unprocessable_entity
+      render json: { status: '422', message: "いいねに失敗しました" }, status: :unprocessable_entity
     end
   end
 
   def destroy
     logger.info "Likeのdestroyアクションが発火"
     if @like.destroy
-      render json: { status: 'SUCCESS', message: 'Unliked the post', data: @post }
+      # render json: { status: '200', data: @post }
+      render json: { status: '200' }, status: :ok
     else
-      render json: { status: 'ERROR', message: 'Unliking the post failed', data: @like.errors }
+      render json: { status: '422', message: '操作を完了できませんでした' }, status: :unprocessable_entity
     end
   end
 
@@ -77,7 +79,5 @@ createメソッドはオブジェクトをメモリ上に作成するだけで�
 （`post`と`like`）が定義されています。そのため、`destroy`メソッド内ではこれらの変数が存在せず、エラーが発生しま
 す。ローカル変数は定義されたメソッド内（`set_post`と`set_like`）でのみ有効なため、メソッドを跨いで使用することは
 できません。
-- Railsのコントローラで使用されるインスタンス変数とNext.jsが関係ないことは正しいです。しかしながら、上記の説明の
-ように、`set_post`と`set_like`で定義された変数を`destroy`メソッドで使用するにはインスタンス変数が必要となりま
-す。
+- Railsのコントローラで使用されるインスタンス変数とNext.jsは関係ない。
 =end

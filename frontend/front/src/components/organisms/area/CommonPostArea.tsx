@@ -5,8 +5,10 @@ import Pagination from '../../molecules/Pagination';
 import CommonPostList from '../list/CommonPostList';
 
 type CommonPostAreaProps = {
+  // 投稿作成user
   users: User[];
   posts: Post[];
+  // ページネーションで使用
   totalPostsCount: number;
   handlePageChange: (selectedItem: { selected: number }) => void;
   // CommonPostListへ渡す
@@ -15,6 +17,7 @@ type CommonPostAreaProps = {
   ListItemComponent: (props: { post: Post; user: User }) => JSX.Element;
 };
 
+// 投稿表示エリア
 const CommonPostArea = ({
   users,
   posts,
@@ -25,6 +28,7 @@ const CommonPostArea = ({
 }: CommonPostAreaProps) => {
   return (
     <div>
+      {/* 投稿表示リスト */}
       <CommonPostList
         posts={posts}
         users={users}

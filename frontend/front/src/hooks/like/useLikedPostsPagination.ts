@@ -2,17 +2,22 @@ import { useCallback, useEffect, useState } from 'react';
 import { getUserLikedPostsByUserId } from '../../api/like';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
+import { useAlertContext } from '../../contexts/AlertContext';
+
+
 
 // 指定userIDのlikedPost一覧、likedPost総数、現在のページ番号を返す
 export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) => {
-  // 指定したuserIdのlikedPost一覧
+  // 指定userIdのlikedPost一覧
   const [likedPosts, setLikedPosts] = useState<Post[]>([]);
-  // 指定したuserIdのlikedPost総数
+  // 指定userIdのlikedPost総数
   const [totalLikedPostsCount, setTotalLikedPostsCount] = useState(0);
-  // 指定したuserIdのlikedUser一覧
+  // 指定userIdのlikedUser一覧
   const [likedUsers, setLikedUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
+  const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
+
 
   // currentUserがいいねした投稿の集合と、その総数を取得し、currentUserのstateに格納する
   const handleGetUserLikedPostsByUserId = useCallback(
@@ -30,18 +35,19 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
           // console.log(`likedUsers: ${JSON.stringify(likedUsers)}`);
           setLikedUsers(likedUsers);
         }
-      } catch (err) {
-        alert('ユーザーが存在しません');
+      } catch (err:any) {
+        setAlertSeverity('error');
+        setAlertMessage(err.response.message);
+        setAlertOpen(true);
       }
     },
-    []
+    [setAlertSeverity,setAlertMessage,setAlertOpen]
   );
 
   useEffect(() => {
     handleGetUserLikedPostsByUserId(userId, currentPage, itemsPerPage);
   }, [currentPage, userId, itemsPerPage, handleGetUserLikedPostsByUserId]);
 
-  // 3
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

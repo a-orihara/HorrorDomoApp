@@ -1,14 +1,17 @@
-// frontend/front/src/hooks/useFormattedTime.ts
+// date-fns: JavaScriptの日付ユーティリティライブラリ
 import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
+// date-fns-tz: date-fnsを補完するパッケージで、特にタイムゾーンの扱いに特化。
 import { utcToZonedTime } from 'date-fns-tz';
+// date-fns/locale:言語のローカリゼーションサポート
 import { ja } from 'date-fns/locale';
 
 // postContextから取得したpostを利用するので、undefinedの可能性がある
 const useFormattedTime = (createdAt: string | undefined) => {
-  // 2 date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
   if (!createdAt) {
-    return ''; // createdAtがundefinedの場合、空文字を返す
+    // createdAtがundefinedの場合、空文字を返す
+    return '';
   }
+  // 2 date-fns-tzパッケージを使ってUTC時間を日本時間に変換し、フォーマットを指定
   const japanTime = utcToZonedTime(createdAt, 'Asia/Tokyo');
   // 3
   const formattedTime = format(japanTime, 'yyyy/MM/dd');
@@ -16,7 +19,6 @@ const useFormattedTime = (createdAt: string | undefined) => {
   const relativeTime = formatDistanceToNow(japanTime, { addSuffix: true, locale: ja });
   // 5
   const displayTime = differenceInDays(new Date(), japanTime) >= 3 ? formattedTime : relativeTime;
-
   return displayTime;
 };
 

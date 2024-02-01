@@ -25,7 +25,6 @@ export const LikeProvider = ({ children }: LikeProviderProps) => {
   const handleGetTotalLikesCountByCurrentUserId = useCallback(async (userId: number | undefined) => {
     if (!userId) return;
     try {
-    console.log("handleGetTotalLikesCountByCurrentUserId発火しまくり")
       // currentUserがいいねした投稿の集合と、その総数を取得する
       const data = await getTotalLikesCountByUserId(userId);
       if (data.status === 200) {

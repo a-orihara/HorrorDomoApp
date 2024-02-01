@@ -115,36 +115,35 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  # 6 ユーザーがいいねした投稿の1P当たりの集合と、総いいね数を返す
+  # ユーザーがいいねした投稿の1P当たりの集合と、総いいね数を返す
   def all_likes
     logger.info "all_likesアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
     # 指定ユーザーIDでユーザーを検索
-    # user = User.find(params[:id])
     user = User.find_by(id: params[:id])
     if user
-      # 8 指定ユーザーのいいねした投稿の1P当たりの集合を取得
+      # 6 8 指定ユーザーのいいねした投稿の1P当たりの投稿の集合を取得
       liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)
-      # currrentUserのいいねの真偽値情報を取得（いいねするのはcurrrentUserのため）
+      # 6.1 liked_postsにcurrrentUserのいいねの真偽値情報、いいねした投稿の持ついいね数を付加
       liked_posts_with_likes_info = liked_posts.map do |post|
           # currrentUserがいいねしているかの真偽値をlikedに代入
           liked = current_api_v1_user.already_liked?(post)
-          # 2
           likes_count = post.likes.count
           post.as_json.merge(liked: liked, likes_count: likes_count)
       end
-      # 指定userのliked_posts（いいねした1p当たりのpost）に紐づくuserの集合を取得
-      # ↓ 書換:liked_users = liked_posts.map { |post| post.user }.uniq
+      # 6.2 指定userのliked_posts（いいねした1p当たりのpost）のuser（post作成者）の集合を取得
       liked_users = liked_posts.map(&:user).uniq
-      # 指定userのいいねの総数を取得
+      # user（post作成者）に情報を付加
       liked_users_with_avatar = liked_users.map do |liked_user|
+        # avatarのurlを取得
         avatar_url = generate_avatar_url(liked_user)
+        # avatar情報を加味したuser情報
         liked_user.as_json.merge(avatar_url: avatar_url)
       end
-      # 1P当たりの数ではなく総数を代入
+      # 指定userのいいねした投稿総数
       total_liked_counts = user.likes.count
-      # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostに紐づく集合を返す
+      # 指定userの、1.いいねしたpostの集合、2.いいねしたpostの総数、3.いいねしたpostの作成userのリストを返す
       render json: {
         status: '200',
         liked_posts: liked_posts_with_likes_info,
@@ -292,13 +291,20 @@ is_following = current_user.following?(other_user)
 際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。
 ただし、users_controller.rbに書く方が単一責任の原則に近く、リソース指向設計の観点からは好ましいと思われます。
+
 ================================================================================================
 6
-. `user_likes = user.likes.includes(:post)`は適切です。
+. `user_likes = user.likes.includes(:post)`
+- user.likes`で、特定のユーザーが行った全ての「いいね！」にアクセスします。
+- user.likes.includes(:post)で、特定のユーザーが行った全ての「いいね！」にアクセスし、その「いいね！」した投
+稿を一度に取得する
+------------------------------------------------------------------------------------------------
 includesメソッドの基本構文
 モデル名.includes(:関連名) # 関連名はテーブル名ではない
 includesメソッドに渡す引数は、テーブル名ではなくアソシエーションで定義した関連名を指定します。
 例えば関連名は、belongs_to :postの場合はpostになります。
+includesメソッドは、親子関係のデータリソースをまとめてDBから取得できるメソッド
+詳細は：https://zenn.dev/yukihaga/articles/aee4c55332a103
 ------------------------------------------------------------------------------------------------
 `user_likes = user.likes.includes(:post)` の `user_likes` の中身は、ログインユーザー（`user`）がいいね
 した `Like` オブジェクトの配列です。
@@ -308,6 +314,7 @@ includesメソッドに渡す引数は、テーブル名ではなくアソシエ
   created_at: Mon, 31 Jul 2023 09:00:11.878736000 UTC +00:00,
   updated_at: Mon, 31 Jul 2023 09:00:11.878736000 UTC +00:00>, ..., ...,
 ]
+------------------------------------------------------------------------------------------------
 ここで `includes(:post)` は事前に `post` を読み込むための命令で、これにより後の処理（`like.post`）で毎回デー
 タベースにアクセスすることなく `post` の情報を取得できます。
 つまり、`user_likes` の各要素は `Like` オブジェクトで、それぞれがいいねした `post` の情報も含んでいます。
@@ -349,12 +356,31 @@ N+1問題は、まず1回のクエリで「親」データを取得し（これ�
 1. ユーザーが「いいね」した全ての「いいね」データとそれに関連する投稿データを一度のクエリで取得
 その結果、データベースへの問い合わせ回数が大幅に削減され、アプリケーションのパフォーマンスが向上します。
 ------------------------------------------------------------------------------------------------
+n+1問題が発生するため、user.likes.allで取得しない。
+includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
+
+================================================================================================
+6.1
 . `likes_data_with_post = user_likes.map do |like| { like_data: like, post_data: like.post } end`
 - この部分は、取得した「いいね」（`user_likes`）に対して`.map`メソッドを使用しています。`.map`メソッドは、元の
 配列の各要素に対してブロック内の処理を行い、その結果を新たな配列として返すメソッドです。
 - ここでは、各「いいね」データ（`like`）とそれに対応する投稿データ（`like.post`）をハッシュ形式で格納しています。
 これにより、`likes_data_with_post`という配列が作成され、各要素はユーザーの「いいね」とその「いいね」に対応する投
 稿データのハッシュになります。
+
+================================================================================================
+6.2
+書換:liked_users = liked_posts.map { |post| post.user }.uniq
+------------------------------------------------------------------------------------------------
+. liked_posts.map(&:user).uniq`
+- 各`liked_post` を繰り返し処理し、各投稿に関連付けられた `user` を取得する。短縮形の `&:user` は
+`{ |post| post.user }` と等価であり、`liked_posts` の各 `post` に対して、その投稿の `user` を取得する。
+- この処理は、各 `post` に存在する外部キー `user_id` を利用している。すべての `post` は `user` に属している
+ので (`Post` モデルの `belongs_to :user` で定義されている)、 `post.user` を呼び出すと、その特定の `post`
+に関連付けられた `User` オブジェクトが取得される。
+------------------------------------------------------------------------------------------------
+- uniq` メソッドは配列から重複する要素を削除するために使用する。liked_posts.map(&:user)のuserの配列に対して
+使用。重複した投稿作成userの削除
 
 ================================================================================================
 7
@@ -373,22 +399,19 @@ N+1問題は、まず1回のクエリで「親」データを取得し（これ�
 ================================================================================================
 8
 liked_posts = user.likes.includes(:post).page(page).per(per_page).map(&:post)
-* map(&:post) = map { |like| like.post }
-------------------------------------------------------------------------------------------------
-# n+1問題が発生するため、user.likes.allで取得しない。
-# includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
+* map(&:post)は、 map { |like| like.post }の省略形
+各'like'に対して、関連する'post'を取得し、新しいコレクションに変換する。いいね！」のリストを受け取り、その「いい
+ね！」に関連する投稿だけを含む新しいリストを作成。
 ------------------------------------------------------------------------------------------------
 当初のコード
-# n+1問題が発生するため、user.likes.allで取得しない。
 user_likes = user.likes.includes(:post)
-# includes(:post)により、user_likesの各要素に対して、postを事前に取得している。
 liked_posts = user_likes.map { |like| like.post }.page(page).per(per_page)
 ------------------------------------------------------------------------------------------------
 当初のコードがkaminariでうまくいかなかった理由
 1. **メソッドチェーンの順序の問題**:
 - 最初のコードでは、`page`メソッドが配列に対して呼び出されています。
-- `user_likes.map { |like| like.post }` の結果は通常のRubyの配列であり、Kaminariのページネーションメソッド
-が適用できるActiveRecordのリレーションではありません。
+- `user_likes.map { |like| like.post }` の結果は通常のRubyの配列（いいねした投稿）であり、Kaminariのペー
+ジネーションメソッドが適用できるActiveRecordのリレーションではありません。
 - したがって、`page`メソッドはこのコンテキストでは動作しません。
 2. **正しい動作のコードの理由**:
 liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| like.post }
@@ -405,8 +428,10 @@ liked_posts = user.likes.includes(:post).page(page).per(per_page).map { |like| l
 、後続の処理で"いいね"に関連する投稿にアクセスする際に追加のデータベースクエリを発行することなくデータにアクセスでき
 るようになります。ただここまでではまだ実際の投稿データは取得していません。includes(:post)の処理をした、
 user.likesになります。
-- `.page(page).per(per_page)`: これにより、取得する"いいね"の一覧をページネーションの制限に従って絞り込むこと
-ができます。
+- `.page(page).per(per_page)`: これにより、取得する"いいね"の一覧をページネーションの制限に従って絞り込む
+ことができます。
+- page(page):nページ目のデータを取得。5なら5ページ目。
+- per(per_page):1ページ当たりの個数。
 この時点で、取得されるのは"いいね"のデータの一覧です。しかし、次の処理では実際に"いいね"された投稿のデータが欲しい
 ため、`.map { |like| like.post }`という操作を行っています。
 - `.map { |like| like.post }`: これにより、各"いいね"のデータから関連する投稿(`post`)のデータのみを取り出し

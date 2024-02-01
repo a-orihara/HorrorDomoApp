@@ -3,6 +3,7 @@ import { User } from '../../../types/user';
 
 type CommonPostListProps = {
   posts: Post[];
+  // 投稿作成user
   users: User[];
   noPostsMessage: string;
   // 1 コンポーネントの型指定
@@ -11,7 +12,7 @@ type CommonPostListProps = {
 
 // propsにコンポーネントも渡せる
 const CommonPostList = ({ posts, users, noPostsMessage, ListItemComponent }: CommonPostListProps) => {
-  // 2
+  // 2 投稿が０、もしくはない場合にnoPostsMessageを表示
   if (!posts || posts.length === 0) {
     return (
       <div className='mb-4 flex flex-1 flex-col items-center justify-around'>
@@ -24,13 +25,14 @@ const CommonPostList = ({ posts, users, noPostsMessage, ListItemComponent }: Com
     <div className='flex-1'>
       <ol>
         {posts.map((post) => {
-          // 3
+          // 3 usersの中から表示する投稿の作成者のidと一致するuser（投稿者）を探す
           const user = users.find((user) => user.id === post.userId);
           // 4
           if (user) {
-            // この部分で無名関数を実行している
+            // この部分で無名関数を実行している。投稿情報をListItemComponentに渡す
             return <ListItemComponent key={post.id} post={post} user={user} />;
           } else {
+            // 投稿者が見つからない場合
             return (
               <div key={post.id} className='mb-4 flex flex-1 flex-col items-center justify-around'>
                 <p className='border-b-2 border-slate-200 text-base md:text-xl'>投稿を表示できません</p>
@@ -81,6 +83,7 @@ return文がある場合、最初に一致したreturn文が実行され、そ�
 nullと空の配列はJavaScriptでは異なるものとして扱われ、if (!posts)はpostsがnullまたはundefinedの場合にのみ真
 となります。一方、空の配列はfalseにはなりません。
 if (!posts || posts.length === 0)という条件を追加し、空の配列の場合も真となるようにしています。
+
 ================================================================================================
 3
 userの型がUser | undefinedになる理由

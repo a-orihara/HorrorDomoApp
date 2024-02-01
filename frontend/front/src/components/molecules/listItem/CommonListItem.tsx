@@ -10,6 +10,7 @@ type CommonListItemProps = {
   handleDeletePost: (postId: number) => void;
 };
 
+// ListItemの共通表示部分
 const CommonListItem = ({ post, currentUser, handleDeletePost }: CommonListItemProps) => {
   // postの作成日時を形成するカスタムフック
   const postCreatedTime = useFormattedTime(post.createdAt);

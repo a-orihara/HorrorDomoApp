@@ -26,6 +26,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
         <UserAvatar avatarUrl={likedUser.avatarUrl} userId={likedUser.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={likedUser} post={likedPost}></UserAndPostLinks>
+          {/* ListItemの共通表示部分 */}
           <CommonListItem
             post={likedPost}
             currentUser={currentUser}

@@ -28,7 +28,6 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
           <UserAndPostLinks user={likedUser} post={likedPost}></UserAndPostLinks>
           <CommonListItem
             post={likedPost}
-            // user={likedUser}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}
           />

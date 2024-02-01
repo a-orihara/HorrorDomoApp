@@ -48,7 +48,6 @@ export const useLikedPostsPagination = (itemsPerPage: number, userId?: number) =
     handleGetUserLikedPostsByUserId(userId, currentPage, itemsPerPage);
   }, [currentPage, userId, itemsPerPage, handleGetUserLikedPostsByUserId]);
 
-  // 3
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

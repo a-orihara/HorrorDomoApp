@@ -13,7 +13,7 @@ type LikedPostListItemProps = {
   likedUser: User;
 };
 
-// 指定userIdのlikedPost, likedUser
+// 指定userIdのlikedPost, likedUser（投稿作成者）
 const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => {
   // currentUserと指定userIdが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
@@ -28,7 +28,7 @@ const LikedPostListItem = ({ likedPost, likedUser }: LikedPostListItemProps) => 
           <UserAndPostLinks user={likedUser} post={likedPost}></UserAndPostLinks>
           <CommonListItem
             post={likedPost}
-            user={likedUser}
+            // user={likedUser}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}
           />

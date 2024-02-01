@@ -6,7 +6,6 @@ import { LikeButtonIcon } from '../../atoms/LikeButtonIcon';
 
 type CommonListItemProps = {
   post: Post;
-  user: User;
   currentUser?: User;
   handleDeletePost: (postId: number) => void;
 };

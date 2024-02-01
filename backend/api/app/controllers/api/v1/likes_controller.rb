@@ -14,16 +14,17 @@ class Api::V1::LikesController < ApplicationController
       # render json: { status: '201', data: like }, status: :ok
       render json: { status: '201' }, status: :ok
     else
-      render json: { status: '422', message: like.errors.full_messages }, status: :unprocessable_entity
+      render json: { status: '422', message: "いいねに失敗しました" }, status: :unprocessable_entity
     end
   end
 
   def destroy
     logger.info "Likeのdestroyアクションが発火"
     if @like.destroy
-      render json: { status: 'SUCCESS', message: 'Unliked the post', data: @post }
+      # render json: { status: '200', data: @post }
+      render json: { status: '200' }, status: :ok
     else
-      render json: { status: 'ERROR', message: 'Unliking the post failed', data: @like.errors }
+      render json: { status: '422', message: '操作を完了できませんでした' }, status: :unprocessable_entity
     end
   end
 

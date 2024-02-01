@@ -29,7 +29,7 @@ RSpec.describe "Api::V1::Likes", type: :request do
       delete api_v1_post_likes_path(post_id: post.id), headers: headers
       expect(response).to have_http_status(200)
       json = response.parsed_body
-      expect(json["status"]).to eq 'SUCCESS'
+      expect(json["status"]).to eq '200'
       expect(user.already_liked?(post)).to be_falsy
     end
   end

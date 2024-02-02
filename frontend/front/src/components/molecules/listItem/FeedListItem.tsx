@@ -32,7 +32,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
           {/* 2 */}
           <CommonListItem // CommonListItemコンポーネントを使用
             post={feedPost}
-            user={feedUser}
+            // user={feedUser}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}
           />

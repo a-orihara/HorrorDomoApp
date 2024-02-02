@@ -13,6 +13,7 @@ const FeedArea = ({ user }: FeedAreaProps) => {
   const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
   return (
     <div>
+      {/* 1ページ当たりのfeedのpostとuserを`CommonPostArea`に受け渡し */}
       <CommonPostArea
         users={feedUsers}
         posts={feedPosts}

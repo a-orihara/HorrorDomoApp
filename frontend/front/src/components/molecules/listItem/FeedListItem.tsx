@@ -17,8 +17,6 @@ type FeedListItemProps = {
 const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   // ログインユーザーと投稿者のidが一致する場合は、投稿を削除するボタンを表示
   const { currentUser } = useAuthContext();
-  // // 現在のユーザーが未定義かどうかを確認
-  // const userId = currentUser?.id;
   const { handleDeletePost } = useDeletePost();
   // console.log(`feedPost:の${feedPost.liked}`);
   // console.log(`feedListItemのpost:${JSON.stringify(feedPost)}`);
@@ -29,10 +27,8 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
         <UserAvatar avatarUrl={feedUser.avatarUrl} userId={feedUser.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={feedUser} post={feedPost}></UserAndPostLinks>
-          {/* 2 */}
           <CommonListItem // CommonListItemコンポーネントを使用
             post={feedPost}
-            // user={feedUser}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}
           />

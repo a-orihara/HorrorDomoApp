@@ -10,14 +10,12 @@ export const useCreateFollow = (otherUserId: number | undefined) => {
         const res = await createFollow(otherUserId);
         if (res.data.status === 200) {
           setAlertSeverity('success');
-          // setAlertMessage(`${res.data.message}`);
-          setAlertMessage('フォローしました');
+          setAlertMessage(`${res.data.message}`);
           setAlertOpen(true);
         }
       } catch (err: any) {
         setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.errors}`);
-        setAlertMessage('フォローに失敗しました。');
+        setAlertMessage("フォローに失敗しました");
         setAlertOpen(true);
       }
     }

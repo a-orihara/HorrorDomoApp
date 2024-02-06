@@ -10,13 +10,11 @@ export const useDeleteFollow = (otherUserId: number | undefined) => {
         const res = await deleteFollow(otherUserId);
         if (res.data.status === 200) {
           setAlertSeverity('success');
-          // setAlertMessage(`${res.data.message}`);
-          setAlertMessage('フォロー解除しました');
+          setAlertMessage(`${res.data.message}`);
           setAlertOpen(true);
         }
       } catch (err: any) {
         setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.errors}`);
         setAlertMessage('フォロー解除に失敗しました。');
         setAlertOpen(true);
       }

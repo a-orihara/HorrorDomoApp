@@ -5,7 +5,7 @@ class Api::V1::RelationshipsController < ApplicationController
   # 2.1
   def create
     # logger.info "Relationshipのcreateアクションが発火"
-    user = User.find(params[:other_id])
+    user = User.find_by(id: params[:other_id])
     # 2.2
     if current_api_v1_user.follow(user)
       render json: { status: 200, message: 'フォローしました' }
@@ -18,7 +18,7 @@ class Api::V1::RelationshipsController < ApplicationController
   # 3
   def destroy
     # logger.info "Relationshipのdestroyアクションが発火"
-    user = User.find(params[:other_id])
+    user = User.find_by(id: params[:other_id])
     if current_api_v1_user.unfollow(user)
       render json: { status: 200, message: 'フォロー解除しました' }
     else

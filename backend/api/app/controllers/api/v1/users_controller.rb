@@ -27,7 +27,7 @@ class Api::V1::UsersController < ApplicationController
     render json: { users: @users, total_users: total_users }
   end
 
-  # userの詳細情報を返却
+  # GET /api/v1/users/${userId} userの詳細情報を返却
   def show
     logger.info "showアクションが発火"
     # generate_avatar_urlの戻り値はavatarのURLかnil

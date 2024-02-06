@@ -27,7 +27,7 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
         <UserAvatar avatarUrl={feedUser.avatarUrl} userId={feedUser.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={feedUser} post={feedPost}></UserAndPostLinks>
-          <CommonListItem // CommonListItemコンポーネントを使用
+          <CommonListItem
             post={feedPost}
             currentUser={currentUser}
             handleDeletePost={handleDeletePost}

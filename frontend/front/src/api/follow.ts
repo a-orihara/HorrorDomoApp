@@ -29,7 +29,7 @@ export const getFollowingByUserId = async (page: number, itemsPerPage: number, u
   });
 };
 
-// ユーザーをフォローするAPI
+// 2 ユーザーをフォローするAPI
 export const createFollow = (otherUserId: number) => {
   return client.post(
     `/relationships`,
@@ -143,4 +143,14 @@ Axiosのpostメソッドの第三引数のconfig部分には、リクエスト�
 このconfigオブジェクトのheadersプロパティには、HTTPリクエストヘッダに追加したい情報を指定します。
 headerの部分は、認証情報をHTTPヘッダとして送信するための設定です。これによりサーバ側で認証を行い、リクエストを正し
 く処理することができます。
+
+================================================================================================
+2
+Axiosのpostメソッド
+URL**：
+- client.post`の最初の引数は、リクエストを送信するURL文字列である。
+- 2番目の引数はリクエストボディとして送信するデータです。ここでは、単一のプロパティ `other_id` を持つオブジェクト
+を送信します。other_id`の値は変数 `otherUserId` に設定され、関数 `createFollow` に渡される。
+- 3番目の引数はリクエストの設定オブジェクトである。このオブジェクトには、リクエストに設定したい追加の設定やヘッダー
+が含まれます。
 */

@@ -16,7 +16,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   const { handleDeleteFollow } = useDeleteFollow(otherUserId);
   const { handleGetFollowersCountByUserId } = useFollowContext();
 
-  // 1
+  // 1 crrentユーザーと別ユーザーのフォロー状態を作成し、アクション完了時にフォロワー数を更新する。
   const handleFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     handleCreateFollow().then(() => {
@@ -25,7 +25,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
     });
   };
 
-  // 2
+  // 2 crrentユーザーと別ユーザーのフォロー状態を削除し、アクション完了時にフォロワー数を更新する。
   const handleUnFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (window.confirm('フォローを解除しますか？')) {
       event.preventDefault();
@@ -37,6 +37,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   };
 
   useEffect(() => {
+    // crrentユーザーと別ユーザーのフォロー状態を非同期にチェックし、それに応じてフォローの状態を更新する。
     const checkFollow = async () => {
       // userId（currentId）と otherUserId が undefined でないことを確認する
       if (userId !== undefined && otherUserId !== undefined) {

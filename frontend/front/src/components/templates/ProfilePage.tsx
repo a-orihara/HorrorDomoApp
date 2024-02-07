@@ -52,15 +52,13 @@ const ProfilePage = () => {
         ></UserInfo>
       </div>
       <div className='flex-1 lg:w-full'>
-        {/* 8 */}
+        {/* 8 crrentユーザーが別ユーザーのページを閲覧する場合に表示 */}
         {currentUser && currentUser.id !== userId && (
           <FollowForm userId={currentUser.id} otherUserId={userId}></FollowForm>
         )}
         <div className='flex-1 lg:w-full'>
           {showLikedPostArea ? <LikedPostArea user={user}></LikedPostArea> : <PostArea user={user}></PostArea>}
         </div>
-        {/* <PostArea user={user}></PostArea>
-        <LikedPostArea user={user}></LikedPostArea> */}
       </div>
     </div>
   );
@@ -172,9 +170,6 @@ scoreが60以上の場合、resultは'合格'、そうでない場合は'不合�
 - undefined`**にフォールバック： もし `id` が文字列でないか、有効な数値を表していない文字列である場合、
 `userId` は `undefined` に設定される。これはセーフガードとして機能し、`userId`に依存する後続の操作が有効な数
 値識別子でのみ実行されることを保証する。
-
-
-------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------
 ユーザーIDを[const id: string | string[] | undefined]型から、number型に変換してからusePostsPagination
 に渡します。

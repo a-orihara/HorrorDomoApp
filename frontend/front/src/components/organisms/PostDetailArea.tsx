@@ -13,11 +13,11 @@ import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 export const PostDetailArea = () => {
   const router = useRouter();
   const { id } = router.query;
-  // 指定post詳細とそれを取得する関数を取得
+  // 指定idのpost詳細とそれを取得する関数を取得
   const { postDetailByPostId, handleGetPostDetailByPostId } = usePostContext();
   // 指定user詳細とそれを取得する関数を取得
   const { user, handleGetUserById } = useGetUserById(
-    // 指定postのuserIdが存在すればその数値(number)が、存在しない場合はundefinedが引数として渡される
+    // 4 指定postのuserIdが存在すればその数値(number)が、存在しない場合はundefinedが引数として渡される
     postDetailByPostId?.userId !== undefined ? Number(postDetailByPostId.userId) : undefined
   );
   // 指定post.titleから映画情報を取得する関数とその映画情報を取得
@@ -167,4 +167,18 @@ falseなら[undefined]が評価。
 場合）は、undefinedを返します。
 この条件分岐の結果は、`useGetUserById`フックに引数として渡されます。そのため、指定されたユーザーIDが存在する場合
 にはその数値が、存在しない場合にはundefinedが引数として渡されることになります。
+
+================================================================================================
+4
+. `postDetailByPostId?.userId !== undefined ? Number(postDetailByPostId.userId) : undefined`
+- メカニズム**：`postDetailByPostId`の`userId`に安全にアクセスするために、オプショナルチェーン（
+`postDetailByPostId` が `null` または `undefined` の場合、式が短絡して `undefined` に評価され、エラーを
+スローしないことを保証します。
+- `== undefined` の部分は `userId` が存在するかどうか（つまり `undefined` ではないかどうか）をチェックする。
+`userId` が存在する場合、三項演算子 (`? :`) は `Number(postDetailByPostId.userId)` を返し、 `userId`
+を数値に変換する。userId`が存在しない場合は、`undefined`を返す。
+- **振る舞い**： この条件付きロジックには2つの目的がある。まず、投稿 (`postDetailByPostId`) に関連付けられた
+`userId` が存在するかどうかをチェックする。userId` が存在する場合、この ID を文字列から数値に変換し、
+`useGetUserById` フックに渡される ID が正しい型 (数値) であることを確認する。`userId` が存在しない場合、フッ
+クは `undefined` を引数として受け取る。
 */

@@ -37,9 +37,9 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   };
 
   useEffect(() => {
-    // crrentユーザーと別ユーザーのフォロー状態を非同期にチェックし、それに応じてフォローの状態を更新する。
+    // crrentユーザーと別ユーザーのフォロー状態を非同期にチェックし、それに応じてフォロー状態を更新する。
     const checkFollow = async () => {
-      // userId（currentId）と otherUserId が undefined でないことを確認する
+      // currentIdと otherUserId が undefined でないことを確認する
       if (userId !== undefined && otherUserId !== undefined) {
         const response = await isFollowing(userId, otherUserId);
         setIsFollowed(response.data.isFollowing);
@@ -51,6 +51,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   return (
     <div>
       <form>
+        {/* フォロー状態により表示を切り分ける */}
         {isFollowed ? (
           <Button
             className='m-auto mb-1 mt-1 flex h-8 items-center justify-center rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow md:h-12'

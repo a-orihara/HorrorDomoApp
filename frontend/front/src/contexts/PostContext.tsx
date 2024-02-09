@@ -48,9 +48,10 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         // 指定Idののpostの詳細を取得する関数
         const res = await getPostDetailByUserId(postId);
         if (res.data.status == 200) {
+          // id選択の投稿の詳細をセット
           setPostDetailByPostId(res.data.data);
         } else {
-          console.log('投稿を表示できません');
+          alert('投稿を表示できません');
         }
       } catch (err) {
         alert('投稿を表示できません');

@@ -99,6 +99,7 @@ class Api::V1::UsersController < ApplicationController
   def is_following
     current_user = User.find_by(id: params[:id])
     other_user = User.find_by(id: params[:other_id])
+    # is_followingは真偽値
     is_following = current_user.following?(other_user)
     render json: { status: '200', is_following: is_following }
   end
@@ -275,18 +276,15 @@ current_api_v1_user&.admin?として安全な参照を行います。
 is_following = current_user.following?(other_user)
 ------------------------------------------------------------------------------------------------
 フロントエンドでユーザーがあるユーザーをフォローしているかどうかを確認するには、APIを通じてバックエンドに問い合わせ
-るのが適切です。フロントエンドがその情報を保持するとなると、データの同期問題などが生じる可能性があります。
-
+るのが適切です。
 バックエンド側で、ユーザーが他のユーザーをフォローしているかどうかを確認するには、Userモデルの`following?`メソッ
 ドを使うのが適切です。`following?`メソッドは引数で渡されたユーザーが`following`リストに含まれるかを確認します。
-
 バックエンドのロジックは主にコントローラーに書くのが適切です。今回の場合、ユーザーが特定のユーザーをフォローしている
 か確認するためのAPIエンドポイントを作成するため、`users_controller.rb`にそのロジックを追加します。
 ------------------------------------------------------------------------------------------------
 フォローの状態はユーザーの一部の状態（属性）として考えることができます。したがって、特定のユーザーが他のユーザーをフ
 ォローしているかどうかを確認する操作は、ユーザーというリソースの一部を扱う操作と捉えることができます。
 それにより、users_controller.rbでその操作を処理するという選択がなされます。
-
 一般的にRESTfulな設計をする際、あるリソースに対する操作はそのリソースのコントローラーで行うのが基本です。しかし、実
 際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。

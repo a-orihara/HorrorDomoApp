@@ -24,8 +24,8 @@ export const useGetMovieInfo = () => {
           setMovieInfo(res.data.data.results[0]);
         }
       }
-    } catch (err: any) {
-      alert('エラーが発生しました');
+    } catch (err) {
+      alert('映画情報を取得出来ませんでした');
     }
   }, []);
 

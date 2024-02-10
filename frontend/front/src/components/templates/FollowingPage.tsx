@@ -15,8 +15,12 @@ const FollowingPage = () => {
   // console.log(`FollowingPage.tsxのuserId: ${userId}`);
   // const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
-  const { following, totalFollowingCount, handlePageChange } = useFollowingPagination(10, userId);
+  const { following, totalFollowingCount, handlePageChange, isLoading } = useFollowingPagination(10, userId);
 
+  // isLoadingがtrue(loading中)のときに "Loading... "をレンダ。
+  if (isLoading) {
+    return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
+  }
   return (
     <div className='flex flex-1 flex-col'>
       <FollowList

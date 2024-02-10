@@ -42,7 +42,6 @@ class Api::V1::UsersController < ApplicationController
     logger.info "followingアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
-    # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
     user = User.find_by(id: params[:id])
     if user
       following_users = user.following.page(page).per(per_page)

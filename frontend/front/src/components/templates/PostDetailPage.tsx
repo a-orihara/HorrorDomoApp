@@ -1,6 +1,6 @@
 import { PostDetailArea } from '../organisms/PostDetailArea';
 
-1;
+// 1
 export const PostDetailPage = () => {
   return <PostDetailArea></PostDetailArea>;
 };

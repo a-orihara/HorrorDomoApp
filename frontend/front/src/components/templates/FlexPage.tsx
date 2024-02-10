@@ -1,3 +1,4 @@
+// Flex練習用のページ
 const FlexPage = () => {
   return (
     <div className='flex min-h-screen flex-col  bg-orange-100'>

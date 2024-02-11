@@ -16,7 +16,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   const { handleDeleteFollow } = useDeleteFollow(otherUserId);
   const { handleGetFollowersCountByUserId } = useFollowContext();
 
-  // 1
+  // 1 crrentユーザーと別ユーザーのフォロー状態を作成し、アクション完了時にフォロワー数を更新する。
   const handleFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     handleCreateFollow().then(() => {
@@ -25,7 +25,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
     });
   };
 
-  // 2
+  // 2 crrentユーザーと別ユーザーのフォロー状態を削除し、アクション完了時にフォロワー数を更新する。
   const handleUnFollowClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if (window.confirm('フォローを解除しますか？')) {
       event.preventDefault();
@@ -37,8 +37,9 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   };
 
   useEffect(() => {
+    // crrentユーザーと別ユーザーのフォロー状態を非同期にチェックし、それに応じてフォロー状態を更新する。
     const checkFollow = async () => {
-      // userId（currentId）と otherUserId が undefined でないことを確認する
+      // currentIdと otherUserId が undefined でないことを確認する
       if (userId !== undefined && otherUserId !== undefined) {
         const response = await isFollowing(userId, otherUserId);
         setIsFollowed(response.data.isFollowing);
@@ -50,6 +51,7 @@ export const FollowForm = ({ userId, otherUserId }: FollowFormProps) => {
   return (
     <div>
       <form>
+        {/* フォロー状態により表示を切り分ける */}
         {isFollowed ? (
           <Button
             className='m-auto mb-1 mt-1 flex h-8 items-center justify-center rounded-lg bg-basic-yellow font-semibold hover:bg-hover-yellow md:h-12'

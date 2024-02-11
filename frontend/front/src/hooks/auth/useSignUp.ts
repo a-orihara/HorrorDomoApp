@@ -47,27 +47,6 @@ const useSignUp = () => {
         setAlertMessage('認証に失敗しました');
         setAlertOpen(true);
       }
-      // if (res.status === 200) {
-      //   // 3 Cookieにトークンをセット
-      //   Cookies.set('_access_token', res.headers['access-token']);
-      //   Cookies.set('_client', res.headers['client']);
-      //   Cookies.set('_uid', res.headers['uid']);
-      //   setIsSignedIn(true);
-      //   // サインインユーザーでcurrentUserを取得してセット
-      //   setCurrentUser(res.data.data);
-      //   setAlertSeverity('success');
-      //   setAlertMessage(`${res.data.message}`);
-      //   setAlertOpen(true);
-      //   // first-loginをtrueにすることで、初回ログイン時にwelcome-messageを表示する。
-      //   localStorage.setItem('firstTimeLogin', 'true');
-      //   setTimeout(() => {
-      //     router.push('/');
-      //   }, 1000);
-      // } else {
-      //   setAlertSeverity('error');
-      //   setAlertMessage(getErrorMessage(res.data));
-      //   setAlertOpen(true);
-      // }
       // 6
     } catch (err) {
       // デフォルトメッセージを設定し、これをAxios以外のその他エラーの際に表示

@@ -11,6 +11,7 @@ type AuthProviderProps = {
 
 // 1.1 下記のkeyを持つオブジェクトのAuthContextPropsという名前の型を作成
 type AuthContextProps = {
+  // 1.5
   loading: boolean;
   // 1.2
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +29,7 @@ export const AuthContext = createContext<AuthContextProps | undefined>(undefined
 // @          @@          @@          @@          @@          @@          @@          @@          @
 // AuthContextのプロパティ、AuthContext.Providerを返すAuthProviderコンポーネント
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // 3 ローディング中（ローディング中ならtrue）かどうかの状態を管理するステート
+  // 3 サインインのローディング中（ローディング中ならtrue）かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
   // ログインしているかどうかの状態を管理するステート。初期値はfalse（サインインしていない）
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -60,6 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // ここをアラートモーダルの表示にすると、エラーの際にモーダル表示の連続になるのでalertで処理
       alert('サインインのユーザー情報を取得出来ませんでした');
     }
+    // 1.6
     setLoading(false);
   };
 
@@ -172,6 +174,20 @@ AuthContext.ProviderのvalueにはAuthContextProps型のデータを渡すこと
 - JavaScriptでは`null`はオブジェクト型を持つが、`undefined`は独自の型を持つ。これにより、`undefined`を使う
 ことで「何も設定されていない」という状態がより明確になる。
 
+================================================================================================
+1.5
+AuthContext` 内の `loading` 状態は、現在のユーザの認証状態を取得する際の非同期性を管理するために設計されている。
+具体的には、アプリケーションがユーザがログインしているかどうかを判定している間は `true` に設定され、その処理が完了
+すると `false` に設定される。
+loading` の状態をチェックすることで、コンポーネントは認証状態がわかっているときだけ条件付きでレンダリングしたりロ
+ジックを実行したりすることができます。
+
+================================================================================================
+1.6
+`AuthContext` の `loading` 状態は、主にユーザー認証に関するアプリの最初のロード状態を反映することを意図している。
+handleGetCurrentUser` で `loading` を明示的に `false` に設定することは、この目的に適している。他の操作でロ
+ード状態を操作する必要がある場合は、`AuthContext` 内で (グローバルに関連する場合)、または個々のコンポーネント内
+で (ローカルなロード状態の場合) 個別に処理する必要があります。
 ================================================================================================
 2.1
 getAuthenticatedUser()の返り値はユーザー情報か、undefinedです。

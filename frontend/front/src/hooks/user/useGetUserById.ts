@@ -6,7 +6,6 @@ import { User } from '../../types/user';
 const useGetUserById = (id: number | undefined) => {
   // ユーザー情報を格納するステート
   const [user, setUser] = useState<User | null>(null);
-
   // 2
   const handleGetUserById = useCallback(async () => {
     // 3
@@ -17,7 +16,7 @@ const useGetUserById = (id: number | undefined) => {
       // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       setUser(fetchedUser);
     } catch (err) {
-      console.error('Error fetching user data:', err);
+      alert("ユーザー情報を取得出来ませんでした")
     }
   }, [id]);
 
@@ -30,22 +29,15 @@ export default useGetUserById;
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
 (id: string | string[] | undefined)
-id` の型が `string | string[] | undefined` である理由は、Next.js の `router.query` が返す型がこれである
+- id` の型が `string | string[] | undefined` である理由は、Next.js の `router.query` が返す型がこれである
 ためです。query`オブジェクトには、URLからパースされた現在のルートのクエリパラメータが格納されます。これらのパラメ
 ータは `string` 、`array of strings` 、またはパラメータが存在しない場合は `undefined` である可能性がありま
 す。
-`id` の型に `string` を使用するだけでは、 `router.query` が返す可能性のあるすべての型を網羅することはできませ
+------------------------------------------------------------------------------------------------
+- `id` の型に `string` を使用するだけでは、 `router.query` が返す可能性のあるすべての型を網羅することはできませ
 ん。なぜなら、TypeScriptは `id` が `string[]` や `undefined` にもなりうると想定しているからです。
 フックの `useUser` に `id` を渡す場合、実際には `router.query.id` の結果を渡すことになるので、`id` のすべて
 の可能な型を考慮する必要がある。
-
-余談ですが、関数 `getUserById` では、`id as string` を使っていますね。このタイプアサーションは TypeScript
-に `id` を `string` として扱うように指示するもので、もし `id` が実際には `array of strings` や
-`undefined` であれば、安全ではない可能性がある。しかし、すでに `!id` をチェックしているので、 `id` は
-`undefined` でもなく、空文字列でもないことがわかります。id` が配列の場合はまだ問題があるかもしれませんが、これ
-は `router.query` がアプリケーションでどのように使用されているかによります。もし `id` が単一の文字列であるこ
-とが確実であれば、 `router.query` が常に `string` を返すようにアプリケーションを変更し、おそらく単一の文字列
-のクエリパラメータしか使用しないようにする方が安全かもしれません。
 
 ================================================================================================
 2
@@ -71,6 +63,7 @@ handleGetUserDataById関数は新たに生成されず（つまり「変わら�
 さらにuseCallback`により新しい `handleGetUserDataById` 関数が作成されますが、useCallbackは生成するだけで、
 この関数は自動的に実行されません。ProfilePage.tsx`の `useEffect` 内のように、明示的に呼び出されたときのみ実行
 されます。
+
 ================================================================================================
 3
 idがない場合があるかどうか:

@@ -23,7 +23,7 @@ export const useRedirectIfNotAuthorized = () => {
           router.push('/signin');
         }, 1000);
       }
-      // 2
+      // 2 URLクエリパラメータがあるかと、currentUser（ユーザーがサインインしているか）の二つをチェクし、処理を実行
       else if (typeof router.query.id === 'string' && currentUser?.id !== parseInt(router.query.id)) {
         setAlertSeverity('error');
         setAlertMessage('他のユーザーの編集ページにアクセスすることはできません');
@@ -63,6 +63,24 @@ router.query.idはstring | string[] | undefinedの型を持っています。
 parseInt関数はstring型の引数を期待しています。
 router.query.idが存在しない場合、parseInt関数にはundefinedが渡されます。
 このままだとエラーになるので、2のように'string'の場合でIDが合わない場合にのみ処理するよう記載。
+------------------------------------------------------------------------------------------------
+このフックでは、Next.jsのルーティングシステムの一部である`router.query.id`を含む条件チェックが行われます。なぜ
+なら、URLのクエリパラメータは未定義、単一の文字列（1つのパラメータ）、または文字列の配列（URL内で同じパラメータが
+複数回使用されている場合）だからです。
+------------------------------------------------------------------------------------------------
+typeof router.query.id === 'string' && currentUser?.id !== parseInt(router.query.id)`の条件チェッ
+クは、以下の2つの条件が満たされた場合にのみアクションを実行するように設計されています
+- `typeof router.query.id === 'string'` は、`router.query.id` が本当に単一の文字列であることを保証する。
+これは `parseInt` 関数が文字列引数を想定しているために必要である。もし `router.query.id` が `undefined` ま
+たは文字列の配列の場合、それを `parseInt` に直接渡すと、JavaScript のエラーまたは不正な動作になる。
+- `currentUser?.id !== parseInt(router.query.id)` は、現在のユーザのIDがURLクエリパラメータのIDと一致し
+ないかどうかをチェック。currentUser?.id`は、ユーザがログインしていない場合に`undefined`になる可能性のある
+`currentUser`の`id`に安全にアクセスするために、オプションのチェインを使用します。parseInt(router.query.id)`
+は、URLのクエリ文字列から `id` を整数に変換して比較します。この条件により、ユーザーが自分のユーザーIDとは異なる
+ユーザーIDを必要とするページにアクセスしようとしているときにのみ、アクションが実行されることが保証されます。
+- これらの条件を組み合わせることで、リダイレクトとエラーメッセージは、ログインしているユーザーがURLの`id`によって
+識別される別のユーザーの編集ページにアクセスしようとしたときにのみ発生し、`id`は1つの文字列として正しくフォーマット
+されます。
 ------------------------------------------------------------------------------------------------
 parseInt
 文字列を整数に変換するJavaScriptの組み込み関数。

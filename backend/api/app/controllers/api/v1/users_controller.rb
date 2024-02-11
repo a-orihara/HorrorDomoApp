@@ -27,7 +27,7 @@ class Api::V1::UsersController < ApplicationController
     render json: { users: @users, total_users: total_users }
   end
 
-  # userの詳細情報を返却
+  # GET /api/v1/users/${userId} userの詳細情報を返却
   def show
     logger.info "showアクションが発火"
     # generate_avatar_urlの戻り値はavatarのURLかnil
@@ -42,7 +42,6 @@ class Api::V1::UsersController < ApplicationController
     logger.info "followingアクションが発火"
     page = params[:page] || 1
     per_page = params[:per_page] || 10
-    # user  = User.find(params[:id])より変更。rescue節を使わずnullを返した方がエラー処理がシンプル
     user = User.find_by(id: params[:id])
     if user
       following_users = user.following.page(page).per(per_page)
@@ -97,8 +96,9 @@ class Api::V1::UsersController < ApplicationController
 
   # 5 ユーザーが特定のユーザーをフォローしているか確認するためのAPI
   def is_following
-    current_user = User.find(params[:id])
-    other_user = User.find(params[:other_id])
+    current_user = User.find_by(id: params[:id])
+    other_user = User.find_by(id: params[:other_id])
+    # is_followingは真偽値
     is_following = current_user.following?(other_user)
     render json: { status: '200', is_following: is_following }
   end
@@ -275,18 +275,15 @@ current_api_v1_user&.admin?として安全な参照を行います。
 is_following = current_user.following?(other_user)
 ------------------------------------------------------------------------------------------------
 フロントエンドでユーザーがあるユーザーをフォローしているかどうかを確認するには、APIを通じてバックエンドに問い合わせ
-るのが適切です。フロントエンドがその情報を保持するとなると、データの同期問題などが生じる可能性があります。
-
+るのが適切です。
 バックエンド側で、ユーザーが他のユーザーをフォローしているかどうかを確認するには、Userモデルの`following?`メソッ
 ドを使うのが適切です。`following?`メソッドは引数で渡されたユーザーが`following`リストに含まれるかを確認します。
-
 バックエンドのロジックは主にコントローラーに書くのが適切です。今回の場合、ユーザーが特定のユーザーをフォローしている
 か確認するためのAPIエンドポイントを作成するため、`users_controller.rb`にそのロジックを追加します。
 ------------------------------------------------------------------------------------------------
 フォローの状態はユーザーの一部の状態（属性）として考えることができます。したがって、特定のユーザーが他のユーザーをフ
 ォローしているかどうかを確認する操作は、ユーザーというリソースの一部を扱う操作と捉えることができます。
 それにより、users_controller.rbでその操作を処理するという選択がなされます。
-
 一般的にRESTfulな設計をする際、あるリソースに対する操作はそのリソースのコントローラーで行うのが基本です。しかし、実
 際の設計はビジネスロジックや開発チームの好みにより変わる可能性があります。従って、users_controller.rbか、あるいは
 relationships_controller.rbにその処理を書くかは設計次第です。そのため、どちらの方法も一般的によく見られます。

@@ -3,43 +3,44 @@ class Api::V1::HomePagesController < ApplicationController
 
   # 3 UserHomePageで取得するfeedをhomeアクションから取得
   def home
-      page = params[:page] || 1
-      per_page = params[:per_page] || 10
-      if params[:user_id]
-        # feed_itemはpostインスタンスの集合
-        # Post モデルに定義されている default_scope -> { order(created_at: :desc) } が適用されているため、投稿作成順
-        feed_posts = current_api_v1_user.feed.page(page).per(per_page)
-        # feed_postsにいいねしているかの真偽値を持たせる
-        feed_posts_with_likes_info = feed_posts.map do |post|
-          # いいねしているかの真偽値をlikedに代入
-          liked = current_api_v1_user.already_liked?(post)
-          likes_count = post.likes.count
-          # 2
-          post.as_json.merge(liked: liked, likes_count: likes_count)
-        end
-        feed_total_count = current_api_v1_user.feed.count
-        # 1 feed_postsのfeed_user_idsである事に注意
-        feed_user_ids = feed_posts.map(&:user_id).uniq
-        # feed_user_idsに紐づくuser情報を取得
-        feed_users = User.where(id: feed_user_ids)
-        # 各ユーザに対してgenerate_avatar_urlを実行し、as_jsonとmergeを使って、avatar_urlを含む新しいハッシュを生成
-        feed_users_with_avatar = feed_users.map do |user|
-          avatar_url = generate_avatar_url(user)
-          user.as_json.merge(avatar_url: avatar_url)
-        end
-        # 返り値:feed（1.feedPostの集合, 2.feedPost総数, 3.feedのuserIdに紐づくfeeduserの集合）
-        render json: {
-          status: '200',
-          # いいねしているかの真偽値を持たせたfeed
-          data: feed_posts_with_likes_info,
-          # feed_total_countはpaginationに必要
-          feed_total_count: feed_total_count,
-          # avatar情報付属したfeed_users
-          feed_users: feed_users_with_avatar
-        }, status: :ok
-      else
-        render json: { status: '404', message: 'ユーザーを取得出来ません' }, status: :not_found
+    page = params[:page] || 1
+    per_page = params[:per_page] || 10
+    if params[:user_id]
+      # feed_itemは指定1ページ当たりのpostインスタンスの集合
+      # Post モデルに定義されている default_scope -> { order(created_at: :desc) } が適用されているため、投稿作成順
+      feed_posts = current_api_v1_user.feed.page(page).per(per_page)
+      # feed_postsにいいねしているかの真偽値といいねの数を持たせる
+      feed_posts_with_likes_info = feed_posts.map do |post|
+        # いいねしているかの真偽値をlikedに代入
+        liked = current_api_v1_user.already_liked?(post)
+        likes_count = post.likes.count
+        # 2
+        post.as_json.merge(liked: liked, likes_count: likes_count)
       end
+      # feedの投稿総数
+      feed_total_count = current_api_v1_user.feed.count
+      # 1 feed_postsのfeed_user_idsである事に注意
+      feed_user_ids = feed_posts.map(&:user_id).uniq
+      # feed_user_idsに紐づくfeedのuser情報を取得
+      feed_users = User.where(id: feed_user_ids)
+      # 各ユーザに対してgenerate_avatar_urlを実行し、as_jsonとmergeを使って、avatar_urlを含む新しいハッシュを生成
+      feed_users_with_avatar = feed_users.map do |user|
+        avatar_url = generate_avatar_url(user)
+        user.as_json.merge(avatar_url: avatar_url)
+      end
+      # 返り値:feed（1.feedPostの集合, 2.feedPost総数, 3.feedのuserIdに紐づくfeeduserの集合）
+      render json: {
+        status: '200',
+        # いいねしているかの真偽値を持たせたfeed
+        data: feed_posts_with_likes_info,
+        # feed_total_countはpaginationに必要
+        feed_total_count: feed_total_count,
+        # avatar情報付属したfeed_users
+        feed_users: feed_users_with_avatar
+      }, status: :ok
+    else
+      render json: { status: '404', message: 'ユーザーを取得出来ませんでした' }, status: :not_found
+    end
   end
 end
 

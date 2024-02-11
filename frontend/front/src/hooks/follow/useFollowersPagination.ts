@@ -11,12 +11,15 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
   const [totalFollowersCount, setTotalFollowersCount] = useState(0);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
+  // loading状態の管理。loading中はtrue/解説はuseFollowingPaginationの2へ
+  const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
   // console.log(`OK:useFollowersPaginationのfollowers:${JSON.stringify(followers)}`);
 
   const handleGetFollowersByUserId = useCallback(
     async (page: number) => {
+      setIsLoading(true);
       try {
         const res = await getFollowersByUserId(page, itemsPerPage, userId);
         setFollowers(res.data.followers);
@@ -31,6 +34,9 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
         setTimeout(() => {
           router.push('/');
         }, 2000);
+      }finally {
+        // リクエスト完了後、ロードを停止する
+        setIsLoading(false);
       }
     },
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
@@ -47,5 +53,5 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
     setCurrentPage(selectedItem.selected);
   };
 
-  return { followers, totalFollowersCount, handlePageChange, currentPage };
+  return { followers, totalFollowersCount, handlePageChange, currentPage, isLoading };
 };

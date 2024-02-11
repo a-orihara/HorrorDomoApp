@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 type Data = {
   name: string
 }
-
+// 1
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
@@ -36,4 +36,8 @@ pages/apiフォルダ内にあるすべてのファイルは /api/* にマッピ
 サイドのみのバンドルです。
 
 API Routes では作成した関数は必ず export する必要があります。
+
+================================================================================================
+１
+. `/api/hello`にアクセスすると、Next.jsのAPIルーティングによりこの関数が発火する。
 */

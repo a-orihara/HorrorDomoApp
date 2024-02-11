@@ -29,7 +29,7 @@ export const getFollowingByUserId = async (page: number, itemsPerPage: number, u
   });
 };
 
-// ユーザーをフォローするAPI
+// 2 ユーザーをフォローするAPI
 export const createFollow = (otherUserId: number) => {
   return client.post(
     `/relationships`,
@@ -46,7 +46,7 @@ export const createFollow = (otherUserId: number) => {
   );
 };
 
-// ユーザーをフォロー解除するAPI
+// 3 ユーザーをフォロー解除するAPI
 export const deleteFollow = (otherUserId: number) => {
   return client.delete(`/relationships/${otherUserId}`, {
     params: {
@@ -143,4 +143,26 @@ Axiosのpostメソッドの第三引数のconfig部分には、リクエスト�
 このconfigオブジェクトのheadersプロパティには、HTTPリクエストヘッダに追加したい情報を指定します。
 headerの部分は、認証情報をHTTPヘッダとして送信するための設定です。これによりサーバ側で認証を行い、リクエストを正し
 く処理することができます。
+
+================================================================================================
+2
+Axiosのpostメソッド
+URL**：
+- client.post`の最初の引数は、リクエストを送信するURL文字列である。
+- 2番目の引数はリクエストボディとして送信するデータです。ここでは、単一のプロパティ `other_id` を持つオブジェクト
+を送信します。other_id`の値は変数 `otherUserId` に設定され、関数 `createFollow` に渡される。
+- 3番目の引数はリクエストの設定オブジェクトである。このオブジェクトには、リクエストに設定したい追加の設定やヘッダー
+が含まれます。
+
+================================================================================================
+3
+- Axiosのdeleteメソッドは引数が二つ。URLとConfig Object。
+------------------------------------------------------------------------------------------------
+- **Config Object**： 2番目の引数は、Axiosがリクエストをさらにカスタマイズするために使用するオプションの設定オ
+ブジェクトです。
+- params`： params`: リソース識別子はすでに URL に含まれているため、通常 DELETE リクエストでは使用されません
+が、おそらくサーバー側での追加処理のためにここで提供されます。このプロパティには `other_id: otherUserId` が含
+まれ、フォローを解除するユーザーのIDを冗長に指定します。
+- ヘッダ`： リクエストと共に送信されるHTTPヘッダを含む。これらのヘッダには、クッキーに保存された認証トークン (`'access-token'`, `client`, `uid`) が含まれる。これは、サーバーがクライアントのIDと権限を認識する必要がある認証済みのAPIコールに不可欠である。-
+
 */

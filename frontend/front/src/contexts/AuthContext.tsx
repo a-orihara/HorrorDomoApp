@@ -29,7 +29,7 @@ export const AuthContext = createContext<AuthContextProps | undefined>(undefined
 // @          @@          @@          @@          @@          @@          @@          @@          @
 // AuthContextのプロパティ、AuthContext.Providerを返すAuthProviderコンポーネント
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  // 3 ローディング中（ローディング中ならtrue）かどうかの状態を管理するステート
+  // 3 サインインのローディング中（ローディング中ならtrue）かどうかの状態を管理するステート
   const [loading, setLoading] = useState(true);
   // ログインしているかどうかの状態を管理するステート。初期値はfalse（サインインしていない）
   const [isSignedIn, setIsSignedIn] = useState(false);

@@ -25,6 +25,4 @@ flex付与されているheaderは、flex-rowというクラスも付与され�
 items-centerとjustify-aroundも付与されており、
 items-centerクラスによって、子要素であるh1要素とdiv要素が垂直方向の中央に配置され、
 justify-aroundクラスによって、子要素が均等に左右中央に配置されるようになります。
-
-
 */

@@ -46,7 +46,7 @@ RSpec.describe 'Api::V1::HomePages', type: :request do
 
       it 'エラーメッセージを返すこと' do
         json = response.parsed_body
-        expect(json['message']).to eq('ユーザーを取得出来ません')
+        expect(json['message']).to eq('ユーザーを取得出来ませんでした')
       end
     end
   end

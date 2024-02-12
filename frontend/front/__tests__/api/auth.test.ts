@@ -8,128 +8,108 @@ jest.mock('../../src/api/client');
 // 2
 jest.mock('js-cookie');
 
-// 3 すべてのテストの前にモックをリセット
-beforeEach(() => {
-  // 4 '../../src/api/client'内の各clientメソッドに対して
-  (client.get as jest.Mock).mockReset();
-  (client.post as jest.Mock).mockReset();
-  (client.delete as jest.Mock).mockReset();
-  // 5
-  (Cookies.get as jest.Mock).mockReset();
-  // 6 すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
-  (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
-});
-
-describe('signUp関数のテスト', () => {
+describe('Auth API Tests', () => {
   // 7 各テストで共通の変数を定義
   let mockResponse: { data: object };
-  // 8
-  let params: SignUpParams;
-
+  // 3 すべてのテストの前にモックをリセット
   beforeEach(() => {
-    // 9 mockResponseに空オブジェクトをセット
+    // 9
     mockResponse = { data: {} };
-    // 10 client.putの戻り値に空オブジェクトをセット
-    (client.post as jest.Mock).mockResolvedValue(mockResponse);
-    // 11
-    params = { name: 'test', email: 'test@example.com', password: 'password', passwordConfirmation: 'password' };
+    // 4 '../../src/api/client'内の各clientメソッドに対して
+    (client.get as jest.Mock).mockReset().mockResolvedValue(mockResponse);
+    // 10
+    (client.post as jest.Mock).mockReset().mockResolvedValue(mockResponse);
+    (client.delete as jest.Mock).mockReset().mockResolvedValue(mockResponse);
+    // 5 6 すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
+    (Cookies.get as jest.Mock).mockReset().mockImplementation((key: string) => `mock_${key}`);
   });
 
-  it('client.postが正しいパスで呼ばれる', async () => {
-    await signUp(params);
-    // 12
-    expect(client.post).toHaveBeenCalledWith('/auth', params);
-  });
+  describe('signUp関数のテスト', () => {
+    // 8
+    let params: SignUpParams;
+    beforeEach(() => {
+      // 11
+      params = { name: 'test', email: 'test@example.com', password: 'password', passwordConfirmation: 'password', confirmSuccessUrl: "http://localhost:3001/signin" };
+    });
 
-  it('signUpの戻り値がclient.postのモックから返された値と一致しているか確認', async () => {
-    const result = await signUp(params);
-    // 13
-    expect(result).toEqual(mockResponse);
-  });
-});
+    // 12.1
+    it('client.postが正しいパスで呼ばれる', async () => {
+      await signUp(params);
+      // 12.2 signUp(params)に対してのテスト
+      expect(client.post).toHaveBeenCalledWith('/auth', params);
+    });
 
-describe('signIn関数のテスト', () => {
-  // 各テストで共通の変数を定義
-  let mockResponse: { data: object };
-  let params: SignInParams;
-
-  beforeEach(() => {
-    mockResponse = { data: {} };
-    (client.post as jest.Mock).mockResolvedValue(mockResponse);
-    params = { email: 'test@example.com', password: 'password' };
-  });
-
-  it('client.postが正しいパスとパラメータで呼ばれる', async () => {
-    await signIn(params);
-    expect(client.post).toHaveBeenCalledWith('/auth/sign_in', params);
-  });
-
-  it('signInの戻り値がclient.postのモックから返された値と一致しているか確認', async () => {
-    const result = await signIn(params);
-    expect(result).toEqual(mockResponse);
-  });
-});
-
-describe('signOut関数のテスト', () => {
-  // 各テストで共通の変数を定義
-  let mockResponse: { data: object };
-
-  beforeEach(() => {
-    mockResponse = { data: {} };
-    (client.delete as jest.Mock).mockResolvedValue(mockResponse);
-    // 14
-    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
-  });
-
-  it('client.deleteが正しいパスとヘッダーで呼ばれる', async () => {
-    await signOut();
-    // 15
-    expect(client.delete).toHaveBeenCalledWith('/auth/sign_out', {
-      headers: {
-        // `mock_${key}` は、Cookies.get が呼ばれたときに返す値を示しています。
-        'access-token': 'mock__access_token',
-        client: 'mock__client',
-        uid: 'mock__uid',
-      },
+    // 13.1
+    it('signUpの戻り値がclient.postのモックから返された値と一致しているか確認', async () => {
+      const result = await signUp(params);
+      // 13.2
+      expect(result).toEqual(mockResponse);
     });
   });
 
-  it('signOutの戻り値がclient.deleteのモックから返された値と一致しているか確認', async () => {
-    const result = await signOut();
-    expect(result).toEqual(mockResponse);
-  });
-});
+  describe('signIn関数のテスト', () => {
+    let params: SignInParams;
 
-describe('getAuthenticatedUser関数のテスト', () => {
-  let mockResponse: { data: object };
+    beforeEach(() => {
+      params = { email: 'test@example.com', password: 'password' };
+    });
 
-  beforeEach(() => {
-    mockResponse = { data: {} };
-    (client.get as jest.Mock).mockResolvedValue(mockResponse);
-    (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
-  });
+    it('client.postが正しいパスとパラメータで呼ばれる', async () => {
+      await signIn(params);
+      expect(client.post).toHaveBeenCalledWith('/auth/sign_in', params);
+    });
 
-  it('認証情報が存在する場合、client.getが正しいパスとヘッダーで呼ばれる', async () => {
-    await getAuthenticatedUser();
-    expect(client.get).toHaveBeenCalledWith('/authenticated_users', {
-      headers: {
-        'access-token': 'mock__access_token',
-        client: 'mock__client',
-        uid: 'mock__uid',
-      },
+    it('signInの戻り値がclient.postのモックから返された値と一致しているか確認', async () => {
+      const result = await signIn(params);
+      expect(result).toEqual(mockResponse);
     });
   });
 
-  it('getAuthenticatedUserの戻り値がclient.getのモックから返された値と一致しているか確認', async () => {
-    const result = await getAuthenticatedUser();
-    expect(result).toEqual(mockResponse);
+  describe('signOut関数のテスト', () => {
+
+    it('client.deleteが正しいパスとヘッダーで呼ばれる', async () => {
+      await signOut();
+      // 15
+      expect(client.delete).toHaveBeenCalledWith('/auth/sign_out', {
+        headers: {
+          // `mock_${key}` は、Cookies.get が呼ばれたときに返す値を示しています。
+          'access-token': 'mock__access_token',
+          'client': 'mock__client',
+          'uid': 'mock__uid',
+        },
+      });
+    });
+
+    it('signOutの戻り値がclient.deleteのモックから返された値と一致しているか確認', async () => {
+      const result = await signOut();
+      expect(result).toEqual(mockResponse);
+    });
   });
 
-  it('認証情報が存在しない場合、client.getは呼ばれない', async () => {
-    // undefinedを返すので、(key: string)の引数はいらない
-    (Cookies.get as jest.Mock).mockImplementation(() => undefined);
-    await getAuthenticatedUser();
-    expect(client.get).not.toHaveBeenCalled();
+  describe('getAuthenticatedUser関数のテスト', () => {
+
+    it('認証情報が存在する場合、client.getが正しいパスとヘッダーで呼ばれる', async () => {
+      await getAuthenticatedUser();
+      expect(client.get).toHaveBeenCalledWith('/authenticated_users', {
+        headers: {
+          'access-token': 'mock__access_token',
+          'client': 'mock__client',
+          'uid': 'mock__uid',
+        },
+      });
+    });
+
+    it('getAuthenticatedUserの戻り値がclient.getのモックから返された値と一致しているか確認', async () => {
+      const result = await getAuthenticatedUser();
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('認証情報が存在しない場合、client.getは呼ばれない', async () => {
+      // undefinedを返すので、(key: string)の引数はいらない
+      (Cookies.get as jest.Mock).mockImplementation(() => undefined);
+      await getAuthenticatedUser();
+      expect(client.get).not.toHaveBeenCalled();
+    });
   });
 });
 
@@ -167,10 +147,28 @@ describe('getAuthenticatedUser関数のテスト', () => {
 
 ================================================================================================
 6
+- アプリケーションのコンテキストでは、/src/api/auth.tsの実際の関数`signOut` と `getAuthenticatedUser` の
+両方の関数が `Cookies.get` を利用して、認証トークンとクッキーに格納されたその他の情報を取得します。
+`Cookies.get` が予測可能な値（この場合は `mock_${key}`）を返すようにモックすることで、実際の関数`signOut` と
+`getAuthenticatedUser` をテストの中で使用する際、テストが予測可能に実行され、制御された条件下でこれらの関数の動
+作を検証できるようになります。`signOut` と `getAuthenticatedUser` が正しく動作するためには `Cookies.get` 
+を使用するので、このモッキングは確かに有効です。
+------------------------------------------------------------------------------------------------
 . `(Cookies.get as jest.Mock).mockImplementation((key: string) => \`mock_${key}\`);`
-- `Cookies.get` 関数のモック挙動を新しく設定します。
-- このモックが呼び出されたら、引数 `key` を使って `mock_${key}` 文字列を返す。
-- これにより、実際に Cookie を読みに行かず、テストが制御できる状態にする。
+- mockImplementationは、Jestのモッキング機能の一部で、モック関数の実装をカスタマイズするために使用される。これ
+を利用することで、テスト中に特定の関数が呼び出された場合の振る舞いを模擬的に定義できる。関数が返す値や、受け取る引数
+に基づいた処理を模擬的に設定することが可能になる。
+------------------------------------------------------------------------------------------------
+. **(Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);の詳細解説**
+- このコード行は、`Cookies.get`メソッドをモック化し、その挙動をカスタマイズしている。
+- `(Cookies.get as jest.Mock)`は、`Cookies.get`関数がJestのモック関数として扱われるように型アサーションを使
+用している。
+- `.mockImplementation((key: string) => \`mock_${key}\`)`は、`Cookies.get`が呼び出された時に、引数とし
+て渡された`key`を使って`mock_${key}`という文字列を返すように実装を上書きしている。
+- この挙動により、テスト中に`Cookies.get`が呼ばれた際には、実際のCookieの値を参照する代わりに、予測可能で一貫性
+のある値を返すことができる。これは、外部の状態に依存しないテストを実現するために重要。
+- 例えば、`Cookies.get('_access_token')`が呼ばれた場合、`mock__access_token`という文字列が返される。これに
+より、認証トークンの具体的な値に依存することなく、テストを実行することが可能になる。
 
 ================================================================================================
 7
@@ -209,14 +207,44 @@ describe('getAuthenticatedUser関数のテスト', () => {
 - 解説: `params`変数にテストで使用するダミーのユーザー情報を格納。これを`signUp`関数に渡して動作をテスト。
 
 ================================================================================================
-12
+12.1
+. **テストの `it` ブロック内での操作の順番について:**.
+await signUp(params);
+expect(client.post).toHaveBeenCalledWith('/auth', params);
+------------------------------------------------------------------------------------------------
+Jest  (あるいはほとんどのテストフレームワーク) の `it` ブロックの構造は、次のようなパターンに従っています：
+- テスト対象の関数を実行する:** ここで、テスト対象の関数を引数とともに呼び出します。
+- 期待される結果を保証する:** 実行後、期待される動作や結果を保証します。
+-  この順序により、テストは、最初にテスト対象のシナリオを設定し実行し、次にシナリオが期待通りに実行されたことを検証
+します
+
+================================================================================================
+12.2
+. **`toHaveBeenCalledWith`の解説**
+- `toHaveBeenCalledWith` は Jestにおけるマッチャーの一つで、特定の関数が期待される引数で呼び出されたかどうかを
+検証するために使用。このマッチャーを使用することで、テスト中にモック関数（この場合は `client.post`）が特定のパラ
+メータで正確に一度呼び出されたことを確認できます。正確に `'/auth'` というエンドポイントと、`params` というオブ
+ジェクトで呼び出されたことを検証します。
+------------------------------------------------------------------------------------------------
 . `expect(client.post).toHaveBeenCalledWith('/auth', params);`
 - 意図: `signUp`関数内で`client.post`が期待通りの引数で呼び出されたかを確認。
 - 解説: Jestのマッチャーを使用して`client.post`が`'/auth'`というパスと`params`という引数で呼び出されたか確認。
 これにより、関数が正確にAPIエンドポイントにデータを送っているかをテスト。
 
 ================================================================================================
-13
+13.1
+このテストは、`signUp` 関数が `client.post` メソッドを呼び出した際に、モックから返されたレスポンス（`mockResponse`）
+が実際の関数の戻り値として受け取れるかを検証します。これにより、2つの主な目的が達成されます：
+- **API呼び出しの結果のハンドリングが正しいことを検証する：** このテストでは、`signUp` 関数が内部で使用する
+`client.post` メソッドが期待どおりのレスポンスを返し、それを関数の戻り値として適切に扱えることを確認します。これ
+により、APIからのレスポンスがアプリケーションによって正しく処理されることを保証します。
+- **関数の副作用が期待通りに発生することを検証する：** 特に非同期処理（例えばAPIコール）を伴う関数では、その関数が
+想定通りの副作用（この場合はHTTPリクエストの送信）を引き起こし、期待される結果を返すことが非常に重要です。このテスト
+は、そのような副作用が正確に発生し、適切なレスポンスデータが得られることを確認するために行われます。
+- このテストの意図は、関数の信頼性と、外部システムとのインテグレーションポイントの正確性が保証されます。
+
+================================================================================================
+13.2
 - `mockResponse`の使用理由:
 - 単体テストでは、外部の依存関係（この場合はAPIサーバー）に依存しないようにするのが一般的です。
 - `mockResponse`を使うことで、APIからの戻り値を模倣（モック）して、テストがその値に依存する動作を確認できます。

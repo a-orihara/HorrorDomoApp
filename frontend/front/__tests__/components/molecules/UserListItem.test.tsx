@@ -27,6 +27,15 @@ const mockUser = {
 };
 
 describe('UserListItem', () => {
+  beforeEach(() => {
+    // 4.2 5
+    mockUseAuthContext.mockReturnValue({
+      currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
+    });
+    // 4.3 handleDeleteUserという関数を返す
+    mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
+  });
+
   // 3
   afterEach(() => {
     jest.clearAllMocks();
@@ -34,33 +43,18 @@ describe('UserListItem', () => {
 
   // 4.1
   it('listがレンダリングされる', () => {
-    // 4.2
-    mockUseAuthContext.mockReturnValue({
-      currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
-    });
-    // 4.3 handleDeleteUserという関数を返す
-    mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
     render(<UserListItem user={mockUser} />);
     // `listitem`という役割を持つ要素がドキュメントに存在するかどうかをチェック
     expect(screen.getByRole('listitem')).toBeInTheDocument();
   });
 
   it('ユーザーの名前が表示される', () => {
-    // 5
-    mockUseAuthContext.mockReturnValue({
-      currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
-    });
-    mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
     render(<UserListItem user={mockUser} />);
     // テキスト 'Test User' を含む要素がドキュメント内に存在することを検証
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
   it('Linkコンポーネントのhrefが正しく設定されている', () => {
-    mockUseAuthContext.mockReturnValue({
-      currentUser: { id: 2, name: 'Other User', email: 'other@user.com', admin: false },
-    });
-    mockUseDeleteUser.mockReturnValue({ handleDeleteUser: jest.fn() });
     render(<UserListItem user={mockUser} />);
     // 7 リンクの一部としてユーザの名前が表示されているだけでなく、リンクが期待されるURLを正しく指しているかも検証
     expect(screen.getByText('Test User').closest('a')).toHaveAttribute('href', '/users/1');

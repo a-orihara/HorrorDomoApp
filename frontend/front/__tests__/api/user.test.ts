@@ -3,41 +3,33 @@ import { client } from '../../src/api/client';
 import { getUserById, updateUser, userDelete, userIndex } from '../../src/api/user';
 
 // 1
-
-// 2
-// clientとCookiesのモジュール全体をモック化。モック関数は戻り値を指定しないとundefined。
-// モジュールからエクスポートされているもののみモック化
+// 2 clientとCookiesのモジュール全体をモック化。モック関数は戻り値を指定しないとundefined。
 jest.mock('../../src/api/client');
 jest.mock('js-cookie');
+// グローバルスコープで定義。必要であればモックレスポンスのデータをリセットする。
+let mockResponse = { data: {} };
 
 // 8 すべてのテストに対応するグローバル設定
 beforeEach(() => {
-  (client.get as jest.Mock).mockReset();
+  (client.get as jest.Mock).mockReset().mockResolvedValue(mockResponse);
   // 3 テストのたびにモックをリセット
-  (client.delete as jest.Mock).mockReset();
-  (client.put as jest.Mock).mockReset();
+  (client.delete as jest.Mock).mockReset().mockResolvedValue(mockResponse);
+  (client.put as jest.Mock).mockReset().mockResolvedValue(mockResponse);
   (Cookies.get as jest.Mock).mockReset();
   // 4 すべてのテストに共通のモッキング:元々の使い方:Cookies.get('_access_token')
   (Cookies.get as jest.Mock).mockImplementation((key: string) => `mock_${key}`);
+  // 5 mockResponseのデータをリセット
+  mockResponse = { data: {} };
 });
 
 describe('updateUser関数のテスト', () => {
-  // 各テストで共通の変数を定義
-  let mockResponse: { data: object };
-  let formData: any;
-
-  beforeEach(() => {
-    // mockResponseに空オブジェクトをセット
-    mockResponse = { data: {} };
-    // client.putの戻り値に空オブジェクトをセット
-    (client.put as jest.Mock).mockResolvedValue(mockResponse);
-    formData = { name: 'test' };
-  });
+  // テストで共通の変数を定義
+  const formData = { name: 'test' };
 
   it('client.putが正しいパスで呼ばれる', async () => {
     // このupdateUser内のclient.putの戻り値は、{ data: {} }
     await updateUser(formData);
-    // 4.1
+    // 4.1 await updateUser(formData)に対するテスト
     expect(client.put).toHaveBeenCalledWith('/auth', formData, expect.anything());
   });
   it('client.putが正しいヘッダーで呼ばれる', async () => {
@@ -45,8 +37,8 @@ describe('updateUser関数のテスト', () => {
     expect(client.put).toHaveBeenCalledWith(expect.anything(), expect.anything(), {
       headers: {
         'access-token': 'mock__access_token',
-        client: 'mock__client',
-        uid: 'mock__uid',
+        'client': 'mock__client',
+        'uid': 'mock__uid',
       },
     });
   });
@@ -57,17 +49,8 @@ describe('updateUser関数のテスト', () => {
 });
 
 describe('userDelete関数のテスト', () => {
-  // 7 各テストで共通の変数を定義
-  let mockResponse: { data: object };
-  let testUserId: number;
-  // 8
-  beforeEach(() => {
-    // 5
-    mockResponse = { data: {} };
-    (client.delete as jest.Mock).mockResolvedValue(mockResponse);
-    // テストユーザーIDを設定する
-    testUserId = 1;
-  });
+  // 7 テストで共通の変数を定義
+  const testUserId = 1;
 
   it('client.deleteが正しいパスで呼ばれる', async () => {
     // 6
@@ -102,16 +85,8 @@ describe('userDelete関数のテスト', () => {
 });
 
 describe('userIndex関数のテスト', () => {
-  let mockResponse: { data: object };
-  let page: number;
-  let itemsPerPage: number;
-
-  beforeEach(() => {
-    mockResponse = { data: {} };
-    (client.get as jest.Mock).mockResolvedValue(mockResponse);
-    page = 0;
-    itemsPerPage = 5;
-  });
+  const page = 0;
+  const itemsPerPage = 5;
 
   it('client.getが正しいパスとパラメータで呼ばれる', async () => {
     await userIndex(page, itemsPerPage);
@@ -134,8 +109,8 @@ describe('userIndex関数のテスト', () => {
       expect.objectContaining({
         headers: {
           'access-token': 'mock__access_token',
-          client: 'mock__client',
-          uid: 'mock__uid',
+          'client': 'mock__client',
+          'uid': 'mock__uid',
         },
       })
     );
@@ -148,13 +123,7 @@ describe('userIndex関数のテスト', () => {
 });
 
 describe('getUserById関数のテスト', () => {
-  let mockResponse: { data: object };
-  let testUserId: number;
-  beforeEach(() => {
-    mockResponse = { data: {} };
-    (client.get as jest.Mock).mockResolvedValue(mockResponse);
-    testUserId = 1;
-  });
+  const testUserId = 1;
 
   it('client.getが正しいパスで呼ばれる', async () => {
     await getUserById(testUserId);
@@ -166,8 +135,8 @@ describe('getUserById関数のテスト', () => {
     expect(client.get).toHaveBeenCalledWith(expect.anything(), {
       headers: {
         'access-token': 'mock__access_token',
-        client: 'mock__client',
-        uid: 'mock__uid',
+        'client': 'mock__client',
+        'uid': 'mock__uid',
       },
     });
   });
@@ -200,6 +169,8 @@ jest.spyOn`は特定のオブジェクトのメソッドをスパイし、その
 
 ================================================================================================
 2
+モジュールからエクスポートされているもののみモック化
+------------------------------------------------------------------------------------------------
 jest.mock('../../src/api/client');で、api/clientをモック化する理由。
 モック化する理由は、実際のAPIへのリクエストを行わずにテストを実行するためです。
 テスト中に実際のAPIへリクエストを行うと、ネットワークの問題やAPIサーバの問題でテストが失敗する可能性があります。そ
@@ -264,6 +235,10 @@ userDelete関数の実行結果は変数に取得せず、ただ関数が終了�
 
 ================================================================================================
 7
+以前の処理
+let mockResponse: { data: object };
+let testUserId: number;
+------------------------------------------------------------------------------------------------
 let を使用する理由は、変数 mockResponse が beforeEach ブロック内で再代入されるためです。各テスト実行前に
 mockResponse は新しいオブジェクト { data: {} } に再代入されます。一方、 const は一度定義すると再代入できない
 ため、このケースでは使用できません。testUserIdも同じ。
@@ -276,13 +251,13 @@ mockResponse は新しいオブジェクト { data: {} } に再代入されま�
 テストの準備を行う: 一部のテストが必要とする特定の状態を設定するために使います。
 ------------------------------------------------------------------------------------------------
 上記のコードにおける `beforeEach` の挙動は次のとおり。
-1. `client.delete` と `Cookies.get` のモックをリセットします。これにより、テスト間でモックの呼び出し状態が共
+. `client.delete` と `Cookies.get` のモックをリセットします。これにより、テスト間でモックの呼び出し状態が共
 有されることを防ぎます。
-2. `Cookies.get` メソッドのモックを設定します。これにより、各テストで `Cookies.get` が呼び出されるたびに、渡さ
+. `Cookies.get` メソッドのモックを設定します。これにより、各テストで `Cookies.get` が呼び出されるたびに、渡さ
 れたキーに対して `mock_` が付いた文字列を返します。
-3. `mockResponse` に空のオブジェクトを設定し、それを `client.delete` の戻り値として設定します。これにより、各
+. `mockResponse` に空のオブジェクトを設定し、それを `client.delete` の戻り値として設定します。これにより、各
 テストで `client.delete` が呼び出されるたびに、指定した `mockResponse` が返されます。
-4. テストで使用する `testUserId` を `1` に設定します。これにより、各テストで同一のユーザーIDを用いることができま
+. テストで使用する `testUserId` を `1` に設定します。これにより、各テストで同一のユーザーIDを用いることができま
 す。
 
 ================================================================================================

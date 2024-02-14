@@ -5,6 +5,9 @@ name: Run Jest
 #     branches: [main]
 on:
   push:
+    branches-ignore:
+      - "main"
+    workflow_call:
 
 # ジョブ。一つのjob内の全てのstepは同じVM内で実行される。
 jobs:

@@ -10,7 +10,7 @@ on:
     branches-ignore:
       - "main"
     # 3.6
-    workflow_call:
+  workflow_call:
 
 # 3.4 envセクションはGitHub Actionsワークフロー内で使用される環境変数を設定するためのセクション
 env:

@@ -33,11 +33,11 @@ defaults:
 jobs:
 # 2.6
   backend-ci:
-    uses: .github/workflows/ci-backend.yml
+    uses: ./.github/workflows/ci-backend.yml
 
 # 2.7
   frontend-ci:
-    uses: .github/workflows/ci-frontend.yml
+    uses: ./.github/workflows/ci-frontend.yml
 
   # jobsのマップのキー（<job_id>）。すなわちid。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   preview:

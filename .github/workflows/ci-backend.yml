@@ -11,6 +11,9 @@ on:
       - "main"
     # 3.6
   workflow_call:
+    secrets:
+      EMAIL_ADDRESS:
+        required: true
 
 # 3.4 envセクションはGitHub Actionsワークフロー内で使用される環境変数を設定するためのセクション
 env:

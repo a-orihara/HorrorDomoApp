@@ -28,7 +28,7 @@ env:
   DOMAIN: "horror-domo-app.com"
   RDS_INSTANCE_NAME: "portfolio-mysql-rds-instance"
   # EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-  TMDB_API: ${{ secrets.TMDB_API }}
+  # TMDB_API: ${{ secrets.TMDB_API }}
 
 # 全てのjobに対するデフォルト動作を設定
 defaults:

@@ -7,11 +7,6 @@ on:
       - main
   # 1.3
   workflow_dispatch:
-  # workflow_run:
-  #   workflows: ["Run Rspec and Rubocop", "Run Jest"]
-  #   branches: [main]
-  #   types:
-  #     - completed
 
 # 2 git hubとawsを連携させるのに必要。git hub実行に際して二つ許可する。
 permissions:
@@ -27,8 +22,7 @@ env:
   # アプリのドメイン名
   DOMAIN: "horror-domo-app.com"
   RDS_INSTANCE_NAME: "portfolio-mysql-rds-instance"
-  # EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-  # TMDB_API: ${{ secrets.TMDB_API }}
+
 
 # 全てのjobに対するデフォルト動作を設定
 defaults:
@@ -41,6 +35,7 @@ jobs:
 # 2.6
   backend-ci:
     uses: ./.github/workflows/ci-backend.yml
+    # 2.9
     secrets:
       EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
 
@@ -430,6 +425,20 @@ jobs:
 # と `frontend-ci` の両方のジョブの完了に依存していることを指定。つまり`backend-ci` と `frontend-ci` の両方の
 # ジョブが正常に完了した後に開始される。(CI) チェックがパスした場合にのみ (CD) プロセスが進行し、デプロイパイプライ
 # ンの品質と安定性が維持されます。
+
+# ================================================================================================
+# 2.9
+# - secretsは、job実行の際のsecretを指定する。
+# ------------------------------------------------------------------------------------------------
+#  - jobsのbackend-ciの設定内で、`secrets： EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}` 行は
+# `EMAIL_ADDRESS` のシークレットがジョブに渡されることを示します。このジョブは特定のワークフローファイル
+# （`.github/workflows/ci-backend.yml`）を使用し、その実行には `EMAIL_ADDRESS` のシークレットが必要。
+#  - この設定により、`backend-ci` ジョブの一部として `ci-backend.yml` ワークフローが実行されたときに、リポジト
+# リレベルで定義された `EMAIL_ADDRESS` シークレットファイルが利用できるようになります。
+# ------------------------------------------------------------------------------------------------
+# - ワークフローが `workflow_call` を通して他のワークフローから呼び出される（トリガーされる）場合、どのシークレッ
+# トが必要かを指定することができる。呼び出されたワークフロー（`backend-ci`）は、これらのシークレットを提供しなけれ
+# ばならない。
 
 # ================================================================================================
 # 3

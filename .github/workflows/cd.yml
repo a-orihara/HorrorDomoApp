@@ -27,6 +27,7 @@ env:
   # アプリのドメイン名
   DOMAIN: "horror-domo-app.com"
   RDS_INSTANCE_NAME: "portfolio-mysql-rds-instance"
+  EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
 
 # 全てのjobに対するデフォルト動作を設定
 defaults:

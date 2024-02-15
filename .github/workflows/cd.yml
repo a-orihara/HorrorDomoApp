@@ -2,11 +2,16 @@
 name: "cd"
 
 on:
-  push:
-    branches:
-      - main
-  # 1.3
-  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # # 1.3
+  # workflow_dispatch:
+  workflow_run:
+    workflows: ["Run Rspec and Rubocop", "Run Jest"]
+    branches: [main]
+    types:
+      - completed
 
 # 2 git hubとawsを連携させるのに必要。git hub実行に際して二つ許可する。
 permissions:
@@ -32,12 +37,12 @@ defaults:
 
 jobs:
 # 2.6
-  backend-ci:
-    uses: ./.github/workflows/ci-backend.yml
+  # backend-ci:
+  #   uses: .github/workflows/ci-backend.yml
 
 # 2.7
-  frontend-ci:
-    uses: ./.github/workflows/ci-frontend.yml
+  # frontend-ci:
+  #   uses: .github/workflows/ci-frontend.yml
 
   # jobsのマップのキー（<job_id>）。すなわちid。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   preview:

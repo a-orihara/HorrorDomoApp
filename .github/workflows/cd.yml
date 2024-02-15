@@ -1,5 +1,5 @@
 # 1.1
-name: "cd"
+name: CD
 
 on:
   push:

@@ -31,7 +31,7 @@ resource "aws_lb_target_group" "alb_tg" {
     # ターゲットが正常であると見なされるまでの連続した正常な応答の回数を指定
     healthy_threshold = 5
     # ヘルスチェックを実行する間隔（秒単位）を指定
-    interval = 30
+    interval = 300
     # ヘルスチェックの応答と比較するステータスコードを指定
     matcher = "200"
     # ヘルスチェックリクエストのパスを指定
@@ -73,7 +73,7 @@ resource "aws_lb_target_group" "frontend_alb_tg" {
   health_check {
     enabled             = true
     healthy_threshold   = 5
-    interval            = 30
+    interval            = 300
     matcher             = "200"
     path                = "/api/health_check"
     port                = "traffic-port"

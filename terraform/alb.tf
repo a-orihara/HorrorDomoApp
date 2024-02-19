@@ -4,7 +4,7 @@
 # ------------------------------------------------------------------------------------------------
 # 1 alb
 resource "aws_lb" "alb" {
-  desync_mitigation_mode = "defensive"
+  desync_mitigation_mode           = "defensive"
   drop_invalid_header_fields       = false
   enable_cross_zone_load_balancing = true
   enable_deletion_protection       = false
@@ -30,7 +30,7 @@ resource "aws_lb" "alb" {
 # ------------------------------------------------------------------------------------------------
 # frontend_alb
 resource "aws_lb" "frontend_alb" {
-  desync_mitigation_mode = "defensive"
+  desync_mitigation_mode           = "defensive"
   drop_invalid_header_fields       = false
   enable_cross_zone_load_balancing = true
   enable_deletion_protection       = false
@@ -77,9 +77,9 @@ resource "aws_lb_listener" "alb_listener_https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   # ACMの証明書を設定
-  certificate_arn   = aws_acm_certificate.acm_cert.arn
-  tags              = {}
-  tags_all          = {}
+  certificate_arn = aws_acm_certificate.acm_cert.arn
+  tags            = {}
+  tags_all        = {}
   default_action {
     # order            = 0
     target_group_arn = aws_lb_target_group.alb_tg.arn

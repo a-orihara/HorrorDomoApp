@@ -27,7 +27,7 @@ resource "aws_s3_bucket" "portfolio_tfstate_s3_bucket" {
 resource "aws_s3_bucket_request_payment_configuration" "rails_active_strage_s3_bucket_payment" {
   bucket = aws_s3_bucket.rails_active_strage_s3_bucket.bucket
   # S3 バケットを所有する AWS アカウントがS3のコストを負担する
-  payer  = "BucketOwner"
+  payer = "BucketOwner"
 }
 
 # ------------------------------------------------------------------------------------------------

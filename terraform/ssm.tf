@@ -12,9 +12,9 @@ resource "aws_ssm_parameter" "ssm_parameter" {
   tags_all    = {}
   tier        = "Standard"
   # 1.3
-  type        = "String"
+  type = "String"
   # terraform/terraform.tfvarsより取得
-  value       = var.rails_master_key
+  value = var.rails_master_key
 }
 
 /*

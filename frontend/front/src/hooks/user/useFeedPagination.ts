@@ -13,6 +13,8 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 指定idユーザーのfeedのusers
   const [feedUsers, setFeedUsers] = useState<User[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  // loading状態の管理。loading中はtrue
+  const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
@@ -20,6 +22,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   // 引数pageは、ページネーションで選択したページ。
   const handleGetUserFeed = useCallback(
     async (page: number) => {
+      setIsLoading(true);
       try {
         // 1 ユーザーのフィード情報を取得
         const res = await getUserFeed(page, itemsPerPage, userId);
@@ -35,6 +38,9 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
         setTimeout(() => {
           router.push('/');
         }, 2000);
+      }finally {
+        // リクエスト完了後、ロードを停止する
+        setIsLoading(false);
       }
     },
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
@@ -50,7 +56,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, currentPage };
+  return { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, currentPage, isLoading };
 };
 
 /*

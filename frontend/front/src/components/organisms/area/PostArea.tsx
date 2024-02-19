@@ -12,8 +12,10 @@ type PostAreaProps = {
 const PostArea = ({ user }: PostAreaProps) => {
   // 指定userIdのlikedPost一覧, likedPost総数, likedUser一覧, ページ変更関数を取得
   // この10は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
-  const { posts, totalPostsCount, handlePageChange } = usePostsPagination(10, user.id);
-
+  const { posts, totalPostsCount, handlePageChange, isLoading } = usePostsPagination(10, user.id);
+  if (isLoading) {
+    return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
+  }
   return (
     <div>
       {/* 1 */}

@@ -64,7 +64,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
           timeout = 5
         }
         # ECSタスクで実行されるコンテナのDockerイメージを指定
-        # image = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod"
+        # 1.4 image = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod"
         image = aws_ecr_repository.rails_img_prod.repository_url
         # コンテナのログ設定を指定するためのセクション
         logConfiguration = {
@@ -95,7 +95,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
         # コンテナのポートマッピングを指定する設定
         portMappings = [
           {
-            # アプリケーションの通信プロトコルを指定
+            # アプリケーション（コンテナ）の通信プロトコルを指定
             appProtocol = "http"
             # コンテナ内のポート番号を指定
             containerPort = 3000
@@ -275,16 +275,12 @@ resource "aws_ecs_service" "fargate_service" {
   enable_execute_command = true
   # 健康チェックの許容期間を秒単位で指定
   health_check_grace_period_seconds = 0
-  # サービスが使用するIAMロールの名前を指定
-  # iam_role = "aws-service-role"
   # サービスが使用する起動タイプを指定
   launch_type = "FARGATE"
   # サービスの名前を指定
   name = "portfolio-fargate-service"
   # サービスが使用するFargateプラットフォームのバージョンを指定
   platform_version = "1.4.0"
-  # ECSサービスがタグを伝播する方法を指定
-  # propagate_tags                     = "NONE"
   # タスクのスケジューリング戦略を指定。"REPLICA"：タスクの数を指定されたレプリカ数に保つことを意味。
   scheduling_strategy = "REPLICA"
   # サービスに関連付けるタグを指定
@@ -342,11 +338,9 @@ resource "aws_ecs_service" "fargate_service_frontend" {
   enable_ecs_managed_tags            = true
   enable_execute_command             = false
   health_check_grace_period_seconds  = 0
-  # iam_role                           = "aws-service-role"
   launch_type      = "FARGATE"
   name             = "portfolio-fargate-service-frontend"
   platform_version = "LATEST"
-  # propagate_tags                     = "NONE"
   scheduling_strategy = "REPLICA"
   tags                = {}
   tags_all            = {}
@@ -409,6 +403,12 @@ terraform import aws_ecs_cluster.ecs-on-fargate-cluster portfolio-ecs-on-fargate
 なり、ECSクラスター内のコンテナに関する詳細なパフォーマンスデータが収集されないようになります。
 
 ================================================================================================
+1.4
+- `aws_ecr_repository.rails_img_prod.repository_url`の`repository_url` 属性は、ECR リポジトリの作成時
+に AWS によって動的に生成されるため、"aws_ecr_repository"リソースブロック内で設定していなくても使用できます。
+- `aws_ecr_repository`リソースに明示的に `repository_url` を設定することはありませんが、Terraform は 
+`repository_url` をリソース作成後に参照できる属性として理解します。
+================================================================================================
 2
 terraform import aws_ecs_task_definition.<name> <タスク定義のarn>
 実際の例：
@@ -416,6 +416,21 @@ terraform import aws_ecs_task_definition.fargate_task_definition arn:aws:ecs:ap-
 
 ================================================================================================
 2.1
+. **コンテナにアタッチされた IAM ロールが付与する権限:**.
+- タスク定義の `execution_role_arn` を通じてコンテナにアタッチされた IAM ロール
+`portfolio_ecs_task_execution_role` は、ユーザーに代わって AWS サービスを呼び出す権限を ECS タスクに付与す
+る。
+- AmazonS3FullAccess:** Amazon S3 へのフルアクセスを許可し、タスクが S3 バケット内のオブジェクトをアップロー
+ド、ダウンロード、削除できるようにする。
+- AmazonSSMFullAccess:** AWS Systems Manager へのフルアクセスを許可し、タスクが SSM パラメータとやり取り
+できるようにします。
+- CloudWatchAgentServerPolicy:**タスクが監視とロギング目的でCloudWatchとやり取りできるようにします。タスク
+はログをCloudWatchにプッシュすることができ、ログの一元管理を可能にする。
+- AmazonECSTaskExecutionRolePolicy:** ECRからのDockerイメージのプルやCloudWatchへのログの保存など、ECSタ
+スクの実行に必要なパーミッションを提供します。
+- ポリシードキュメント `iam_policy_document` は、ECSタスク（`ecs-tasks.amazonaws.com`）がこのロールを引き
+受けることを指定し、これらのタスクがこのロールによって付与された権限を継承できるようにする。
+------------------------------------------------------------------------------------------------
 . `execution_role_arn` と `task_role_arn` の解説と違い:
 - `execution_role_arn`: このIAMロールはAmazon ECSタスクランタイムエージェントに、DockerイメージをECRからプ
 ルしたり、logsをCloudWatch Logsに書き込んだりする権限をエージェントに与えます。

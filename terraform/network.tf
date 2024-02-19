@@ -22,7 +22,7 @@ resource "aws_vpc" "vpc" {
 resource "aws_subnet" "pub_subnet_a" {
   availability_zone = "ap-northeast-1a"
   cidr_block        = "10.0.1.0/24"
-  # resource "aws_vpc"の"portfolio_vpc_tf"のid
+  # resource "aws_vpc"の"vpc"のid
   vpc_id = aws_vpc.vpc.id
   # インスタンス作成時にIPv6アドレスを割り当てるかどうか。
   assign_ipv6_address_on_creation = false
@@ -72,8 +72,6 @@ resource "aws_subnet" "priv_subnet_c" {
 # ---------------------------------------------
 # Route Table(Pub)
 # ---------------------------------------------
-# resource "aws_route_table" "portfolio_pub_rtb_tf" {
-
 resource "aws_route_table" "pub_rtb" {
   vpc_id = aws_vpc.vpc.id
   # pubのrtbはigwで外部と接続

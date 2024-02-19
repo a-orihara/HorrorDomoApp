@@ -5,7 +5,7 @@
 # 1
 resource "aws_iam_role" "portfolio_ecs_task_execution_role" {
   # このロールに対するポリシーの設定
-  assume_role_policy = data.aws_iam_policy_document.iam_policy_document.json
+  assume_role_policy    = data.aws_iam_policy_document.iam_policy_document.json
   description           = "Allows ECS tasks to call AWS services on your behalf."
   force_detach_policies = false
   # IAMロールにアタッチするAWS管理ポリシーのARN（Amazon Resource Name）のリストを指定します。

@@ -338,13 +338,13 @@ resource "aws_ecs_service" "fargate_service_frontend" {
   enable_ecs_managed_tags            = true
   enable_execute_command             = false
   health_check_grace_period_seconds  = 0
-  launch_type      = "FARGATE"
-  name             = "portfolio-fargate-service-frontend"
-  platform_version = "LATEST"
-  scheduling_strategy = "REPLICA"
-  tags                = {}
-  tags_all            = {}
-  task_definition     = aws_ecs_task_definition.fargate_task_definition_frontend.arn
+  launch_type                        = "FARGATE"
+  name                               = "portfolio-fargate-service-frontend"
+  platform_version                   = "LATEST"
+  scheduling_strategy                = "REPLICA"
+  tags                               = {}
+  tags_all                           = {}
+  task_definition                    = aws_ecs_task_definition.fargate_task_definition_frontend.arn
   deployment_circuit_breaker {
     enable   = true
     rollback = true

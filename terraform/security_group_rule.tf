@@ -4,10 +4,10 @@
 # 1
 resource "aws_security_group_rule" "pub_sg_in_http_ipv4" {
   # ipv4
-  cidr_blocks       = ["0.0.0.0/0"]
-  from_port         = 80
-  ipv6_cidr_blocks  = []
-  protocol          = "tcp"
+  cidr_blocks      = ["0.0.0.0/0"]
+  from_port        = 80
+  ipv6_cidr_blocks = []
+  protocol         = "tcp"
   # このルールを設定するセキュリティグループを指定
   security_group_id = aws_security_group.pub_sg.id
   to_port           = 80
@@ -39,8 +39,8 @@ resource "aws_security_group_rule" "pub_sg_in_http_ipv6" {
 resource "aws_security_group_rule" "pub_sg_out_all" {
   cidr_blocks = ["0.0.0.0/0"]
   # 送信元ポートの設定です。この値が0の場合、すべてのポートを許可することを意味します。
-  from_port = 0
-  ipv6_cidr_blocks  = []
+  from_port        = 0
+  ipv6_cidr_blocks = []
   # トラフィックのプロトコルを指定。"-1"はすべてのプロトコルを許可（制限しない）。
   protocol          = "-1"
   security_group_id = aws_security_group.pub_sg.id
@@ -189,10 +189,10 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv6" {
 # ================================================================================================
 # 3
 resource "aws_security_group_rule" "alb_frontend_sg_out_front" {
-  from_port                = 80
-  protocol                 = "tcp"
+  from_port = 80
+  protocol  = "tcp"
   # ルールが適用されるセキュリティグループ
-  security_group_id        = aws_security_group.alb_frontend_sg.id
+  security_group_id = aws_security_group.alb_frontend_sg.id
   # アクセス許可のソース（このセキュリティグループからのトラフィックのみ許可）を設定
   source_security_group_id = aws_security_group.front_sg.id
   to_port                  = 80
@@ -254,9 +254,9 @@ resource "aws_security_group_rule" "alb_sg_in_https_ipv6" {
 # alb out
 # ================================================================================================
 resource "aws_security_group_rule" "alb_sg_out_pub" {
-  from_port                = 80
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.alb_sg.id
+  from_port         = 80
+  protocol          = "tcp"
+  security_group_id = aws_security_group.alb_sg.id
   # アクセス許可のソース（このセキュリティグループからのトラフィックのみ許可）を設定
   source_security_group_id = aws_security_group.pub_sg.id
   to_port                  = 80

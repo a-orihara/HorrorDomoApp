@@ -49,18 +49,18 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
         environmentFiles = []
         # このコンテナがタスク内で必須かどうかを指定。trueは必須。
         essential = true
-        # コンテナの健康状態を監視するための設定
+        # コンテナのヘルス状態を監視するための設定
         healthCheck = {
-          # 健康チェックを行うコマンドを指定
+          # 2.3 ヘルスチェックを行うコマンドを指定
           command = [
             "CMD-SHELL",
             "curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1",
           ]
-          # 健康チェックの間隔を秒単位で指定
+          # ヘルスチェックの間隔を秒単位で指定
           interval = 300
-          # 健康チェックのリトライ回数を指定
+          # ヘルスチェックのリトライ回数を指定
           retries = 3
-          # 健康チェックのタイムアウトを秒単位で指定
+          # ヘルスチェックのタイムアウトを秒単位で指定
           timeout = 5
         }
         # ECSタスクで実行されるコンテナのDockerイメージを指定
@@ -114,10 +114,10 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
       },
       {
         cpu = 0
-        # コンテナの起動や停止が他のコンテナの健康状態に依存する場合に使用する設定
+        # コンテナの起動や停止が他のコンテナのヘルス状態に依存する場合に使用する設定
         dependsOn = [
           {
-            # 依存するコンテナの健康状態を指定
+            # 依存するコンテナのヘルス状態を指定
             condition = "HEALTHY"
             # 依存するコンテナの名前を指定
             containerName = "rails-fargate-ctr"
@@ -265,7 +265,7 @@ resource "aws_ecs_service" "fargate_service" {
   cluster = aws_ecs_cluster.ecs-on_fargate_cluster.id
   # サービスのデプロイ時に利用可能なタスクの最大数のパーセンテージを指定
   deployment_maximum_percent = 200
-  # サービスのデプロイ中に最低限健康な状態である必要があるタスクの最小パーセンテージを指定
+  # サービスのデプロイ中に最低限ヘルスな状態である必要があるタスクの最小パーセンテージを指定
   deployment_minimum_healthy_percent = 100
   # サービスで実行するタスクの希望する数を指定
   desired_count = 1
@@ -273,7 +273,7 @@ resource "aws_ecs_service" "fargate_service" {
   enable_ecs_managed_tags = true
   # EC2インスタンス用のExecute Commandが有効かを指定
   enable_execute_command = true
-  # 健康チェックの許容期間を秒単位で指定
+  # ヘルスチェックの許容期間を秒単位で指定
   health_check_grace_period_seconds = 0
   # サービスが使用する起動タイプを指定
   launch_type = "FARGATE"
@@ -440,6 +440,16 @@ terraform import aws_ecs_task_definition.fargate_task_definition arn:aws:ecs:ap-
 ------------------------------------------------------------------------------------------------
 **違い**: `execution_role_arn`はECSエージェント（実行環境）に対する権限、`task_role_arn`はタスク内のアプリ
 ケーションに対する権限を制御します。
+
+================================================================================================
+2.3
+- cmd-shell"`： コンテナのシェル環境でコマンドを実行することを指定する。
+- curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1"`：
+これは実際に実行されるコマンドです。curl`を使用して、`/api-app/tmp/sockets/puma.sock`にあるUnixソケットファ
+イルを通してローカルのPumaサーバー（Rubyウェブサーバー）にリクエストを送信します。このコマンドは
+`/api/v1/health_check` というパスを要求する。このコマンドが失敗した場合（ヘルスチェックが正常な応答を返さなかっ
+た場合）、`||exit 1` は失敗を示す `1` というステータスでコマンドが終了することを保証する。
+
 
 ================================================================================================
 3

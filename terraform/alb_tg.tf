@@ -8,7 +8,7 @@ resource "aws_lb_target_group" "alb_tg" {
   deregistration_delay = "300"
   # 1.2
   load_balancing_algorithm_type = "round_robin"
-  # ターゲットグループの名前を指定
+  # ターゲットグループ（ALBのトラフィックを転送する先）の名前を指定
   name = "portfolio-alb-tg"
   # ターゲットグループが受け入れるトラフィックのポートを指定
   port = 80
@@ -31,7 +31,7 @@ resource "aws_lb_target_group" "alb_tg" {
     # ターゲットが正常であると見なされるまでの連続した正常な応答の回数を指定
     healthy_threshold = 5
     # ヘルスチェックを実行する間隔（秒単位）を指定
-    interval = 30
+    interval = 300
     # ヘルスチェックの応答と比較するステータスコードを指定
     matcher = "200"
     # ヘルスチェックリクエストのパスを指定
@@ -73,7 +73,7 @@ resource "aws_lb_target_group" "frontend_alb_tg" {
   health_check {
     enabled             = true
     healthy_threshold   = 5
-    interval            = 30
+    interval            = 300
     matcher             = "200"
     path                = "/api/health_check"
     port                = "traffic-port"
@@ -150,8 +150,8 @@ target_typeは、ターゲットグループに登録されるターゲットの
 resource "aws_lb_target_group_attachment"は、importできない。
 ------------------------------------------------------------------------------------------------
 `aws_lb_target_group_attachment` は、AWSのターゲットグループ（Target Group）に対するターゲットのアタッチメ
-ントを設定するTerraformのリソースです。ターゲットグループにターゲット（例えばEC2インスタンスやコンテナ）を関連付
-けるために使用されます。
+ントを設定するTerraformのリソースです。ターゲットグループにターゲット（例えばEC2インスタンスやECSのコンテナ）を関
+連付けるために使用されます。
 ------------------------------------------------------------------------------------------------
 ecsサービスのload_balancer>target_group_arn で設定した場合、aws_lb_target_group_attachmentは不要。
 - ECS サービスはターゲットグループとの統合が組み込まれています。したがって、ECS サービスの `load_balancer` ブ

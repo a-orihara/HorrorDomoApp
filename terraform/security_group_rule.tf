@@ -3,10 +3,12 @@
 # ================================================================================================
 # 1
 resource "aws_security_group_rule" "pub_sg_in_http_ipv4" {
+  # ipv4
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 80
   ipv6_cidr_blocks  = []
   protocol          = "tcp"
+  # このルールを設定するセキュリティグループを指定
   security_group_id = aws_security_group.pub_sg.id
   to_port           = 80
   type              = "ingress"
@@ -14,8 +16,9 @@ resource "aws_security_group_rule" "pub_sg_in_http_ipv4" {
 
 resource "aws_security_group_rule" "pub_sg_in_http_ipv6" {
   cidr_blocks = []
-  # 送信元ポートの設定
+  # セキュリティグループへの送信元のポートの設定
   from_port = 80
+  # ipv6
   ipv6_cidr_blocks = [
     # "::/0"はIPv6の全てのアドレスを表すCIDRブロックで、すべてのIPv6トラフィックを許可
     "::/0",
@@ -37,8 +40,8 @@ resource "aws_security_group_rule" "pub_sg_out_all" {
   cidr_blocks = ["0.0.0.0/0"]
   # 送信元ポートの設定です。この値が0の場合、すべてのポートを許可することを意味します。
   from_port = 0
-  # トラフィックのプロトコルを指定。"-1"はすべてのプロトコルを許可（制限しない）。
   ipv6_cidr_blocks  = []
+  # トラフィックのプロトコルを指定。"-1"はすべてのプロトコルを許可（制限しない）。
   protocol          = "-1"
   security_group_id = aws_security_group.pub_sg.id
   # 送信先ポートの設定です。同様に、この値も0の場合、すべてのポートを許可することを示しています。
@@ -75,6 +78,7 @@ resource "aws_security_group_rule" "priv_sg_in_rds" {
 # ================================================================================================
 # priv out
 # ================================================================================================
+# 教材がデフォルトのままの設定をしているので、それに倣って下記のように設定
 resource "aws_security_group_rule" "priv_sg_out_all" {
   cidr_blocks = [
     "0.0.0.0/0",
@@ -117,6 +121,7 @@ resource "aws_security_group_rule" "front_sg_in_http_ipv6" {
 # ================================================================================================
 # front out
 # ================================================================================================
+# 教材がデフォルトのままの設定をしているので、それに倣って下記のように設定
 resource "aws_security_group_rule" "front_sg_out_all" {
   cidr_blocks = [
     "0.0.0.0/0",
@@ -186,7 +191,9 @@ resource "aws_security_group_rule" "alb_frontend_sg_in_https_ipv6" {
 resource "aws_security_group_rule" "alb_frontend_sg_out_front" {
   from_port                = 80
   protocol                 = "tcp"
+  # ルールが適用されるセキュリティグループ
   security_group_id        = aws_security_group.alb_frontend_sg.id
+  # アクセス許可のソース（このセキュリティグループからのトラフィックのみ許可）を設定
   source_security_group_id = aws_security_group.front_sg.id
   to_port                  = 80
   type                     = "egress"
@@ -250,6 +257,7 @@ resource "aws_security_group_rule" "alb_sg_out_pub" {
   from_port                = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.alb_sg.id
+  # アクセス許可のソース（このセキュリティグループからのトラフィックのみ許可）を設定
   source_security_group_id = aws_security_group.pub_sg.id
   to_port                  = 80
   type                     = "egress"

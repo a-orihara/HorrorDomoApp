@@ -25,6 +25,9 @@ output "ecs_task_definition_nextjs_image_val" {
 - `output`ブロックは、Terraformの設定ファイル内で定義され、通常はTerraformの実行結果として表示される値を定義し
 ます。ブロックの名前は任意に選べます。名前にはピリオド（.）は使えません。
 - `value`キーワードの後には、実際の出力値の定義が続きます。
+- terraform planでは表示されない。`terraform plan` はリソースに加えられる変更を表示しますが、`output` 値は
+`terraform apply` で変更が適用された後に計算されて表示されます。出力される値を見たい場合は、まず設定を適用してか
+ら `terraform output` を実行してください。
 ------------------------------------------------------------------------------------------------
 ### 具体的な利用シーン:
 - `output`ブロックを使用して、Terraformがデプロイしたインフラの状態情報を表示できます。例えば、EC2インスタンス
@@ -50,4 +53,26 @@ output "ecs_task_definition_nextjs_image_val" {
 ------------------------------------------------------------------------------------------------
 要するに、`terraform output`は常に現在の状態ファイルに基づいて情報を表示するため、`output`の変更を反映するには
 先に`terraform apply`を実行して状態ファイルを更新する必要があります。
+
+@          @@          @@          @@          @@          @@          @@          @@          @
+実際の値
+@          @@          @@          @@          @@          @@          @@          @@          @
+Outputs:
+
+ecs_task_definition_nextjs_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-img-prod"
+ecs_task_definition_nginx_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-img-prod"
+ecs_task_definition_rails_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod"
+route53_record_for_each_result = {
+  "*.horror-domo-app.com" = {
+    "name" = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com."
+    "record" = "_7db5af47b5645710dac77820f7101798.knjdltryfm.acm-validations.aws."
+    "type" = "CNAME"
+  }
+  "horror-domo-app.com" = {
+    "name" = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com."
+    "record" = "_7db5af47b5645710dac77820f7101798.knjdltryfm.acm-validations.aws."
+    "type" = "CNAME"
+  }
+}
+
 */

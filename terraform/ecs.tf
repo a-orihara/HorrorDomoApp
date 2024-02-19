@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
             "curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1",
           ]
           # 健康チェックの間隔を秒単位で指定
-          interval = 30
+          interval = 300
           # 健康チェックのリトライ回数を指定
           retries = 3
           # 健康チェックのタイムアウトを秒単位で指定
@@ -131,7 +131,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
             "CMD-SHELL",
             "curl -f http://localhost/api/v1/health_check || exit 1",
           ]
-          interval = 30
+          interval = 300
           retries  = 3
           timeout  = 5
         }

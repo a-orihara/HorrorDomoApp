@@ -53,4 +53,26 @@ output "ecs_task_definition_nextjs_image_val" {
 ------------------------------------------------------------------------------------------------
 要するに、`terraform output`は常に現在の状態ファイルに基づいて情報を表示するため、`output`の変更を反映するには
 先に`terraform apply`を実行して状態ファイルを更新する必要があります。
+
+@          @@          @@          @@          @@          @@          @@          @@          @
+実際の値
+@          @@          @@          @@          @@          @@          @@          @@          @
+Outputs:
+
+ecs_task_definition_nextjs_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nextjs-img-prod"
+ecs_task_definition_nginx_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-img-prod"
+ecs_task_definition_rails_image_val = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod"
+route53_record_for_each_result = {
+  "*.horror-domo-app.com" = {
+    "name" = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com."
+    "record" = "_7db5af47b5645710dac77820f7101798.knjdltryfm.acm-validations.aws."
+    "type" = "CNAME"
+  }
+  "horror-domo-app.com" = {
+    "name" = "_862fb5009c2cacd5b7b1c60c0820e39e.horror-domo-app.com."
+    "record" = "_7db5af47b5645710dac77820f7101798.knjdltryfm.acm-validations.aws."
+    "type" = "CNAME"
+  }
+}
+
 */

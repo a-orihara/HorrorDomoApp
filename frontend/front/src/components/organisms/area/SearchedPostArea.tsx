@@ -8,11 +8,14 @@ type SearchedPostAreaProps = {
 };
 
 const SearchedPostArea = ({ searchQuery }: SearchedPostAreaProps) => {
-  const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange } = useSearchedPostsPagination(
+  const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange, isLoading } = useSearchedPostsPagination(
     10,
     searchQuery
   );
 
+  if (isLoading) {
+    return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
+  }
   return (
     <div>
       <CommonPostArea

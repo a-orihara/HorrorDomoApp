@@ -12,12 +12,15 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
   const [searchedPostUsers, setSearchedPostUsers] = useState<User[]>([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
+  // loading状態の管理。loading中はtrue
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   // 4 指定したuserIdのユーザーの投稿一覧を取得、post一覧と全post数をステートに格納。
   // 引数pageは、ページネーションで選択したページ。
   const handleGetSearchedPosts = useCallback(
     async (page: number) => {
+      setIsLoading(true);
       try {
         // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
         // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
@@ -32,6 +35,9 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
         setTimeout(() => {
           router.push('/');
         }, 2000);
+      }finally {
+        // リクエスト完了後、ロードを停止する
+        setIsLoading(false);
       }
     },
     [itemsPerPage, router, query]
@@ -54,6 +60,7 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
     handlePageChange,
     currentPage,
     handleGetSearchedPosts,
+    isLoading
   };
 };
 

@@ -56,8 +56,8 @@ jobs:
     uses: ./.github/workflows/update-ecr-image.yml
     # 2.10
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
       ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
       IMAGE_TAG: ${{ github.sha }}

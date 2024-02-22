@@ -40,9 +40,10 @@ jobs:
   frontend-ci:
     uses: ./.github/workflows/ci-frontend.yml
 
-  deploy-rails:
+  ecr-push-docker-rails:
     needs: [backend-ci]
     runs-on: ubuntu-latest
+    # 3.1
     environment: production
 
     steps:
@@ -91,7 +92,7 @@ jobs:
 
 # ------------------------------------------------------------------------------------------------
   # 処理③ Railsの自動デプロイ。動作には ci のクリアが必要
-  deploy-next:
+  ecr-push-docker-nextjs:
     needs: [frontend-ci]
     runs-on: ubuntu-latest
     environment: production
@@ -146,6 +147,16 @@ jobs:
 # docker build -t rails-img-prod -f backend/api/Dockerfile.prod ./backend/api/ --no-cache
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
+# 3.1
+# - GitHub Actions のワークフローでは、ジョブのコンテキストで `environment: production` を指定すると、そのジ
+# ョブは `production` 環境で実行されます。これはいくつかのことを意味します：
+# - 環境シークレットへのアクセス**： ジョブは `production` 環境をスコープとするgit hub action のシークレットに
+# アクセスできるようになります。これはgit hub上のコンソールから設定出来ます。これらのシークレットには、認証情報、AP
+# Iキー、または本番環境でのデプロイに関連する操作にのみアクセス可能なその他の機密データが含まれるかもしれません。
+# - GitHub の環境保護ルールが `production` 環境に設定されている場合、例えば、ジョブを実行する前にGitHubの手動
+# による承認が必要になるかもしれません。
+
+# ================================================================================================
 # 8.1
 # .aws-actions/configure-aws-credentials@v1
 # - この GitHub Action は、AWS CLI と環境変数を設定してアクションで使用する AWS 認証情報を設定します。
@@ -423,3 +434,5 @@ jobs:
 # `docker push` を使用することで、Dockerに対してレジストリの特定の場所にimageをアップロードするように指示するこ
 # とになります。URL形式のタグを付けないと、DockerはデフォルトのレジストリであるDocker Hubにイメージをプッシュしよ
 # うとします。
+
+# @          @@          @@          @@          @@          @@          @@          @@          @

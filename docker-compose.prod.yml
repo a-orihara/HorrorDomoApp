@@ -24,7 +24,7 @@ services:
     build:
       # 7
       context: ./backend/api/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     # imageとbuildが同時に宣言されている場合, ビルドが優先的に実行されて,
     # imageはその構成に使われる(imageによるプルは発生しない).結果image名を設定する事になる。
     image: rails-img-prod

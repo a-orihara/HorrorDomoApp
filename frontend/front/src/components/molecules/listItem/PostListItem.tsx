@@ -26,7 +26,7 @@ const PostListItem = ({ post, user }: PostListItemProps) => {
         <UserAvatar avatarUrl={user.avatarUrl} userId={user.id}></UserAvatar>
         <div>
           <UserAndPostLinks user={user} post={post}></UserAndPostLinks>
-          <CommonListItem post={post} user={user} currentUser={currentUser} handleDeletePost={handleDeletePost} />
+          <CommonListItem post={post} currentUser={currentUser} handleDeletePost={handleDeletePost} />
         </div>
       </div>
     </li>

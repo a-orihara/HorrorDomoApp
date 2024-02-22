@@ -5,6 +5,11 @@ on:
     branches-ignore:
       - "main"
   workflow_call:
+    secrets:
+      GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY:
+        required: true
+      GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY:
+        required: true
 
 permissions:
   contents: read

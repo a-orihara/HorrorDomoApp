@@ -28,10 +28,10 @@ env:
   CONTAINER_NAME_NEXT: nextjs-fargate-ctr
 
 # 全てのjobに対するデフォルト動作を設定
-defaults:
-  run:
-    shell: bash
-    working-directory: ./terraform
+# defaults:
+#   run:
+#     shell: bash
+#     working-directory: ./terraform
 
 jobs:
 # 2.6
@@ -69,6 +69,10 @@ jobs:
         id: login-ecr
         # 9.2
         uses: aws-actions/amazon-ecr-login@v1
+
+      # ディレクトリ確認
+      - name: List directory contents
+        run: ls -lah
 
       # docker imageをビルドし、タグ付けし、ECRへプッシュ
       - name: Build, tag, and push image to Amazon ECR
@@ -116,6 +120,10 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+
+    # ディレクトリ確認
+    - name: List directory contents
+      run: ls -lah
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image

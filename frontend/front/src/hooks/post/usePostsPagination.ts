@@ -11,6 +11,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
   const [totalPostsCount, setTotalPostsCount] = useState(0);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
@@ -18,6 +19,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
   // 引数pageは、ページネーションで選択したページ。
   const handleGetPostListByUserId = useCallback(
     async (page: number) => {
+      setIsLoading(true);
       try {
         // 指定したuserIdのpostの総数と、指定したページの1ページ当たりの表示件数分のpostを取得
         // userIdがundefinedの場合は、最終的にindexのelse部分が実行される。
@@ -33,6 +35,9 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
         setTimeout(() => {
           router.push('/');
         }, 2000);
+      }finally {
+        // リクエスト完了後、ロードを停止する
+        setIsLoading(false);
       }
     },
     [itemsPerPage, router, setAlertMessage, setAlertOpen, setAlertSeverity, userId]
@@ -47,7 +52,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { posts, totalPostsCount, handlePageChange, currentPage };
+  return { posts, totalPostsCount, handlePageChange, currentPage, isLoading };
 };
 
 /*

@@ -10,7 +10,10 @@ type FeedAreaProps = {
 };
 
 const FeedArea = ({ user }: FeedAreaProps) => {
-  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange } = useFeedPagination(10, user.id);
+  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, isLoading } = useFeedPagination(10, user.id);
+  if (isLoading) {
+    return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
+  }
   return (
     <div>
       {/* 1ページ当たりのfeedのpostとuserを`CommonPostArea`に受け渡し */}

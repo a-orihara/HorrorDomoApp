@@ -1,0 +1,425 @@
+name: Update ECR Image Push
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  TF_VERSION: 1.3.10
+  AWS_REGION: ap-northeast-1
+  ECS_CLUSTER: portfolio-ecs-on-fargate-cluster
+  ECS_SERVICE_BACKEND: fargate_service
+  ECS_SERVICE_FRONTEND: fargate_service_frontend
+  ECS_TASK_DEFINITION_BACKEND: backend/api/task-definition.json
+  ECS_TASK_DEFINITION_FRONTEND: frontend/front/task-definition.json
+  ECR_REPOSITORY_RAILS: rails_img_prod
+  ECR_REPOSITORY_NEXT: nextjs_img_prod
+  CONTAINER_NAME_RAILS: rails-fargate-ctr
+  CONTAINER_NAME_NEXT: nextjs-fargate-ctr
+
+# 全てのjobに対するデフォルト動作を設定
+defaults:
+  run:
+    shell: bash
+    working-directory: ./terraform
+
+jobs:
+# 2.6
+  backend-ci:
+    uses: ./.github/workflows/ci-backend.yml
+    # 2.9
+    secrets:
+      EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+
+# 2.7
+  frontend-ci:
+    uses: ./.github/workflows/ci-frontend.yml
+
+  deploy-rails:
+    needs: [backend-ci]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # AWS認証情報を設定する
+      - name: Configure AWS credentials
+      # 8.1
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        # 9.1
+        id: login-ecr
+        # 9.2
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # docker imageをビルドし、タグ付けし、ECRへプッシュ
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          # 10.1
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          # 10.2 ワークフローのトリガーとなったコミットIDでdockerのimageをタグ付け
+          IMAGE_TAG: ${{ github.sha }}
+        # 10.3
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # Amazon ECSタスク定義に新しいイメージIDを記入する。
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        # 11.1 既存のECSタスク定義JSONファイルとしてGitHubリポジトリに指定）を受け取り、指定されたコンテナのコンテナイメージIDを更新し、新しいタスク定義を出力
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        # 11.2
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
+          container-name: ${{ env.CONTAINER_NAME_RAILS }}
+          image: ${{ steps.build-image.outputs.image }}
+
+# ------------------------------------------------------------------------------------------------
+  # 処理③ Railsの自動デプロイ。動作には ci のクリアが必要
+  deploy-next:
+    needs: [frontend-ci]
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./frontend/front/Dockerfile.prod ./frontend/front/
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
+        container-name: ${{ env.CONTAINER_NAME_NEXT }}
+        image: ${{ steps.build-image.outputs.image }}
+
+
+    # # Amazon ECSのタスク定義をデプロイする
+    # - name: Deploy Amazon ECS task definition
+    #   # 12.1
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   # 12.2
+    #   with:
+    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+    #     service: ${{ env.ECS_SERVICE_BACKEND }}
+    #     cluster: ${{ env.ECS_CLUSTER }}
+    #     wait-for-service-stability: true
+
+
+# 再ビルドのコマンド
+# docker build -t rails-img-prod -f backend/api/Dockerfile.prod ./backend/api/ --no-cache
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# 8.1
+# .aws-actions/configure-aws-credentials@v1
+# - この GitHub Action は、AWS CLI と環境変数を設定してアクションで使用する AWS 認証情報を設定します。
+# - with` ブロックでは、使用する AWS 認証情報 (`aws-access-key-id`, `aws-secret-access-key`) と AWS リー
+# ジョン (`aws-region`) を指定します。これらの値は通常、セキュリティのために GitHub の secret に保存され、
+# `${{ secrets.SECRET_NAME }}` を使って参照される。
+# - このアクションを実行すると、ワークフローの後続のステップで、指定した認証情報を使って AWS とやりとりできる。
+
+# ================================================================================================
+# 9.1
+# - GitHub Actions ワークフローの後続のステップで、ステップに `id` を設定することで、`login-ecr` ステップを参照
+# することができます。以降のステップでその出力にアクセスできるようになります。この場合、`id: login-ecr` を使うと、
+# `steps.login-ecr.outs.registry` を使って環境変数 `ECR_REGISTRY` を動的に設定することができます。これは、
+# ECRとやり取りするワークフローで特に有用です。レジストリのURLはDockerイメージのタグ付けとプッシュに必要ですが、AWS
+# アカウントやリージョンによって異なる可能性があるからです。outputは文字列です。
+
+# ================================================================================================
+# 9.2
+# .uses:aws-actions/amazon-ecr-login@v1]
+# - このアクションはECRにログインし、DockerがECRにイメージをプッシュまたはプルできるようにします。
+# - configure-aws-credentials`アクションで設定したAWS認証情報を使用するため、`with`ブロックは必要ありません。
+# - ログインステップはECRとの認証プロセスを簡素化し、ワークフロー内のDockerアクションがECRリポジトリにアクセスするた
+# めに必要な権限を持っていることを保証します。
+
+# ================================================================================================
+# 10.1
+# - aws-actions/amazon-ecr-login@v1`のGitHubアクションは実行に成功すると、`registry`出力を含む特定の出力を自
+# 動的に設定します。この動作はアクション自体であらかじめ定義されています。ワークフローファイルで手動で出力を指定しなく
+# ても、アクションのコードは完了時にこれらの出力を設定するように設計されています。
+# - `outputs` の基本的な使い方は、あるステップでoutputsのキーを指定し、その下にキーをインデントして値を記述する。
+# その後のステップでそのキーを参照するというもの
+# jobs:
+#   job1:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       random:<値>
+#    job2:
+#     runs-on: ubuntu-latest
+#     needs: job1
+#     steps:
+#       - run: echo "${{ needs.job1.outputs.random }}"
+# ------------------------------------------------------------------------------------------------
+# その他、echoでも書ける
+# 後続のステップから参照するためにidをつける。
+# 変数名=値 を echo して $GITHUB_OUTPUT に出力する
+# ------------------------------------------------------------------------------------------------
+# - `steps.login-ecr.outputs.registry` は `login-ecr` ステップの出力。このステップは、
+# `aws-actions/amazon-ecr-login@v1` アクションを使って ECR に対して認証を行います。このステップの `registry`
+# 出力は、ユーザーが認証された ECR レジストリの URI を提供します。このECRレジストリのURIは、Dockerイメージをタグ付
+# けして正しいECRリポジトリにプッシュするために重要です。
+# - URIは通常、次のような形式になっています：
+# <aws_account_id>.dkr.ecr.<aws_region>.amazonaws.com
+# 例えば、AWS アカウント ID が `123` で、リージョンが `ap-northeast-1` の場合、
+# `steps.login-ecr.outputs.registry` は次のように出力されます：
+# 123.dkr.ecr.ap-northeast-1.amazonaws.com
+# ------------------------------------------------------------------------------------------------
+# - ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}.は、環境変数 `ECR_REGISTRY` に ECR レジスト
+# リの URI を設定する。この変数は `Build, tag, and push image to Amazon ECR` ステップで使用され、ビルドされ
+# たDockerイメージにタグを付けてプッシュします
+# ------------------------------------------------------------------------------------------------
+# - IMAGE_TAG: ${{ github.sha }}で、github.shaがabcの場合、このようになる
+# docker build -t 123.dkr.ecr.ap-northeast-1.amazonaws.com/rails_img_prod:abc -f ./rails/Dockerfile.prod ./rails
+# docker push 123.dkr.ecr.ap-northeast-1.amazonaws.com/rails_img_prod:abc
+
+# ================================================================================================
+# 10.2
+# `github.sha` の説明：
+# - github.sha` は、GitHub Actions ワークフローのトリガーとなったコミットの SHA (Secure Hash Algorithm) を
+# 指します。Docker イメージのタグ付けのコンテキストでは、`github.sha` をイメージタグとして使うことで、各イメージが
+# ビルドされた Git コミットを一意に特定できるようになります。開発者が実行中のDockerコンテナとそれがビルドされたソース
+# コードのバージョンを簡単に一致させることを可能にします。これはCI/CDパイプラインにとって特に有益で、すべてのビルドと
+# デプロイをバージョン管理システムの特定のコミットまで正確に遡ることができます。
+# ------------------------------------------------------------------------------------------------
+# - このコミットは、 Git のコミットのこと。github.sha` がワークフローのトリガーとなった特定のコミットの一意な識別
+# 子を取得するというのは、`github.sha` に GitHub Actions ワークフローを実行させたコミットの SHA-1 ハッシュが含
+# まれるということです。これはブランチの話ではなく、ひとつのコミットの話です。ブランチは特定のコミットへのポインタです
+# が、`github.sha` の値はブランチ名ではなくコミットそのものに注目します。
+# - つまり、あるコミットをリポジトリにプッシュして GitHub Actions ワークフローを起動した場合、`github.sha` はそ
+# のコミットの SHA-1 ハッシュになります。たとえば、コミットのハッシュが `abc123` の場合、`github.sha` はこの値に
+# なります。
+# ------------------------------------------------------------------------------------------------
+# - GitHub Actions のワークフローで `github.sha` を使うと、ワークフローのトリガーとなった特定のコミットの一意な
+# 識別子 が得られます。この識別子は SHA (Secure Hash Algorithm) に基づいており、リポジトリへのコミットごとに一意
+# なフィンガープリントを作成します。
+# - たとえば、リポジトリに変更をコミットして GitHub Actions ワークフローが起動すると、`github.sha` は
+# `abc123def456...` のようになります。この `abc123def456...` を Docker イメージを作成する際のタグとして使用す
+# ることができます。こうすることで、多くのイメージがある場合、タグを見るだけで、それぞれのイメージがどのコード変更に由
+# 来するかを正確に知ることができます。
+# - つまり、コードに変更を加えた後にDockerイメージをビルドする場合、そのイメージに`github.sha`というタグを付けると
+# 、Dockerイメージに "このコードの変更から作られました "というステッカーを貼るようなものです。これは、特にアプリを頻
+# 繁に更新している場合に、どのコードがどこで実行されているかを追跡するのに非常に便利です。
+
+# ================================================================================================
+# 10.3
+# #imageにタグを追加
+# [docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api]
+# [docker build -t rails-img-prod/<ECRのURI>:<git hubのcommit id> -f <dockerファイル名> <ビルドコンテキスト>]
+# ------------------------------------------------------------------------------------------------
+# - Dockerfile`という名前で、指定したビルドコンテキストディレクトリ（この場合はカレントディレクトリの`.`）にある場合は
+# 、Dockerfileに明示的に名前を付ける必要はありません。Dockerは自動的にビルドコンテキストから`Dockerfile`という名
+# 前のファイルを探します。しかし、Dockerfileに`Dockerfile`以外の名前を付けていたり、別のディレクトリにある場合は、
+# `-f`または`--file`オプションを使って名前とパスを指定します。
+# - ./backend/api` を使用すると、ビルド・コンテキスト（Dockerがビルドプロセスのルート環境として使用するディレクト
+# リ）は `./backend/api` に設定されます。これはつまり
+# ------------------------------------------------------------------------------------------------
+# - タグ名は、`ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG`
+# つまり、<ECRレジストリURL/<ECRリポジトリ名(rails_img_prod)>:<gitのコミットID>>
+# ------------------------------------------------------------------------------------------------
+# - GitHub Actions を使って Docker イメージのビルドと ECR へのプッシュを自動化する場合、成功させるには
+# `ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG` というタグ名を付ける必要があります。
+# - `ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG`は、`レジストリのURL、リポジトリ名、画像タグが含まれており、
+# これらはすべてECRの正しい場所にimageをプッシュするために必要です。
+# ------------------------------------------------------------------------------------------------
+# - ECR_REGISTRYは ECR レジストリの URL で、レジストリを指定しないと、DockerはデフォルトでDocker Hubにプッシュ
+# するため、ECRにイメージをプッシュすることがわかりません。だから送信先URLを必ず付けます。
+# - `ECR_REGISTRY`は、認証された ECR レジストリ URL を指します。このURLはあなたのAWSアカウントとリージョ
+# ンに固有です。通常、`123.dkr.ecr.region.amazonaws.com` のようになります。`123` は AWS アカウント ID で、
+# `region` は AWS リージョンです。タグのこの部分は、画像が特定の ECR レジストリにプッシュされることを保証します。
+# ------------------------------------------------------------------------------------------------
+# - ECR_REPOSITORY_RAILSは、DockerとECRにレジストリ内のどのリポジトリにイメージを格納すべきかを正確に伝えます。
+# - $ECR_REPOSITORY_RAILS`は、イメージを保存する ECR レジストリ内のリポジトリ名`rails_img_prod` 。
+# ------------------------------------------------------------------------------------------------
+# - **$IMAGE_TAG`** は画像のタグで、GitHub Actions ワークフローのコミット SHA (`github.sha`) に設定。こう
+# することで、それぞれのイメージのビルド元となった Git のコミットを一意に特定できるようになります。
+# ------------------------------------------------------------------------------------------------
+# . **ローカル環境と CI/CD 環境のコンテキストの違い
+# - GitHub Actions環境では、効率化と自動化のために、Dockerイメージのビルドとタグ付けがワンステップで行われます。こ
+# こで使われるタグ `$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG` には、AWS ECRがイメージを認識するため
+# に必要な情報が全て含まれています
+# - シンプルでわかりやすい**： 最初から完全なイメージ名を使用することで、プロセスが簡素化され、イメージの行き先やイメ
+# ージの内容が曖昧になりません。
+# ------------------------------------------------------------------------------------------------
+# .ワークフローの `run` コマンドで `${{}}` が使われない理由
+# - GitHub Actions のワークフローでは、`run` コマンドで環境変数を直接使っても問題ないだけでなく、動的で柔軟な自動
+# 化のための標準的なプラクティスでもあります。
+# - ワークフローでは、環境変数は GitHub Actions の式構文である `${{ }}` ではなく、シェル変数の構文
+# (`$ECR_REGISTRY` など) を使って間接的に `run` コマンドで使用します。いったん環境変数が定義されると (ジョブレベ
+# ルでもステップレベルでもグローバルでも)、通常のシェル環境変数として `run` コマンドを実行するシェルからアクセスでき
+# るようになるからです。
+# - run` ブロックの中では基本的にシェルスクリプトを書くことになるので、変数には GitHub Actions の構文ではなくシェ
+# ルの構文 (例: bash では `$VARIABLE_NAME`) を使います。
+# ------------------------------------------------------------------------------------------------
+# . **echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT**
+# - シェルスクリプトやコマンドライン操作における `echo` コマンドは、テキスト行や変数の値を表示するために使われます。
+# GitHub Actions やその他のスクリプト環境では、デバッグのためにターミナルやログファイルに情報を表示したり、ステー
+# タスの更新を行ったりするためによく使われます。これは、レジストリ、リポジトリ、タグを含む完全なイメージ名を、コンソー
+# ルまたは指定された出力に表示します。
+# - シェルスクリプトで `echo` を使用した場合、ターミナルに直接出力されますが、このケースでは `$GITHUB_OUTPUT` で
+# 指定したファイルにリダイレクト (`>>`) されます。
+# - `GITHUB_OUTPUT` ファイルは GitHub Actions の特別な仕組みで、ジョブのステップ間でデータを共有するために使用
+# されます。出力を直接コンソールに表示する代わりに、このファイルに書き込むことで、同じジョブ内の後続のステップがデータ
+# にアクセスして使用できるようになります。
+# ------------------------------------------------------------------------------------------------
+# - シェルスクリプトでは、 `>>` は出力を上書きするのではなく、ファイルに追加するために使用します。echo` などのコマ
+# ンドと一緒に使用すると、既存のファイルの内容を削除したり上書きしたりすることなく、コマンドの出力が指定したファイルの
+# 末尾に追加されます。
+# - `>> $GITHUB_OUTPUT`は、`$GITHUB_OUTPUT`変数で指定されたファイルにDockerイメージの完全な名前が追加されるこ
+# とを意味します。このアプローチは、データを失うことなくログを構築したり、ステップ間で情報を渡したりするのに便利です。
+# ------------------------------------------------------------------------------------------------
+# - 後続のステップから参照するためにステップにidをつける。変数名=値 を echo して $GITHUB_OUTPUT に出力する
+# ------------------------------------------------------------------------------------------------
+# GITHUB_OUTPUT` は GitHub Actions の特別な環境変数で、ジョブの各ステップがファイルにデータを書き込んで通信でき
+# るようにします。このファイルに書き込まれたデータは、同じジョブ内の後続のステップで環境変数として共有されます。これは
+# 、ワークフローのあるステップで生成された動的なデータを後のステップに渡すための方法です。`$GITHUB_OUTPUT` に書き
+# 込むことで、GitHub Actions ワークフローの後続のステップで作成したイメージ名を利用できるようにします。
+# ------------------------------------------------------------------------------------------------
+
+
+
+# ================================================================================================
+# 11.1
+# . aws-actions/amazon-ecs-render-task-definition@v1
+# - この GitHub Action は Amazon ECS のタスク定義 JSON ファイルを変更し、そのタスク定義内で指定されたコンテナの
+# イメージ URI を更新します。
+# - このアクションの `with` セクションでは、タスク定義 JSON ファイルのパス (`task-definition`)、更新するコンテ
+# ナの名前 (`container-name`)、新しい画像 URI (`image`) を指定する必要がある。
+# - 基本的に、このアクションはタスク定義の JSON ファイルから指定したコンテナ名を検索し、既存のimage URI を指定した
+# ものに置き換える。これは通常、ECRにプッシュした新しくビルドされたDockerイメージのイメージURIです。
+# - このステップは継続的なデプロイワークフローにとって非常に重要です。新しいタスクがデプロイされるときに、ECSサービス
+# が最新のDockerイメージ（つまりこのワークフローでビルドしたイメージ）を使用することを保証します。新しいイメージURIで
+# タスク定義を更新した後、更新されたタスク定義JSONを使用してECSサービスを更新し、新しいイメージのデプロイをトリガーす
+# ることができます。
+
+# ================================================================================================
+# 11.2
+# .task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
+# - タスク定義`： 既存の ECS タスク定義 JSON ファイルへのパス。
+# ------------------------------------------------------------------------------------------------
+# .container-name: ${{ env.CONTAINER_NAME_RAILS }}
+# - コンテナ名`： 新しいイメージで更新するタスク定義内のコンテナ名。
+# ------------------------------------------------------------------------------------------------
+# .image: ${{ steps.build-image.outputs.image }}
+# - 新しいDockerイメージのURI： 前のステップで作成したECRレジストリ、リポジトリ、イメージタグを組み合わせた新しい
+# DockerイメージのURI。このURIはビルドステップの出力に基づいて動的に生成されます。
+# - `steps.build-image.outputs.image` は、ワークフローの "Build, tag, and push image to Amazon ECR"ス
+# テップで設定された出力変数を指します。この変数には通常、ビルドされてAmazon ECRにプッシュされたDockerイメージのURI
+# が含まれます。
+# - この出力の具体的な形式や値は、スクリプトでどのように設定するかによって決まります。提供されたワークフローでは、
+# `echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT`を使用して設定します。
+# これは、レジストリ、リポジトリ名、タグ（この場合はコミットSHA）を含むDockerイメージの完全なURIが含まれることを意味
+# します。
+
+# ================================================================================================
+# 12.1
+# . **aws-actions/amazon-ecs-deploy-task-definition@v1
+# - この GitHub Action は、更新された ECS タスク定義の JSON ファイルを受け取り、指定された ECS サービスにデプロ
+# イします。これにより ECS サービスは更新されたタスク定義に基づいて新しいタスクを実行するようになる。
+# - このアクションの `with` セクションでは、更新されたタスク定義 JSON (`task-definition`)、ECS サービス名
+# (`service`)、ECS クラスタ名 (`cluster`) を指定する必要がある。オプションで `wait-for-service-stability`
+# を指定すると、サービスの更新が安定するまで（新しいタスクが実行され、古いタスクが停止するまで）アクションを待機させる
+# ことができる。
+# - 新しいDockerイメージをビルドしてプッシュし、この新しいイメージを使用するようにタスク定義を更新した後、タスク定義
+# をデプロイすると、これらの変更が適用され、ECSサービス内のアプリケーションの新しいバージョンが効果的にロールアウトさ
+# れます。
+
+# ================================================================================================
+# 12.2
+# - steps.task-def.outputs.task-definition`は、
+# "Fill in the new image ID in the Amazon ECS task definition "ステップの出力変数を参照する。この変数に
+# は、更新されたECSタスク定義JSONが含まれ、指定されたコンテナの新しいイメージURIが含まれる。
+# - この更新されたタスク定義は、次のステップ（「Amazon ECSタスク定義のデプロイ」）でECSにデプロイされるものだ。こ
+# の出力の具体的な値は、タスク定義の更新ステップで指定されたコンテナの `image` プロパティが更新されたタスク定義全
+# 体の JSON である。このJSONはECSサービスを更新するために使用され、サービスによって起動された新しいタスクが更新さ
+# れたDockerイメージを使用するようにします。
+
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# 第一段階 タグ付けしてビルド
+# ◆awsコンソールで表示のecrのプッシュコマンド
+# #imageにrails-img-prodタグを付けてビルド
+# [docker build -t rails-img-prod .]
+# ------------------------------------------------------------------------------------------------
+# - docker build -t rails-img-prod .` コマンドの `-t` オプションは、ビルドするDockerイメージにタグを付ける
+# ために使用します。Dockerの用語では、タグは通常リポジトリ名とタグ名の両方を含み、`<リポジトリ名>:<タグ名>`のよう
+# な書式になります。
+# - [rails-img-prod]のように、リポジトリ名のみを指定した場合（`rails-img-prod`のようにコロンとタグ名を指定し
+# ない場合）、Dockerはデフォルトでタグ名を`latest`とみなします
+# - したがって、結果的に`rails-img-prod:latest`としてタグ付けしています。リポジトリ名は `rails-img-prod` で、
+# タグ名は `latest` です。
+# - Dockerはコロン以降の部分だけでなく、`repository:tag`という文字列全体を指して「タグ」という用語を使っている
+# ため、このような混乱がよく起こります。
+
+# ================================================================================================
+# 第二段階
+# [docker tag rails-img-prod:latest 283.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest]
+# ------------------------------------------------------------------------------------------------
+# 構成は下記
+# docker tag rails-img-prod:latest <ECRレジストリURL/<ECRリポジトリ名(rails_img_prod)>:<latestタグ>
+# ------------------------------------------------------------------------------------------------
+# ローカルイメージ `rails-img-prod:latest` に別のタグとして、
+# <ECRレジストリURL/<ECRリポジトリ名(rails_img_prod)>:<latestタグ>タグを追加
+# ------------------------------------------------------------------------------------------------
+# - Dockerの用語では、イメージのタグ付けは新しいイメージや別のイメージを作成するのではなく、既存のイメージに追加の
+# 参照（または名前）を割り当てます。このコマンドを実行すると、イメージ `rails-img-prod:latest` には2つのタグが
+# 付けられます：
+# 1. オリジナルのローカルタグ rails-img-prod:latest`。
+# 2. ECR リポジトリのタグ 283.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest`。
+# これにより、同じDockerイメージを複数のタグで識別できるようになり、特にECRのようなリモートリポジトリで作業する場
+# 合、整理、バージョン管理、デプロイが容易になります。
+
+# ================================================================================================
+# 第三段階
+# [docker push 283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest]
+# ------------------------------------------------------------------------------------------------
+# - [283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest]というタグを持つimageを
+# プッシュ
+# ------------------------------------------------------------------------------------------------
+# - `docker push 283.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest` は、
+# `rails-img-prod:latest` というタグが付けられた Docker イメージを、指定された URL
+# `283.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest` にあるECRにプッシュします。
+# ------------------------------------------------------------------------------------------------
+# - imageタグにURLを追加する場合、特に`283.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:latest`
+# のようなレジストリURLの形式では、イメージをプッシュする先のリポジトリとタグを指定していることになります。Dockerで
+# は、`[registry-url]/[repository-name]:[tag]`という記法を用いて、イメージがどこにあるか、あるいはどこに送る
+# べきかを定義します。imageに完全なURL（レジストリのアドレス、リポジトリ名、タグ）をタグ付けし、そのタグで
+# `docker push` を使用することで、Dockerに対してレジストリの特定の場所にimageをアップロードするように指示するこ
+# とになります。URL形式のタグを付けないと、DockerはデフォルトのレジストリであるDocker Hubにイメージをプッシュしよ
+# うとします。

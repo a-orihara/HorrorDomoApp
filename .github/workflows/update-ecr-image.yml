@@ -20,8 +20,8 @@ env:
   ECS_CLUSTER: portfolio-ecs-on-fargate-cluster
   ECS_SERVICE_BACKEND: fargate_service
   ECS_SERVICE_FRONTEND: fargate_service_frontend
-  ECS_TASK_DEFINITION_BACKEND: backend/api/task-definition.json
-  ECS_TASK_DEFINITION_FRONTEND: frontend/front/task-definition.json
+  ECS_TASK_DEFINITION_BACKEND: ./backend/api/task-definition.json
+  ECS_TASK_DEFINITION_FRONTEND: ./frontend/front/task-definition.json
   ECR_REPOSITORY_RAILS: rails_img_prod
   ECR_REPOSITORY_NEXT: nextjs_img_prod
   CONTAINER_NAME_RAILS: rails-fargate-ctr
@@ -59,6 +59,7 @@ jobs:
       - name: Configure AWS credentials
       # 8.1
         uses: aws-actions/configure-aws-credentials@v1
+        # 作成したIAMユーザーのアクセスキー、シークレットアクセスキーを使用
         with:
           aws-access-key-id: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}

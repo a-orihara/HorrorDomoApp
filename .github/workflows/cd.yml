@@ -56,11 +56,11 @@ jobs:
     uses: ./.github/workflows/update-ecr-image.yml
     # 2.10
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
-      ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
-      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-      IMAGE_TAG: ${{ github.sha }}
+      GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
+      GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
+      NEXT_PUBLIC_API_URL: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
+      NEXT_PUBLIC_FRONT_URL: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
+      # IMAGE_TAG: ${{ github.sha }}
 
   # deploy-rails:
   #   needs: [backend-ci]
@@ -474,6 +474,13 @@ jobs:
 # で定義されるため、自動的にそのステップで使用できるようになります。secrets接頭辞の環境変数は、機密情報という性質上、
 # ワークフローが再利用されたり、別のワークフローから呼び出されたりする場合には、セキュリティと適切なアクセス制御を保証
 # するために、明示的に渡す必要があります。
+# ------------------------------------------------------------------------------------------------
+# `IMAGE_TAG: ${{ github.sha }}` も記載する必要あり
+# - `update-ecr-image.yml` ワークフローが GitHub のコミット SHA (`${{ github.sha }}` で示される) と関連す
+# るイメージタグを使用するように設計されている場合は、 `IMAGE_TAG` を渡す必要があります。
+# - IMAGE_TAG`はDockerイメージの一意な識別子を提供し、ソースコードの特定のコミットへのトレースを容易にします。これ
+# は継続的インテグレーションやデプロイプロセスで特に有用で、コミット履歴に基づいて特定のイメージバージョンを素早く特定
+# し、ロールバックする必要があるかもしれません。
 
 # ================================================================================================
 # 3

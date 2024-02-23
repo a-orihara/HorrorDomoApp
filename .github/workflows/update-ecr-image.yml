@@ -10,6 +10,10 @@ on:
         required: true
       GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY:
         required: true
+      NEXT_PUBLIC_API_URL:
+        required: true
+      NEXT_PUBLIC_FRONT_URL:
+        required: true
 
 permissions:
   contents: read

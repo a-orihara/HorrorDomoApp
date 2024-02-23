@@ -19,15 +19,6 @@ permissions:
 env:
   TF_VERSION: 1.3.10
   AWS_REGION: ap-northeast-1
-  # ECS_CLUSTER: portfolio-ecs-on-fargate-cluster
-  # ECS_SERVICE_BACKEND: fargate_service
-  # ECS_SERVICE_FRONTEND: fargate_service_frontend
-  # ECS_TASK_DEFINITION_BACKEND: backend/api/task-definition.json
-  # ECS_TASK_DEFINITION_FRONTEND: frontend/front/task-definition.json
-  # ECR_REPOSITORY_RAILS: rails_img_prod
-  # ECR_REPOSITORY_NEXT: nextjs_img_prod
-  # CONTAINER_NAME_RAILS: rails-fargate-ctr
-  # CONTAINER_NAME_NEXT: nextjs-fargate-ctr
   # アプリのドメイン名
   DOMAIN: "horror-domo-app.com"
   RDS_INSTANCE_NAME: "portfolio-mysql-rds-instance"
@@ -41,37 +32,19 @@ defaults:
     working-directory: ./terraform
 
 jobs:
-# # 2.6
-#   backend-ci:
-#     uses: ./.github/workflows/ci-backend.yml
-#     # 2.9
-#     secrets:
-#       EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-
-# # 2.7
-#   frontend-ci:
-#     uses: ./.github/workflows/ci-frontend.yml
-
   update-ecr-image:
     uses: ./.github/workflows/update-ecr-image.yml
-    # 2.10
+    # 2.10 update-ecr-image.ymlで使用するsecretsの環境変数を渡す
     secrets:
       GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
       GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
       NEXT_PUBLIC_API_URL: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
       NEXT_PUBLIC_FRONT_URL: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
       EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-      # IMAGE_TAG: ${{ github.sha }}
-
-  # deploy-rails:
-  #   needs: [backend-ci]
-  #   runs-on: ubuntu-latest
-  #   environment: production
 
   # jobsのマップのキー（<job_id>）。すなわちid。jobs.<job_id>:rspec。<job_id>:名は重複不可。
   preview:
   # 2.8
-    # needs: [backend-ci, frontend-ci]
     needs: [update-ecr-image]
     # jobの名前（ = jobs<job_id>.name ）
     name: Preview
@@ -432,39 +405,11 @@ jobs:
 # 境変数を定義するために使用される。
 
 # ================================================================================================
-# 2.6
-# - .github/workflows/cd.yml` ファイルのこの行は、継続的デプロイメント (CD) ワークフロー内のジョブとして
-# `ci-backend.yml` ワークフローを使用することを指定する。uses` キーワードは、このジョブが `ci-backend.yml`ワー
-# クフローで定義されたステップを実行することを示す。`ci-backend.yml` ワークフローには、RSpec、RuboCopのバックエン
-# ドの継続的インテグレーションに必要なすべてのステップが含まれている。
-
-# ================================================================================================
-# 2.7
-# - `.github/workflows/cd.yml`ファイルのこの行は、CDワークフロー内の別のジョブとして`ci-frontend.yml`ワークフ
-# ローの使用を指定する。uses` キーワードで、このジョブが `ci-frontend.yml` ワークフローで定義されたステップを実行
-# することを示す。`ci-frontend.yml` は Jest や lint の継続的インテグレーションタスクに必要なすべてのステップを含
-# む。
-
-# ================================================================================================
 # 2.8
 # - `needs： ワークフローファイル `cd.yml` の [backend-ci, frontend-ci]` 行は `preview` ジョブが `backend-ci`
 # と `frontend-ci` の両方のジョブの完了に依存していることを指定。つまり`backend-ci` と `frontend-ci` の両方の
 # ジョブが正常に完了した後に開始される。(CI) チェックがパスした場合にのみ (CD) プロセスが進行し、デプロイパイプライ
 # ンの品質と安定性が維持されます。
-
-# ================================================================================================
-# 2.9
-# - secretsは、job実行の際のsecretを指定する。
-# ------------------------------------------------------------------------------------------------
-#  - jobsのbackend-ciの設定内で、`secrets： EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}` 行は
-# `EMAIL_ADDRESS` のシークレットがジョブに渡されることを示します。このジョブは特定のワークフローファイル
-# （`.github/workflows/ci-backend.yml`）を使用し、その実行には `EMAIL_ADDRESS` のシークレットが必要。
-#  - この設定により、`backend-ci` ジョブの一部として `ci-backend.yml` ワークフローが実行されたときに、リポジト
-# リレベルで定義された `EMAIL_ADDRESS` シークレットファイルが利用できるようになります。
-# ------------------------------------------------------------------------------------------------
-# - ワークフローが `workflow_call` を通して他のワークフローから呼び出される（トリガーされる）場合、どのシークレッ
-# トが必要かを指定することができる。呼び出されたワークフロー（`backend-ci`）は、これらのシークレットを提供しなけれ
-# ばならない。
 
 # ================================================================================================
 # 2.10
@@ -476,12 +421,11 @@ jobs:
 # ワークフローが再利用されたり、別のワークフローから呼び出されたりする場合には、セキュリティと適切なアクセス制御を保証
 # するために、明示的に渡す必要があります。
 # ------------------------------------------------------------------------------------------------
-# `IMAGE_TAG: ${{ github.sha }}` も記載する必要あり
-# - `update-ecr-image.yml` ワークフローが GitHub のコミット SHA (`${{ github.sha }}` で示される) と関連す
-# るイメージタグを使用するように設計されている場合は、 `IMAGE_TAG` を渡す必要があります。
-# - IMAGE_TAG`はDockerイメージの一意な識別子を提供し、ソースコードの特定のコミットへのトレースを容易にします。これ
-# は継続的インテグレーションやデプロイプロセスで特に有用で、コミット履歴に基づいて特定のイメージバージョンを素早く特定
-# し、ロールバックする必要があるかもしれません。
+# . EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+# - 参照先のupdate-ecr-image.ymlを経由してci-backend.ymlで使用する為に記述。これがないとci-backend.ymlで使用
+# 出来ず、エラーになる
+# ------------------------------------------------------------------------------------------------
+# IMAGE_TAG: ${{ github.sha }}は書かないでもいい
 
 # ================================================================================================
 # 3

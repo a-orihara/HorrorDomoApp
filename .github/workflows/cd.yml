@@ -198,7 +198,7 @@ jobs:
         run: |
           terraform fmt -check
 
-      # ポリリーの"Condition"をStringLikeへ変更必要
+      # ポリシーの"Condition"をStringLikeへ変更必要
       - name: Configure AWS Credential
         uses: aws-actions/configure-aws-credentials@v1
         with:

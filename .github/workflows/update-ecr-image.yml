@@ -20,8 +20,8 @@ env:
   ECS_CLUSTER: portfolio-ecs-on-fargate-cluster
   ECS_SERVICE_BACKEND: fargate_service
   ECS_SERVICE_FRONTEND: fargate_service_frontend
-  ECS_TASK_DEFINITION_BACKEND: backend/api/task-definition.json
-  ECS_TASK_DEFINITION_FRONTEND: frontend/front/task-definition.json
+  ECS_TASK_DEFINITION_BACKEND: ./backend/api/task-definition.json
+  ECS_TASK_DEFINITION_FRONTEND: ./frontend/front/task-definition.json
   ECR_REPOSITORY_RAILS: rails_img_prod
   ECR_REPOSITORY_NEXT: nextjs_img_prod
   CONTAINER_NAME_RAILS: rails-fargate-ctr
@@ -59,6 +59,7 @@ jobs:
       - name: Configure AWS credentials
       # 8.1
         uses: aws-actions/configure-aws-credentials@v1
+        # 作成したIAMユーザーのアクセスキー、シークレットアクセスキーを使用
         with:
           aws-access-key-id: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
@@ -84,7 +85,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         # 10.3
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api --no-cache
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
@@ -131,7 +132,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./frontend/front/Dockerfile.prod ./frontend/front/
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./frontend/front/Dockerfile.prod ./frontend/front/ --no-cache
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 

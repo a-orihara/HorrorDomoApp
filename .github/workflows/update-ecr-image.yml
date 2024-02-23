@@ -22,8 +22,8 @@ env:
   ECS_SERVICE_FRONTEND: fargate_service_frontend
   ECS_TASK_DEFINITION_BACKEND: ./backend/api/task-definition.json
   ECS_TASK_DEFINITION_FRONTEND: ./frontend/front/task-definition.json
-  ECR_REPOSITORY_RAILS: rails_img_prod
-  ECR_REPOSITORY_NEXT: nextjs_img_prod
+  ECR_REPOSITORY_RAILS: rails-img-prod
+  ECR_REPOSITORY_NEXT: nextjs-img-prod
   CONTAINER_NAME_RAILS: rails-fargate-ctr
   CONTAINER_NAME_NEXT: nextjs-fargate-ctr
 
@@ -125,6 +125,12 @@ jobs:
     # ディレクトリ確認
     - name: List directory contents
       run: ls -lah
+
+    # .gitignoreに指定されているファイルの使用これがないと後述のbuildに失敗
+    - name: Create .env.production.local
+      run: |
+        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > frontend/front/.env.production.local
+        echo "NEXT_PUBLIC_FRONT_URL=${{ secrets.NEXT_PUBLIC_FRONT_URL }}" >> frontend/front/.env.production.local
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
@@ -450,3 +456,13 @@ jobs:
 # うとします。
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
+# はい。`.env.production.local` ファイルが `.gitignore` に指定されていてリポジトリにチェックインされていなくても、GitHub Actions ワークフローで扱うことができます。.gitignore` ファイルは、機密ファイルや環境固有のファイルがソース管理に保存されるのを防ぎます。しかし、そのようなファイルを GitHub アクションで安全に使うことはできます。ここではその方法を説明します：
+### GitHub Actions での `.env.production.local` の作成と使用
+### GitHub Actions での `.env.production.local` の作成と使用
+
+# 1. **環境変数を GitHub のシークレットに保存する:** `.env.production.local` ファイルを直接使う代わりに、その内容を GitHub リポジトリのシークレットとして保存することができます。例えば、`.env.production.local` に API URL が含まれている場合、その値を `NEXT_PUBLIC_API_URL` という名前でシークレットを作成することができます。
+
+# 2. **ワークフロー中に`.env.production.local`を生成する:** GitHub Actionsのワークフローでは、Dockerのビルドプロセスが始まる前に動的に`.env.production.local`ファイルを作成することができます。以下は、このステップを含むようにワークフローを変更する方法です：
+
+# DeepL.com（無料版）で翻訳しました。
+

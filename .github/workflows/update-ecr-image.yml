@@ -75,11 +75,6 @@ jobs:
       - name: List directory contents
         run: ls -lah
 
-      # .gitignoreに指定されているファイルの使用これがないと後述のbuildに失敗
-      - name: Create .env.production.local
-        run: |
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > frontend/front/.env.production.local
-
       # docker imageをビルドし、タグ付けし、ECRへプッシュ
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -130,6 +125,11 @@ jobs:
     # ディレクトリ確認
     - name: List directory contents
       run: ls -lah
+
+    # .gitignoreに指定されているファイルの使用これがないと後述のbuildに失敗
+    - name: Create .env.production.local
+      run: |
+        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > frontend/front/.env.production.local
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image

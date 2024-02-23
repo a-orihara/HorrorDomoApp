@@ -100,7 +100,6 @@ resource "aws_db_instance" "mysql-rds-instance" {
   timeouts {}
 }
 
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

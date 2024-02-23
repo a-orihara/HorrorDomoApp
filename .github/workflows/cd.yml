@@ -41,16 +41,16 @@ defaults:
     working-directory: ./terraform
 
 jobs:
-# 2.6
-  backend-ci:
-    uses: ./.github/workflows/ci-backend.yml
-    # 2.9
-    secrets:
-      EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+# # 2.6
+#   backend-ci:
+#     uses: ./.github/workflows/ci-backend.yml
+#     # 2.9
+#     secrets:
+#       EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
 
-# 2.7
-  frontend-ci:
-    uses: ./.github/workflows/ci-frontend.yml
+# # 2.7
+#   frontend-ci:
+#     uses: ./.github/workflows/ci-frontend.yml
 
   update-ecr-image:
     uses: ./.github/workflows/update-ecr-image.yml

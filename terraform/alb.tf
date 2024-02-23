@@ -101,15 +101,15 @@ resource "aws_lb_listener" "frontend_alb_listener_http" {
     order            = 1
     target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
     # 7.2
-    type             = "redirect"
+    type = "redirect"
     redirect {
-            # 7.3
-            # host        = "#{host}"
-            # path        = "/#{path}"
-            port        = "443"
-            protocol    = "HTTPS"
-            # query       = "#{query}"
-            status_code = "HTTP_301"
+      # 7.3
+      # host        = "#{host}"
+      # path        = "/#{path}"
+      port     = "443"
+      protocol = "HTTPS"
+      # query       = "#{query}"
+      status_code = "HTTP_301"
     }
   }
   timeouts {}

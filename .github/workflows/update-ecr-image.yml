@@ -93,7 +93,12 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api --no-cache
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "ecr_rails_image_tag=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Output ECR Image Tag
+        id: output_ecr_image_tag
+        run: echo "::set-output name=image_tag::${{ github.sha }}"
+
 
       # Amazon ECSタスク定義に新しいイメージIDを記入する。
       - name: Fill in the new image ID in the Amazon ECS task definition
@@ -104,11 +109,13 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
           container-name: ${{ env.CONTAINER_NAME_RAILS }}
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image.outputs.ecr_rails_image_tag }}
 
       # imageのタグ名をterraformのoutputsで動的に渡せるように
-      - name: Set Image Tag Output
-        run: echo "rails_img_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
+      # - name: Set Image Tag Output
+      #   run: echo "rails_img_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
+
+
 
 
 # ------------------------------------------------------------------------------------------------
@@ -151,7 +158,7 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./frontend/front/Dockerfile.prod ./frontend/front/ --no-cache
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "ecr_nextjs_image_tag=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -159,7 +166,7 @@ jobs:
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
         container-name: ${{ env.CONTAINER_NAME_NEXT }}
-        image: ${{ steps.build-image.outputs.image }}
+        image: ${{ steps.build-image.outputs.ecr_nextjs_image_tag }}
 
 
     # # Amazon ECSのタスク定義をデプロイする
@@ -368,6 +375,18 @@ jobs:
 # - `GITHUB_OUTPUT` ファイルは GitHub Actions の特別な仕組みで、ジョブのステップ間でデータを共有するために使用
 # されます。出力を直接コンソールに表示する代わりに、このファイルに書き込むことで、同じジョブ内の後続のステップがデータ
 # にアクセスして使用できるようになります。
+# ------------------------------------------------------------------------------------------------
+# $GITHUB_OUTPUTは「ステップの出力パラメータの設定」に使う環境ファイルです。
+# 環境ファイルには追記のリダイレクトを使って書き込みます。
+# 書式は以下のようになります。
+
+# echo "{key}={value}" >> $GITHUB_OUTPUT
+
+# # stepsのイメージです
+# - id: awesome
+#   run: echo "character=shion" >> $GITHUB_OUTPUT
+# - run: |
+#     # あとに続くステップでは ${{ steps.awesome.outputs.character }} でshionを参照できます
 # ------------------------------------------------------------------------------------------------
 # - シェルスクリプトでは、 `>>` は出力を上書きするのではなく、ファイルに追加するために使用します。echo` などのコマ
 # ンドと一緒に使用すると、既存のファイルの内容を削除したり上書きしたりすることなく、コマンドの出力が指定したファイルの

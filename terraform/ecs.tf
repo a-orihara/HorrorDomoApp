@@ -406,8 +406,10 @@ terraform import aws_ecs_cluster.ecs-on-fargate-cluster portfolio-ecs-on-fargate
 1.4
 - `aws_ecr_repository.rails_img_prod.repository_url`の`repository_url` 属性は、ECR リポジトリの作成時
 に AWS によって動的に生成されるため、"aws_ecr_repository"リソースブロック内で設定していなくても使用できます。
-- `aws_ecr_repository`リソースに明示的に `repository_url` を設定することはありませんが、Terraform は 
+- `aws_ecr_repository`リソースに明示的に `repository_url` を設定することはありませんが、Terraform は
 `repository_url` をリソース作成後に参照できる属性として理解します。
+- タグが明示的に指定されていない場合、Dockerは "latest "タグを想定します。
+
 ================================================================================================
 2
 terraform import aws_ecs_task_definition.<name> <タスク定義のarn>

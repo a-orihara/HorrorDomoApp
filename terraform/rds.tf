@@ -48,7 +48,7 @@ resource "aws_db_instance" "mysql-rds-instance" {
   # データベースエンジンを指定
   engine = "mysql"
   # データベースエンジンのバージョンを指定
-  engine_version = "8.0.33"
+  engine_version = "8.0.35"
   # IAMデータベース認証を有効にするかどうかを指定
   iam_database_authentication_enabled = false
   # このidentifierがこのrdsインスタンスの名前。変数使用時はvar.を付ける。

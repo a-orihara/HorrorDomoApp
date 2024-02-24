@@ -93,11 +93,7 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG -f ./backend/api/Dockerfile.prod ./backend/api --no-cache
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
-          echo "ecr_rails_image_tag=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Output ECR Image Tag
-        id: output_ecr_image_tag
-        run: echo "::set-output name=image_tag::${{ github.sha }}"
+          echo "ecr_rails_image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
 
       # Amazon ECSタスク定義に新しいイメージIDを記入する。
@@ -109,17 +105,14 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
           container-name: ${{ env.CONTAINER_NAME_RAILS }}
-          image: ${{ steps.build-image.outputs.ecr_rails_image_tag }}
+          image: ${{ steps.build-image.outputs.ecr_rails_image }}
 
-      # imageのタグ名をterraformのoutputsで動的に渡せるように
-      # - name: Set Image Tag Output
-      #   run: echo "rails_img_tag=${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
-
-
+      # 13
+      - name: Output ECR Image Tag to Environment
+        run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
 
 # ------------------------------------------------------------------------------------------------
-  # 処理③ Railsの自動デプロイ。動作には ci のクリアが必要
   ecr-push-docker-nextjs:
     needs: [frontend-ci]
     runs-on: ubuntu-latest
@@ -158,7 +151,7 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG -f ./frontend/front/Dockerfile.prod ./frontend/front/ --no-cache
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
-        echo "ecr_nextjs_image_tag=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "ecr_nextjs_image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -166,7 +159,11 @@ jobs:
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
         container-name: ${{ env.CONTAINER_NAME_NEXT }}
-        image: ${{ steps.build-image.outputs.ecr_nextjs_image_tag }}
+        image: ${{ steps.build-image.outputs.ecr_nextjs_image }}
+
+    # 重複
+    # - name: Output ECR Image Tag to Environment
+    #   run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
 
     # # Amazon ECSのタスク定義をデプロイする
@@ -459,6 +456,21 @@ jobs:
 # の出力の具体的な値は、タスク定義の更新ステップで指定されたコンテナの `image` プロパティが更新されたタスク定義全
 # 体の JSON である。このJSONはECSサービスを更新するために使用され、サービスによって起動された新しいタスクが更新さ
 # れたDockerイメージを使用するようにします。
+
+# ================================================================================================
+# 13
+# `$GITHUB_ENV` を使う理由を説明します：
+# ------------------------------------------------------------------------------------------------
+### `$github_env`：
+# - 範囲:** `$GITHUB_ENV` を使用して設定された環境変数は、他のjobや他の別ファイルのワークフローで参照出来る
+# ------------------------------------------------------------------------------------------------
+### `$github_output`：
+# - `$GITHUB_OUTPUT`を使用して設定された環境変数は、同じジョブ内の別ステップでしか参照できず、他のjobや他の別ファイ
+# ルのワークフローで参照出来ない
+# ------------------------------------------------------------------------------------------------
+# . なぜ `$GITHUB_OUTPUT` ではなく `$GITHUB_ENV` なのか？
+# - GitHub のコミット SHA (`${{ github.sha }}`) に基づいて `ECR_RAILS_IMAGE_TAG` を設定するシナリオで、他
+# のjobや他の別ファイルのワークフローで参照する場合は、`$GITHUB_ENV` の方が適しています：
 
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # 第一段階 タグ付けしてビルド

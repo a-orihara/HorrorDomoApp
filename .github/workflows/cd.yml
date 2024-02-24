@@ -82,6 +82,10 @@ jobs:
           # githubaction上でawsリソースを操作する為のroleのarnを使用。secrets.:gitのsecretで作成した環境変数
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
 
+      # - name: Pass Image Tag to Terraform
+      #   run: |
+      #     echo "TF_VAR_rails_img_tag=${{ env.rails_img_tag }}" >> $GITHUB_ENV
+
       - name: Terraform init
         # 4.4 git hub actionのログは色がない為、no colorを設定
         run: |

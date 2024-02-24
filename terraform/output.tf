@@ -16,9 +16,10 @@ output "ecs_task_definition_nginx_image_val" {
 output "ecs_task_definition_nextjs_image_val" {
   value = aws_ecr_repository.nextjs_img_prod.repository_url
 }
-# outout "aws_ecs_task_definition" "fargate_task_definition" {
-#   value = 
-# }
+output "ecs_task_definition_rails_image_with_tag" {
+  value = "${aws_ecr_repository.rails_img_prod.repository_url}:${var.rails_img_tag}"
+}
+
 
 
 /*

@@ -131,7 +131,7 @@ jobs:
     - name: List directory contents
       run: ls -lah
 
-    # .gitignoreに指定されているファイルの使用これがないと後述のbuildに失敗
+    # .gitignoreに指定されているファイルの使用。これがないと後述のbuildに失敗
     - name: Create .env.production.local
       run: |
         echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > frontend/front/.env.production.local

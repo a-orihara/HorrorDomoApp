@@ -12,3 +12,4 @@
 - CI/CD: GitHub Actions
 - 開発環境：Docker、Docker Compose、VSCode、Git Hub
 
+![AWS構成図 drawio](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92)

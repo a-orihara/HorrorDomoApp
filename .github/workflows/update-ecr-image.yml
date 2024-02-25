@@ -89,7 +89,6 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
           echo "ecr_rails_image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-
       # Amazon ECSタスク定義に新しいイメージIDを記入する。
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
@@ -100,11 +99,6 @@ jobs:
           task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
           container-name: ${{ env.CONTAINER_NAME_RAILS }}
           image: ${{ steps.build-image.outputs.ecr_rails_image }}
-
-      # 13
-      # - name: Output ECR Image Tag to Environment
-      #   run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
-
 
 # ------------------------------------------------------------------------------------------------
   ecr-push-docker-nextjs:
@@ -154,26 +148,6 @@ jobs:
         task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
         container-name: ${{ env.CONTAINER_NAME_NEXT }}
         image: ${{ steps.build-image.outputs.ecr_nextjs_image }}
-
-    # 重複
-    # - name: Output ECR Image Tag to Environment
-    #   run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
-
-
-    # # Amazon ECSのタスク定義をデプロイする
-    # - name: Deploy Amazon ECS task definition
-    #   # 12.1
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   # 12.2
-    #   with:
-    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
-    #     service: ${{ env.ECS_SERVICE_BACKEND }}
-    #     cluster: ${{ env.ECS_CLUSTER }}
-    #     wait-for-service-stability: true
-
-
-# 再ビルドのコマンド
-# docker build -t rails-img-prod -f backend/api/Dockerfile.prod ./backend/api/ --no-cache
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # ================================================================================================

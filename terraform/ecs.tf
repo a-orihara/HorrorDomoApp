@@ -65,7 +65,8 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
         }
         # ECSタスクで実行されるコンテナのDockerイメージを指定
         # 1.4 image = "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod"
-        image = aws_ecr_repository.rails_img_prod.repository_url
+        # image = aws_ecr_repository.rails_img_prod.repository_url
+        image = "${aws_ecr_repository.rails_img_prod.repository_url}:${var.ecr_image_tag}"
         # コンテナのログ設定を指定するためのセクション
         logConfiguration = {
           # ログドライバーを指定しており、ここでは"awslogs"が指定
@@ -208,7 +209,8 @@ resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
         environment      = []
         environmentFiles = []
         essential        = true
-        image            = aws_ecr_repository.nextjs_img_prod.repository_url
+        # image            = aws_ecr_repository.nextjs_img_prod.repository_url
+        image = "${aws_ecr_repository.nextjs_img_prod.repository_url}:${var.ecr_image_tag}"
         logConfiguration = {
           logDriver = "awslogs"
           options = {

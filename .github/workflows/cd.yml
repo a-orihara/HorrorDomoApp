@@ -53,6 +53,7 @@ jobs:
     # 2.4 jobの実行結果を参照可能にする
     outputs:
       TF_PLAN_EXITCODE: ${{ steps.plan.outputs.exitcode }}
+
     steps:
       # jobs.<job_id>.steps.name:ステップの名前。
       - name: Cehckout repository
@@ -66,6 +67,10 @@ jobs:
         with:
           # 2.5 ${{}}:git hub actionの式。env.でgithubactionで設定した環境変数を利用可能
           terraform_version: ${{ env.TF_VERSION }}
+
+      # 2.6 gitのコミットidをECRへプッシュするimageにタグ付け
+      - name: Set git commit ID for ECR image tag
+        run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
       # initの前にfmtを実行
       - name: Terraform format
@@ -82,17 +87,13 @@ jobs:
           # githubaction上でawsリソースを操作する為のroleのarnを使用。secrets.:gitのsecretで作成した環境変数
           role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
 
-      # - name: Pass Image Tag to Terraform
-      #   run: |
-      #     echo "TF_VAR_rails_img_tag=${{ env.rails_img_tag }}" >> $GITHUB_ENV
-
       - name: Terraform init
         # 4.4 git hub actionのログは色がない為、no colorを設定
         run: |
           terraform init -no-color
 
       - name: Terraform validate
-      # 4.5
+        # 4.5
         run: |
           terraform validate -no-color
 
@@ -109,6 +110,7 @@ jobs:
             -var 'mysql_db_username=${{ secrets.MYSQL_DB_USERNAME }}' \
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
+            -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
             -input=false \
             -no-color \
             -detailed-exitcode
@@ -172,6 +174,10 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
+      # gitのコミットidをECRへプッシュするimageにタグ付け
+      - name: Set git commit ID for ECR image tag
+        run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
+
       - name: Terraform format
         run: |
           terraform fmt -check
@@ -198,6 +204,7 @@ jobs:
             -var 'mysql_db_username=${{ secrets.MYSQL_DB_USERNAME }}' \
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
+            -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
             -input=false \
             -no-color \
             -auto-approve
@@ -409,6 +416,29 @@ jobs:
 # 境変数を定義するために使用される。
 
 # ================================================================================================
+# 2.6
+# . **run: echo "ECR_IMAGE_TAG=${{ github.sha }}" の説明。>> $github_env`:**.
+# - このコマンドは `ECR_IMAGE_TAG` という名前の環境変数を作成し、現在のコミットの SHA (`${{ github.sha }}`)を
+# `GITHUB_ENV` ファイルに追加します。これにより、同じジョブの後続ステップで `ECR_IMAGE_TAG` を利用できるようにな
+# ります。
+# - ${{ github.sha }}`はワークフロー実行のトリガーとなったgitコミットSHAを取得し、Dockerイメージタグがデプロイさ
+# れるコードの正確なバージョンを反映します。
+# - また、`>> $GITHUB_ENV` を使用することで、この環境変数が現在のジョブの後続のすべてのステップで持続することを保証
+# し、ワークフローでビルドまたはデプロイされたDockerイメージの一貫したタグ付けと参照を可能にします。
+# ------------------------------------------------------------------------------------------------
+# - GITHUB_ENV`***は、同じジョブ内の後続のすべてのステップで使用可能な環境変数を設定するために使用されます。同じワ
+# ークフロー内のジョブ間で値を共有したい場合、通常はジョブレベルで出力を渡し、それらの値にアクセスするためにneedsを使
+# 用します。
+# - 別のワークフローファイルからはアクセスできません。同じワークフロー内のジョブとそのステップにスコープされます。他ワ
+# ークフロー間でデータを共有するには、アーティファクトや外部ストレージメカニズムを使用する必要があります。
+# ------------------------------------------------------------------------------------------------
+# - GITHUB_OUTPUT`***は、同じジョブ内の他のステップで使用できるステップの出力を設定するためのものです。ジョブやワ
+# ークフロー間のデータ共有とは直接関係ありません。ジョブ間で共有する場合は、ジョブの `outputs` プロパティを使用し、
+# 後続のジョブで `needs` キーワードを使用して参照します。
+# ------------------------------------------------------------------------------------------------
+# - まとめると、`$GITHUB_ENV`はジョブ内の環境変数用で、`$GITHUB_OUTPUT`は同じジョブ内のステップ出力用です。
+
+# ================================================================================================
 # 2.8
 # - `needs： ワークフローファイル `cd.yml` の [backend-ci, frontend-ci]` 行は `preview` ジョブが `backend-ci`
 # と `frontend-ci` の両方のジョブの完了に依存していることを指定。つまり`backend-ci` と `frontend-ci` の両方の
@@ -539,6 +569,12 @@ jobs:
 # GitHub Actionsのワークフローでは、コマンドの終了コードを使用して次のステップに進むかどうかを判断します。終了コー
 # ド0（成功）の場合、ワークフローは次のステップに進みます。0以外の場合（エラー）、ワークフローは通常、エラーとして停
 # 止します。
+# ------------------------------------------------------------------------------------------------
+# . **var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}'`:** の説明。
+# - Terraform の入力変数 `ecr_image_tag` を指定し、その値を GitHub Actions ワークフローで設定した環境変数
+# `ECR_IMAGE_TAG` に設定します。
+# - これにより、Terraformは実行コンテキスト内でこの値を使用できるようになり、通常は一意な識別子を必要とするDocker
+# イメージやリソースにタグを付けることができる。
 
 # ================================================================================================
 # 4.4

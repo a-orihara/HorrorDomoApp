@@ -14,7 +14,7 @@ const LikedPostArea = ({ user }: LikedPostAreaProps) => {
   const { likedPosts, totalLikedPostsCount, likedUsers, handlePageChange, isLoading } = useLikedPostsPagination(10, user.id);
 
   if (isLoading) {
-    return <div className='flex flex-1 items-center justify-center'>Loadingプププポーン...</div>;
+    return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
   }
   return (
     <CommonPostArea

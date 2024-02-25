@@ -174,7 +174,7 @@ jobs:
         with:
           terraform_version: ${{ env.TF_VERSION }}
 
-      # gitのコミットidをECRへプッシュするimageにタグ付け
+      # ECRへプッシュするimageにgitのコミットidをタグ付け
       - name: Set git commit ID for ECR image tag
         run: echo "ECR_IMAGE_TAG=${{ github.sha }}" >> $GITHUB_ENV
 
@@ -247,9 +247,6 @@ jobs:
         env:
           # slacアプリ作成の際に一緒に作成したbot_token
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
-
-
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # 1.1

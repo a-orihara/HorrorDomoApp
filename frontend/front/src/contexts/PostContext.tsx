@@ -37,7 +37,7 @@ export const PostProvider = ({ children }: PostProviderProps) => {
         console.log('ユーザーの投稿数を取得出来ませんでした');
       }
     } catch (err) {
-      alert('ユーザーの投稿数を取得出来ませんでした');
+      // alert('ユーザーの投稿数を取得出来ませんでした');
     }
   };
 

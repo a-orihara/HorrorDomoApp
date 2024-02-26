@@ -127,6 +127,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
         environment      = []
         environmentFiles = []
         essential        = true
+        # 4.1
         healthCheck = {
           command = [
             "CMD-SHELL",
@@ -202,6 +203,7 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
 # ------------------------------------------------------------------------------------------------
 # "fargate_task_definition_frontend"
 resource "aws_ecs_task_definition" "fargate_task_definition_frontend" {
+  # ALB側のヘルスチェック機能の方を活用するので、フロント側のコンテナのヘルスチェックは記述しない
   container_definitions = jsonencode(
     [
       {
@@ -447,17 +449,84 @@ terraform import aws_ecs_task_definition.fargate_task_definition arn:aws:ecs:ap-
 
 ================================================================================================
 2.3
-- cmd-shell"`： コンテナのシェル環境でコマンドを実行することを指定する。
-- curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1"`：
+- ECS タスク定義のヘルスチェックコマンドは、ECS自体によって実行されます。具体的には、ECSタスク定義で定義されたコン
+テナのコンテキスト内で実行されます。ECSはこのコマンドを使用して、健全性をチェックする。
+------------------------------------------------------------------------------------------------
+- cmd-shell"`:コンテナのシェル環境でコマンドを実行することを指定する。
+------------------------------------------------------------------------------------------------
+. curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1"`：
+------------------------------------------------------------------------------------------------
+- curl`： コマンドラインからHTTPリクエストを行うためのコマンドです。
+------------------------------------------------------------------------------------------------
+- --unix-socket/api-app/tmp/sockets/puma.sock`： このオプションは `curl` に指定された Unix ソケットを接
+続に使用するように指示します。TCP/IP ネットワーク接続の代わりに、`curl` は Unix ソケットファイルを介して接続しま
+す。
+- `--unix-socket`オプションは、リクエストをネットワークソケットではなくUnixドメインソケットを通して行うことを指
+定します。Unix ドメインソケットは同じマシン上のプロセス間通信 (IPC) に使用され、ローカル接続に TCP/IP ソケットを
+使用するよりも効率的に通信する方法を提供します。
+------------------------------------------------------------------------------------------------
+- localhost/api/v1/health_check`： リクエスト先のURLパス。Unixソケットを使用していても、`curl`はURLパスを
+要求します。接続はネットワークスタックを経由しないため、`localhost` の部分は本質的にプレースホルダです。
+- `localhost` の部分は本質的にプレースホルダとは、`localhost`の部分が実際のドメイン名やIPアドレスの代用として動
+作します。Nginxの設定に`server unix:///api-app/tmp/sockets/puma.sock`とある場合は、NginxがPumaサーバーに
+リクエストを転送するために使用するUnixソケットファイルへのパスを指定しています。このserverの名前が`localhost`。
+- つまり、代わりにRailsへの実際の接続は`/api-app/tmp/sockets/puma.sock`にあるUnixソケットを介して行われるた
+め、プレースホルダとして機能します
+------------------------------------------------------------------------------------------------
+- exit 1`： コマンドのこの部分は、`curl` コマンドが失敗した場合 (例えば、ヘルスチェックエンドポイントが成功ステ
+ータスを返さなかった場合)、スクリプトまたはコマンドがエラーを示すステータスコード 1 で終了することを指定します。
 これは実際に実行されるコマンドです。curl`を使用して、`/api-app/tmp/sockets/puma.sock`にあるUnixソケットファ
 イルを通してローカルのPumaサーバー（Rubyウェブサーバー）にリクエストを送信します。このコマンドは
 `/api/v1/health_check` というパスを要求する。このコマンドが失敗した場合（ヘルスチェックが正常な応答を返さなかっ
 た場合）、`||exit 1` は失敗を示す `1` というステータスでコマンドが終了することを保証する。
-
 
 ================================================================================================
 3
 terraform import aws_ecs_service.<name> <cluster name>/<service name>
 実際の例：
 terraform import aws_ecs_service.fargate_service portfolio-ecs-on-fargate-cluster/portfolio-fargate-service
+
+================================================================================================
+4.1
+nginxのヘルスチェックコマンド
+"CMD-SHELL",
+"curl -f http://localhost/api/v1/health_check || exit 1",
+------------------------------------------------------------------------------------------------
+- `localhost` は `nginx.conf` の httpコンテキストのserverディレクティブの`server_name localhost;` で設
+定された Nginx のバーチャルホストのサーバのローカルインスタンスを指します。ヘルスチェックコマンドが実行されると、
+Nginxサーバが動作しているコンテナのコンテキスト内で実行されます。ここで、`localhost` は Nginx サーバー（バーチャ
+ルホスト）自身を指しており、ヘルスチェックは Nginx の背後にあるアプリケーションが提供する `/api/v1/health_check`
+エンドポイントを要求します。このセットアップにより、ヘルスチェックは背後のアプリケーションレイヤーまでのフルスタック
+を検証し、両方が動作可能であることを確認します。
+------------------------------------------------------------------------------------------------
+- curl -f http://localhost/api/v1/health_check` を使用したRailsへのアクセスは、Railsアプリケーションへの
+リクエストをプロキシするNginx設定によって可能になります。nginx.conf`ファイル内の
+`server unix:///api-app/tmp/sockets/puma.sock fail_timeout=30s;` という特定の設定で可能です。これは、
+Railsを実行しているアプリケーションサーバーであるPumaに接続されたUnixドメインソケット経由でRailsにリクエストを転
+送するようにNginxに指示します。
+- curlコマンドの`localhost`はNginxサーバー自身を指し、Nginxサーバーは指定されたUnixソケットパスを介してRails
+にリクエストをプロキシします
+------------------------------------------------------------------------------------------------
+# - `nginx.conf` の`upstream api-app`の、`server unix:///api-app/tmp/sockets/puma.sock;`この行は
+Puma（Railsサーバー）がリッスンしているUnixソケットにリクエストを転送するようにNginxを設定します。このUnixソケッ
+トパス（`/api-app/tmp/sockets/puma.sock`）はNginxとPumaが内部的に通信に使用し、NginxとPumaの間でTCP/IPを
+介したHTTPリクエストの必要性を置き換えます。
+- curl コマンド `curl -f http://localhost/api/v1/health_check` の `localhost` は、同じネットワークまた
+はコンテナ環境内で実行された場合の Nginx サーバーへの参照です。このセットアップでは、`localhost` は Unix ソケッ
+トパスに直接関係しません。その代わり、`http://localhost/api/v1/health_check`へのリクエストはNginxが受け取り
+、設定されたUnixソケットパスを経由してRailsアプリケーションに転送されます。localhost`からUnixソケット
+（`/api-app/tmp/sockets/puma.sock`）への実際の「置き換え」や「転送」は、Nginxの設定によって抽象化され、舞台
+裏で行われます。
+- `http://localhost/api/v1/health_check`のlocalhostでRailsへつながり、つまりRailsへ`、
+http://<この部分のlocalhostがrailsのコンピュータに置き換わり>/api/v1/health_check`、api/v1/health_check
+パスへリクエストしている
+------------------------------------------------------------------------------------------------
+- railsもnginxのヘルスチェックも、同じエンドポイントを対象にしているため似ているように見えますが、目的は異なる。
+- Railsの健全性チェックでは、Unixソケットを介して接続することで、Pumaアプリケーションサーバがリクエストを処理する
+能力を直接テストします。このチェックでは、Railsが稼働し、応答し、必要なサービス（データベースなど）に接続できること
+を確認します。
+- HTTPで実行されるNginxヘルスチェックは、Nginxウェブサーバが動作可能で、リクエストに対応できることを確認します。
+また、NginxからRailsへの通信経路をネットワークスタックを通じて間接的にテストし、プロキシ転送やHTTPリクエスト処理
+を含むウェブサービスインフラストラクチャ全体が機能していることを確認します。
+
 */

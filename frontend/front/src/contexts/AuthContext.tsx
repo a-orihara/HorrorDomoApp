@@ -59,7 +59,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     } catch (err) {
       console.log(err);
       // ここをアラートモーダルの表示にすると、エラーの際にモーダル表示の連続になるのでalertで処理
-      alert('サインインのユーザー情報を取得出来ませんでした');
+      // 一旦コメントアウト
+      // alert('サインインのユーザー情報を取得出来ませんでした');
     }
     // 1.6
     setLoading(false);

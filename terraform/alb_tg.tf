@@ -71,10 +71,10 @@ resource "aws_lb_target_group" "frontend_alb_tg" {
   target_type                   = "ip"
   vpc_id                        = aws_vpc.vpc.id
   health_check {
-    enabled             = true
-    healthy_threshold   = 5
-    interval            = 300
-    matcher             = "200"
+    enabled           = true
+    healthy_threshold = 5
+    interval          = 300
+    matcher           = "200"
     # 3.1
     path                = "/api/health_check"
     port                = "traffic-port"

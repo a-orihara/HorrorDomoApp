@@ -52,9 +52,8 @@ module ApiApp
     config.middleware.insert_before 0, Rack::Cors do
       # 許可されるCORSリクエストについての設定
       allow do
-        # origins '*'すべてのオリジンからのリクエストを許可（なぜかrspecだと使えないため）
-        # origins Settings.front_domain || '*'
-        origins '*'
+        origins Settings.front_domain
+        # origins '*'
         # すべてのリソースに対するCORSポリシーを指定
         resource '*',
                   # すべてのヘッダーを許可

@@ -20,10 +20,10 @@ titles = YAML.load_file(titles_path)['titles']
 contents = YAML.load_file(contents_path)['contents']
 
 user1 = User.create!(
-  name: 'momo',
-  email: 'momo@momo.com',
-  password: 'momomo',
-  password_confirmation: 'momomo',
+  name: 'hiro',
+  email: 'hiro@hiro.com',
+  password: 'hirohiro',
+  password_confirmation: 'hirohiro',
   admin: true,
   # 1
   # profile: Faker::Lorem.sentence(word_count: 20),
@@ -33,10 +33,10 @@ user1 = User.create!(
 )
 
 user2 = User.create!(
-  name: 'koko',
-  email: 'koko@koko.com',
-  password: 'kokoko',
-  password_confirmation: 'kokoko',
+  name: 'momo',
+  email: 'momo@momo.com',
+  password: 'momomomo',
+  password_confirmation: 'momomomo',
   profile: profiles.sample,
   confirmed_at: Time.current
 )
@@ -64,7 +64,7 @@ image_paths = %w[
   app/assets/images/woman3.png
 ]
 
-# 追加のユーザーをまとめて生成する
+# 追加の50ユーザーをまとめて生成する
 50.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
@@ -93,8 +93,8 @@ end
 allusers = User.all
 
 allusers.each do |user|
-  # 自分を除いたユーザーからランダムに20〜30人を選ぶ
-  random_following = allusers.where.not(id: user.id).sample(rand(10..15))
+  # 自分を除いたユーザーからランダムに15〜20人を選ぶ
+  random_following = allusers.where.not(id: user.id).sample(rand(15..20))
   # それらのユーザーをフォロー
   random_following.each do |followed|
     # すでにフォローしている場合はスキップ
@@ -104,7 +104,7 @@ allusers.each do |user|
   # すべての投稿から自分の投稿を除外（自分の投稿を除外した他のユーザーの投稿を取得）
   other_user_posts = Post.where.not(user_id: user.id)
   # 20回のループの中で、ランダムに投稿を選び、already_liked?メソッドを使ってその投稿を既にいいねしているか確認
-  20.times do
+  75.times do
     # ランダムに投稿を選ぶ
     post = other_user_posts.sample
     # already_liked?メソッドを使ってその投稿を既にいいねしているか確認、すでにいいねしている場合はスキップ
@@ -138,6 +138,7 @@ confirmed_at: Time.now を追加しています。これにより、シードデ
 
 ================================================================================================
 2
+app/assets/images/man1.pngではなく、
 /app/assets/images/man1.png、にするとパスが見つからないので注意。
 エラーが出る理由は、スラッシュ(/)で始まるパスは絶対パスと解釈されるからです。
 つまり、/app/assets/images/man1.png は、システムのルートディレクトリからのパスとなります。
@@ -219,8 +220,8 @@ backend/api/に置き換わる
 . `(profiles_path)['profiles']`の意味
 - `profiles_path`: この変数はYAMLファイルのパスを保持している。
 - `['profiles']`: YAMLファイル内の`profiles`キーに対応する値を取り出すための記法。
-- 指しているもの: `profiles`キーの値（YAMLファイル内における）を取得している。YAMLファイルの構造に応じた値が取
-り出される。ハッシュのキーから値を取り出しているため、profilesはハッシュとなります。
+- 指しているもの: `profiles`キーの値（YAMLファイルprofiles_path内における）を取得している。YAMLファイルの構造
+に応じた値が取り出される。ハッシュのキーから値を取り出しているため、profilesはハッシュとなります。
 
 ================================================================================================
 7

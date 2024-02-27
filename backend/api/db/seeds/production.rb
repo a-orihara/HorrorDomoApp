@@ -9,10 +9,10 @@ titles = YAML.load_file(titles_path)['titles']
 contents = YAML.load_file(contents_path)['contents']
 
 user1 = User.create!(
-  name: 'momo',
-  email: 'momo@momo.com',
-  password: 'momomo',
-  password_confirmation: 'momomo',
+  name: 'hiro',
+  email: 'hiro@hiro.com',
+  password: 'hirohiro',
+  password_confirmation: 'hirohiro',
   admin: true,
   profile: profiles.sample,
   # 1.1
@@ -20,10 +20,10 @@ user1 = User.create!(
 )
 
 user2 = User.create!(
-  name: 'koko',
-  email: 'koko@koko.com',
-  password: 'kokoko',
-  password_confirmation: 'kokoko',
+  name: 'momo',
+  email: 'momo@momo.com',
+  password: 'momomomo',
+  password_confirmation: 'momomomo',
   profile: profiles.sample,
   confirmed_at: Time.current
 )
@@ -31,14 +31,19 @@ user2 = User.create!(
 model_users = [user1, user2]
 
 model_users.each do |user|
+  # 投稿を20個作成
   20.times do
+    # 投稿文作成
     content = contents.sample
     title = titles.sample
+    # 作成日時を過去1年間のランダムな日付で作成
     created_at = Faker::Date.between(from: 1.years.ago, to: Date.today)
+    # 投稿を作成
     user.posts.create!(content: content, title: title, created_at: created_at)
   end
 end
 
+# サンプルユーザーの画像パスを配列で作成
 image_paths = %w[
   app/assets/images/man1.png
   app/assets/images/man2.png
@@ -47,17 +52,8 @@ image_paths = %w[
   app/assets/images/woman2.png
   app/assets/images/woman3.png
 ]
-# image_paths = %w[
-#   man1.png
-#   man2.png
-#   man3.png
-#   woman1.png
-#   woman2.png
-#   woman3.png
-# ]
 
-
-
+# 追加のユーザーをまとめて生成する
 50.times do |n|
   name  = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
@@ -69,8 +65,11 @@ image_paths = %w[
                 password_confirmation: password,
                 profile: profile,
                 confirmed_at: Time.current)
+  # avatar画像選択
   image_path = Rails.root.join(image_paths.sample)
+  # avatar画像を登録
   user.avatar.attach(io: File.open(image_path), filename: File.basename(image_path), content_type: 'image/png')
+  # 投稿を20個作成
   20.times do
     content = contents.sample
     title = titles.sample
@@ -79,16 +78,21 @@ image_paths = %w[
   end
 end
 
+# 全てのユーザーを格納
 allusers = User.all
 
 allusers.each do |user|
-  random_following = allusers.where.not(id: user.id).sample(rand(10..15))
+  # フォローする可能性のある他のユーザーを（10から15）ランダムに選択する。
+  random_following = allusers.where.not(id: user.id).sample(rand(15..20))
+  # 選択した他ユーザーの配列をループ
   random_following.each do |followed|
+    # userが既に他ユーザーをフォローしているチェック。もしそうなら残りのブロックをスキップ
     next if user.following?(followed)
     user.follow(followed)
   end
+  # DBから他ユーザーが作成した投稿を取得し、`other_user_posts` に格納
   other_user_posts = Post.where.not(user_id: user.id)
-  20.times do
+  75.times do
     post = other_user_posts.sample
     next if user.already_liked?(post)
     user.likes.create!(post_id: post.id)

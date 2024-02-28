@@ -92,6 +92,7 @@ allusers.each do |user|
   end
   # DBから他ユーザーが作成した投稿を取得し、`other_user_posts` に格納
   other_user_posts = Post.where.not(user_id: user.id)
+  # 75回いいねをする
   75.times do
     post = other_user_posts.sample
     next if user.already_liked?(post)

@@ -8,6 +8,13 @@
 
 *転職用のポートフォリオと合わせて学習用の為、コードに学習用のコメントをそのまま残してあります。
 
+*費用節約の為、面談前に本番デプロイします。
+
+## 概要
+フロントエンドはNext.js、バックエンドはRailsでSPA構成。
+
+インフラはAWS（Fargate）。Terraformでインフラをコード化し、GitHubActionsでビルド、テスト、デプロイを自動化。
+
 ## 主な使用技術
 ### バックエンド
 - Ruby(3.1.2)
@@ -31,7 +38,7 @@
 ### Docker、Docker Compose
 - 開発環境、本番環境をコンテナ化
 ### Nginx
-- Webサーバ
+- Webサーバー
 - RailsのPumaとUnixドメインソケット通信
 ### AWS
 - ECS Fargate: Nextjs、Rails、Nginxのコンテナを実行
@@ -41,12 +48,11 @@
 - S3: Active Strageの画像やTerraformの設定ファイルを保存
 - Route53: 独自ドメインでアクセス
 - ACM: 証明書を発行、httpsでアクセス
-- CI/CD: GitHub Actions
-- 開発環境：Docker、Docker Compose、VSCode、Git Hub
 ### Terraform
 - AWSリソースをコード化して管理
 ### GitHubAction
-CI/CDパイプライン構築
+CI/CDパイプラインを構築
+
 ビルド、テスト、デプロイを全自動化
 - テスト
   - Rspec（単体テスト(model)、機能テスト(request)）
@@ -58,10 +64,10 @@ CI/CDパイプライン構築
   - Nextjs、Rails、NginxのDocker imageをビルド
   - imageにgitのコミットidをタグ付け
   - ECRへイメージをプッシュ
-  - ECSのサービスアップデート、プッシュしたimageを使ってタスク定義からコンテナを作成
+  - ECSのサービスをアップデート、プッシュしたimageを使ってタスク定義からコンテナを作成
 
 ## デプロイ手順
-GitHubのmainブランチにプッシュした際、GitHub ActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。Slackへ通知後、CDフローでTerraformを使ってAWS Fargateへデプロイ。
+GitHubのmainブランチにプッシュした際、GitHub ActionsでgitのコミットidをECRへプッシュするimageにタグ付け。Slackへ通知後、CDフローでTerraformを使ってAWS Fargateへデプロイ。
 
 ## インフラ構成図
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92" width="80%" />
@@ -76,7 +82,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 - ACM: 証明書を発行、httpsでアクセス。 -->
 
 ## 機能詳細
-- アカウント作成、ログイン、ログアウト機能（devise、devise token auth）
+- アカウント作成、ログイン、ログアウト機能（Devise、Devise Token Auth）
 - ユーザー編集機能
   - Avatar登録（Active_Starage）、
 - 管理ユーザーによるユーザー削除機能
@@ -85,7 +91,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 - 投稿検索機能
 - 投稿へのいいね機能
 - ユーザーフォロー機能
-- TMDB API（外部API）によるの映画情報取得機能
+- TMDB API（外部API）によるの映画情報取得
 - モーダル表示（React-Modal）
 - ページネーション機能（Kaminari）
 - レスポンシブ対応（React-Paginate、TailwindCSS）
@@ -110,7 +116,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 - ユーザー一覧
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/e5c75b2d-0db8-4a7f-a9c4-c5d5a3bc416e" width="80%" />
 
-- フォロワー
+- フォロウィング
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/8918bc01-3a7c-4210-80bf-3ef59a2be1e2" width="80%" />
 
 - 投稿作成

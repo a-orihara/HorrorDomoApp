@@ -1,8 +1,7 @@
 ホラー映画の感想投稿サイトです。
-
 好きなホラー映画の感想を投稿、閲覧、検索できます。
-
 レスポンシブ対応しているのでスマホからもご覧いただけます。
+*転職用のポートフォリオと合わせて学習用の為、コードに学習用のコメントをそのまま残してあります。
 
 ## 使用技術
 - バックエンド：Rails(api)、Devise、Devise Token Auth、Kaminari、ActiveStorage、Rspec、Rubocop
@@ -12,9 +11,34 @@
 - 開発環境：Docker、Docker Compose、VSCode、Git Hub
 
 ## デプロイ手順
-GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。その後、CDフローでterraformを使ってAWS Fargateへデプロイ。
+GitHubのmainブランチにプッシュした際、GitHub ActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。Slackへ通知後、CDフローでTerraformを使ってAWS Fargateへデプロイ。
 
+## インフラ構成図
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92" width="80%" />
+
+## AWS詳細
+- ECS Fargate: Nextjs、Rails、Nginxのコンテナを実行
+- ECR: Nextjs、Rails、Nginxのイメージを保存
+- ALB: ALBをフロントエンド、バックエンドの2つに分け、各サービスのトラフィックを独立して管理。それぞれ独自ドメインを使用して別々にアクセス可能
+- RDS: MySQLを使用
+- S3: Active Strageの画像やTerraformの設定ファイルを保存
+- Route53: 独自ドメインでアクセス
+- ACM: 証明書を発行、httpsでアクセス。
+
+## 機能詳細
+- アカウント作成、ログイン、ログアウト機能（devise、devise token auth）
+- ユーザー編集機能
+  - Avatar登録（Active_Starage）、
+- 管理ユーザーによるユーザー削除機能
+- 投稿作成機能
+- 投稿削除機能
+- 投稿検索機能
+- 投稿へのいいね機能
+- ユーザーフォロー機能
+- TMDB API（外部API）によるの映画情報取得機能
+- モーダル表示（React-Modal）
+- ページネーション機能（Kaminari）
+- レスポンシブ対応（React-Paginate、TailwindCSS）
 
 ## 使用イメージ
 - ホーム

@@ -18,11 +18,11 @@ GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミ
 
 ## 使用イメージ
 ### ホーム
-![ホームページ](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08)
-
+<!-- ![ホームページ](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08) -->
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08" width="75%" />
 ### サインイン
-![サインイン](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/85809807-ab80-474d-a73e-9ca95d584c5f)
-
+<!-- ![サインイン](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/85809807-ab80-474d-a73e-9ca95d584c5f) -->
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/85809807-ab80-474d-a73e-9ca95d584c5f" width="80%" />
 ### サインアップ
 ![サインアップ](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/ac0e1259-0fc2-4cc9-b9f8-638e54ad1d9b)
 
@@ -47,10 +47,13 @@ GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミ
 
 ### レスポンシブに対応
 #### Iphone
-![レスポンシブ_iphone](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/26d070dd-a463-4f18-b90d-b439dfb442a4)
+<!-- ![レスポンシブ_iphone](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/26d070dd-a463-4f18-b90d-b439dfb442a4) -->
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/26d070dd-a463-4f18-b90d-b439dfb442a4" width="75%" />
 
 #### Ipad
-![レスポンシブ_Ipad](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/c059fdfa-4658-4048-bcda-aadb64dba150)
+<!-- ![レスポンシブ_Ipad](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/c059fdfa-4658-4048-bcda-aadb64dba150) -->
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/c059fdfa-4658-4048-bcda-aadb64dba150" width="50%" />
 
 
-
+<!-- + <img src="{画像URL}" width="50%" />
+- ![iPhone 13_2022-02-06 15:27:44 085500]({画像URL}) -->

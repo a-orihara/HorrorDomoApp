@@ -16,3 +16,12 @@
 GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。その後、CDフローでterraformを使ってAWS Fargateへデプロイ。
 
 ![AWS構成図 drawio](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92)
+
+##　レスポンシブに対応
+### Iphone
+![E6164206-61A0-4765-9A27-E31DFA6CBFC9_1_105_c](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/74380b6b-2763-45e2-b756-597b903452cf)
+### Ipad
+![レスポンシブ_Ipad](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/3127bda5-577e-417c-beb1-165f42bed136)
+
+
+

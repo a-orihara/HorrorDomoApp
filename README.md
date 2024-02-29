@@ -1,6 +1,11 @@
+## 作成アプリ：HorrorDomoApp
+
 ホラー映画の感想投稿サイトです。
+
 好きなホラー映画の感想を投稿、閲覧、検索できます。
+
 レスポンシブ対応しているのでスマホからもご覧いただけます。
+
 *転職用のポートフォリオと合わせて学習用の為、コードに学習用のコメントをそのまま残してあります。
 
 ## 使用技術
@@ -71,10 +76,10 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 
 ### レスポンシブに対応
 - IPhone
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/26d070dd-a463-4f18-b90d-b439dfb442a4" width="45%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/26d070dd-a463-4f18-b90d-b439dfb442a4" width="40%" />
 
 - IPad
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/c059fdfa-4658-4048-bcda-aadb64dba150" width="45%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/c059fdfa-4658-4048-bcda-aadb64dba150" width="40%" />
 
 
 <!-- + <img src="{画像URL}" width="50%" />

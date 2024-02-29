@@ -14,37 +14,36 @@
 ## デプロイ手順
 GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。その後、CDフローでterraformを使ってAWS Fargateへデプロイ。
 
-![AWS構成図 drawio](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92)
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92" width="80%" />
 
 ## 使用イメージ
 ### ホーム
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08" width="80%" />
 
 ### サインイン
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/85809807-ab80-474d-a73e-9ca95d584c5f" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/85809807-ab80-474d-a73e-9ca95d584c5f" width="80%" />
 
 ### サインアップ
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/ac0e1259-0fc2-4cc9-b9f8-638e54ad1d9b" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/ac0e1259-0fc2-4cc9-b9f8-638e54ad1d9b" width="80%" />
 
 ### ユーザーホーム
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/3089876c-b609-46a0-afcf-310d70910f0d" width="80%" />
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/882bd372-6d84-4699-a76a-04f058ffdcee" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/882bd372-6d84-4699-a76a-04f058ffdcee" width="80%" />
 
 ### ユーザー編集
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/868bd984-4940-48e6-abe9-af5b1e519c16" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/868bd984-4940-48e6-abe9-af5b1e519c16" width="80%" />
 
 ### ユーザー一覧
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/e5c75b2d-0db8-4a7f-a9c4-c5d5a3bc416e" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/e5c75b2d-0db8-4a7f-a9c4-c5d5a3bc416e" width="80%" />
 
 ### フォロワー
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/8918bc01-3a7c-4210-80bf-3ef59a2be1e2" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/8918bc01-3a7c-4210-80bf-3ef59a2be1e2" width="80%" />
 
 ### 投稿作成
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/d952ce76-d529-4bb0-9c8f-2011c5bcd397" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/d952ce76-d529-4bb0-9c8f-2011c5bcd397" width="80%" />
 
 ### 投稿詳細
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/68762c3d-a414-420a-af0c-2beea59e743b" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/68762c3d-a414-420a-af0c-2beea59e743b" width="80%" />
 
 ### レスポンシブに対応
 #### Iphone

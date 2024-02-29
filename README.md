@@ -18,7 +18,7 @@
 - Rspec
 - Rubocop
 ### フロントエンド
-- Next.js(Ver.12)
+- Next.js(12.3.4)
 - TypeScript
 - TailwindCSS
 - Axios
@@ -29,8 +29,10 @@
 - Lint、Prettier
 ## インフラ
 ### Docker、Docker Compose
-開発環境、本番環境をコンテナ化
+- 開発環境、本番環境をコンテナ化
 ### Nginx
+- Webサーバ
+- RailsのPumaとUnixドメインソケット通信
 ### AWS
 - ECS Fargate: Nextjs、Rails、Nginxのコンテナを実行
 - ECR: Nextjs、Rails、Nginxのイメージを保存
@@ -38,25 +40,25 @@
 - RDS: MySQLを使用
 - S3: Active Strageの画像やTerraformの設定ファイルを保存
 - Route53: 独自ドメインでアクセス
-- ACM: 証明書を発行、httpsでアクセス。
+- ACM: 証明書を発行、httpsでアクセス
 - CI/CD: GitHub Actions
 - 開発環境：Docker、Docker Compose、VSCode、Git Hub
 ### Terraform
-AWSリソースをコード化して管理
+- AWSリソースをコード化して管理
 ### GitHubAction
 CI/CDパイプライン構築
 ビルド、テスト、デプロイを全自動化
-- テスト・
+- テスト
   - Rspec（単体テスト(model)、機能テスト(request)）
   - Rubocop
   - Lint
   - Testing Library
   - Jest（一部の非同期処理を含むUIコンポーネントやカスタムフックのテスト）
-- デプロイ（フロント）
+- デプロイ
   - Nextjs、Rails、NginxのDocker imageをビルド
   - imageにgitのコミットidをタグ付け
   - ECRへイメージをプッシュ
-  - ECSのサービスアップデート、プッシュしたimageを使ったタスク定義からコンテナを作成
+  - ECSのサービスアップデート、プッシュしたimageを使ってタスク定義からコンテナを作成
 
 ## デプロイ手順
 GitHubのmainブランチにプッシュした際、GitHub ActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。Slackへ通知後、CDフローでTerraformを使ってAWS Fargateへデプロイ。
@@ -64,14 +66,14 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 ## インフラ構成図
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92" width="80%" />
 
-## AWS詳細
+<!-- ## AWS詳細
 - ECS Fargate: Nextjs、Rails、Nginxのコンテナを実行
 - ECR: Nextjs、Rails、Nginxのイメージを保存
 - ALB: ALBをフロントエンド、バックエンドの2つに分け、各サービスのトラフィックを独立して管理。それぞれ独自ドメインを使用して別々にアクセス可能
 - RDS: MySQLを使用
 - S3: Active Strageの画像やTerraformの設定ファイルを保存
 - Route53: 独自ドメインでアクセス
-- ACM: 証明書を発行、httpsでアクセス。
+- ACM: 証明書を発行、httpsでアクセス。 -->
 
 ## 機能詳細
 - アカウント作成、ログイン、ログアウト機能（devise、devise token auth）

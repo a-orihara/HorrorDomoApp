@@ -15,6 +15,7 @@
 GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。その後、CDフローでterraformを使ってAWS Fargateへデプロイ。
 
 ![AWS構成図 drawio](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92)
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/5ca90b71-66ad-4d09-b444-182b33833e92" width="80%" />
 
 ## 使用イメージ
 ### ホーム
@@ -27,7 +28,7 @@ GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミ
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/ac0e1259-0fc2-4cc9-b9f8-638e54ad1d9b" width="75%" />
 
 ### ユーザーホーム
-<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/3089876c-b609-46a0-afcf-310d70910f0d" width="75%" />
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/3089876c-b609-46a0-afcf-310d70910f0d" width="80%" />
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/882bd372-6d84-4699-a76a-04f058ffdcee" width="75%" />
 
 ### ユーザー編集
@@ -55,3 +56,11 @@ GitHubのmainブランチにプッシュした際、GitHubActionsでgitのコミ
 
 <!-- + <img src="{画像URL}" width="50%" />
 - ![iPhone 13_2022-02-06 15:27:44 085500]({画像URL}) -->
+
+<!--
+GitHubのReadMeファイルはMarkdownで書かれています。Markdownは軽量なマークアップ言語であり、プレーンテキストフォーマット構文を備えています。
+しかし、Markdown自体は構文内で直接画像のリサイズをサポートしていません。
+GitHubのREADMEで画像のサイズを変更するには、HTMLの<img>タグを使います。
+<path>を画像の実際のパスに置き換え、widthとheightの値を希望の寸法に調整します。MarkdownファイルでHTMLタグを使うと、GitHubはそれをHTMLとしてレンダリングします。これにより、Markdownの構文ではカバーされていないHTMLの機能を利用することができます。
+画像のリサイズなどMarkdown以上の機能が必要な場合は、HTMLコード（<img>タグなど）を含めることもできます。
+-->

@@ -8,12 +8,55 @@
 
 *転職用のポートフォリオと合わせて学習用の為、コードに学習用のコメントをそのまま残してあります。
 
-## 使用技術
-- バックエンド：Rails(api)、Devise、Devise Token Auth、Kaminari、ActiveStorage、Rspec、Rubocop
-- フロントエンド：Next.js、TypeScript、TailwindCSS、Axios、React-Modal、React-Paginate、Testing Library、Jest、ESLint、Prettier
-- インフラ：AWS（VPC、ECS(Fargate)、ECR、ALB、RDS、Route53、ACM、S3）、Nginx、Terraform
+## 主な使用技術
+### バックエンド
+- Ruby(3.1.2)
+- Rails api(6.1.7)
+- Devise、Devise Token Auth
+- Kaminari
+- ActiveStorage
+- Rspec
+- Rubocop
+### フロントエンド
+- Next.js(Ver.12)
+- TypeScript
+- TailwindCSS
+- Axios
+- React-Modal
+- React-Paginate
+- Testing Library
+- Jest
+- Lint、Prettier
+## インフラ
+### Docker、Docker Compose
+開発環境、本番環境をコンテナ化
+### Nginx
+### AWS
+- ECS Fargate: Nextjs、Rails、Nginxのコンテナを実行
+- ECR: Nextjs、Rails、Nginxのイメージを保存
+- ALB: ALBをフロントエンド、バックエンドの2つに分け、各サービスのトラフィックを独立して管理。それぞれ独自ドメインを使用して別々にアクセス可能
+- RDS: MySQLを使用
+- S3: Active Strageの画像やTerraformの設定ファイルを保存
+- Route53: 独自ドメインでアクセス
+- ACM: 証明書を発行、httpsでアクセス。
 - CI/CD: GitHub Actions
 - 開発環境：Docker、Docker Compose、VSCode、Git Hub
+### Terraform
+AWSリソースをコード化して管理
+### GitHubAction
+CI/CDパイプライン構築
+ビルド、テスト、デプロイを全自動化
+- テスト・
+  - Rspec（単体テスト(model)、機能テスト(request)）
+  - Rubocop
+  - Lint
+  - Testing Library
+  - Jest（一部の非同期処理を含むUIコンポーネントやカスタムフックのテスト）
+- デプロイ（フロント）
+  - Nextjs、Rails、NginxのDocker imageをビルド
+  - imageにgitのコミットidをタグ付け
+  - ECRへイメージをプッシュ
+  - ECSのサービスアップデート、プッシュしたimageを使ったタスク定義からコンテナを作成
 
 ## デプロイ手順
 GitHubのmainブランチにプッシュした際、GitHub ActionsでgitのコミットidをECRのへプッシュするimageにタグ付け。Slackへ通知後、CDフローでTerraformを使ってAWS Fargateへデプロイ。

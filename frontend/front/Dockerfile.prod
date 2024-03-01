@@ -1,6 +1,6 @@
 # 7
 
-# 2 alpine:Linuxのディストリビューション。軽量なAlpine上でNodeJSのv16系を動かす。
+# 2 alpine:Linuxのディストリビューション。軽量なAlpine上でNodeJSのv16系を動かす
 FROM node:19.4.0-alpine AS deps
 # 3
 RUN apk add --no-cache libc6-compat

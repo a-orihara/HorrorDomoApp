@@ -4,6 +4,7 @@ class Api::V1::MoviesController < ApplicationController
 
   def index
     logger.info "MoviesControllerのindexアクションが発火"
+    logger.info "◆TMDB_APIキー: #{ENV.fetch('TMDB_API')}"
     title = params[:title]
     # 1 titleをエンコードする
     url = "https://api.themoviedb.org/3/search/movie?api_key=#{ENV.fetch('TMDB_API')}&language=ja&query=" + URI.encode_www_form_component(title)

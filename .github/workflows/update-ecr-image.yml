@@ -65,6 +65,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # ECRへログイン
       - name: Login to Amazon ECR
         # 9.1
         id: login-ecr
@@ -75,8 +76,12 @@ jobs:
       - name: List directory contents
         run: ls -lah
 
-      # docker imageをビルドし、タグ付けし、ECRへプッシュ
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Create Rails .env
+        run: |
+          echo "TMDB_API=${{ secrets.TMDB_API }}" > backend/api/.env
+
+      # docker imageをビルドし、gitコミットidでタグ付けし、ECRへプッシュ、そのURLをOUTPUT
+      - name: Rails Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           # 10.1
@@ -90,7 +95,7 @@ jobs:
           echo "ecr_rails_image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       # Amazon ECSタスク定義に新しいイメージIDを記入する。
-      - name: Fill in the new image ID in the Amazon ECS task definition
+      - name: Fill in the new Rails image ID in the Amazon ECS task definition
         id: task-def
         # 11.1 既存のECSタスク定義JSONファイルとしてGitHubリポジトリに指定）を受け取り、指定されたコンテナのコンテナイメージIDを更新し、新しいタスク定義を出力
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -126,12 +131,12 @@ jobs:
       run: ls -lah
 
     # .gitignoreに指定されているファイルの使用。これがないと後述のbuildに失敗
-    - name: Create .env.production.local
+    - name: Create Nextjs .env.production.local
       run: |
         echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > frontend/front/.env.production.local
         echo "NEXT_PUBLIC_FRONT_URL=${{ secrets.NEXT_PUBLIC_FRONT_URL }}" >> frontend/front/.env.production.local
 
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Nextjs Build, tag, and push image to Amazon ECR
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -141,7 +146,7 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
         echo "ecr_nextjs_image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    - name: Fill in the new image ID in the Amazon ECS task definition
+    - name: Fill in the new Nextjs image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
@@ -366,8 +371,6 @@ jobs:
 # 、ワークフローのあるステップで生成された動的なデータを後のステップに渡すための方法です。`$GITHUB_OUTPUT` に書き
 # 込むことで、GitHub Actions ワークフローの後続のステップで作成したイメージ名を利用できるようにします。
 # ------------------------------------------------------------------------------------------------
-
-
 
 # ================================================================================================
 # 11.1

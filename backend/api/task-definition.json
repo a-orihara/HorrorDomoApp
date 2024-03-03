@@ -1,118 +1,120 @@
 {
-  "family": "portfolio-fargate-task-definition",
-  "containerDefinitions": [
-      {
-          "name": "rails-fargate-ctr",
-          "image": "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod",
-          "cpu": 0,
-          "memory": 1024,
-          "memoryReservation": 1024,
-          "portMappings": [
-              {
-                  "name": "rails-fargate-ctr-3000-tcp",
-                  "containerPort": 3000,
-                  "hostPort": 3000,
-                  "protocol": "tcp",
-                  "appProtocol": "http"
-              }
-          ],
-          "essential": true,
-          "environment": [
-              {
-                  "name": "RAILS_MASTER_KEY",
-                  "value": "af3b8667305c7424b53243259da648ab"
-              },
-              {
-                  "name": "RAILS_LOG_TO_STDOUT",
-                  "value": "true"
-              }
-          ],
-          "environmentFiles": [],
-          "mountPoints": [],
-          "volumesFrom": [],
-          "ulimits": [],
-          "logConfiguration": {
-              "logDriver": "awslogs",
-              "options": {
-                  "awslogs-create-group": "true",
-                  "awslogs-group": "/ecs/portfolio-fargate-task-definition",
-                  "awslogs-region": "ap-northeast-1",
-                  "awslogs-stream-prefix": "ecs"
-              },
-              "secretOptions": []
-          },
-          "healthCheck": {
-              "command": [
-                  "CMD-SHELL",
-                  "curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1"
-              ],
-              "interval": 300,
-              "timeout": 5,
-              "retries": 3
-          }
-      },
-      {
-          "name": "nginx-fargate-ctr",
-          "image": "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-img-prod",
-          "cpu": 0,
-          "memory": 1024,
-          "memoryReservation": 1024,
-          "portMappings": [
-              {
-                  "name": "nginx-fargate-ctr-80-tcp",
-                  "containerPort": 80,
-                  "hostPort": 80,
-                  "protocol": "tcp",
-                  "appProtocol": "http"
-              }
-          ],
-          "essential": true,
-          "environment": [],
-          "environmentFiles": [],
-          "mountPoints": [],
-          "volumesFrom": [
-              {
-                  "sourceContainer": "rails-fargate-ctr",
-                  "readOnly": false
-              }
-          ],
-          "dependsOn": [
-              {
-                  "containerName": "rails-fargate-ctr",
-                  "condition": "HEALTHY"
-              }
-          ],
-          "logConfiguration": {
-              "logDriver": "awslogs",
-              "options": {
-                  "awslogs-create-group": "true",
-                  "awslogs-group": "/ecs/portfolio-fargate-task-definition",
-                  "awslogs-region": "ap-northeast-1",
-                  "awslogs-stream-prefix": "ecs"
-              },
-              "secretOptions": []
-          },
-          "healthCheck": {
-              "command": [
-                  "CMD-SHELL",
-                  "curl -f http://localhost/api/v1/health_check || exit 1"
-              ],
-              "interval": 300,
-              "timeout": 5,
-              "retries": 3
-          }
-      }
-  ],
-  "taskRoleArn": "arn:aws:iam::283956208428:role/portfolio-ecsTaskExecutionRole",
-  "executionRoleArn": "arn:aws:iam::283956208428:role/portfolio-ecsTaskExecutionRole",
-  "networkMode": "awsvpc",
-  "requiresCompatibilities": [
-      "FARGATE"
-  ],
-  "cpu": "256",
-  "memory": "2048",
-  "runtimePlatform": {
-      "cpuArchitecture": "X86_64",
-      "operatingSystemFamily": "LINUX"
-  }
+    "family": "portfolio-fargate-task-definition",
+    "containerDefinitions": [
+        {
+            "name": "rails-fargate-ctr",
+            "image": "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/rails-img-prod:de27856ea2650ae1a993265a4fdacdba6ab4271c",
+            "cpu": 0,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "rails-fargate-ctr-3000-tcp",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "RAILS_MASTER_KEY",
+                    "value": "af3b8667305c7424b53243259da648ab"
+                },
+                {
+                    "name": "RAILS_LOG_TO_STDOUT",
+                    "value": "true"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/portfolio-fargate-task-definition",
+                    "awslogs-region": "ap-northeast-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "curl --unix-socket /api-app/tmp/sockets/puma.sock localhost/api/v1/health_check || exit 1"
+                ],
+                "interval": 300,
+                "timeout": 5,
+                "retries": 3
+            },
+            "systemControls": []
+        },
+        {
+            "name": "nginx-fargate-ctr",
+            "image": "283956208428.dkr.ecr.ap-northeast-1.amazonaws.com/nginx-img-prod",
+            "cpu": 0,
+            "memory": 1024,
+            "memoryReservation": 1024,
+            "portMappings": [
+                {
+                    "name": "nginx-fargate-ctr-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [
+                {
+                    "sourceContainer": "rails-fargate-ctr",
+                    "readOnly": false
+                }
+            ],
+            "dependsOn": [
+                {
+                    "containerName": "rails-fargate-ctr",
+                    "condition": "HEALTHY"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/portfolio-fargate-task-definition",
+                    "awslogs-region": "ap-northeast-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "healthCheck": {
+                "command": [
+                    "CMD-SHELL",
+                    "curl -f http://localhost/api/v1/health_check || exit 1"
+                ],
+                "interval": 300,
+                "timeout": 5,
+                "retries": 3
+            },
+            "systemControls": []
+        }
+    ],
+    "taskRoleArn": "arn:aws:iam::283956208428:role/portfolio-ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::283956208428:role/portfolio-ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "2048",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    }
 }

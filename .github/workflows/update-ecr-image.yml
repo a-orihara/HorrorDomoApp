@@ -76,10 +76,6 @@ jobs:
       - name: List directory contents
         run: ls -lah
 
-      # - name: Create Rails .env
-      #   run: |
-      #     echo "TMDB_API=${{ secrets.TMDB_API }}" > backend/api/.env
-
       # docker imageをビルドし、gitコミットidでタグ付けし、ECRへプッシュ、そのURLをOUTPUT
       - name: Rails Build, tag, and push image to Amazon ECR
         id: build-image

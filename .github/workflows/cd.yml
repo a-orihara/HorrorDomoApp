@@ -111,6 +111,7 @@ jobs:
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
             -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
+            -var 'tmbd_api_key=${{ secrets.TMDB_API_KEY }}' \
             -input=false \
             -no-color \
             -detailed-exitcode
@@ -205,6 +206,7 @@ jobs:
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
             -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
+            -var 'tmbd_api_key=${{ secrets.TMDB_API_KEY }}' \
             -input=false \
             -no-color \
             -auto-approve

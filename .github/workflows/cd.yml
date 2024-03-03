@@ -102,7 +102,7 @@ jobs:
         continue-on-error: true
         # 4.2 この[Terraform plan]の結果をアウトプットする為にIDを指定
         id: plan
-        # 4.3 Terraformでは、変数名にアンダースコア（_）を使用することは一般的
+        # 4.3 terraformの変数に値を代入。Terraformでは、変数名にアンダースコア（_）を使用することは一般的
         run: |
           terraform plan \
             -var 'domain=${{ env.DOMAIN }}' \
@@ -526,6 +526,10 @@ jobs:
 
 # ================================================================================================
 # 4.3
+# - terraformの変数は、terraform/variables.tfやterraform/terraform.tfvars.に設定されている。これらのファ
+# イルはgitにあげないので、git hub actionのcdフローでは、ワークフロー中に設定した環境変数か、git secretsで設定
+# した環境変数を使うことになる
+# ------------------------------------------------------------------------------------------------
 # . **`-var 'domain=${{ env.DOMAIN }}'`の文法**:
 # - この文法は、Terraformにおいてコマンドライン(terraform planに)変数を指定するオプションです。
 # - `-var`オプションは、Terraformの`plan`や`apply`コマンドで変数を設定するために使用されます。

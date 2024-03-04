@@ -1,9 +1,40 @@
 # 1
-variable "ecr_image_tag" {
-  description = "The tag of the Docker image to use in the ECS task"
+# variable ブロック:Terraformの設定ファイルで変数を定義。変数名：domain、型はstring
+variable "domain" {
   type        = string
+  description = "The domain name for the application."
+}
+
+variable "rails_master_key" {
+  type        = string
+  description = "Master key for Rails encryption."
+}
+
+variable "rds_instance_name" {
+  type        = string
+  description = "The name of the RDS instance."
+}
+
+variable "mysql_db_username" {
+  type        = string
+  description = "Username for the MySQL database."
+}
+
+variable "mysql_db_password" {
+  type        = string
+  description = "Password for the MySQL database."
+}
+
+variable "ecr_image_tag" {
+  type        = string
+  description = "The tag of the Docker image to use in the ECS task."
   # デフォルト値はlatest
-  default = "latest"
+  default     = "latest"
+}
+
+variable "tmbd_api_key" {
+  type        = string
+  description = "api tmbd_api_key"
 }
 
 /*

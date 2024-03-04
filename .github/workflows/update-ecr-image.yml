@@ -59,7 +59,7 @@ jobs:
       - name: Configure AWS credentials
       # 8.1
         uses: aws-actions/configure-aws-credentials@v1
-        # 作成したIAMユーザーのアクセスキー、シークレットアクセスキーを使用
+        # 作成したECRプッシュ用のIAMユーザーのアクセスキー、シークレットアクセスキーを使用
         with:
           aws-access-key-id: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.GITHUBACTIONS_ECR_PUSH_AWS_SECRET_ACCESS_KEY }}
@@ -76,10 +76,6 @@ jobs:
       - name: List directory contents
         run: ls -lah
 
-      - name: Create Rails .env
-        run: |
-          echo "TMDB_API=${{ secrets.TMDB_API }}" > backend/api/.env
-
       # docker imageをビルドし、gitコミットidでタグ付けし、ECRへプッシュ、そのURLをOUTPUT
       - name: Rails Build, tag, and push image to Amazon ECR
         id: build-image
@@ -94,16 +90,16 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
           echo "ecr_rails_image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # Amazon ECSタスク定義に新しいイメージIDを記入する。
-      - name: Fill in the new Rails image ID in the Amazon ECS task definition
-        id: task-def
-        # 11.1 既存のECSタスク定義JSONファイルとしてGitHubリポジトリに指定）を受け取り、指定されたコンテナのコンテナイメージIDを更新し、新しいタスク定義を出力
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        # 11.2
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
-          container-name: ${{ env.CONTAINER_NAME_RAILS }}
-          image: ${{ steps.build-image.outputs.ecr_rails_image }}
+      # # Amazon ECSタスク定義に新しいイメージIDを記入する。
+      # - name: Fill in the new Rails image ID in the Amazon ECS task definition
+      #   id: task-def
+      #   # 11.1 既存のECSタスク定義JSONファイルとしてGitHubリポジトリに指定）を受け取り、指定されたコンテナのコンテナイメージIDを更新し、新しいタスク定義を出力
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   # 11.2
+      #   with:
+      #     task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
+      #     container-name: ${{ env.CONTAINER_NAME_RAILS }}
+      #     image: ${{ steps.build-image.outputs.ecr_rails_image }}
 
 # ------------------------------------------------------------------------------------------------
   ecr-push-docker-nextjs:
@@ -146,13 +142,13 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
         echo "ecr_nextjs_image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    - name: Fill in the new Nextjs image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
-        container-name: ${{ env.CONTAINER_NAME_NEXT }}
-        image: ${{ steps.build-image.outputs.ecr_nextjs_image }}
+    # - name: Fill in the new Nextjs image ID in the Amazon ECS task definition
+    #   id: task-def
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
+    #     container-name: ${{ env.CONTAINER_NAME_NEXT }}
+    #     image: ${{ steps.build-image.outputs.ecr_nextjs_image }}
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # ================================================================================================

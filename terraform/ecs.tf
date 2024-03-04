@@ -44,6 +44,10 @@ resource "aws_ecs_task_definition" "fargate_task_definition" {
             # （SSM）パラメータから取得
             value = aws_ssm_parameter.ssm_parameter.value
           },
+          {
+            name  = "TMDB_API_KEY"
+            value = var.tmbd_api_key
+          }
         ]
         # コンテナ内で使用する環境変数ファイルを指定するための設定。空のリスト：ファイルは使っていない
         environmentFiles = []

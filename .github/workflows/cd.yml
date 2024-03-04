@@ -111,6 +111,7 @@ jobs:
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
             -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
+            -var 'tmbd_api_key=${{ secrets.TMDB_API_KEY }}' \
             -input=false \
             -no-color \
             -detailed-exitcode
@@ -196,7 +197,7 @@ jobs:
       - name: Terraform apply
         # 6.4 apply結果が知りたいので、このstepの結果をidを使って参照出来るようにする
         id: apply
-        # 6.5
+        # 4.3 6.5
         run: |
           terraform apply \
             -var 'domain=${{ env.DOMAIN }}' \
@@ -205,6 +206,7 @@ jobs:
             -var 'mysql_db_password=${{ secrets.MYSQL_DB_PASSWORD }}' \
             -var 'rds_instance_name=${{ env.RDS_INSTANCE_NAME }}' \
             -var 'ecr_image_tag=${{ env.ECR_IMAGE_TAG }}' \
+            -var 'tmbd_api_key=${{ secrets.TMDB_API_KEY }}' \
             -input=false \
             -no-color \
             -auto-approve
@@ -529,6 +531,19 @@ jobs:
 # - terraformの変数は、terraform/variables.tfやterraform/terraform.tfvars.に設定されている。これらのファ
 # イルはgitにあげないので、git hub actionのcdフローでは、ワークフロー中に設定した環境変数か、git secretsで設定
 # した環境変数を使うことになる
+# ------------------------------------------------------------------------------------------------
+# - terraform.tfvars`は `.gitignore` で指定されるため、バージョン管理には直接含まれない。
+# - GitHub Actions のワークフローで terraform applyの際、`-var 'domain=${{ env.DOMAIN }}'` を使ってドメ
+# インを指定するのは理にかなっており、GitHub Actions の環境変数の値を Terraform コマンドに直接注入できるので効果
+# 的です。このアプローチは CI/CD コンテキストで `terraform.tfvars` を必要とせず、機密性の高い値や設定を
+# `terraform.tfvars` や Git によって追跡されるファイルにハードコードされることなく、安全かつ柔軟に管理することが
+# できます。
+# - Terraform コマンドで `-var` または `-var-file` フラグを使うことで、`terraform.tfvars` の存在やバージョ
+# ン管理による追跡に依存することなく、実行時に必要な変数を Terraform に与えることができます。`terraform.tfvars`
+# ファイルとは別に、実行時に環境変数を設定したり変数値を渡したりすることができる。
+# ------------------------------------------------------------------------------------------------
+# var 'domain=${{ env.DOMAIN }}'` を使って "domain" 変数をインポートできるのは、"domain" 変数が Terraform
+# の設定（例えば `main.tf` や実行範囲内の他のterraform/variables.tf等）で変数が定義されていることが条件です。
 # ------------------------------------------------------------------------------------------------
 # . **`-var 'domain=${{ env.DOMAIN }}'`の文法**:
 # - この文法は、Terraformにおいてコマンドライン(terraform planに)変数を指定するオプションです。

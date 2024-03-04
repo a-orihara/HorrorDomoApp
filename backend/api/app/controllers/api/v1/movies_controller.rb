@@ -7,7 +7,7 @@ class Api::V1::MoviesController < ApplicationController
     logger.info "◆TMDB_APIキー: #{ENV.fetch('TMDB_API_KEY')}"
     title = params[:title]
     # 1 titleをエンコードする
-    url = "https://api.themoviedb.org/3/search/movie?api_key=#{ENV.fetch('TMDB_API')}&language=ja&query=" + URI.encode_www_form_component(title)
+    url = "https://api.themoviedb.org/3/search/movie?api_key=#{ENV.fetch('TMDB_API_KEY')}&language=ja&query=" + URI.encode_www_form_component(title)
     # 2
     movie_info = JSON.parse(Net::HTTP.get(URI.parse(url)))
     # 3

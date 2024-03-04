@@ -29,7 +29,7 @@ variable "ecr_image_tag" {
   type        = string
   description = "The tag of the Docker image to use in the ECS task."
   # デフォルト値はlatest
-  default     = "latest"
+  default = "latest"
 }
 
 variable "tmbd_api_key" {

@@ -25,7 +25,7 @@ services:
       - "3306:3306"
 
   api:
-    # docker build:Dockerfileと指定したコンテキスト（ビルドコンテキスト）からDockerイメージを構築。
+    # docker build:Dockerfileと指定したコンテキスト（ビルドコンテキスト）からDockerイメージを構築する。
     build:
       # 7
       context: ./backend/api/

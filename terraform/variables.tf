@@ -34,7 +34,7 @@ variable "ecr_image_tag" {
 
 variable "tmbd_api_key" {
   type        = string
-  description = "Master key for Rails encryption."
+  description = "api tmbd_api_key"
 }
 
 /*

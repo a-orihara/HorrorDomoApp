@@ -82,7 +82,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 - ACM: 証明書を発行、httpsでアクセス。 -->
 
 ## 機能詳細
-- アカウント作成、ログイン、ログアウト機能（Devise、Devise Token Auth）
+- アカウント作成（メール認証）、ログイン、ログアウト機能（Devise、Devise Token Auth）
 - ユーザー編集機能
   - Avatar登録（Active_Starage）、
 - 管理ユーザーによるユーザー削除機能

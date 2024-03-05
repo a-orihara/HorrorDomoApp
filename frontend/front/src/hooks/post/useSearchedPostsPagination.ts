@@ -10,7 +10,7 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
   // タイトル検索したsearchedPostの総数
   const [searchedTotalPostsCount, setSearchedTotalPostsCount] = useState(0);
   const [searchedPostUsers, setSearchedPostUsers] = useState<User[]>([]);
-  // 現在のページ番号
+  // 説明はuseLikedPostsPaginationの1.1へ 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   // loading状態の管理。loading中はtrue
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +48,7 @@ export const useSearchedPostsPagination = (itemsPerPage: number, query: string) 
     handleGetSearchedPosts(currentPage);
   }, [currentPage, handleGetSearchedPosts]);
 
-  // 3
+  // 3と説明はuseLikedPostsPaginationの1.2へ
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

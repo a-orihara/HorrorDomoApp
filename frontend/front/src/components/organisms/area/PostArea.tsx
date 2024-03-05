@@ -9,8 +9,8 @@ type PostAreaProps = {
   user: User;
 };
 
+// 指定userIdページのPost一覧エリア
 const PostArea = ({ user }: PostAreaProps) => {
-  // 指定userIdのlikedPost一覧, likedPost総数, likedUser一覧, ページ変更関数を取得
   // この10は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
   const { posts, totalPostsCount, handlePageChange, isLoading, currentPage } = usePostsPagination(10, user.id);
   if (isLoading) {

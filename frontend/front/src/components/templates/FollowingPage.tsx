@@ -15,7 +15,7 @@ const FollowingPage = () => {
   // console.log(`FollowingPage.tsxのuserId: ${userId}`);
   // const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
-  const { following, totalFollowingCount, handlePageChange, isLoading } = useFollowingPagination(10, userId);
+  const { following, totalFollowingCount, handlePageChange, isLoading, currentPage } = useFollowingPagination(10, userId);
 
   // isLoadingがtrue(loading中)のときに "Loading... "をレンダ。
   if (isLoading) {
@@ -28,7 +28,7 @@ const FollowingPage = () => {
         title={'ALL Following'}
         noFollowMessage={'フォローユーザーはいません'}
       ></FollowList>
-      <Pagination totalCount={totalFollowingCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <Pagination totalCount={totalFollowingCount} itemsPerPage={10} handlePageChange={handlePageChange} currentPage={currentPage}></Pagination>
     </div>
   );
 };

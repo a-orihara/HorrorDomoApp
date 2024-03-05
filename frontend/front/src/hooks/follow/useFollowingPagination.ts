@@ -9,7 +9,7 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   const [following, setFollowing] = useState<FollowUser[]>([]);
   // 指定したuserIdのフォローユーザーの総数
   const [totalFollowingCount, setTotalFollowingCount] = useState(0);
-  // 現在のページ番号
+  // 説明はuseLikedPostsPaginationの1.1へ 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   // 2 loading状態の管理。loading中はtrue
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +49,7 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
     }
   }, [handleGetFollowingByUserId, currentPage, userId]);
 
+  // 説明はuseLikedPostsPaginationの1.2へ
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

@@ -22,8 +22,6 @@ class Api::V1::AuthenticatedUsersController < ApplicationController
 
 end
 
-# [devise_token_auth]ヘルパーメソッドが使えない(undefined)ときの対処法
-
 =begin
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

@@ -8,7 +8,7 @@
 
 *転職用のポートフォリオと合わせて学習用の為、コードに学習用のコメントをそのまま残してあります。
 
-*費用節約の為、面談前に本番デプロイします。
+*費用節約の為、一旦停止中。面談前に本番デプロイします。
 
 ## 概要
 フロントエンドはNext.js、バックエンドはRailsでSPA構成。
@@ -36,7 +36,7 @@
 - Lint、Prettier
 ## インフラ
 ### Docker、Docker Compose
-- 開発環境、本番環境をコンテナ化
+- 開発環境（Rails, Nextjs）、本番環境（Rails, Nginx, Nextjs）をコンテナ化
 ### Nginx
 - Webサーバー
 - RailsのPumaとUnixドメインソケット通信
@@ -48,6 +48,7 @@
 - S3: Active Strageの画像やTerraformの設定ファイルを保存
 - Route53: 独自ドメインでアクセス
 - ACM: 証明書を発行、httpsでアクセス
+- SSM: パラメーター管理
 ### Terraform
 - AWSリソースをコード化して管理
 ### GitHubAction
@@ -63,7 +64,7 @@ CI/CDパイプラインを構築
 - デプロイ
   - Nextjs、Rails、NginxのDocker imageをビルド
   - imageにgitのコミットidをタグ付け
-  - ECRへイメージをプッシュ
+  - ECRへimageをプッシュ
   - ECSのサービスをアップデート、プッシュしたimageを使ってタスク定義からコンテナを作成
 
 ## デプロイ手順

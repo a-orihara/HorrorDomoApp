@@ -7,7 +7,7 @@ const Index = () => {
   // 1ぺージに表示するユーザー数
   const itemsPerPage = 10;
   // 1 users:指定したページの指定した表示件数分のユーザー情報。
-  const { users, totalUsersCount, handlePageChange } = useUsersPagination(itemsPerPage);
+  const { users, totalUsersCount, handlePageChange, currentPage } = useUsersPagination(itemsPerPage);
 
   return (
     <Layout title={'Users'}>
@@ -18,6 +18,7 @@ const Index = () => {
           totalCount={totalUsersCount}
           itemsPerPage={itemsPerPage}
           handlePageChange={handlePageChange}
+          currentPage={currentPage}
         ></Pagination>
       </div>
     </Layout>

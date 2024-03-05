@@ -10,7 +10,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
   const [users, setUsers] = useState<User[]>([]);
   // 総ユーザー数を保持するステート
   const [totalUsersCount, setTotalUsersCount] = useState(0);
-  // 現在のページ番号を保持するステート
+  // 説明はuseLikedPostsPaginationの1.1へ 現在のページ番号を保持するステート
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
@@ -44,12 +44,12 @@ export const useUsersPagination = (itemsPerPage: number) => {
     handleGetUsers(currentPage);
   }, [currentPage, handleGetUsers]);
 
-  // 5
+  // 5 説明はuseLikedPostsPaginationの1.2へ
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  return { users, totalUsersCount, handlePageChange };
+  return { users, totalUsersCount, handlePageChange, currentPage };
 };
 
 /*

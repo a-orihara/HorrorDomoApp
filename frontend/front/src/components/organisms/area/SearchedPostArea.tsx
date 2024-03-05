@@ -8,7 +8,7 @@ type SearchedPostAreaProps = {
 };
 
 const SearchedPostArea = ({ searchQuery }: SearchedPostAreaProps) => {
-  const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange, isLoading } = useSearchedPostsPagination(
+  const { searchedPosts, searchedTotalPostsCount, searchedPostUsers, handlePageChange, isLoading, currentPage, } = useSearchedPostsPagination(
     10,
     searchQuery
   );
@@ -27,6 +27,7 @@ const SearchedPostArea = ({ searchQuery }: SearchedPostAreaProps) => {
         noPostsMessage='投稿がありません'
         // 孫のCommonPostListに渡し、ListItemContentで使用
         ListItemComponent={({ post, user }) => <PostListItem post={post} user={user} />}
+        currentPage={currentPage}
       />
     </div>
   );

@@ -9,7 +9,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
   const [posts, setPosts] = useState<Post[]>([]);
   // 指定したuserIdのユーザーの投稿数
   const [totalPostsCount, setTotalPostsCount] = useState(0);
-  // 現在のページ番号
+  // 説明はuseLikedPostsPaginationの1.1へ 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
@@ -47,7 +47,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
     handleGetPostListByUserId(currentPage);
   }, [currentPage, handleGetPostListByUserId]);
 
-  // 3
+  // 3 説明はuseLikedPostsPaginationの1.2へ
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

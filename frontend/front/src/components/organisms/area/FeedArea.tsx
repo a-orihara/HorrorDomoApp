@@ -10,7 +10,7 @@ type FeedAreaProps = {
 };
 
 const FeedArea = ({ user }: FeedAreaProps) => {
-  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, isLoading } = useFeedPagination(10, user.id);
+  const { feedPosts, totalFeedPostsCount, feedUsers, handlePageChange, isLoading, currentPage } = useFeedPagination(10, user.id);
   if (isLoading) {
     return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
   }
@@ -26,6 +26,7 @@ const FeedArea = ({ user }: FeedAreaProps) => {
         noPostsMessage='投稿がありません'
         // 孫のCommonPostListに渡し、ListItemContentで使用
         ListItemComponent={({ post, user }) => <FeedListItem feedPost={post} feedUser={user} />}
+        currentPage={currentPage}
       />
     </div>
   );

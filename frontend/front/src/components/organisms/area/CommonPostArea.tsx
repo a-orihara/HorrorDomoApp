@@ -15,6 +15,7 @@ type CommonPostAreaProps = {
   noPostsMessage: string;
   // CommonPostListへ渡す
   ListItemComponent: (props: { post: Post; user: User }) => JSX.Element;
+  currentPage: number;
 };
 
 // 投稿表示エリア
@@ -25,7 +26,9 @@ const CommonPostArea = ({
   handlePageChange,
   noPostsMessage,
   ListItemComponent,
+  currentPage,
 }: CommonPostAreaProps) => {
+  console.log(`注目CommonPostAreaの:${currentPage}`)
   return (
     <div>
       {/* 投稿表示リスト */}
@@ -35,7 +38,7 @@ const CommonPostArea = ({
         noPostsMessage={noPostsMessage}
         ListItemComponent={ListItemComponent}
       />
-      <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange} currentPage={currentPage}></Pagination>
     </div>
   );
 };

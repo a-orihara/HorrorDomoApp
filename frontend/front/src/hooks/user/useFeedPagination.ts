@@ -12,6 +12,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
   const [totalFeedPostsCount, setTotalFeedPostsCount] = useState(0);
   // 指定idユーザーのfeedのusers
   const [feedUsers, setFeedUsers] = useState<User[]>([]);
+  // 説明はuseLikedPostsPaginationの1.1へ
   const [currentPage, setCurrentPage] = useState(0);
   // loading状態の管理。loading中はtrue
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +53,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
     }
   }, [currentPage, handleGetUserFeed, userId]);
 
+  // 説明はuseLikedPostsPaginationの1.2へ
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };

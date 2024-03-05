@@ -12,7 +12,7 @@ const FollowersPage = () => {
   // 2 userIdはnumberかundefined型
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
-  const { followers, totalFollowersCount, handlePageChange, isLoading } = useFollowersPagination(10, userId);
+  const { followers, totalFollowersCount, handlePageChange, isLoading, currentPage } = useFollowersPagination(10, userId);
   // isLoadingがtrue(loading中)のときに "Loading... "をレンダ。
   if (isLoading) {
     return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
@@ -21,7 +21,7 @@ const FollowersPage = () => {
   return (
     <div className='flex flex-1 flex-col'>
       <FollowList followUsers={followers} title={'All Followers'} noFollowMessage={'フォロワーはいません'}></FollowList>
-      <Pagination totalCount={totalFollowersCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <Pagination totalCount={totalFollowersCount} itemsPerPage={10} handlePageChange={handlePageChange} currentPage={currentPage}></Pagination>
     </div>
   );
 };

@@ -9,10 +9,10 @@ type PostAreaProps = {
   user: User;
 };
 
+// 指定userIdページのPost一覧エリア
 const PostArea = ({ user }: PostAreaProps) => {
-  // 指定userIdのlikedPost一覧, likedPost総数, likedUser一覧, ページ変更関数を取得
   // この10は、1ページ当たりの表示件数->itemsPerPage: number, userId?: number
-  const { posts, totalPostsCount, handlePageChange, isLoading } = usePostsPagination(10, user.id);
+  const { posts, totalPostsCount, handlePageChange, isLoading, currentPage } = usePostsPagination(10, user.id);
   if (isLoading) {
     return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
   }
@@ -21,7 +21,7 @@ const PostArea = ({ user }: PostAreaProps) => {
       {/* 1 */}
       <PostList posts={posts} user={user}></PostList>
       {/* 2 */}
-      <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange}></Pagination>
+      <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange} currentPage={currentPage}></Pagination>
     </div>
   );
 };

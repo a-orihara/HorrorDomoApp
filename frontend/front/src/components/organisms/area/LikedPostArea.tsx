@@ -11,7 +11,7 @@ type LikedPostAreaProps = {
 
 const LikedPostArea = ({ user }: LikedPostAreaProps) => {
   // 指定userIdのlikedPost一覧, likedPost総数, likedUser一覧, ページ変更関数を取得
-  const { likedPosts, totalLikedPostsCount, likedUsers, handlePageChange, isLoading } = useLikedPostsPagination(10, user.id);
+  const { likedPosts, totalLikedPostsCount, likedUsers, handlePageChange, isLoading, currentPage, } = useLikedPostsPagination(10, user.id);
 
   if (isLoading) {
     return <div className='flex flex-1 items-center justify-center'>Loading...</div>;
@@ -26,6 +26,7 @@ const LikedPostArea = ({ user }: LikedPostAreaProps) => {
       noPostsMessage='投稿がありません'
       // 孫のCommonPostListに渡す
       ListItemComponent={({ post, user }) => <LikedPostListItem likedPost={post} likedUser={user} />}
+      currentPage={currentPage}
     />
   );
 };

@@ -3,8 +3,7 @@ import { client } from './client';
 
 // 2.1 ユーザー情報を更新
 export const updateUser = (formData: any) => {
-  console.log('%c updateUser時点のUID:', 'color: blue', Cookies.get('_uid'));
-  console.log('%c updateUser時点のClient:', 'color: blue', Cookies.get('_client'));
+  // console.log('%c updateUser時点のUID:', 'color: blue', Cookies.get('_uid'));
   return client.put('/auth', formData, {
     headers: {
       'access-token': Cookies.get('_access_token'),

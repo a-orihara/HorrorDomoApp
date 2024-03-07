@@ -5,7 +5,6 @@ import { updateUser } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { AxiosError } from 'axios';
-import Cookies from 'js-cookie';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
@@ -34,12 +33,9 @@ export const useUpdateUser = () => {
     try {
       const res = await updateUser(formData);
       if (res.status === 200) {
-        console.log('%c handleUpdateUser後のUID:', 'color: red', Cookies.get('_uid'));
-        console.log('%c handleUpdateUser後のClient:', 'color: red', Cookies.get('_client'));
         // 1.4 更新後のユーザーを取得し直す
         handleGetCurrentUser();
-        console.log('%c handleGetCurrentUser後のUID:', 'color: red', Cookies.get('_uid'));
-        console.log('%c handleGetCurrentUser後のClient:', 'color: red', Cookies.get('_client'));
+        // console.log('%c handleGetCurrentUser後のUID:', 'color: red', Cookies.get('_uid'));
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);

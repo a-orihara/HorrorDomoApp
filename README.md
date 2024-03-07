@@ -112,7 +112,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/882bd372-6d84-4699-a76a-04f058ffdcee" width="80%" />
 
 - ユーザー編集
-![ユーザー編集](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/01a774ac-95ae-4181-9468-5620068bcb48)
+<img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/01a774ac-95ae-4181-9468-5620068bcb48" width="80%" />
 
 - ユーザー一覧
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/e5c75b2d-0db8-4a7f-a9c4-c5d5a3bc416e" width="80%" />

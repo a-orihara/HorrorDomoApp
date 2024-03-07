@@ -29,7 +29,6 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     @avatar_url = avatar_url
     logger.info "最終的な@avatar_urlの内容: #{@avatar_url.inspect}"
     # 6.6 親クラスのupdateメソッドを呼び出し
-    # 最終的なupdateレスポンス: {:status=>"success", :message=>"アカウント情報を変更しました。", :data=>{"id"=>1, "provider"=>"email", "uid"=>"hiro@hiro.com", "allow_password_change"=>false, "name"=>"hiro", "email"=>"hiro@hiro.com", "created_at"=>"2024-03-04T16:00:30.578+09:00", "updated_at"=>"2024-03-05T14:57:59.644+09:00", "admin"=>true, "profile"=>""}, :avatar_url=>nil}
     super
   end
 
@@ -321,7 +320,8 @@ before_action :set_user_by_token, only: [:destroy, :update]が設定されてい
 - render_update_success`のような `RegistrationsController` クラスの他のメソッドは `avatar_url` にアク
 セスできません。
 ------------------------------------------------------------------------------------------------
-ユーザー情報の更新とファイルアップロードの処理は、2つの異なる処理です。前者はテキストベースの属性を更新し、後者はフ
-ァイルデータを処理する。assign_attributes`だけではファイルのアップロードは扱えません。
-なぜなら、'b'は新しいアバターファイルを含む入力パラメータを表し、'a'
+- 最終的なupdateレスポンス: {:status=>"success", :message=>"アカウント情報を変更しました。",
+:data=>{"id"=>1, "provider"=>"email", "uid"=>"hiro@hiro.com", "allow_password_change"=>false,
+"name"=>"hiro", "email"=>"hiro@hiro.com", "created_at"=>"2024-03-04T16:00:30.578+09:00",
+"updated_at"=>"2024-03-05T14:57:59.644+09:00", "admin"=>true, "profile"=>""}, :avatar_url=>nil}
 =end

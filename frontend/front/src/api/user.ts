@@ -3,6 +3,8 @@ import { client } from './client';
 
 // 2.1 ユーザー情報を更新
 export const updateUser = (formData: any) => {
+  console.log('%c updateUser時点のUID:', 'color: blue', Cookies.get('_uid'));
+  console.log('%c updateUser時点のClient:', 'color: blue', Cookies.get('_client'));
   return client.put('/auth', formData, {
     headers: {
       'access-token': Cookies.get('_access_token'),
@@ -54,6 +56,7 @@ export const getUserById = (userId: number | undefined) => {
 
 // currentUserのfeedを取得する
 export const getUserFeed = async (page: number, itemsPerPage: number, userId?: number) => {
+  console.log("src/api/user.tsの、getUserFeedが発火")
   return client.get(`/`, {
     params: {
       // 表示したいページ番号を送信。APIは1から始まるページ番号を期待しているため、+1を行います

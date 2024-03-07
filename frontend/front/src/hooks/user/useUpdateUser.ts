@@ -5,6 +5,7 @@ import { updateUser } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
@@ -33,9 +34,12 @@ export const useUpdateUser = () => {
     try {
       const res = await updateUser(formData);
       if (res.status === 200) {
-        console.log(`updateのres.data:${JSON.stringify(res.data)}`);
+        console.log('%c handleUpdateUser後のUID:', 'color: red', Cookies.get('_uid'));
+        console.log('%c handleUpdateUser後のClient:', 'color: red', Cookies.get('_client'));
         // 1.4 更新後のユーザーを取得し直す
         handleGetCurrentUser();
+        console.log('%c handleGetCurrentUser後のUID:', 'color: red', Cookies.get('_uid'));
+        console.log('%c handleGetCurrentUser後のClient:', 'color: red', Cookies.get('_client'));
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -50,17 +54,15 @@ export const useUpdateUser = () => {
     } catch (err: any) {
       // デフォルトメッセージを設定し、これをAxiosに関連しない、その他のエラーの際に表示
       let errorMessage = '予期しないエラーが発生しました';
-      // Axiosエラーかチェック
-      if (err instanceof AxiosError) {
-        if (err.response) {
-          errorMessage = err.response.data.errors
-          ? err.response.data.errors.join(', ')
-          // Axiosエラーだが、特定のエラーメッセージがサーバー側で設定されていない等の場合を処理
-          : '不明なエラーが発生しました';
-        }else {
-        // Axiosのレスポンスがない、JavaScript他のエラーの場合のメッセージ
+
+      // 3.1
+      if (err instanceof AxiosError && err.response && typeof err.response.data.errors === 'object') {
+        // axios-case-converterの為、full_messagesをfullMessagesへ変形
+        const messages = err.response.data.errors.fullMessages
+        // 3.2 オブジェクトの中のfull_messagesの中身の配列をfullMessagesに代入しているのでjoinが使える
+        errorMessage = messages.join(', ');
+      } else {
         setAlertMessage('サーバーへの接続に失敗しました');
-        }
       }
       setAlertSeverity('error');
       setAlertMessage(errorMessage);
@@ -125,4 +127,36 @@ handleUpdateUserでは、ユーザーを更新した直後に `handleGetCurrentU
 JavaScriptの `File` タイプはファイルを表します。画像、ドキュメント、その他のファイルタイプなど、どのような種類の
 ファイルでも構いません。File`オブジェクトは通常、ファイル名、サイズ、タイプ(例えば `image/jpeg`)、ファイルの内容
 のようなプロパティを含んでいます。
+
+================================================================================================
+3.1
+. **err instanceof AxiosError`**：
+- この条件は、エラー `err` が `AxiosError` のインスタンスであるかどうかを確認します。Axios のエラーは、ネット
+ワークエラーや サーバーからのエラー応答 (404 や 500 などのステータスコード) など、 Axios リクエストに問題がある
+場合にスローされます。
+------------------------------------------------------------------------------------------------
+. **`&& err.response`**：
+- この部分は `err` オブジェクトに `response` プロパティがあるかどうかを調べます。Axios のコンテキストでは、
+`response` プロパティにはリクエストに対するサーバーの応答が含まれます。このプロパティは、サーバーが実際にエラース
+テータスコードで応答した場合にのみ有効です。応答がない場合 (例えば、リクエストがサーバーに到達する前にネットワークの
+問題で失敗した場合)、処理するエラー応答がないので、この条件はエラー処理ロジックの進行を妨げます。
+------------------------------------------------------------------------------------------------
+. **& typeof err.response.data.errors === 'object'`**：
+- 最後に、この条件は `response` 内の `data` オブジェクトの `errors` プロパティが `object` 型であるかどうかを
+チェックします。多くの API では、 `errors` プロパティはリクエストの何が問題だったのかについての詳細な情報を提供す
+るために使用される。これは単純なメッセージ文字列であったり、エラー文字列の配列であったり、より一般的にはエラーの詳細
+を含むオブジェクトであったりする。errors` がオブジェクトであるかどうかをチェックすることで、エラーの詳細がオブジェ
+クト形式で提供される構造化されたエラーレスポンスを予期していることになります。これにより、このオブジェクトのキーに基
+づいて特定のエラーメッセージを表示するなど、より洗練されたエラー処理が可能になります。
+------------------------------------------------------------------------------------------------
+- `err.response.data.errors`から `fullMessages` を抽出して、エラーメッセージとして表示するための1つの文字列
+に結合しようとしています。もし `fullMessages` が存在しなかったり、直接アクセスできなかったりした場合は、 `errors`
+オブジェクトを平坦化し、結果のメッセージを結合します。
+
+================================================================================================
+3.2
+- messages はエラーメッセージの配列を指します。この配列には、サーバーから返された検証エラーや他の種類のエラーメッ
+セージが含まれている。
+- .join(', ') メソッドは、配列の各要素を指定された文字列（この場合はコンマとスペース）で連結し、一つの文字列にし
+ます。
 */

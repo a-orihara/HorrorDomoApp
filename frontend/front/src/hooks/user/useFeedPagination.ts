@@ -26,6 +26,7 @@ export const useFeedPagination = (itemsPerPage: number, userId: number) => {
       setIsLoading(true);
       try {
         // 1 ユーザーのフィード情報を取得
+        // console.log("useFeedPaginationのhandleGetUserFeed発火")
         const res = await getUserFeed(page, itemsPerPage, userId);
         // ユーザーとそのフォローユーザーの両方の、指定したページの1ページ当たりの表示件数分の投稿をセット
         setFeedPosts(res.data.data);

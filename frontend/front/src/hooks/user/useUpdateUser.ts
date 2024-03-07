@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   // 2.1
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -23,7 +23,7 @@ export const useUpdateUser = () => {
     const formData = new FormData();
     // 1.2
     formData.append('name', name);
-    formData.append('email', email);
+    // formData.append('email', email);
     formData.append('profile', profile || '');
     // 1.3
     if (avatar) {
@@ -74,8 +74,8 @@ export const useUpdateUser = () => {
   return {
     name,
     setName,
-    email,
-    setEmail,
+    // email,
+    // setEmail,
     profile,
     setProfile,
     setAvatar,

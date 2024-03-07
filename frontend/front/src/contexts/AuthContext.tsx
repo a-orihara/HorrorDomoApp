@@ -49,12 +49,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // 2.2 サインインしていたら。[if (res && res.data.isLogin === true)]と同じ意味
       if (res?.data.isLogin === true) {
         // サインイン状態に変更
+        console.log('サインインしている');
         setIsSignedIn(true);
         // 現在のユーザー情報をセット
         setCurrentUser(res?.data.data);
-        console.log(`？？handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
+        // console.log(`？？handleGetCurrentUserのカレントユーザー:${JSON.stringify(res?.data.data)}`);
       } else {
         console.log('No current user');
+        // console.log(`No current userのサインイン状態:${JSON.stringify(res?.data.isLogin)}`);
       }
     } catch (err) {
       console.log(err);

@@ -8,7 +8,9 @@ import { useAuthContext } from '../../../contexts/AuthContext';
 
 // ================================================================================================
 const UserEditForm = () => {
-  const { name, setName, email, setEmail, profile, setProfile, setAvatar, handleUpdateUser } =
+  // const { name, setName, email, setEmail, profile, setProfile, setAvatar, handleUpdateUser } =
+  //   useUpdateUser();
+  const { name, setName, profile, setProfile, setAvatar, handleUpdateUser } =
     useUpdateUser();
   const { currentUser  } = useAuthContext();
   // 3.1
@@ -22,7 +24,7 @@ const UserEditForm = () => {
 
   // ================================================================================================
   return (
-    <div className='flex flex-1 flex-col'>
+    <div className='flex flex-1 flex-col '>
       <h1 className='mt-4 flex h-16 items-center justify-center text-2xl font-semibold md:mt-8 md:text-4xl lg:mt-4'>
         Update your profile
       </h1>
@@ -34,7 +36,7 @@ const UserEditForm = () => {
             Name:
           </Label>
           <Input
-            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
+            className='m-auto mb-8 w-4/5  md:w-3/5 lg:w-2/5'
             id='name'
             type='text'
             name='name'
@@ -46,28 +48,12 @@ const UserEditForm = () => {
             }}
           ></Input>
         </div>
-        <div className='md:mt-4 lg:mt-0'>
-          <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='email'>
-            Email:
-          </Label>
-          <Input
-            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
-            id='email'
-            type='email'
-            name='email'
-            value={email}
-            placeholder={currentUser ? currentUser.email : 'Email'}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setEmail(e.target.value);
-            }}
-          ></Input>
-        </div>
         <div className='flex flex-col md:mt-4 lg:mt-0'>
           <Label className='m-auto w-4/5 pl-4 text-left text-lg md:w-3/5 md:text-2xl lg:w-2/5' htmlFor='profile'>
             Profile:
           </Label>
           <TextArea
-            className='m-auto mb-2 h-32 w-4/5  bg-blue-200 md:w-3/5 lg:w-2/5'
+            className='m-auto mb-8 h-32 w-4/5  bg-blue-200 md:w-3/5 lg:w-2/5'
             id='profile'
             name='profile'
             value={profile || ''}
@@ -82,7 +68,7 @@ const UserEditForm = () => {
             Avatar:
           </Label>
           <Input
-            className='m-auto mb-2 w-4/5  md:w-3/5 lg:w-2/5'
+            className='m-auto mb-8 w-4/5  md:w-3/5 lg:w-2/5'
             id='avatar'
             type='file'
             // 4

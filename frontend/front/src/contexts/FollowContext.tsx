@@ -26,7 +26,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
     // userIdがなければ処理をしない
     if (!userId) return;
     try {
-      // console.log("handleGetFollowingCountByUserId発火しまくり")
+      console.log("handleGetFollowingCountByUserId発火しまくり")
       const data = await getFollowingCountByUserId(userId);
       // 1.1
       if (data.status === 200) {
@@ -39,23 +39,6 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       alert('ユーザーのフォロー数を取得出来ませんでした');
     }
   }, []);
-  // const handleGetFollowingCountByUserId = async (userId: number | undefined) => {
-  //   // userIdがなければ処理をしない
-  //   if (!userId) return;
-  //   try {
-  //     console.log("handleGetFollowingCountByUserId発火しまくり")
-  //     const data = await getFollowingCountByUserId(userId);
-  //     // 1.1
-  //     if (data.status === 200) {
-  //       const count: number = data.data.followingCount;
-  //       // console.log(`◆handleGetFollowingCountByUserIdの中身${JSON.stringify(data.data)}`);
-  //       setFollowingCount(count);
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert('ユーザーのフォロー数を取得出来ませんでした');
-  //   }
-  // };
 
   // フォローされているuserの総数を取得し、状態変数にセットする関数
   const handleGetFollowersCountByUserId = useCallback(async (userId: number | undefined) => {

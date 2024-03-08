@@ -98,6 +98,10 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 - レスポンシブ対応（React-Paginate、TailwindCSS）
 
 ## 使用イメージ
+-　動画
+https://github.com/a-orihara/HorrorDomoApp/assets/83584987/862cb7a4-53ba-4217-b8e7-5b14cfa6aa2b
+
+
 - ホーム
 <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/be3ab779-07ce-4392-a4fe-b6b9ee338b08" width="80%" />
 

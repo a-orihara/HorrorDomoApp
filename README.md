@@ -100,13 +100,7 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 ## 使用イメージ
 - 動画1
 
-<!-- https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614 -->
-<!-- [![Video Placeholder](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614/placeholder.png)](https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614) -->
-
-<a href="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614">
-  <img src="https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614/placeholder.png" width="80%" alt="Video Placeholder"/>
-</a>
-
+https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614
 
 - 動画2
 

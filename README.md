@@ -99,9 +99,11 @@ GitHubのmainブランチにプッシュした際、GitHub Actionsでgitのコ�
 
 ## 使用イメージ
 - 動画1
+
 https://github.com/a-orihara/HorrorDomoApp/assets/83584987/9ede096c-a4e5-42e3-963e-b0f618fda614
 
--動画2
+- 動画2
+
 https://github.com/a-orihara/HorrorDomoApp/assets/83584987/885c8285-588e-4026-a7f3-0f0644bc1c78
 
 - ホーム

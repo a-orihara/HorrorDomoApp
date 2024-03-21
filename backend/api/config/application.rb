@@ -47,23 +47,6 @@ module ApiApp
         # ビュースペックを作成しない。フィーチャースペック、またはフロント側でUIをテストする為
         view_specs: false
     end
-
-    # Rackミドルウェアを使用してCORS（Cross-Origin Resource Sharing）ポリシーを設定
-    config.middleware.insert_before 0, Rack::Cors do
-      # 許可されるCORSリクエストについての設定
-      allow do
-        # origins Settings.front_domain
-        origins '*'
-        # すべてのリソースに対するCORSポリシーを指定
-        resource '*',
-                  # すべてのヘッダーを許可
-                  :headers => :any,
-                  # CORSリクエストに含まれるヘッダーの内、許可されるヘッダーを指定
-                  :expose => ['access-token', 'expiry', 'token-type', 'uid', 'client'],
-                  # 許可されるHTTPメソッドを指定
-                  :methods => [:get, :post, :options, :delete, :put, :show, :patch]
-      end
-    end
     # 2
     config.i18n.default_locale = :ja
   end

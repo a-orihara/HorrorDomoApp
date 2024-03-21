@@ -1,1 +1,11 @@
-front_domain: https://horror-domo-app.com/
+# front_domain: https://horror-domo-app.com/
+front_domain: https://horror-domo-app.com
+
+# @          @@          @@          @@          @@          @@          @@          @@          @
+# production.yml`のドメイン設定を`https://horror-domo-app.com/`から`https://horror-domo-app.com`に変更する（末尾のスラッシュを削除する）と、RailsバックエンドがCORS（Cross-Origin Resource Sharing）リクエストをどのようにマッチングして受け入れるかに影響します。何が起こるかは次のとおりです：
+
+# 1. **オリジンヘッダの正規化**： ブラウザは通常、オリジンヘッダに末尾のスラッシュを含めないように正規化します。そのため、CORSリクエストが行われると、ブラウザはリクエストが`https://horror-domo-app.com/`に行われたとしても、オリジンとして`https://horror-domo-app.com`を送信します。
+
+# 2. **Rack::Cors**での比較： Railsアプリケーションの `Rack::Cors` ミドルウェアは、ブラウザから送信された `origin` ヘッダと、CORS設定で指定した `origins` を比較します。
+
+# 3. **変更の影響**： production.yml`の`front_domain`から末尾のスラッシュを削除することで、CORS設定をブラウザが使用する正規化されたオリジン形式に合わせることができます。これにより、ブラウザから送信されるオリジンがRailsアプリケーションのCORS設定で指定したものと正確に一致し、CORSリクエストが成功するようになります。

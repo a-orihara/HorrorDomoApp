@@ -1,6 +1,6 @@
 name: Run Jest
-# on:イベント。ワークフローを実行するイベントを指定
 
+# on:イベント。ワークフローを実行するイベントを指定
 on:
   push:
     branches-ignore:

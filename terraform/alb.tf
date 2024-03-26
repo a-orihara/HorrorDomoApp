@@ -115,20 +115,6 @@ resource "aws_lb_listener" "frontend_alb_listener_http" {
   timeouts {}
 }
 
-# resource "aws_lb_listener" "frontend_alb_listener_http_2" {
-#   # load_balancer_arn = aws_lb.frontend_alb.id
-#   # port              = 80
-#   # protocol          = "HTTP"
-#   # tags              = {}
-#   # tags_all          = {}
-#   # default_action {
-#   #   # order            = 0
-#   #   target_group_arn = aws_lb_target_group.frontend_alb_tg.arn
-#   #   type             = "forward"
-#   # }
-#   # timeouts {}
-# }
-
 # albにhttpsのlistenerを設定することが、ざっくり言うとacm証明書をalbに取り付けている。
 resource "aws_lb_listener" "frontend_alb_listener_https" {
   load_balancer_arn = aws_lb.frontend_alb.id

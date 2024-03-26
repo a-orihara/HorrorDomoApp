@@ -12,7 +12,6 @@ WORKDIR /api-app
 #COPY(コピー)はローカル側のファイルをdockerイメージ側の指定したディレクトリにコピーする
 COPY Gemfile /api-app/Gemfile
 COPY Gemfile.lock /api-app/Gemfile.lock
-# RUN mkdir -p /api-app/tmp/sockets
 # Gemfileに記載されたGem(初回時はrailsが記載)をインストールする。再ビルド時にbundle installするために記載。
 RUN bundle install
 # COPY . /api-appは、docker-compose.dev.ymlでバウンドされているのでいらない

@@ -41,8 +41,6 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
         status: 'success',
         message: I18n.t('devise.registrations.signed_up'),
         data: resource_data
-      #   # status: 'created'は、201を返す。201はPOST, PUT：リクエストが成功しリソースが作成されたことを示す。
-      # },status: :created
       }
     end
 
@@ -59,12 +57,6 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
       logger.info "最終的なupdateレスポンス: #{response.inspect}"
       # 実際にレスポンスを返す
       render json: response
-      # render json: {
-      #   status: 'success',
-      #   message: I18n.t('devise.registrations.updated'),
-      #   data: resource_data,
-      #   avatar_url: @avatar_url
-      # }
     end
 end
 

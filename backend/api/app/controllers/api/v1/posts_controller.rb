@@ -66,7 +66,6 @@ class Api::V1::PostsController < ApplicationController
     if @post.destroy
     render json: { status: '200', message: '投稿を削除しました', data: @post }, status: :ok
     else
-    # render json: { error: '削除に失敗しました' }, status: :unprocessable_entity
     # correct_userのエラーメッセージに合わせるため、
     render json: { status: '422', message: '削除に失敗しました', errors: @post.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end

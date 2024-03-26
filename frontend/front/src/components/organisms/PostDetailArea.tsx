@@ -6,10 +6,6 @@ import useFormattedTime from '../../hooks/helpers/useFormattedTime';
 import useGetUserById from '../../hooks/user/useGetUserById';
 import { MovieInfoArea } from '../molecules/MovieInfoArea ';
 
-// idがあるかどうか
-// idがあれば、指定postと指定userを取得
-// 第一useEffectが呼ばれ、指定postがあれば指定映画を取得
-
 export const PostDetailArea = () => {
   const router = useRouter();
   const { id } = router.query;

@@ -1,4 +1,3 @@
-// frontend/front/src/hooks/useToggleFeed.ts
 import { useState } from 'react';
 
 // FeedとLikedPostAreaの表示切替のカスタムフック

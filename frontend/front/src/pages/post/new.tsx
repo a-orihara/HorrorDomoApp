@@ -1,5 +1,3 @@
-// frontend/front/src/pages/posts/new.tsx
-
 import Layout from '../../components/layout/Layout';
 import { PostFormPage } from '../../components/templates/PostFormPage';
 import { useRedirectIfNotAuthorized } from '../../hooks/useRedirectIfNotAuthorized';

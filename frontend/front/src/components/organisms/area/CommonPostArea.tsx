@@ -44,30 +44,3 @@ const CommonPostArea = ({
 };
 
 export default CommonPostArea;
-
-// @          @@          @@          @@          @@          @@          @@          @@          @
-// import { Post } from '../../../types/post';
-// import { User } from '../../../types/user';
-// import Pagination from '../../molecules/Pagination';
-
-// type CommonPostAreaProps = {
-//   user: User;
-//   posts: Post[];
-//   totalPostsCount: number;
-//   users: User[];
-//   handlePageChange: (data: { selected: number }) => void;
-//   ListComponent: (props: { users: User[]; posts: Post[] }) => JSX.Element;
-//   // ListComponent: (props: FeedListProps) => JSX.Element;
-// };
-// // const handlePageChange: (selectedItem: { selected: number }) => void;
-
-// const CommonPostArea = ({ posts, totalPostsCount, users, handlePageChange, ListComponent }: CommonPostAreaProps) => {
-//   return (
-//     <div>
-//       <ListComponent users={users} posts={posts} />
-//       <Pagination totalCount={totalPostsCount} itemsPerPage={10} handlePageChange={handlePageChange} />
-//     </div>
-//   );
-// };
-
-// export default CommonPostArea;

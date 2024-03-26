@@ -8,7 +8,6 @@ import { AxiosError } from 'axios';
 
 export const useUpdateUser = () => {
   const [name, setName] = useState('');
-  // const [email, setEmail] = useState('');
   const [profile, setProfile] = useState<string | null>(null);
   // 2.1
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -22,7 +21,6 @@ export const useUpdateUser = () => {
     const formData = new FormData();
     // 1.2
     formData.append('name', name);
-    // formData.append('email', email);
     formData.append('profile', profile || '');
     // 1.3
     if (avatar) {
@@ -35,7 +33,6 @@ export const useUpdateUser = () => {
       if (res.status === 200) {
         // 1.4 更新後のユーザーを取得し直す
         handleGetCurrentUser();
-        // console.log('%c handleGetCurrentUser後のUID:', 'color: red', Cookies.get('_uid'));
         setAlertSeverity('success');
         setAlertMessage(`${res.data.message}`);
         setAlertOpen(true);
@@ -70,8 +67,6 @@ export const useUpdateUser = () => {
   return {
     name,
     setName,
-    // email,
-    // setEmail,
     profile,
     setProfile,
     setAvatar,

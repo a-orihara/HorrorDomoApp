@@ -19,7 +19,6 @@ const HomePage = () => {
   const { currentUserPostsCount } = usePostContext();
   // FeedAreaとLikedPostAreaの表示切替の状態変数と関数。
   const { showLikedPostArea, toggleFeed } = useToggleFeed();
-  // 検索語句。状態は親[Home]で管理。
   // searchQueryは[SearchedPostArea]のpagination取得に、setSearchQueryは[PostSearchForm]で使用
   const [searchQuery, setSearchQuery] = useState<string>('');
   // 検索がボタンが押された(検索が実行されたか）を追跡する状態変数（真偽値）

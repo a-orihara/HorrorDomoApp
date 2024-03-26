@@ -18,7 +18,6 @@ const ProfilePage = () => {
   const { id } = router.query;
   // 4.1 4.2 4.3
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
-  // console.log(`ProfilePage.tsxのuserId: ${userId}`);
   // queryパラメータから指定したidに紐付くuserとpostsを取得
   const { user, handleGetUserById } = useGetUserById(userId);
   const { currentUserPostsCount } = usePostContext();

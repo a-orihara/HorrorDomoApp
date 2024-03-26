@@ -1,4 +1,3 @@
-// import Image from 'next/image';
 import { User } from '../../types/user';
 import FollowStats from '../molecules/stats/FollowStats';
 import { LikeStats } from '../molecules/stats/LikeStats';

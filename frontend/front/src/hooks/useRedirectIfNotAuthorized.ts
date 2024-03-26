@@ -8,9 +8,8 @@ export const useRedirectIfNotAuthorized = () => {
   const router = useRouter();
   const { currentUser, loading } = useAuthContext();
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
-  // ------------------------------------------------------------------------------------------------
-  console.log(`useRedirectIfNotAuthorizedのカレントユーザー:${JSON.stringify(currentUser)}`);
 
+  console.log(`useRedirectIfNotAuthorizedのカレントユーザー:${JSON.stringify(currentUser)}`);
   // 1 サインインしていない場合はサインインページ、サインイン済みでも他ユーザーならユーザーのホームページへリダイレ
   // クトする
   useEffect(() => {

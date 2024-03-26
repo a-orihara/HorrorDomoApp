@@ -5,8 +5,6 @@ type MovieInfoAreaProps = {
 };
 
 export const MovieInfoArea = ({ movieInfo }: MovieInfoAreaProps) => {
-  // console.log(`%cMovieInfoAreaに渡って来たmovieInfo:${movieInfo?.title}`, 'color: blue;');
-  // console.log('%cisMovieInfoFoundが呼ばれた', 'color: red; ');
   return (
     // movieInfoがあれば映画情報を表示、なければ映画情報が見つかりませんでしたと表示
     <div>

@@ -6,7 +6,7 @@ import { signUp } from '../../api/auth';
 import { useAlertContext } from '../../contexts/AlertContext';
 // import { useAuthContext } from '../../contexts/AuthContext';
 import { SignUpParams } from '../../types/user';
-// ================================================================================================
+
 // 7.1 サインアップ処理。非同期通信なので、async awaitを使う。
 const useSignUp = () => {
   const [name, setName] = useState<string>('');
@@ -15,11 +15,10 @@ const useSignUp = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   // 1.1 サインアップ認証用のmailのリンク先のURL（認証に成功した後にリダイレクトされるページの指定）
   const confirmSuccessUrl = "http://localhost:3001/signin";
-  // const { setIsSignedIn, setCurrentUser } = useAuthContext();
   // 7.2
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // ------------------------------------------------------------------------------------------------
+
   // サインアップ処理
   const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -68,7 +67,7 @@ const useSignUp = () => {
       setAlertOpen(true);
     }
   };
-  // ------------------------------------------------------------------------------------------------
+
   return {
     name,
     setName,

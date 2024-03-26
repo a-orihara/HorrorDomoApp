@@ -6,7 +6,6 @@ const profile = () => {
   return (
     <Layout title='Profile'>
       <ProfilePage></ProfilePage>
-      {/* <PostForm></PostForm> */}
     </Layout>
   );
 };

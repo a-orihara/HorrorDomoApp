@@ -19,7 +19,6 @@ const FeedListItem = ({ feedPost, feedUser }: FeedListItemProps) => {
   const { currentUser } = useAuthContext();
   const { handleDeletePost } = useDeletePost();
   // console.log(`feedPost:の${feedPost.liked}`);
-  // console.log(`feedListItemのpost:${JSON.stringify(feedPost)}`);
 
   return (
     <li key={feedPost.id} className='my-px rounded-md bg-basic-beige'>

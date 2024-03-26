@@ -31,7 +31,6 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       // 1.1
       if (data.status === 200) {
         const count: number = data.data.followingCount;
-        // console.log(`◆handleGetFollowingCountByUserIdの中身${JSON.stringify(data.data)}`);
         setFollowingCount(count);
       }
     } catch (err) {
@@ -47,7 +46,6 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
       const data = await getFollowersCountByUserId(userId);
       if (data.status == 200) {
         const count: number = data.data.followersCount;
-        // console.log(`handleGetFollowersCountByUserIdのcount:${count}`);
         setFollowersCount(count);
       }
     } catch (err) {

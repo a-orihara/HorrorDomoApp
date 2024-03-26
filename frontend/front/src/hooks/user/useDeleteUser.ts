@@ -2,12 +2,10 @@ import { useRouter } from 'next/router';
 import { userDelete } from '../../api/user';
 import { useAlertContext } from '../../contexts/AlertContext';
 
-// ================================================================================================
 export const useDeleteUser = () => {
   const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
   const router = useRouter();
 
-  // ------------------------------------------------------------------------------------------------
   const handleDeleteUser = async (userId: number) => {
     try {
       const res = await userDelete(userId);
@@ -36,6 +34,5 @@ export const useDeleteUser = () => {
     }
   };
 
-  // ------------------------------------------------------------------------------------------------
   return { handleDeleteUser };
 };

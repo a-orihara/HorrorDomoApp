@@ -45,11 +45,6 @@ const CommonPostList = ({ posts, users, noPostsMessage, ListItemComponent }: Com
   );
 };
 
-// 使用例:
-// const FeedList = () => (
-//   <CommonPostList posts={feedPosts} users={feedUsers} noPostsMessage="投稿がありません" ListItemComponent={FeedListItem} />
-// );
-
 export default CommonPostList;
 
 /*

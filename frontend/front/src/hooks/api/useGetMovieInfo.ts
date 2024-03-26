@@ -14,7 +14,6 @@ export const useGetMovieInfo = () => {
       const res = await getMovieInfo(movieTitle);
       if (res.status === 200) {
         if (res.data.data.results.length === 0) {
-          // console.log(`%cres.data.data.results:${JSON.stringify(res.data.data)}`, 'color: red');
           setMovieInfo({
             title: 'タイトルから映画が見つかリませんでした',
             overview: 'no Content',

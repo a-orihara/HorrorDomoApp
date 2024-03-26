@@ -13,7 +13,6 @@ const useGetUserById = (id: number | undefined) => {
     try {
       const res = await getUserById(id);
       const fetchedUser: User = res.data;
-      // console.log(`fetchedUser:${JSON.stringify(fetchedUser)}`);
       setUser(fetchedUser);
     } catch (err) {
       alert("ユーザー情報を取得出来ませんでした")

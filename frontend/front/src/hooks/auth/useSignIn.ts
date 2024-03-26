@@ -8,7 +8,7 @@ import { useFollowContext } from '../../contexts/FollowContext';
 import { usePostContext } from '../../contexts/PostContext';
 import { SignInParams } from '../../types/user';
 import { AxiosError } from 'axios';
-// ================================================================================================
+
 // 1.1
 export const useSignIn = () => {
   // カスタムフック内でローカル状態を作成し、管理
@@ -24,7 +24,6 @@ export const useSignIn = () => {
   const { handleGetFollowingCountByUserId, handleGetFollowersCountByUserId } = useFollowContext();
   const router = useRouter();
 
-  // ------------------------------------------------------------------------------------------------
   // 2.1
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     // 2.2
@@ -95,7 +94,6 @@ export const useSignIn = () => {
       }
   };
 
-  // ================================================================================================
   return {
     email,
     setEmail,

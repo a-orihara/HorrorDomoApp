@@ -11,7 +11,6 @@ export const useDeletePost = () => {
   const handleDeletePost = async (postId: number) => {
     try {
       const res = await deletePost(postId);
-      // console.log(`deletePostのres.data${JSON.stringify(res.data)}`);
       // 文字列でないとundefinedになる
       if (res.data.status === '200') {
         // 作成更新後のpostの投稿総数を取得。
@@ -33,11 +32,6 @@ export const useDeletePost = () => {
       }
     } catch (err: any) {
       console.log('errorが反応');
-      // // エラーが発生した場合の処理
-      // setAlertSeverity('error');
-      // // setAlertMessage('Failed to delete post');
-      // setAlertMessage(`${err.message}`);
-      // setAlertOpen(true);
       setAlertSeverity('error');
       // ${err.res.data.errors}と、responseがresだとエラーになる。axiosの仕様？
       setAlertMessage(`${err.response.data.errors}`);

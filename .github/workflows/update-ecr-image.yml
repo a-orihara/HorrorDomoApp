@@ -88,18 +88,6 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG
           echo "ecr_rails_image=$ECR_REGISTRY/$ECR_REPOSITORY_RAILS:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # *タスク定義の書き込みをCDフローに移した為、下記コメントアアウト
-      # # Amazon ECSタスク定義に新しいイメージIDを記入する。
-      # - name: Fill in the new Rails image ID in the Amazon ECS task definition
-      #   id: task-def
-      #   # 11.1 既存のECSタスク定義JSONファイルとしてGitHubリポジトリに指定）を受け取り、指定されたコンテナのコンテナイメージIDを更新し、新しいタスク定義を出力
-      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-      #   # 11.2
-      #   with:
-      #     task-definition: ${{ env.ECS_TASK_DEFINITION_BACKEND }}
-      #     container-name: ${{ env.CONTAINER_NAME_RAILS }}
-      #     image: ${{ steps.build-image.outputs.ecr_rails_image }}
-
 # ------------------------------------------------------------------------------------------------
   ecr-push-docker-nextjs:
     needs: [frontend-ci]
@@ -141,14 +129,6 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG
         echo "ecr_nextjs_image=$ECR_REGISTRY/$ECR_REPOSITORY_NEXT:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-    # *タスク定義の書き込みをCDフローに移した為、下記コメントアアウト
-    # - name: Fill in the new Nextjs image ID in the Amazon ECS task definition
-    #   id: task-def
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: ${{ env.ECS_TASK_DEFINITION_FRONTEND }}
-    #     container-name: ${{ env.CONTAINER_NAME_NEXT }}
-    #     image: ${{ steps.build-image.outputs.ecr_nextjs_image }}
 
 # @          @@          @@          @@          @@          @@          @@          @@          @
 # ================================================================================================

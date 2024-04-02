@@ -1,7 +1,4 @@
-// Context用のコンポーネント作成の為、AlertContext.js というファイルを作成
-// 1.createContext();でAlertContextというコンテキストオブジェクトを作成
-// 2.AlertContextプロパティの、AlertContext.Providerコンポーネントを返す、AuthProviderコンポーネントを作成
-// 3.AuthProviderコンポーネントにて、AlertContextプロパティのProviderコンポーネントに渡す値（useState）を設定
+// 1
 import React, { createContext, useContext, useState } from 'react';
 
 // AlertContextの引数の型を設定
@@ -62,6 +59,13 @@ export const useAlertContext = () => {
 
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
+1
+Context用のコンポーネント作成の為、AlertContext.js というファイルを作成
+1.createContext();でAlertContextというコンテキストオブジェクトを作成
+2.AlertContextプロパティの、AlertContext.Providerコンポーネントを返す、AuthProviderコンポーネントを作成
+3.AuthProviderコンポーネントにて、AlertContextプロパティのProviderコンポーネントに渡す値（useState）を設定
+
+================================================================================================
 1.1
 シンプルな親コンポーネントと子コンポーネントの作成例と使用例を説明する。
 まず、`Box`という親コンポーネントを作成します。このコンポーネントは`children`プロパティを受け取り、それを表示。

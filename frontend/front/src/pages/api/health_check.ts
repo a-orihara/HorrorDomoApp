@@ -10,6 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   // 5
   res.end(JSON.stringify({ status: 'frontendからbackendへのhealthCheck:ok' }))
 }
+
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 ================================================================================================

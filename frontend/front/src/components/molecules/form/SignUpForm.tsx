@@ -4,7 +4,6 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import Label from '../../atoms/Label';
 
-// ================================================================================================
 const SignUpForm = () => {
   const {
     name,
@@ -18,7 +17,6 @@ const SignUpForm = () => {
     handleSignUp,
   } = useSignUp();
 
-  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
       <h1 className='mt-4 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:mt-12 md:text-4xl lg:mt-8'>

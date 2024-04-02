@@ -11,7 +11,6 @@ import '../styles/globals.css';
 Modal.setAppElement('#__next');
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // console.log('_app.tsxが呼ばれた');
   return (
     <AuthProvider>
       <AlertProvider>

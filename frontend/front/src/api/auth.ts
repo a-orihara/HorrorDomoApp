@@ -1,4 +1,3 @@
-// import { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { SignInParams, SignUpParams } from '../types/user';
 import { client } from './client';

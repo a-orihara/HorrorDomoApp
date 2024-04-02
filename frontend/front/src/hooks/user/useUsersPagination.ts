@@ -14,7 +14,7 @@ export const useUsersPagination = (itemsPerPage: number) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // ------------------------------------------------------------------------------------------------
+
   // 3.1 ユーザー一覧を取得して、ステートに格納し、ページネーションを表示し、ページをクリックした時の処理を定義
   const handleGetUsers = useCallback(
     async (page: number) => {

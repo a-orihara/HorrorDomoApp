@@ -39,6 +39,7 @@ data "aws_iam_policy_document" "iam_policy_document" {
   }
   version = "2012-10-17"
 }
+
 # 2 欄外 AmazonECSTaskExecutionRolePolicy
 # data "aws_iam_policy_document" "iam_policy_document" {
 #   # AmazonECSTaskExecutionRolePolicy
@@ -172,8 +173,6 @@ data "aws_iam_policy_document" "iam_policy_document" {
 #   role       = "portfolio-ecsTaskExecutionRole"
 # }
 
-
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1
@@ -223,6 +222,7 @@ terraform import aws_iam_role.[リソース名] [IAMロール名]
 `"ecs-tasks.amazonaws.com"` に設定され、Amazon ECS タスクがこのポリシーを引き継ぐことを意味する。
 - version` パラメータはポリシーの言語バージョンを定義し、`"2012-10-17"` がポリシーのすべての機能をサポートする
 のバージョンです。
+
 ================================================================================================
 2
 既存のaws_iam_role設定に基づいて、特にカスタムポリシーが必要ない場合は、data "aws_iam_policy_document"の設

@@ -11,9 +11,6 @@ const FollowingPage = () => {
   const { id } = router.query;
   // 2 userIdはnumberかundefined型
   const userId = typeof id === 'string' && !isNaN(Number(id)) ? Number(id) : undefined;
-  // ルーターパラメーターのidに対応するユーザー情報を取得
-  // console.log(`FollowingPage.tsxのuserId: ${userId}`);
-  // const { user, handleGetUserById } = useGetUserById(userId);
   // ルーターパラメーターのidに対応するユーザーのフォローユーザー情報を取得
   const { following, totalFollowingCount, handlePageChange, isLoading, currentPage } = useFollowingPagination(10, userId);
 

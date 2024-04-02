@@ -3,7 +3,6 @@ import { useAuthContext } from '../../contexts/AuthContext';
 
 const Sidebar = () => {
   const { currentUser } = useAuthContext();
-  // ================================================================================================
   return (
     <aside className='basic-border bg-basic-purple  py-4 lg:h-full lg:w-48'>
       <nav className=''>

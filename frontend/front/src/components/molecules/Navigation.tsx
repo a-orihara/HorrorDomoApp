@@ -4,7 +4,7 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { useSignOut } from '../../hooks/auth/useSignOut';
 import Button from '../atoms/Button';
 import AlertMessage from './AlertMessage';
-// ================================================================================================
+
 // 1
 const Navigation = () => {
   // AuthContextから値を取得。Linkコンポーネントの表示制御に使用。
@@ -12,7 +12,7 @@ const Navigation = () => {
   const router = useRouter();
   // useSignOut: ユーザーのサインアウト処理
   const handleSignOut = useSignOut();
-  // ================================================================================================
+
   return (
     <nav className='flex h-16 items-center justify-around text-base font-semibold tracking-tighter text-basic-green md:text-2xl'>
       {/* 2 */}

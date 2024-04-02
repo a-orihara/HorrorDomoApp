@@ -13,8 +13,6 @@ const FeedList = ({ feedPosts, feedUsers }: FeedListProps) => {
     <CommonPostList
       posts={feedPosts}
       users={feedUsers}
-      // propsにコンポーネントも渡せる
-      // ListItemComponent={FeedListItem}
       // 1 無名関数を渡してマッピング
       ListItemComponent={({ post, user }) => <FeedListItem feedPost={post} feedUser={user} />}
       noPostsMessage='投稿がありません'

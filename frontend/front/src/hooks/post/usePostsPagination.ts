@@ -15,8 +15,7 @@ export const usePostsPagination = (itemsPerPage: number, userId?: number) => {
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
 
-  // 4 指定したuserIdのユーザーの投稿一覧を取得、post一覧と全post数をステートに格納。
-  // 引数pageは、ページネーションで選択したページ。
+  // 4 引数pageは、ページネーションで選択したページ。
   const handleGetPostListByUserId = useCallback(
     async (page: number) => {
       setIsLoading(true);
@@ -98,10 +97,12 @@ handlePageChange関数はこれらの値を変更しないので、useCallback�
 ページ番号が新しく選択されたページの番号に更新されます。
 
 以上の流れにより、ページネーションでページ遷移するたびに、新しく選択されたページの内容が取得されて表示されます。
+
 ================================================================================================
 4
+指定したuserIdのユーザーの投稿一覧を取得、post一覧と全post数をステートに格納。
+------------------------------------------------------------------------------------------------
 `handleGetPostListByUserId`の引数 `(page: number)` は、`ReactPaginate` コンポーネントから来ています。
-
 1. `ProfilePage`コンポーネントで `usePostsPagination` フックを呼び出し、その結果として得られた
 `handlePageChange` 関数が `PostsPagination` コンポーネントの `handlePageChange` プロップとして渡される。
 2. `PostsPagination`コンポーネントは、この `handlePageChange` プロップを `ReactPaginate` コンポーネントの

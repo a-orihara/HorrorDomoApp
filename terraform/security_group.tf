@@ -45,10 +45,6 @@ resource "aws_security_group" "alb_sg" {
   vpc_id      = aws_vpc.vpc.id
 }
 
-
-
-
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1

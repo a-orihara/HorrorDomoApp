@@ -6,7 +6,6 @@ import Label from '../../atoms/Label';
 import TextArea from '../../atoms/TextArea';
 import { useAuthContext } from '../../../contexts/AuthContext';
 
-// ================================================================================================
 const UserEditForm = () => {
   // const { name, setName, email, setEmail, profile, setProfile, setAvatar, handleUpdateUser } =
   //   useUpdateUser();
@@ -22,7 +21,6 @@ const UserEditForm = () => {
     }
   };
 
-  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col '>
       <h1 className='mt-4 flex h-16 items-center justify-center text-2xl font-semibold md:mt-8 md:text-4xl lg:mt-4'>

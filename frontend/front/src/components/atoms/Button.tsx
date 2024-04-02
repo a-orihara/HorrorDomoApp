@@ -8,10 +8,6 @@ type ButtonProps = React.ComponentProps<'button'> & {
   className?: string;
 };
 
-// 別の書き方
-// const Button = (props: ButtonProps) => {
-//   return <button className={`${props.className}`}>{props.children}</button>;
-// };
 // 2
 const Button = ({ children, className, ...buttonProps }: ButtonProps) => {
   return (
@@ -106,6 +102,11 @@ Reactでコンポーネントを作るとき、そのコンポーネントの中
 
 ================================================================================================
 2
+別の書き方
+const Button = (props: ButtonProps) => {
+  return <button className={`${props.className}`}>{props.children}</button>;
+};
+------------------------------------------------------------------------------------------------
 - Button = ({ ...buttonProps }: ButtonProps)
 { ...buttonProps } はスプレッド構文を使って ButtonProps オブジェクトのプロパティを展開しています。
 ButtonProps のプロパティを一つずつ分割代入する必要がなく、コードをより短く書くことができます。

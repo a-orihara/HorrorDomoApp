@@ -1,5 +1,4 @@
 class Api::V1::LikesController < ApplicationController
-  # before_action :authenticate_api_v1_user!
   before_action :authenticate_api_v1_user!
   before_action :set_post, only: [:destroy]
   before_action :set_like, only: [:destroy]
@@ -7,8 +6,7 @@ class Api::V1::LikesController < ApplicationController
   # 1
   def create
     logger.info "Likeのcreateアクションが発火"
-    # 投稿に対していいねを作成する
-    # 1.1
+    # 1.1 投稿に対していいねを作成する
     like = current_api_v1_user.likes.build(post_id: params[:post_id])
     if like.save
       # render json: { status: '201', data: like }, status: :ok
@@ -21,7 +19,6 @@ class Api::V1::LikesController < ApplicationController
   def destroy
     logger.info "Likeのdestroyアクションが発火"
     if @like.destroy
-      # render json: { status: '200', data: @post }
       render json: { status: '200' }, status: :ok
     else
       render json: { status: '422', message: '操作を完了できませんでした' }, status: :unprocessable_entity

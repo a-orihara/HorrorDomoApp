@@ -20,8 +20,6 @@ output "ecs_task_definition_rails_image_with_tag" {
   value = "${aws_ecr_repository.rails_img_prod.repository_url}:${var.ecr_image_tag}"
 }
 
-
-
 /*
 @          @@          @@          @@          @@          @@          @@          @@          @
 1.1

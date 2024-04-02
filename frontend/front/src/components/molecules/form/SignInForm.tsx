@@ -4,11 +4,9 @@ import Button from '../../atoms/Button';
 import Input from '../../atoms/Input';
 import Label from '../../atoms/Label';
 
-// ================================================================================================
 const SignInForm = () => {
   const { email, setEmail, password, setPassword, handleSignIn } = useSignIn();
 
-  // ================================================================================================
   return (
     <div className='flex flex-1 flex-col'>
       <h1 className='mt-20 flex h-20 items-center justify-center pt-4 text-2xl font-semibold md:text-4xl'>Sign In</h1>

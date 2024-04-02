@@ -15,7 +15,6 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
   const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // console.log(`OK:useFollowersPaginationのfollowers:${JSON.stringify(followers)}`);
 
   const handleGetFollowersByUserId = useCallback(
     async (page: number) => {
@@ -24,11 +23,8 @@ export const useFollowersPagination = (itemsPerPage: number, userId?: number) =>
         const res = await getFollowersByUserId(page, itemsPerPage, userId);
         setFollowers(res.data.followers);
         setTotalFollowersCount(res.data.followersCount);
-        // console.log(`OK:handleGetFollowersByUserIdのtotalFollowers:${res.data.followersCount}`);
-        // console.log(`OK:handleGetFollowersByUserIdのfollowers:${JSON.stringify(res.data.followers)}`);
       } catch (err: any) {
         setAlertSeverity('error');
-        // setAlertMessage(`${err.response.data.errors[0]}`);
         setAlertMessage(`${err.response.data.message}`);
         setAlertOpen(true);
         setTimeout(() => {

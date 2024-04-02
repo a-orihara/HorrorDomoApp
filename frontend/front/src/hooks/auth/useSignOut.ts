@@ -57,7 +57,7 @@ export const useSignOut = () => {
       setAlertOpen(true);
     }
   };
-  // ------------------------------------------------------------------------------------------------
+
   return handleSignOut;
 };
 

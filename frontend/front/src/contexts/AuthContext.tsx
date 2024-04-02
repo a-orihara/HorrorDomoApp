@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getAuthenticatedUser } from '../api/auth';
 import { User } from '../types/user';
-// import { useAlertContext } from './AlertContext';
-// ================================================================================================
 
 // AuthProviderコンポーネントの引数の型
 type AuthProviderProps = {
@@ -35,9 +33,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isSignedIn, setIsSignedIn] = useState(false);
   // 現在ログインしているユーザーの情報を管理するステート。初期値はundefined（未定義）
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
-  // const { setAlertOpen, setAlertSeverity, setAlertMessage } = useAlertContext();
-
-  // ------------------------------------------------------------------------------------------------
 
   // 認証済みのユーザー情報を取得し、ユーザー情報や認証状態を更新する
   const handleGetCurrentUser = async () => {
@@ -60,7 +55,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     } catch (err) {
       console.log(err);
-      // ここをアラートモーダルの表示にすると、エラーの際にモーダル表示の連続になるのでalertで処理
       // 一旦コメントアウト
       // alert('サインインのユーザー情報を取得出来ませんでした');
     }

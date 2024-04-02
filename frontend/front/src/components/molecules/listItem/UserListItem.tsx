@@ -18,7 +18,6 @@ const UserListItem = ({ user }: UserListItemProps) => {
   // currentUserが管理者の場合にtrue
   const isAdmin = currentUser?.admin;
 
-  // ================================================================================================
   return (
     <li key={user.id} className='flex flex-row justify-center'>
       {/* 1 */}

@@ -3,8 +3,7 @@ class ApplicationController < ActionController::API
   # 4
   # before_action :authenticate_api_v1_user!
 
-  # 2
-  # Deviseコントローラーであれば、アクション実行前にconfigure_permitted_parametersメソッドを呼び出す。
+  # 2 Deviseコントローラーであれば、アクション実行前にconfigure_permitted_parametersメソッドを呼び出す。
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # current_api_v1_userなどの Devise Token Auth のヘルパーメソッドが利用可能

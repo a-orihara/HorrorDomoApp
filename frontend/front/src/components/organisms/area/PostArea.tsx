@@ -1,7 +1,5 @@
-// import { useLikedPostsPagination } from '../../hooks/like/useLikedPostsPagination';
 import { usePostsPagination } from '../../../hooks/post/usePostsPagination';
 import { User } from '../../../types/user';
-// import LikedPostList from '../molecules/LikedPostList';
 import Pagination from '../../molecules/Pagination';
 import PostList from '../list/PostList';
 

@@ -15,7 +15,6 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
   const [isLoading, setIsLoading] = useState(false);
   const { setAlertMessage, setAlertOpen, setAlertSeverity } = useAlertContext();
   const router = useRouter();
-  // console.log(`OK:useFollowingPaginationの${userId}`);
 
   const handleGetFollowingByUserId = useCallback(
     async (page: number) => {
@@ -24,8 +23,6 @@ export const useFollowingPagination = (itemsPerPage: number, userId?: number) =>
         const res = await getFollowingByUserId(page, itemsPerPage, userId);
         setFollowing(res.data.following);
         setTotalFollowingCount(res.data.followingCount);
-        // console.log(`OK:handleGetFollowingByUserIdのtotalFollowing:${res.data.followingCount}`);
-        // console.log(`OK:handleGetFollowingByUserIdのfollowing:${JSON.stringify(res.data.following)}`);
       } catch (err: any) {
         setAlertSeverity('error');
         // この形式で取得成功

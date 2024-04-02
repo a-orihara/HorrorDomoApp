@@ -14,7 +14,7 @@
 インフラはAWS（Fargate）。Terraformでインフラをコード化し、GitHubActionsでビルド、テスト、デプロイを自動化。
 
 ## URL
-horror-domo-app.com
+[horror-domo-app.com](horror-domo-app.com)
 
 *費用節約の為、一旦停止中。面談前に本番デプロイします。
 

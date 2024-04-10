@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Input from '../../atoms/Input';
+import { usePostSearchForm } from '../../../hooks/post/usePostSearchForm';
 
 type PostSearchFormProps = {
   // enterQuery(入力語句)をSearchQuery(検索語句)にセットする。検索語句は親(Home)を通して、SearchedPostAreaに渡る。
@@ -11,34 +12,7 @@ type PostSearchFormProps = {
 };
 
 const PostSearchForm = ({ setSearchQuery, setIsSearchActive, isSearchActive }: PostSearchFormProps) => {
-  // 入力語句を管理する状態
-  const [enterQuery, setEnterQuery] = useState('');
-
-  // formのinputでenterキーを押すと発火。検索アイコン以外でも発火するようにする。
-  const handleSubmit = (e: React.FormEvent) => {
-    // 2
-    e.preventDefault();
-    handleSearchClick();
-  };
-
-  // 検索アイコンを押すと発火。入力語句を検索語句に代入、検索状態をアクティブ(true)にする
-  const handleSearchClick = () => {
-    // 入力語句を検索語句に代入
-    setSearchQuery(enterQuery);
-    // 検索状態をアクティブ(true)。親(Home)に通知。
-    setIsSearchActive(true);
-  };
-
-  // 戻るボタンを押すと発火
-  const handleBackClick = () => {
-    // 検索状態を非アクティブ(false)。結果としてSearchedPostAreaを非表示。
-    setIsSearchActive(false);
-    // 検索語句を空
-    setSearchQuery('');
-    // 入力語句を空（戻るを押しても入力欄に語句が残ったままにしない為）
-    setEnterQuery('');
-  };
-  // console.log(`%c現在のisSearchActive:${isSearchActive}`, 'color: red');
+  const { enterQuery, setEnterQuery, handleSubmit, handleSearchClick, handleBackClick } = usePostSearchForm({ setSearchQuery, setIsSearchActive });
 
   return (
     <div className='m-1 flex flex-row items-center'>
@@ -97,16 +71,4 @@ export default PostSearchForm;
 - このコードが存在することで、フォームのサブミットが起きてもページはリロードされず、`handleSearchClick` 関数が呼
 び出されるだけとなります。
 
-================================================================================================
-2
-.e.preventDefault()は具体的に何をするのですか？
-e.preventDefault()メソッドは、HTML要素のデフォルトの動作を阻止します。JavaScriptでは、eはeventを表すことが多
-く、ハンドラのトリガーとなったイベントを表すオブジェクトです。
-あなたのコードでは、e.preventDefault()は、フォームが送信されたときに発生するhandleSubmit関数内で使用されていま
-す。デフォルトでは、フォームを送信するとページがリロードされますが、e.preventDefault() はこの動作を停止し、ペー
-ジがリロードされないようにします。
-------------------------------------------------------------------------------------------------
-.e.preventDefault()は具体的にどのような誤動作を防ぐのでしょうか？
-意図しないページのリロード： e.preventDefault()が防ぐ主な誤動作は、フォームが送信されたときにページがリロードさ
-れることです。リロードはウェブアプリケーションの流れを中断させ、パフォーマンスに不必要な負担をかける可能性があります。
 */

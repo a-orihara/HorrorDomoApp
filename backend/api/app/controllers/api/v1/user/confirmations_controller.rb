@@ -2,7 +2,7 @@ class Api::V1::User::ConfirmationsController < ApplicationController
   # 1.1
   def update
     user = User.find_by(confirmation_token: params[:confirmation_token])
-    logger.info "ここのuser!: #{user.inspect}"
+    logger.info "updateのuser: #{user.inspect}"
     # 1.2 404
     return render json: { message: "ユーザーが見つかりません" }, status: :not_found if user.nil?
     # 1.3 422

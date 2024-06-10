@@ -26,7 +26,7 @@ export const FollowProvider = ({ children }: FollowProviderProps) => {
     // userIdがなければ処理をしない
     if (!userId) return;
     try {
-      console.log("handleGetFollowingCountByUserId発火しまくり")
+      console.log("handleGetFollowingCountByUserId発火")
       const data = await getFollowingCountByUserId(userId);
       // 1.1
       if (data.status === 200) {
@@ -119,7 +119,7 @@ handleGetFollowingCountByUserId` 関数で観察されている動作は、React
 が、`handleGetFollowingCountByUserId`関数は再作成されない。
 - 関数の参照は再レンダリングしても変わらないため、`FollowStats` の `useEffect` は
 `handleGetFollowingCountByUserId` を複数回呼び出すトリガーにはなりません。
-- したがって、"handleGetFollowingCountByUserId発火しまくり "のログは一度しか表示されません。
+- したがって、"handleGetFollowingCountByUserId発火 "のログは一度しか表示されません。
 ------------------------------------------------------------------------------------------------
 まとめると、`handleGetFollowingCountByUserId` に `useCallback` を使用することで、再レンダリング時に関数参照
 が一定に保たれ、`FollowStats` の `useEffect` での不要な複数回の実行を防ぐことができます。これは不要な計算やネッ

@@ -25,7 +25,7 @@ class Api::V1::Auth::SessionsController < DeviseTokenAuth::SessionsController
 
     # 5.1サインイン失敗時のメソッド。明示的に記載。
     def render_create_error_bad_credentials
-      logger.error "サインイン失敗:発火してます！"
+      logger.error "サインイン失敗"
       # 5.2 render_errorはそのメソッドの中でrender json:している
       render_error(401, I18n.t('devise_token_auth.sessions.bad_credentials'))
     end
